@@ -107,19 +107,23 @@ Placeholders until the first deployable slice is live; real screenshots replace 
 
 ## Getting started
 
-What runs today is the deployable foundation: the API health and version endpoints, the build-status screen in English and Hindi, and the Docker stack. Requirements: Node 20+, Python 3.12 (installed by `uv`), Docker.
+What runs today is the deployable foundation: sign-in with role-based access, a role-based shell in English and Hindi (dark and light), the design system, and the Docker stack. The simulation arrives in later waves. Requirements: Node 20+, Python 3.12 (installed by `uv`), Docker.
 
 ```sh
 make setup            # install API and web dependencies
 make lint typecheck test
 make demo             # build, start the stack, seed demo accounts (passwords printed once)
 make smoke            # /healthz, /readyz and /api/v1/version against the running stack
-make e2e              # Playwright smoke and axe checks against it
-make prod-check       # build the production images and smoke the production-mode stack
+make e2e              # Playwright role tests with axe (EN/HI, dark/light) against the demo stack
+make visual           # visual snapshots (macOS baselines)
+make prod-check       # production images and stack on a throwaway project: smoke, HTTPS, memory
+make backup-test      # backup and restore round trip on a throwaway project
 make down             # stop the stack
 ```
 
-The stack listens on http://localhost:8080; set `WEB_PORT` in `.env` if that port is taken (`make env` creates `.env` with random secrets). In production mode the API refuses to start without a strong `SECRET_KEY`; create the first administrator with `make create-admin` or the `FIRST_ADMIN_*` variables. See [SECURITY.md](SECURITY.md).
+The stack listens on http://localhost:8080; set `WEB_PORT` in `.env` if that port is taken (`make env` creates `.env` with random secrets). In production mode the API refuses to start without a strong `SECRET_KEY` and refuses demo accounts; create accounts with `make create-admin` or the `create-user` command. See [SECURITY.md](SECURITY.md).
+
+To put it on a server, follow [docs/DEPLOY.md](docs/DEPLOY.md) (an Azure for Students Linux VM, with HTTPS, backups, update and rollback). Check a deployed instance with `make check-deploy URL=https://...`.
 
 ## Documentation
 
@@ -129,6 +133,7 @@ The stack listens on http://localhost:8080; set `WEB_PORT` in `.env` if that por
 - [Differentiators](docs/10-differentiators.md) · [Demo script](docs/08-demo.md)
 - [Data register](docs/DATA_REGISTER.md) · [Decisions](docs/DECISIONS.md) · [Open questions](docs/OPEN_QUESTIONS.md)
 - [Build log](docs/BUILD_LOG.md) · [Build waves](docs/waves/README.md)
+- [Deployment runbook](docs/DEPLOY.md) · [Hosting options](docs/HOSTING_OPTIONS.md) · [Fonts and icons](docs/FONTS.md)
 - [Design system](docs/DESIGN.md) · [Traceability](docs/TRACEABILITY.md) · [Release process](docs/RELEASE.md)
 - [Security policy](SECURITY.md) · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
 

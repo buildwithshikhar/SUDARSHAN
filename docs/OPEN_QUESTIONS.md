@@ -40,7 +40,6 @@ Everything the research marked unverified or undecided. Owner is **SD** (the use
 | Q-15 | **Hindi translation review**: who reviews the HI strings for correct military and technical terms. | SD | Name a reviewer; Claude Code produces a glossary file for them in wave 2. | Wave 2 onward |
 | Q-16 | **Real Doppler RAD-DAR** dataset (D17) was not found. | SD | Supply a link, or the row stays dropped. | Optional |
 | Q-17 | **Optional AAR narration backend**: wave 12b ships a deterministic template narrator. Decide whether a local language-model backend is wanted, and which licence and hardware budget applies. | SD | Name a model that fits the 8 GB floor and has an open licence, or keep template-only. | Before wave 12b |
-| Q-18 | **Documentation inside the submission cut**: wave 15 (manuals, SOPs, cost sheet, final report) depends on all waves, so it sits outside the cut. | SD | Choose: run wave 15 straight after 14a with 13a and 14b open, or build 13a first. Then relax the dependency in the wave file. | Before wave 14a completes |
 
 ## Closed
 
@@ -48,3 +47,4 @@ Everything the research marked unverified or undecided. Owner is **SD** (the use
 |---|---|---|---|
 | — | Q1–Q6 from docs/00-gap-check.md (trainee, hardware and VR, next milestone, team, pilot size, Hindi) | Answered; see [DECISIONS.md](DECISIONS.md) ADR-002 to ADR-010 | 2026-10-17 |
 | — | Platform name | SUDARSHAN confirmed, ADR-001 | 2026-10-17 |
+| Q-18 | Documentation inside the submission cut | Wave 15 split into 15a (in the cut) and 15b (depth), ADR-013 | 2026-10-17 |

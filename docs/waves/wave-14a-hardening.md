@@ -81,7 +81,7 @@ ACCEPTANCE (all must be true):
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-LOG: Follow the rules in docs/BUILD_LOG.md. Add a "Wave 14a" entry at the start, append each merged commit, record decisions, test counts and the deploy check, and write the exact first step of wave 14b.
+LOG: Follow the rules in docs/BUILD_LOG.md. Add a "Wave 14a" entry at the start, append each merged commit, record decisions, test counts and the deploy check, and write the exact first step of wave 15a (14b is optional).
 
 STOP CONDITIONS — stop and report if:
 - a step needs credentials, or network beyond package registries and GitHub;
@@ -90,5 +90,5 @@ STOP CONDITIONS — stop and report if:
 - about 60% of the session is used before acceptance (commit green work, log it as wave 14a.2, stop);
 - Never build features from later waves.
 
-FINAL OUTPUT TO ME: at most 10 lines — commits, test counts, CI result, deploy check (and the commit for me to deploy), anything skipped and why, and the first step of wave 14b.
+FINAL OUTPUT TO ME: at most 10 lines — commits, test counts, CI result, deploy check (and the commit for me to deploy), anything skipped and why, and the first step of wave 15a (14b is optional).
 ````

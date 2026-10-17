@@ -22,7 +22,8 @@ Sensor models are calibrated from open research datasets and published specifica
 | Waves 12a–12b · Full after-action review and reports, counterfactual review | Not started |
 | Waves 13a–13c · Team mode, signed records and competency matrix, admin and packs | Not started |
 | Waves 14a–14b · Hardening and accessibility, WebXR (optional) | Not started |
-| Wave 15 · Documentation and release 1.0 | Not started |
+| Wave 15a · Submission documentation | Not started |
+| Wave 15b · Release 1.0 polish (depth) | Not started |
 
 The authoritative state is [docs/BUILD_LOG.md](docs/BUILD_LOG.md).
 
@@ -124,9 +125,11 @@ First, a deployable foundation: the repository, the design system and a live lin
 
 ### Submission-ready cut
 
-The smallest ordered set that gives a complete, polished, demoable live link covering every problem-statement requirement and the five demo features (sensor placement trainer, contact-report scoring, adaptive adversary, counterfactual review, signed record with competency matrix): waves 1, 2, 3, 4a, 4b, 5, 6, 7, 8, 9a, 9b, 9c, 10a, 10b, 11a, 11b, 12a, 12b, 13b, 13c, 14a. Desktop meets the "desktop or VR-capable" requirement; VR is depth.
+The smallest ordered set that gives a complete, polished, demoable live link covering every problem-statement requirement, the five demo features (sensor placement trainer, contact-report scoring, adaptive adversary, counterfactual review, signed record with competency matrix) and the submission documentation: waves 1, 2, 3, 4a, 4b, 5, 6, 7, 8, 9a, 9b, 9c, 10a, 10b, 11a, 11b, 12a, 12b, 13b, 13c, 14a, 15a. Desktop meets the "desktop or VR-capable" requirement; VR is depth.
 
-**Depth, after the cut:** team mode (13a), WebXR (14b) and the documentation and release wave (15). Details and open decisions are in [docs/BUILD_LOG.md](docs/BUILD_LOG.md).
+Reviewers can check the live link at three points: **A** after wave 8 (playable single-operator trainer), **B** after wave 12b (demo-complete, pilot running), **C** after the cut and 15a (submission-ready).
+
+**Depth, after the cut:** team mode (13a), WebXR (14b) and release 1.0 polish (15b). Details, the requirement-to-wave table and the checkpoints are in [docs/BUILD_LOG.md](docs/BUILD_LOG.md).
 
 ---
 

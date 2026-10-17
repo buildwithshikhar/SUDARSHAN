@@ -91,3 +91,10 @@ Status values: **Accepted**, **Superseded by ADR-n**.
 - **Decision:** Wave files now carry the headline features. Split waves: 4 → 4a sensor models, 4b tracking and AI assist; 9 → 9a scenario engine, 9b site builder, 9c sensor placement trainer; 10 → 10a class management and rule packs, 10b live monitor and director mode; 11 → 11a adaptive learning with adversary and fatigue, 11b recognition academy and progression; 12 → 12a full AAR and reports, 12b counterfactual review; 13 → 13a team mode, 13b signed records and competency matrix, 13c admin and pack manager; 14 → 14a hardening, 14b WebXR (optional). Waves 3, 5, 6 and 15 gained scope or edits; 1, 2, 7 and 8 are unchanged. Remainder of an unfinished session is logged as `<wave>.2`.
 - **Consequences:** The pilot (ADR-010) starts once wave 12a is Done, not 12. The demo-complete live link is 12b; the signed-record beat of the demo needs 13b. Wave 9a stays on Opus; 9b and 9c are Sonnet. Wave 14b may be skipped without blocking release 1.0. Narration (12b) ships as a template narrator only; a local-model backend is an open question.
 
+## ADR-013 · Wave 15 split into 15a (in the cut) and 15b (depth); review checkpoints
+
+- **Date:** 2026-10-17 · **Status:** Accepted · **Decided by:** user
+- **Context:** Wave 15 depended on all waves, so the documentation a submission needs (manuals, SOPs, cost sheet, traceability, final report) sat outside the Submission-ready cut (Q-18).
+- **Decision:** 15a covers those documents, release notes for the submission and the demo rehearsal; it depends only on the cut waves, with 14a last, and joins the cut (22 of 25 waves). 15b covers the 1.0 polish, documentation of any depth wave built, and pilot results; it is depth, with 13a and 14b. Three review checkpoints are defined in the build log: A after wave 8, B after wave 12b, C after the cut and 15a.
+- **Consequences:** The cut ends at 15a. The wave 3 ADR for the RNG scheme and tick model is now ADR-014. Any depth wave built must be documented in 15b, and the manuals state what is not built.
+

@@ -39,13 +39,13 @@ Portal wording and defaults change; the intent of each step matters more than th
    - Virtual machine name: for example `trainer-vm`.
    - Region: choose one close to the evaluators. Student subscriptions can restrict regions and sizes; pick from what the portal lets you select.
    - Image: **Ubuntu Server 24.04 LTS - x64 Gen2** (x86_64). Do not choose an Arm image: the instructions and images here are tested for x86_64.
-   - Size: pick from the memory figures in `docs/HOSTING_OPTIONS.md`. As a floor, the stack needs a little over 1 GiB of RAM at idle once the host OS is counted; a 4 GiB machine is comfortable. The smallest burstable sizes may be enough to run the stack but too small to build the images on (see section 9). Prices: *unverified, check the price shown in the portal*.
+   - Size: pick from the memory figures in `docs/HOSTING_OPTIONS.md`. As a floor, the stack needs a little over 1 GiB of RAM at idle once the host OS is counted; a 4 GiB machine is comfortable. The smallest sizes may run the stack but are too small to build the images on without swap (section 4) or building elsewhere (section 9). Prices: *unverified, check the price shown in the portal*.
    - Authentication type: **SSH public key**. Username: `azureuser`. Paste the contents of `~/.ssh/azure_vm.pub`.
    - Public inbound ports: allow **SSH (22)** for now. You will tighten this in step 6.
 4. **Disks:** the OS disk is persistent. A Standard SSD of 30 GiB is a sensible start. Choose "delete with VM" according to whether you want the data to disappear with the VM.
 5. **Networking**
    - Create a new public IP and set its assignment to **Static** (a dynamic address can change after you stop the VM, which would break DNS).
-   - Open the public IP resource after creation: **Configuration → DNS name label**, for example `trainer-demo`. The VM is then reachable at `trainer-demo.<region>.cloudapp.azure.com`. That name is a normal public DNS name, so Caddy can obtain a certificate for it and you do not need a domain of your own.
+   - **Set a DNS name label on the public IP.** Open the VM, then **Overview → Public IP address** (this opens the public IP resource), then **Configuration**. Under **DNS name label (optional)** type a short, unique, lower-case name, for example `trainer-demo`, and **Save**. Azure then gives the VM the name `trainer-demo.<region>.cloudapp.azure.com` (the portal shows the full name on the same page; `<region>` is the region you picked, such as `westeurope`). That is a normal public DNS name, so Caddy can obtain a certificate for it and you do not need a domain of your own. Use exactly this full name as `--domain` in section 6.
 6. **Network security group (NSG)** → inbound rules, so that exactly these are open:
 
    | Port | Source | Why |
@@ -91,6 +91,21 @@ docker compose version
 
 Optional hardening: turn on automatic security updates (`sudo apt-get install -y unattended-upgrades`) and disable SSH password login (the VM was created with a key, and Azure disables password login for key-based VMs by default; confirm with `sudo sshd -T | grep passwordauthentication`).
 
+### Add 2 GB of swap before the first build
+
+**Where the images are built:** by default on the VM itself. `infra/deploy.sh up` runs `docker compose up --build`, so the Python dependency install and the web build both run on the VM, and so does every later `update`. Those builds are the memory peak, and a small VM can kill them. Add 2 GB of swap now, before the first deploy (it also protects the running stack):
+
+```sh
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+free -h        # the Swap line should now show 2.0Gi
+```
+
+If you would rather not build on the VM at all, build the images for x86_64 on your Mac and load them on the VM instead; see section 9. There is no image registry in this setup, by design: images move with `docker save` and `docker load`.
+
 Docker publishes container ports in a way that bypasses the host firewall (`ufw`). That is fine here because the compose files publish only Caddy's 80 and 443, and the web port on `127.0.0.1`. The NSG from step 6 is your real firewall.
 
 ## 5. Get the code onto the VM
@@ -112,6 +127,29 @@ Never put a token in the repository, in a script, or in a command you paste some
 
 ## 6. First deploy
 
+### Before you deploy: check the name and the ports
+
+Caddy gets its certificate from Let's Encrypt by answering a challenge on **port 80** (and it serves on **443**). If either port is blocked, or the name does not point at the VM, no certificate is issued and the site will not open. Check all three from your laptop **before** the first deploy:
+
+1. **The name resolves to the VM's public IP:**
+
+   ```sh
+   dig +short trainer-demo.<region>.cloudapp.azure.com     # must print the VM's public IP
+   ```
+
+2. **The network security group allows 80 and 443.** In the portal: VM → **Networking** → **Network settings** → **Inbound port rules**. Rules for 80 and 443 must exist with action **Allow**, and nothing with a lower priority number may deny them. Then test reachability. Nothing is listening yet, so the *right* answer is "connection refused", and a timeout means a firewall is dropping the traffic:
+
+   ```sh
+   nc -vz -w 5 trainer-demo.<region>.cloudapp.azure.com 80      # refused = reachable (good); timed out = blocked
+   nc -vz -w 5 trainer-demo.<region>.cloudapp.azure.com 443
+   ```
+
+3. **No firewall on the VM itself is in the way.** On Ubuntu `sudo ufw status` should read `inactive` (or allow 80 and 443); Azure's Ubuntu image ships with it inactive.
+
+Only when all three are right, continue. After the deploy, `infra/deploy.sh check` and `make check-deploy URL=https://<name>` confirm the certificate and the site.
+
+### Deploy
+
 On the VM, in the checkout (`~/app`):
 
 ```sh
@@ -124,8 +162,10 @@ infra/deploy.sh check
 What each does:
 
 - `init` writes `.env` (mode 600, git-ignored) with `APP_ENV=production`, a random `SECRET_KEY`, a random `POSTGRES_PASSWORD`, and your `DOMAIN` and `ACME_EMAIL`. It refuses to overwrite an existing `.env`. Those two environment variables are the only HTTPS configuration. The email is given to the certificate authority for expiry notices.
-- `up` builds the images on the VM and starts Postgres, the API, the web server and Caddy. The first build takes several minutes. On a small machine the build can run out of memory; add swap first (section 9).
-- `create-admin` asks for an email and password (at least 12 characters, not common, not containing the email name). Alternatively set `FIRST_ADMIN_EMAIL` and `FIRST_ADMIN_PASSWORD` in `.env` before `up`, and delete the password line afterwards. Nothing else creates accounts in production; demo accounts are refused at start-up and at sign-in.
+- `up` builds the images on the VM and starts Postgres, the API, the web server and Caddy. The first build takes several minutes. On a small machine the build can run out of memory; make sure the swap file from section 4 is in place.
+- `create-admin` asks for an email and then a password, typed twice and not shown on screen. The password is **never** accepted as a command-line argument (it would appear in the process list and in your shell history), and the command never prints it. The password must be at least 12 characters, not a common one, and not contain the email name.
+  - The only other source is the `.env` file: set `FIRST_ADMIN_EMAIL` and `FIRST_ADMIN_PASSWORD` there before `up` and the administrator is created at start. `init` creates `.env` with mode 600 (check with `ls -l .env`; it should read `-rw-------`). Delete the `FIRST_ADMIN_PASSWORD` line afterwards.
+  - Nothing else creates accounts in production; demo accounts are refused at start-up and at sign-in.
 - `check` runs the deployed-URL checks against `https://<your DOMAIN>`.
 
 Then open `https://<your DOMAIN>` in a browser and sign in with the administrator you created.
@@ -168,17 +208,23 @@ infra/deploy.sh restore <that backup directory>
 
 After a rollback the checkout is on a detached commit. Return to normal updates with `git checkout main`.
 
+### Rehearsal: prove update and rollback on the real VM
+
+`deploy.sh update` and `deploy.sh rollback` were written and syntax-checked but have **not** been run against a real server (they need a git remote and a running stack). Run them once, on the VM, before you rely on them, and write the result down. **This verification is open** until the table below has been filled in `docs/BUILD_LOG.md`.
+
+1. Note the current state: `git rev-parse --short HEAD` and `make check-deploy URL=https://<name>` (or `infra/deploy.sh check`).
+2. Take a manual backup and check it exists: `infra/backup.sh`, then `ls -l backups/`.
+3. **Update.** Push any new commit to `main` from your laptop (a docs-only commit is enough), then on the VM run `infra/deploy.sh update`. Expect: a backup, a pull, a rebuild, `check` passing, and the new commit hash shown. Confirm in the browser that you are still signed in or can sign in.
+4. **Roll back.** Run `infra/deploy.sh rollback`. Expect the checkout to return to the previous commit, a rebuild, and `check` passing. Confirm `git rev-parse --short HEAD` equals the hash from step 1.
+5. **Return to main.** `git checkout main`, then `infra/deploy.sh update` once more, and check again.
+6. **Failure path (optional but valuable).** Temporarily break a build (for example a typo on a throwaway branch on the VM), run `update`, and confirm it stops with the rollback instructions and leaves the previous version running.
+7. Record, in `docs/BUILD_LOG.md`: date, VM size, the commits involved, how long the update and rollback took, and anything that did not behave as written here. Fix this runbook for whatever differed.
+
 ## 9. Building on a small VM, and building for x86_64 on an ARM Mac
 
 The VM is x86_64. Images built on an Apple-silicon Mac are arm64 and will not run on it, so build where the architecture matches:
 
-- **Build on the VM (default).** `infra/deploy.sh up` does this. If the VM has little memory, add swap before the first build:
-
-  ```sh
-  sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile
-  sudo mkswap /swapfile && sudo swapon /swapfile
-  echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
-  ```
+- **Build on the VM (default).** `infra/deploy.sh up` does this, so add the swap file first (section 4). `deploy.sh up` also warns when memory plus swap is below 3 GiB.
 
 - **Build on your Mac for x86_64** (the build uses emulation; on the maintainer's M-series laptop `make build-amd64` finished in about 1.5 minutes and produced `amd64` images, but the images were not run on an x86_64 machine):
 
@@ -252,6 +298,6 @@ Environment variables used on the VM:
 | `up` stops with "demo accounts exist" | the database was created in demo mode; use a clean volume (`docker compose … down -v` removes this project's data) |
 | Browser shows a certificate warning | the certificate has not been issued yet; check DNS, ports 80 and 443, and `infra/deploy.sh logs caddy` |
 | `check` fails on `/readyz` | the database is not ready or the password changed; `infra/deploy.sh logs db api` |
-| Build is killed | out of memory on a small VM; add swap (section 9) or build on your Mac |
+| Build is killed | out of memory on a small VM; add the swap file (section 4) or build on your Mac (section 9) |
 | Cannot SSH after a while | your public IP changed and the NSG rule for port 22 no longer matches it |
 | Everyone is locked out of sign-in | too many failed sign-ins from one account or address; the limit clears by itself after 15 minutes |

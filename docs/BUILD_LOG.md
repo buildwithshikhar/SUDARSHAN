@@ -4,11 +4,11 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 
 ## Current position
 
-- **Phase:** wave 2 built and verified locally; waiting for the owner to deploy.
-- **Next wave:** 2 · Design system + app shell → [waves/wave-02-design-system-shell.md](waves/wave-02-design-system-shell.md) 
-- **Next step:** owner deploys following [DEPLOY.md](DEPLOY.md); then run `make smoke URL=...` and `make check-deploy URL=...` and record the result here.
-- **Main is:** green (CI confirmed by owner for the wave 1 closeout commit).
-- **Deployed build:** none yet. First live link is the wave 2 milestone.
+- **Phase:** wave 3 in progress (contracts and deterministic sim core). Wave 2 code is complete; its live-link record (URL, deployed commit) is still owner-pending, and the owner asked for wave 3 to proceed in parallel.
+- **Current wave:** 3 · Contracts + deterministic sim core → [waves/wave-03-contracts-sim-core.md](waves/wave-03-contracts-sim-core.md)
+- **Next step:** see the wave 3 entry's **Done** list and **Next wave entry point**.
+- **Main is:** green locally (lint, typecheck, unit, e2e, visual); CI per the wave entries.
+- **Deployed build:** owner-run update rehearsal on the Azure VM done 2026-10-18; URL and commit not yet recorded.
 
 ## Planning updates
 
@@ -26,7 +26,7 @@ Status values: Not started · In progress · Blocked · Done. A wave is Done onl
 |---|---|---|---|---|---|---|
 | 1 | [Repo bootstrap](waves/wave-01-repo-bootstrap.md) | — | Sonnet | Deploy-ready (prod images, smoke test) | Cut | Done |
 | 2 | [Design system + app shell](waves/wave-02-design-system-shell.md) | 1 | Sonnet | **PRIORITY MILESTONE: first live link** | Cut | In progress |
-| 3 | [Contracts + deterministic sim core](waves/wave-03-contracts-sim-core.md) | 1 | Opus | Keep live build green | Cut | Not started |
+| 3 | [Contracts + deterministic sim core](waves/wave-03-contracts-sim-core.md) | 1 | Opus | Keep live build green | Cut | In progress |
 | 4a | [Sensor models](waves/wave-04a-sensor-models.md) | 3 | Opus | Keep live build green | Cut | Not started |
 | 4b | [Tracking, fusion + AI assist](waves/wave-04b-tracking-ai-assist.md) | 4a | Opus | Keep live build green | Cut | Not started |
 | 5 | [Live-session vertical slice](waves/wave-05-live-session-slice.md) | 2, 4b | Sonnet | Redeploy: playable slice | Cut | Not started |
@@ -293,3 +293,30 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 **Next wave entry point**
 - After the deploy is verified and recorded: wave 3 (contracts and deterministic sim core), read docs/waves/wave-03-contracts-sim-core.md and start with the Pydantic contracts.
+
+### Wave 3 · Contracts + deterministic sim core
+
+- Status: In progress
+- Started from commit: 13ef48c
+- Goal: versioned contracts and a deterministic, replayable simulation core that every later wave builds on.
+
+**Done**
+- 89d38a6 build: `WEB_PORT` comes from the environment or command line before `.env` (run the demo on a free port: `WEB_PORT=8090 make demo`)
+- 13ef48c test(web): macOS visual baselines refreshed for the footer About link
+
+**Decisions**
+- Pack files carry a `contract` field (`scenario.v1`, `rulepack.v1`, `sensor-profile.v1`) instead of `schema`, which would shadow a Pydantic method; the loader dispatches on it.
+- Register row F01 (project-authored fictional value, always `verified: false`) added so example packs and fictional effector figures cite something honest; a test checks every `source_id` in `packs/` exists in DATA_REGISTER.md.
+- Scenario positions are local east-north-up metres on flat ground (no latitude and longitude), so no real-world location can be encoded.
+
+**Tests**
+- pending
+
+**Deploy check**
+- pending
+
+**Open issues**
+- pending
+
+**Next wave entry point**
+- pending

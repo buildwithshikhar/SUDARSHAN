@@ -53,8 +53,22 @@ cmd_init() {
   say "next: infra/deploy.sh up, then infra/deploy.sh create-admin"
 }
 
+warn_if_little_memory() {
+  # Linux only; building the images on a small VM without swap can be killed for lack of memory.
+  [ -r /proc/meminfo ] || return 0
+  local mem swap total
+  mem="$(awk '/^MemTotal:/ {print $2}' /proc/meminfo)"
+  swap="$(awk '/^SwapTotal:/ {print $2}' /proc/meminfo)"
+  total=$(( (mem + swap) / 1024 ))
+  if [ "$total" -lt 3072 ]; then
+    echo "warning: memory plus swap is ${total} MiB; the image build may be killed." >&2
+    echo "         Add the 2 GB swap file (docs/DEPLOY.md section 4) or use NO_BUILD=1 with images built elsewhere." >&2
+  fi
+}
+
 cmd_up() {
   [ -f "$ENV_FILE" ] || die "$ENV_FILE is missing; run infra/deploy.sh init first"
+  [ "${NO_BUILD:-0}" = "1" ] || warn_if_little_memory
   [ "$(env_value APP_ENV)" = "production" ] || die "APP_ENV in $ENV_FILE must be production"
   say "building and starting ($PROJECT, commit $GIT_SHA)"
   if [ "${NO_BUILD:-0}" = "1" ]; then

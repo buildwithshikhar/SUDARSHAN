@@ -275,3 +275,37 @@ def test_export_cli_check_passes_on_the_committed_schemas(
 ) -> None:
     assert main(["--check"]) == 0
     assert "up to date" in capsys.readouterr().out
+
+
+# ---------------------------------------------------------------------------- confusion tables
+
+CONFUSION = {
+    "labels": ["rotary-small", "unknown"],
+    "rows": {"rotary-small": [0.75, 0.25]},
+    "source_id": "F01",
+    "verified": False,
+}
+
+
+def profile_with(confusion: dict[str, Any]) -> dict[str, Any]:
+    return raw(PROFILE) | {"confusion": {"default": confusion}}
+
+
+def test_a_profile_may_carry_a_row_normalised_confusion_table() -> None:
+    data = profile_with(CONFUSION)
+    jsonschema.validate(data, schema("sensor-profile.v1"))
+    assert PACKS["sensor-profile.v1"].model_validate(data).model_dump(mode="json") == data
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"rows": {"rotary-small": [0.7, 0.2]}},
+        {"rows": {"rotary-small": [1.0]}},
+        {"labels": ["a", "a"]},
+    ],
+    ids=["row sum", "row length", "duplicate label"],
+)
+def test_confusion_tables_that_are_not_row_normalised_are_rejected(changes: dict[str, Any]) -> None:
+    with pytest.raises(ValidationError):
+        PACKS["sensor-profile.v1"].model_validate(profile_with(CONFUSION | changes))

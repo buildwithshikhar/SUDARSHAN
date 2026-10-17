@@ -1,5 +1,59 @@
 {
   "$defs": {
+    "ConfusionTable": {
+      "additionalProperties": false,
+      "description": "How a sensor labels each true class: one row per true class, one column per label.\n\nRows are probabilities and sum to 1 (row-normalised). The columns are the labels the sensor\ncan report, `unknown` included; the true classes need not be a subset of them.",
+      "properties": {
+        "labels": {
+          "items": {
+            "maxLength": 64,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "maxItems": 32,
+          "minItems": 2,
+          "title": "Labels",
+          "type": "array"
+        },
+        "rows": {
+          "maxProperties": 64,
+          "minProperties": 1,
+          "patternProperties": {
+            "^[a-z0-9]+(?:-[a-z0-9]+)*$": {
+              "items": {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number"
+              },
+              "type": "array"
+            }
+          },
+          "propertyNames": {
+            "maxLength": 64
+          },
+          "title": "Rows",
+          "type": "object"
+        },
+        "source_id": {
+          "pattern": "^[DGWXF][0-9]{2}$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "verified": {
+          "description": "True only when the matrix was checked against the source.",
+          "title": "Verified",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "labels",
+        "rows",
+        "source_id",
+        "verified"
+      ],
+      "title": "ConfusionTable",
+      "type": "object"
+    },
     "Quantity": {
       "additionalProperties": false,
       "description": "A numeric parameter with its unit and provenance.",
@@ -63,6 +117,20 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "properties": {
+    "confusion": {
+      "default": {},
+      "maxProperties": 8,
+      "patternProperties": {
+        "^[a-z][a-z0-9_]*$": {
+          "$ref": "#/$defs/ConfusionTable"
+        }
+      },
+      "propertyNames": {
+        "maxLength": 64
+      },
+      "title": "Confusion",
+      "type": "object"
+    },
     "contract": {
       "const": "sensor-profile.v1",
       "title": "Contract",

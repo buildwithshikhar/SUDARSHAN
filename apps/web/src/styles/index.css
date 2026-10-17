@@ -1,0 +1,57 @@
+@import './tokens.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-size: 14px;
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 20px;
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  button {
+    font: inherit;
+    color: inherit;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .micro-label {
+    @apply font-sans text-2xs uppercase text-ink-2;
+    letter-spacing: 0.06em;
+  }
+  .num {
+    @apply font-mono;
+    font-variant-numeric: tabular-nums;
+  }
+  .seg {
+    @apply inline-flex h-7 items-center border border-line bg-surface-1 px-3 text-sm text-ink-2;
+    transition:
+      color 140ms ease-out,
+      border-color 140ms ease-out,
+      background-color 140ms ease-out;
+  }
+  .seg:hover {
+    @apply text-ink;
+  }
+  .seg[aria-pressed='true'] {
+    @apply border-accent bg-surface-2 text-accent;
+  }
+}

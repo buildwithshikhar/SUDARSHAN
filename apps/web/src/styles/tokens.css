@@ -1,0 +1,46 @@
+/* Design tokens from docs/07-ui-map.md. Dark is the primary theme; light is selected with data-theme="light". */
+:root,
+[data-theme='dark'] {
+  --bg: #0b0e11;
+  --surface-1: #12161a;
+  --surface-2: #1a1f24;
+  --border: #272d34;
+  --text: #e4e7ea;
+  --text-2: #9ba4ae;
+  --accent: #4fb6c2;
+  --signal: #e0a526;
+  --track-hostile: #e5484d;
+  --track-suspect: #ee8a45;
+  --track-unknown: #e6c84f;
+  --track-neutral: #5db46e;
+  --track-friend: #5b9bd5;
+}
+
+[data-theme='light'] {
+  --bg: #f5f6f7;
+  --surface-1: #ffffff;
+  --surface-2: #eef0f2;
+  --border: #d5d9de;
+  --text: #14181c;
+  --text-2: #4f5862;
+  --accent: #1f7480;
+  --signal: #9a6a00;
+  --track-hostile: #c62b30;
+  --track-suspect: #b85a14;
+  --track-unknown: #8c7400;
+  --track-neutral: #2e7d3e;
+  --track-friend: #2f6ea8;
+}
+
+:root {
+  /* System stacks until wave 2 self-hosts IBM Plex and Noto Sans Devanagari. */
+  --font-sans:
+    'IBM Plex Sans', 'Noto Sans Devanagari', system-ui, -apple-system, 'Segoe UI',
+    'Kohinoor Devanagari', 'Nirmala UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+}

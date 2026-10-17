@@ -1,0 +1,26 @@
+{
+  "app": {
+    "skip": "Skip to content",
+    "scenarioLabel": "Fictional scenarios · open-source parameters"
+  },
+  "controls": {
+    "language": "Language",
+    "theme": "Theme",
+    "dark": "Dark",
+    "light": "Light"
+  },
+  "build": {
+    "title": "Build status",
+    "service": "Service",
+    "version": "Version",
+    "commit": "Commit",
+    "built": "Built",
+    "environment": "Environment",
+    "apiStatus": "API status",
+    "reachable": "Reachable",
+    "unreachable": "Unreachable",
+    "loading": "Loading build information",
+    "error": "The API did not respond. Check that the service is running, then retry.",
+    "retry": "Retry"
+  }
+}

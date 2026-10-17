@@ -6,6 +6,7 @@ Planning pack for SIH 2026 PS 26247, plus the working documents that drive the b
 
 | File | What it is |
 |---|---|
+| [BUILD_LOG.md](BUILD_LOG.md) | Resumable build state: wave list, status, deploy record and the rules every wave follows. |
 | [DECISIONS.md](DECISIONS.md) | Decision log, one short ADR per decision. |
 
 ## Planning pack

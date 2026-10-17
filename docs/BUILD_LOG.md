@@ -219,7 +219,7 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 **Hindi:** all Hindi strings are unreviewed; the sheet is [i18n/HI_REVIEW.md](i18n/HI_REVIEW.md) and Q-15 stays open.
 
 **Open issues**
-- Resolved: the owner confirmed CI green; run URL still to be pasted here. The repository is private and `gh` on this machine is the wrong CPU architecture. Open the Actions tab and confirm the run for 7b16194 (jobs: api, web, e2e, secrets, docker). Fix any failure before starting wave 2.
+- Resolved: the owner confirmed CI green; run URL still pending (to be pasted here). The repository is private and `gh` on this machine is the wrong CPU architecture. Open the Actions tab and confirm the run for 7b16194 (jobs: api, web, e2e, secrets, docker). Fix any failure before starting wave 2.
 - Port 8080 on this machine is held by another project's containers (`sih-*`), which were left untouched; local runs use `WEB_PORT=8081` in the git-ignored `.env`.
 - Playwright's Chromium (about 99 MiB) was downloaded with `npx playwright install`, a download beyond package registries that the wave's test requirement implies.
 - Hindi strings are drafted by Claude Code and need a human reviewer (Q-15).
@@ -272,9 +272,22 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 **Environment notes**
 - `WEB_PORT=8081` in the git-ignored `.env` on this machine (another project holds 8080). `make e2e` and `make visual` seed the three demo accounts in the local stack with a throwaway password.
 
+**Hardening pass (after wave 2)**
+- `create-admin` and `create-user` no longer accept `--password` (it would show in the process list and shell history); the password comes only from the environment or a hidden prompt, and is never echoed. Tests pin this.
+- DEPLOY.md now states that images are built on the VM by default, adds the 2 GB swap step before the first build, documents building amd64 images on a Mac and loading them with `docker save` / `docker load` as the alternative (no registry), makes the DNS name label steps explicit, and adds a pre-deploy check that the name resolves and ports 80 and 443 are open. `deploy.sh up` warns when memory plus swap is under 3 GiB.
+
+**Open verifications**
+- **Rehearse `deploy.sh update` and `deploy.sh rollback` on the real VM** (procedure in DEPLOY.md, "Rehearsal"), then record here: date, VM size, commits involved, durations, anything that differed. Until then both are only syntax-checked.
+- First real certificate from a public CA and a first run of the images on x86_64: not yet done (Azure steps untested).
+
+**Follow-ups**
+- Visual snapshot baselines exist for macOS only. CI excludes the `visual` project until Linux baselines are generated (run `make visual ARGS=--update-snapshots` in a Linux environment, commit `e2e/__screenshots__/linux/`, then add the project to the CI job).
+
+**CI status**
+- Owner statement at the hardening request: CI on `main` is confirmed green. Claude Code cannot read CI itself (no usable `gh`). The wave 1 run URL is still pending and is to be pasted into the Wave 1 entry; the wave 2 run URL is pending as well.
+
 **Open issues**
-- CI for the wave 2 commits has not been seen (no usable `gh`); check the Actions tab. The new CI steps (`make prod-check` pulling the Caddy image, `make backup-test`, e2e with seeded accounts) run for the first time there.
-- The wave 1 CI run URL is still to be pasted.
+- The new CI steps (`make prod-check` pulling the Caddy image, `make backup-test`, e2e with seeded accounts) first ran in CI after wave 2; confirm they stay green.
 - Owner to deploy; then record the live URL and commit here and run `make smoke URL=<live url>` and `make check-deploy URL=<live url>`.
 
 **Next wave entry point**

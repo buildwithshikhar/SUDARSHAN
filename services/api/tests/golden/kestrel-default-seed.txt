@@ -1,0 +1,136 @@
+# golden: kestrel-default-seed · scenario kestrel-dawn-approach 1.0.0 · seed 240117 · 8400 ticks
+# regenerate on purpose: UPDATE_GOLDEN=1 uv run pytest tests/test_sim_golden.py
+final_state_hash 1b832cfc4a133d764426f58d6e8ff81bea0c033c8cad622de7172859e7255919
+event_head 28c6f5a263ae03b3807ac0a9239c14a7830acdce73b9878331a2f0466576e605
+events
+    0 t=   0.00 session.start sim
+    1 t=   8.00 threat.spawn sim contact-a
+    2 t=  20.00 action.designate trainee:op-1
+    3 t=  26.00 action.classify trainee:op-1
+    4 t=  35.00 action.assess trainee:op-1
+    5 t=  35.00 action.report trainee:op-1
+    6 t=  45.00 action.rejected trainee:op-1
+    7 t=  75.00 weather.set instructor:lead
+    8 t=  94.30 threat.waypoint sim contact-a
+    9 t=  95.00 threat.spawn sim contact-b
+   10 t= 135.00 action.designate trainee:op-1
+   11 t= 155.00 action.engage trainee:op-1
+   12 t= 155.00 action.hold trainee:op-1
+   13 t= 169.50 threat.waypoint sim contact-b
+   14 t= 210.00 action.rejected trainee:op-1
+   15 t= 245.60 threat.waypoint sim contact-a
+   16 t= 250.00 weather.set instructor:lead
+   17 t= 252.35 threat.waypoint sim contact-b
+   18 t= 337.85 threat.waypoint sim contact-b
+   19 t= 337.85 threat.route_end sim contact-b
+   20 t= 337.85 threat.despawn sim contact-b
+   21 t= 420.00 session.end sim
+samples (every 200 ticks)
+  t=  10.00 contact-a route  leg=0 x=  2980.828 y=  2685.720 z=  78.000 v=16.000 vz=-3.500 heading=(-0.77550,-0.63134)
+  t=  10.00 wind gust=(-1.1681,+1.0322)
+  t=  20.00 contact-a route  leg=0 x=  2880.776 y=  2603.945 z=  70.051 v=16.000 vz=-0.026 heading=(-0.77566,-0.63115)
+  t=  20.00 wind gust=(-1.1439,+0.2759)
+  t=  30.00 contact-a route  leg=0 x=  2780.786 y=  2514.368 z=  70.000 v=16.000 vz=-0.000 heading=(-0.78098,-0.62456)
+  t=  30.00 wind gust=(+0.1686,-0.6492)
+  t=  40.00 contact-a route  leg=0 x=  2685.681 y=  2424.729 z=  70.000 v=16.000 vz=-0.000 heading=(-0.79175,-0.61085)
+  t=  40.00 wind gust=(-0.7511,+0.7122)
+  t=  50.00 contact-a route  leg=0 x=  2589.646 y=  2345.817 z=  70.000 v=16.000 vz=-0.000 heading=(-0.79645,-0.60470)
+  t=  50.00 wind gust=(-0.1291,+0.4038)
+  t=  60.00 contact-a route  leg=0 x=  2498.102 y=  2262.757 z=  70.000 v=16.000 vz=-0.000 heading=(-0.81384,-0.58110)
+  t=  60.00 wind gust=(+2.0796,+0.3729)
+  t=  70.00 contact-a route  leg=0 x=  2406.978 y=  2188.419 z=  70.000 v=16.000 vz=-0.000 heading=(-0.83106,-0.55618)
+  t=  70.00 wind gust=(+0.9027,-0.7730)
+  t=  80.00 contact-a route  leg=0 x=  2330.533 y=  2117.804 z=  70.000 v=16.000 vz= 0.000 heading=(-0.88723,-0.46132)
+  t=  80.00 wind gust=(-0.6617,+2.2241)
+  t=  90.00 contact-a route  leg=0 x=  2253.736 y=  2063.259 z=  70.000 v=16.000 vz= 0.000 heading=(-0.97038,-0.24160)
+  t=  90.00 wind gust=(-0.6040,-0.6761)
+  t= 100.00 contact-a route  leg=1 x=  2183.563 y=  2014.305 z=  56.243 v=14.000 vz=-0.637 heading=(-0.84274,-0.53833)
+  t= 100.00 contact-b route  leg=0 x= -4029.101 y=  2597.106 z= 257.094 v=28.000 vz= 1.490 heading=(+0.99832,-0.05802)
+  t= 100.00 wind gust=(-1.1569,+2.0679)
+  t= 110.00 contact-a route  leg=1 x=  2138.787 y=  1953.668 z=  55.008 v=14.000 vz=-0.004 heading=(-0.85722,-0.51495)
+  t= 110.00 contact-b route  leg=0 x= -3675.485 y=  2592.977 z= 259.982 v=28.000 vz= 0.009 heading=(+0.99785,-0.06557)
+  t= 110.00 wind gust=(-0.4462,+0.1704)
+  t= 120.00 contact-a route  leg=1 x=  2088.138 y=  1874.116 z=  55.000 v=14.000 vz=-0.000 heading=(-0.88048,-0.47408)
+  t= 120.00 contact-b route  leg=0 x= -3325.133 y=  2564.690 z= 260.000 v=28.000 vz= 0.000 heading=(+0.99803,-0.06274)
+  t= 120.00 wind gust=(-0.5093,-1.1837)
+  t= 130.00 contact-a route  leg=1 x=  2041.391 y=  1809.491 z=  55.000 v=14.000 vz=-0.000 heading=(-0.89971,-0.43649)
+  t= 130.00 contact-b route  leg=0 x= -2967.749 y=  2546.011 z= 260.000 v=28.000 vz= 0.000 heading=(+0.99787,-0.06526)
+  t= 130.00 wind gust=(+0.2199,-0.1561)
+  t= 140.00 contact-a route  leg=1 x=  1988.536 y=  1751.976 z=  55.000 v=14.000 vz=-0.000 heading=(-0.91572,-0.40182)
+  t= 140.00 contact-b route  leg=0 x= -2614.085 y=  2528.400 z= 260.000 v=28.000 vz= 0.000 heading=(+0.99754,-0.07016)
+  t= 140.00 wind gust=(+0.5814,+0.3765)
+  t= 150.00 contact-a route  leg=1 x=  1933.152 y=  1699.617 z=  55.000 v=14.000 vz=-0.000 heading=(-0.93024,-0.36694)
+  t= 150.00 contact-b route  leg=0 x= -2261.082 y=  2509.100 z= 260.000 v=28.000 vz= 0.000 heading=(+0.99700,-0.07736)
+  t= 150.00 wind gust=(+0.0808,+0.2932)
+  t= 160.00 contact-a route  leg=1 x=  1870.526 y=  1646.496 z=  55.000 v=14.000 vz= 0.000 heading=(-0.94541,-0.32588)
+  t= 160.00 contact-b route  leg=0 x= -1913.449 y=  2482.273 z= 260.000 v=28.000 vz= 0.000 heading=(+0.99696,-0.07785)
+  t= 160.00 wind gust=(-0.2966,-0.8260)
+  t= 170.00 contact-a route  leg=1 x=  1810.743 y=  1599.043 z=  55.000 v=14.000 vz= 0.000 heading=(-0.95990,-0.28033)
+  t= 170.00 contact-b route  leg=1 x= -1560.222 y=  2457.331 z= 262.000 v=29.000 vz= 4.000 heading=(+0.99802,+0.06283)
+  t= 170.00 wind gust=(+1.5251,+0.4010)
+  t= 180.00 contact-a route  leg=1 x=  1751.850 y=  1563.293 z=  55.000 v=14.000 vz= 0.000 heading=(-0.96991,-0.24345)
+  t= 180.00 contact-b route  leg=1 x= -1194.650 y=  2476.751 z= 279.821 v=29.000 vz= 0.092 heading=(+0.99794,+0.06414)
+  t= 180.00 wind gust=(-0.3825,-0.7066)
+  t= 190.00 contact-a route  leg=1 x=  1687.863 y=  1528.441 z=  55.000 v=14.000 vz= 0.000 heading=(-0.98012,-0.19843)
+  t= 190.00 contact-b route  leg=1 x=  -832.704 y=  2491.813 z= 279.999 v=29.000 vz= 0.001 heading=(+0.99771,+0.06764)
+  t= 190.00 wind gust=(+0.5634,-0.0395)
+  t= 200.00 contact-a route  leg=1 x=  1621.078 y=  1493.993 z=  55.000 v=14.000 vz= 0.000 heading=(-0.99070,-0.13607)
+  t= 200.00 contact-b route  leg=1 x=  -472.173 y=  2501.201 z= 280.000 v=29.000 vz= 0.000 heading=(+0.99717,+0.07519)
+  t= 200.00 wind gust=(-0.1906,-1.1370)
+  t= 210.00 contact-a route  leg=1 x=  1549.556 y=  1478.535 z=  55.000 v=14.000 vz= 0.000 heading=(-0.99352,-0.11367)
+  t= 210.00 contact-b route  leg=1 x=  -115.586 y=  2524.983 z= 280.000 v=29.000 vz= 0.000 heading=(+0.99702,+0.07715)
+  t= 210.00 wind gust=(-0.1750,+0.4848)
+  t= 220.00 contact-a route  leg=1 x=  1478.950 y=  1467.481 z=  55.000 v=14.000 vz= 0.000 heading=(-0.99525,-0.09736)
+  t= 220.00 contact-b route  leg=1 x=   242.133 y=  2551.352 z= 280.000 v=29.000 vz= 0.000 heading=(+0.99694,+0.07817)
+  t= 220.00 wind gust=(+0.1933,+0.2387)
+  t= 230.00 contact-a route  leg=1 x=  1419.127 y=  1455.800 z=  55.000 v=14.000 vz= 0.000 heading=(-0.99882,-0.04863)
+  t= 230.00 contact-b route  leg=1 x=   610.968 y=  2573.293 z= 280.000 v=29.000 vz= 0.000 heading=(+0.99630,+0.08595)
+  t= 230.00 wind gust=(-0.0098,+0.3675)
+  t= 240.00 contact-a route  leg=1 x=  1351.451 y=  1449.692 z=  55.000 v=14.000 vz= 0.000 heading=(-0.99998,+0.00552)
+  t= 240.00 contact-b route  leg=1 x=   971.987 y=  2596.619 z= 280.000 v=29.000 vz= 0.000 heading=(+0.99494,+0.10047)
+  t= 240.00 wind gust=(-0.6747,-0.5115)
+  t= 250.00 contact-a hold   leg=1 x=  1335.096 y=  1395.459 z=  55.000 v=14.000 vz= 0.000 heading=(-0.24408,-0.96976)
+  t= 250.00 contact-b route  leg=1 x=  1334.647 y=  2628.423 z= 280.000 v=29.000 vz= 0.000 heading=(+0.99161,+0.12924)
+  t= 250.00 wind gust=(-0.7601,+0.3365)
+  t= 260.00 contact-a hold   leg=1 x=  1295.569 y=  1334.861 z=  55.000 v=14.000 vz= 0.000 heading=(-0.99902,-0.04419)
+  t= 260.00 contact-b route  leg=2 x=  1681.372 y=  2572.050 z= 299.241 v=29.000 vz= 0.389 heading=(+0.92547,-0.37882)
+  t= 260.00 wind gust=(-0.6008,+0.6845)
+  t= 270.00 contact-a route  leg=2 x=  1291.997 y=  1253.933 z=  40.191 v=12.000 vz=-0.098 heading=(-0.62270,-0.78246)
+  t= 270.00 contact-b route  leg=2 x=  2024.154 y=  2467.382 z= 299.995 v=29.000 vz= 0.002 heading=(+0.92033,-0.39113)
+  t= 270.00 wind gust=(+0.2459,+0.0814)
+  t= 280.00 contact-a route  leg=2 x=  1286.738 y=  1172.996 z=  40.001 v=12.000 vz=-0.001 heading=(-0.65787,-0.75314)
+  t= 280.00 contact-b route  leg=2 x=  2361.919 y=  2362.932 z= 300.000 v=29.000 vz= 0.000 heading=(+0.91358,-0.40667)
+  t= 280.00 wind gust=(-0.9554,+1.5724)
+  t= 290.00 contact-a route  leg=2 x=  1274.805 y=  1095.647 z=  40.000 v=12.000 vz=-0.000 heading=(-0.69045,-0.72338)
+  t= 290.00 contact-b route  leg=2 x=  2694.471 y=  2253.464 z= 300.000 v=29.000 vz= 0.000 heading=(+0.90530,-0.42476)
+  t= 290.00 wind gust=(-0.3398,-0.2424)
+  t= 300.00 contact-a route  leg=2 x=  1260.030 y=  1010.373 z=  40.000 v=12.000 vz=-0.000 heading=(-0.72914,-0.68436)
+  t= 300.00 contact-b route  leg=2 x=  3026.102 y=  2126.848 z= 300.000 v=29.000 vz= 0.000 heading=(+0.89729,-0.44143)
+  t= 300.00 wind gust=(-0.6146,-0.5756)
+  t= 310.00 contact-a route  leg=2 x=  1245.760 y=   930.585 z=  40.000 v=12.000 vz=-0.000 heading=(-0.76856,-0.63978)
+  t= 310.00 contact-b route  leg=2 x=  3360.349 y=  1995.286 z= 300.000 v=29.000 vz= 0.000 heading=(+0.88472,-0.46611)
+  t= 310.00 wind gust=(+0.6435,+0.3679)
+  t= 320.00 contact-a route  leg=2 x=  1226.633 y=   858.913 z=  40.000 v=12.000 vz=-0.000 heading=(-0.80364,-0.59512)
+  t= 320.00 contact-b route  leg=2 x=  3689.132 y=  1857.106 z= 300.000 v=29.000 vz= 0.000 heading=(+0.86341,-0.50451)
+  t= 320.00 wind gust=(-0.3165,-1.0177)
+  t= 330.00 contact-a route  leg=2 x=  1201.541 y=   785.144 z=  40.000 v=12.000 vz= 0.000 heading=(-0.84017,-0.54232)
+  t= 330.00 contact-b route  leg=2 x=  4008.766 y=  1698.080 z= 300.000 v=29.000 vz= 0.000 heading=(+0.82720,-0.56190)
+  t= 330.00 wind gust=(-0.2374,+0.0573)
+  t= 340.00 contact-a route  leg=2 x=  1171.417 y=   726.046 z=  40.000 v=12.000 vz= 0.000 heading=(-0.86744,-0.49755)
+  t= 340.00 wind gust=(-0.7765,-0.9561)
+  t= 350.00 contact-a route  leg=2 x=  1141.099 y=   674.573 z=  40.000 v=12.000 vz= 0.000 heading=(-0.89152,-0.45299)
+  t= 350.00 wind gust=(+0.4086,-0.0189)
+  t= 360.00 contact-a route  leg=2 x=  1108.770 y=   626.116 z=  40.000 v=12.000 vz= 0.000 heading=(-0.91450,-0.40458)
+  t= 360.00 wind gust=(+0.2229,+1.1145)
+  t= 370.00 contact-a route  leg=2 x=  1073.714 y=   586.236 z=  40.000 v=12.000 vz= 0.000 heading=(-0.93205,-0.36232)
+  t= 370.00 wind gust=(-1.4466,-0.4290)
+  t= 380.00 contact-a route  leg=2 x=  1029.959 y=   543.605 z=  40.000 v=12.000 vz= 0.000 heading=(-0.95071,-0.31010)
+  t= 380.00 wind gust=(-1.5649,-0.3282)
+  t= 390.00 contact-a route  leg=2 x=   984.516 y=   507.698 z=  40.000 v=12.000 vz= 0.000 heading=(-0.96582,-0.25920)
+  t= 390.00 wind gust=(+0.1981,-0.5301)
+  t= 400.00 contact-a route  leg=2 x=   949.829 y=   486.323 z=  40.000 v=12.000 vz= 0.000 heading=(-0.97421,-0.22565)
+  t= 400.00 wind gust=(+0.0131,+0.2498)
+  t= 410.00 contact-a route  leg=2 x=   906.229 y=   467.086 z=  40.000 v=12.000 vz= 0.000 heading=(-0.98068,-0.19561)
+  t= 410.00 wind gust=(+0.5895,+1.4867)
+  t= 420.00 contact-a route  leg=2 x=   864.428 y=   442.810 z=  40.000 v=12.000 vz= 0.000 heading=(-0.99106,-0.13341)
+  t= 420.00 wind gust=(+0.4313,-0.8032)

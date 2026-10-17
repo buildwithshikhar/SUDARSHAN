@@ -18,7 +18,9 @@ function* flat(node, prefix = '') {
 
 const hindi = Object.fromEntries(flat(hi))
 const cell = (text) => String(text).replaceAll('|', '\\|')
-const rows = [...flat(en)].map(([key, source]) => `| \`${key}\` | ${cell(source)} | ${cell(hindi[key] ?? '')} |  |`)
+const rows = [...flat(en)].map(
+  ([key, source]) => `| \`${key}\` | ${cell(source)} | ${cell(hindi[key] ?? '')} |  |`,
+)
 
 const sheet = `# Hindi string review sheet
 

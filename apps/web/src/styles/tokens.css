@@ -8,6 +8,7 @@
   --text: #e4e7ea;
   --text-2: #9ba4ae;
   --accent: #4fb6c2;
+  --on-accent: #0b0e11;
   --signal: #e0a526;
   --track-hostile: #e5484d;
   --track-suspect: #ee8a45;
@@ -24,6 +25,7 @@
   --text: #14181c;
   --text-2: #4f5862;
   --accent: #1f7480;
+  --on-accent: #ffffff;
   --signal: #9a6a00;
   --track-hostile: #c62b30;
   --track-suspect: #b85a14;

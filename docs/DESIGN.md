@@ -26,11 +26,19 @@ Colour is never the only cue: pair it with a shape and a text label. Text pairs 
 
 ## Type, space, shape
 
-- IBM Plex Sans for the interface, IBM Plex Mono with tabular figures for numbers, clocks, coordinates and logs, Noto Sans Devanagari for Hindi. Wave 1 uses system stacks with the same variables; wave 2 self-hosts the fonts (OFL).
+- IBM Plex Sans for the interface, IBM Plex Mono with tabular figures for numbers, clocks, coordinates and logs, Noto Sans Devanagari for Hindi. All three are self-hosted and bundled (sources and licences in [FONTS.md](FONTS.md)); system fonts are fallbacks only.
 - Scale 11 / 12 / 13 / 14 / 16 / 20 (Tailwind `2xs` to `lg`); 13 px base on dense operations screens, 14 px elsewhere. Uppercase only for 11 px micro-labels with +6% tracking.
 - 4 px grid (4, 8, 12, 16, 24, 32, 48). Controls have a 2 px radius, panels 4 px. Panels are separated by 1 px borders, not shadows.
-- Icons: IBM Carbon only, 16 and 20 px, one stroke style. None are used yet.
+- Icons: IBM Carbon only, 16 and 20 px, one stroke style. They appear where they carry meaning (alerts, empty and error states, sign out), not inside every button; navigation is text.
 - Motion: 120–160 ms ease-out for state changes only, and none under `prefers-reduced-motion`.
+
+## Shell and components (wave 2)
+
+- **Frame.** A 40 px top bar (brand mark, role, account, language, theme, sign out), a 232 px sidebar grouped by the role's modules with a 2 px accent bar on the active item, a content area with a page header (path in mono, title at 20 px), and a status strip with the permanent scenario label, build version and an About link.
+- **Brand mark.** A monogram in a ring-and-bearing frame; the letter comes from `brand.json`, so a rename follows.
+- **Components** (`apps/web/src/ui/`): Button (primary, secondary, ghost), Input, Select, Checkbox, Panel, Table (28 px compact and 36 px comfortable rows), Tabs (arrow, Home and End keys), Dialog (native `<dialog>`), Badge, InlineAlert, Tooltip, Segmented, EmptyState, LoadingState, ErrorState. In demo mode `/dev/components` shows them all.
+- **Sidebar source.** One list in `apps/web/src/nav/modules.ts` matches `07-ui-map.md` (trainee 3 groups and 6 modules, instructor 4 and 10, admin 3 and 8, plus a shared Account group); a test pins the counts. A module whose wave has not shipped shows an empty state naming that wave.
+- **Honest content.** The first screen after sign-in is Status: the build, the session, and a table of the role's modules with the wave that delivers each.
 
 ## Rules for every screen
 

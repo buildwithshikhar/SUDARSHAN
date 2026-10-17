@@ -13,7 +13,7 @@ export default {
       surface: { 1: v('surface-1'), 2: v('surface-2') },
       line: v('border'),
       ink: { DEFAULT: v('text'), 2: v('text-2') },
-      accent: v('accent'),
+      accent: { DEFAULT: v('accent'), on: v('on-accent') },
       signal: v('signal'),
       track: {
         hostile: v('track-hostile'),

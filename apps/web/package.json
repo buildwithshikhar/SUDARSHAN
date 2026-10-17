@@ -14,13 +14,19 @@
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "i18n:sheet": "node scripts/hi-review.mjs"
   },
   "dependencies": {
+    "@carbon/icons-react": "^11.90.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/ibm-plex-sans": "^5.3.0",
+    "@fontsource/noto-sans-devanagari": "^5.3.0",
     "i18next": "^26.4.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-i18next": "^17.0.20"
+    "react-i18next": "^17.0.20",
+    "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",

@@ -2,7 +2,7 @@
   "$defs": {
     "ActionRecord": {
       "additionalProperties": false,
-      "description": "A trainee or instructor input, applied at the start of `tick`.",
+      "description": "A trainee or instructor input, applied at the start of `tick`.\n\nPause and resume are not actions: a paused session simply stops ticking, so they never reach\nthe simulation and cannot change its outcome.",
       "properties": {
         "action": {
           "anyOf": [
@@ -18,11 +18,7 @@
               "type": "string"
             },
             {
-              "enum": [
-                "pause",
-                "resume",
-                "set-weather"
-              ],
+              "const": "set-weather",
               "type": "string"
             }
           ],

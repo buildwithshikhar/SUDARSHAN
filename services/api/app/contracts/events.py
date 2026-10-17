@@ -32,11 +32,15 @@ class EventRecord(Contract):
 
 
 class ActionRecord(Contract):
-    """A trainee or instructor input, applied at the start of `tick`."""
+    """A trainee or instructor input, applied at the start of `tick`.
+
+    Pause and resume are not actions: a paused session simply stops ticking, so they never reach
+    the simulation and cannot change its outcome.
+    """
 
     tick: Annotated[int, Field(ge=0)]
     actor: Actor
-    action: Action | Literal["pause", "resume", "set-weather"]
+    action: Action | Literal["set-weather"]
     payload: Payload = {}
 
 

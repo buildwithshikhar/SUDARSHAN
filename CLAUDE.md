@@ -61,11 +61,11 @@ Repo layout (created in wave 1): `apps/web/`, `services/api/`, `packs/` (rule pa
 3. Small conventional commits (`feat:`, `fix:`, `test:`, `docs:`, `chore:`, `build:`, `ci:`, `refactor:`, `perf:`). One logical change per commit. See [CONTRIBUTING.md](CONTRIBUTING.md).
 4. Every feature ships with tests. CI must be green on `main` before the wave is marked done.
 5. Update `docs/BUILD_LOG.md` after every merged step, so a `/clear` can resume from the log alone.
-6. Never carry a red build across a `/clear`. If about 60% of the session is used before acceptance, stop at the next green commit, log it, and continue as wave n.b.
+6. Never carry a red build across a `/clear`. If about 60% of the session is used before acceptance, stop at the next green commit, log it, and continue as wave n.2 (for example 9a.2).
 7. Stop and report instead of guessing when a step needs credentials, network beyond package registries and GitHub, a Docker action outside this compose project, or when CI fails 3 times on the same cause.
 8. Do not build features from later waves.
 
-Model choice: Sonnet by default. Opus only where a wrong design is expensive to undo (waves 3, 4 and 9, or wave 7 if the benchmark gate fails).
+Model choice: Sonnet by default. Opus only where a wrong design is expensive to undo (waves 3, 4a, 4b and 9a, or wave 7 if the benchmark gate fails).
 
 ## Wave execution protocol
 

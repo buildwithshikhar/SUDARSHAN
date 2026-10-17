@@ -13,12 +13,15 @@ Sensor models are calibrated from open research datasets and published specifica
 | Planning pack, data register, decisions | Done |
 | Wave 1 · Repo bootstrap | Not started |
 | Wave 2 · Design system and app shell (first live link) | Not started |
-| Waves 3–4 · Contracts, deterministic sim core, sensor models and fusion | Not started |
+| Waves 3, 4a, 4b · Contracts, deterministic sim core, sensor models, tracking and AI assist | Not started |
 | Wave 5 · Live-session vertical slice | Not started |
-| Waves 6–8 · Scoring and debrief, 3D realism and terrain, threat breadth | Not started |
-| Waves 9–10 · Scenario engine, instructor console | Not started |
-| Waves 11–12 · Adaptive learning, full after-action review and reports | Not started |
-| Waves 13–14 · Team mode, trust and admin, WebXR and hardening | Not started |
+| Waves 6–8 · Scoring and contact reports, 3D realism and terrain, threat breadth | Not started |
+| Waves 9a–9c · Scenario engine, site builder, sensor placement trainer | Not started |
+| Waves 10a–10b · Class management and rule packs, live monitor and director mode | Not started |
+| Waves 11a–11b · Adaptive learning and adversary, recognition academy | Not started |
+| Waves 12a–12b · Full after-action review and reports, counterfactual review | Not started |
+| Waves 13a–13c · Team mode, signed records and competency matrix, admin and packs | Not started |
+| Waves 14a–14b · Hardening and accessibility, WebXR (optional) | Not started |
 | Wave 15 · Documentation and release 1.0 | Not started |
 
 The authoritative state is [docs/BUILD_LOG.md](docs/BUILD_LOG.md).
@@ -117,7 +120,7 @@ There is nothing to run yet. Wave 1 adds the repository skeleton and the `make` 
 
 ## Roadmap
 
-First, a deployable foundation: the repository, the design system and a live link. Then the core: a deterministic simulation, sensor models and a playable single-operator session. Then the training layer: scoring, realism, more threat types, the scenario engine and the instructor console. Then what turns a simulator into a training system: adaptive drills, full after-action review, team mode, signed records and administration. A pilot with 12 volunteers starts once the review is complete, and release 1.0 follows. Differentiating features are scheduled into these waves in [docs/10-differentiators.md](docs/10-differentiators.md).
+First, a deployable foundation: the repository, the design system and a live link. Then the core: a deterministic simulation, sensor models and a playable single-operator session. Then the training layer: scoring, realism, more threat types, the scenario engine and the instructor console. Then what turns a simulator into a training system: adaptive drills, full after-action review, team mode, signed records and administration. A pilot with 12 volunteers starts once the full review is in place, and release 1.0 follows. Differentiating features such as an adaptive adversary, a sensor placement trainer and counterfactual review are scheduled into these waves in [docs/10-differentiators.md](docs/10-differentiators.md).
 
 ---
 

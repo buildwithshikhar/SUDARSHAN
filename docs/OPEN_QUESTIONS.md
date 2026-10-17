@@ -39,6 +39,7 @@ Everything the research marked unverified or undecided. Owner is **SD** (the use
 | Q-14 | **VR headset access**: none assumed. Decide whether any headset test is attempted. | SD | If none, keep the wording "VR mode, emulator-tested". | Wave 14 |
 | Q-15 | **Hindi translation review**: who reviews the HI strings for correct military and technical terms. | SD | Name a reviewer; Claude Code produces a glossary file for them in wave 2. | Wave 2 onward |
 | Q-16 | **Real Doppler RAD-DAR** dataset (D17) was not found. | SD | Supply a link, or the row stays dropped. | Optional |
+| Q-17 | **Optional AAR narration backend**: wave 12b ships a deterministic template narrator. Decide whether a local language-model backend is wanted, and which licence and hardware budget applies. | SD | Name a model that fits the 8 GB floor and has an open licence, or keep template-only. | Before wave 12b |
 
 ## Closed
 

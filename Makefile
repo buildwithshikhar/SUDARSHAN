@@ -5,7 +5,10 @@ PROJECT ?= $(shell echo '$(PRODUCT_NAME)' | tr '[:upper:]' '[:lower:]')
 GIT_SHA := $(shell git rev-parse --short HEAD 2>/dev/null || echo dev)
 BUILD_TIME := $(shell date -u +%Y-%m-%dT%H:%M:%SZ)
 export PRODUCT_NAME GIT_SHA BUILD_TIME
-WEB_PORT := $(or $(shell grep -s '^WEB_PORT=' .env | cut -d= -f2),8080)
+# Host port for the stack: environment or command line first, then .env, then 8080.
+# Example when 8080 is taken: `WEB_PORT=8090 make demo visual`.
+WEB_PORT ?= $(or $(shell grep -s '^WEB_PORT=' .env | cut -d= -f2),8080)
+export WEB_PORT
 URL ?= http://localhost:$(WEB_PORT)
 
 COMPOSE = docker compose -p $(PROJECT) --env-file .env -f infra/docker-compose.yml
@@ -55,7 +58,7 @@ visual: ## Playwright visual snapshots (per-platform baselines); add ARGS=--upda
 build: ## build both production images
 	$(COMPOSE) build
 
-up: env ## start the stack (demo mode) on http://localhost:8080
+up: env ## start the stack (demo mode) on http://localhost:$WEB_PORT (default 8080)
 	$(COMPOSE) up -d --build --wait
 
 down: ## stop the stack; data volume is kept

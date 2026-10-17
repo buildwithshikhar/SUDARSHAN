@@ -120,3 +120,14 @@ def test_validate_email_normalises() -> None:
 
 def test_verify_password_rejects_garbage_hash() -> None:
     assert verify_password("not-a-hash", "x") is False
+
+
+def test_check_passes_in_demo_and_fails_on_bad_production_secret(migrated: Settings) -> None:
+    assert runner.invoke(cli, ["check"], env=_env(migrated)).exit_code == 0
+    bad = runner.invoke(
+        cli, ["check"], env={**_env(migrated, APP_ENV="production"), "SECRET_KEY": "x"}
+    )
+    assert bad.exit_code == 3
+    assert "SECRET_KEY" in bad.output
+    good = runner.invoke(cli, ["check"], env=_env(migrated, APP_ENV="production"))
+    assert good.exit_code == 0 and "production" in good.output

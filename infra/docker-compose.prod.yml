@@ -1,0 +1,25 @@
+# Production override: docker compose -f docker-compose.yml -f docker-compose.prod.yml ...
+# No demo seeding, secrets are required, containers restart and are locked down.
+services:
+  db:
+    restart: unless-stopped
+    security_opt: ["no-new-privileges:true"]
+
+  api:
+    restart: unless-stopped
+    environment:
+      APP_ENV: production
+      SECRET_KEY: ${SECRET_KEY:?set SECRET_KEY (at least 32 random characters)}
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8000/readyz', timeout=2)"]
+      interval: 10s
+      timeout: 3s
+      start_period: 20s
+      retries: 5
+
+  web:
+    restart: unless-stopped
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]

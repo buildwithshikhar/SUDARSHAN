@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from alembic import command
 from app.config import Settings
 from app.db import make_engine
+from app.guard import StartupError, validate_production
 from app.models import Role
 from app.users import UserError, create_admin, upsert_demo_user
 
@@ -28,6 +29,18 @@ def _alembic_config(settings: Settings) -> Config:
     config.set_main_option("script_location", str(root / "alembic"))
     config.set_main_option("sqlalchemy.url", settings.database_url.replace("%", "%%"))
     return config
+
+
+@cli.command()
+def check() -> None:
+    """Run the production start-up guard without starting the server."""
+    settings = Settings()
+    try:
+        validate_production(settings, make_engine(settings.database_url))
+    except StartupError as error:
+        typer.echo(f"error: {error}", err=True)
+        raise typer.Exit(code=3) from error
+    typer.echo(f"start-up checks passed ({settings.app_env})")
 
 
 @cli.command()

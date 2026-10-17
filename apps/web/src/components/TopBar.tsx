@@ -23,9 +23,7 @@ export function TopBar({ theme, onTheme }: Props) {
     <header className="flex h-10 items-center justify-between border-b border-line bg-surface-1 px-4">
       <div className="flex items-center gap-3">
         <span aria-hidden="true" className="block h-4 w-0.5 bg-signal" />
-        <span className="text-base font-semibold" style={{ letterSpacing: '0.14em' }}>
-          {brand.productName}
-        </span>
+        <span className="text-base font-semibold tracking-[0.14em]">{brand.productName}</span>
         <span aria-hidden="true" className="h-4 w-px bg-line" />
         <span className="hidden text-sm text-ink-2 sm:inline">{brand.descriptor}</span>
       </div>

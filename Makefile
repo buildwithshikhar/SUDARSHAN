@@ -8,10 +8,10 @@ export PRODUCT_NAME GIT_SHA BUILD_TIME
 # Host port for the stack: environment or command line first, then .env, then 8080.
 # Example when 8080 is taken: `WEB_PORT=8090 make demo visual`.
 WEB_PORT ?= $(or $(shell grep -s '^WEB_PORT=' .env | cut -d= -f2),8080)
-export WEB_PORT
 URL ?= http://localhost:$(WEB_PORT)
 
-COMPOSE = docker compose -p $(PROJECT) --env-file .env -f infra/docker-compose.yml
+# Passed to the demo stack only; prod-check and backup-test set their own ports.
+COMPOSE = env WEB_PORT=$(WEB_PORT) docker compose -p $(PROJECT) --env-file .env -f infra/docker-compose.yml
 COMPOSE_PROD = $(COMPOSE) -f infra/docker-compose.prod.yml
 # Portable random hex (openssl is not guaranteed on every build host).
 rand = $$(python3 -c "import secrets; print(secrets.token_hex($(1)))")

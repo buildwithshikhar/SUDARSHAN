@@ -46,17 +46,18 @@ Status values: Not started · In progress · Blocked · Done. A wave is Done onl
 | 13c | [Admin + pack manager](waves/wave-13c-admin-packs.md) | 13b, 9a | Sonnet | Keep live build green | Cut | Not started |
 | 14a | [Hardening + accessibility](waves/wave-14a-hardening.md) | 7, 12b, 13c | Sonnet | Keep live build green | Cut | Not started |
 | 14b | [WebXR (optional)](waves/wave-14b-webxr.md) | 14a | Sonnet | Keep live build green | Depth | Not started |
-| 15 | [Docs + release 1.0](waves/wave-15-docs-release.md) | all (14b optional) | Sonnet | Release 1.0 | Depth | Not started |
+| 15a | [Submission documentation](waves/wave-15a-submission-docs.md) | cut waves, 14a last | Sonnet | Redeploy: submission build | Cut | Not started |
+| 15b | [Release 1.0 polish](waves/wave-15b-release-polish.md) | 15a, plus any depth wave built | Sonnet | Release 1.0 | Depth | Not started |
 
 **Pilot** (the user's activity, not a wave): starts once wave 12a is Done. Waves 12b onward continue alongside it. The demo-complete live link is wave 12b.
 
 ## Submission-ready cut
 
-The smallest ordered set of waves that gives a complete, polished, demoable live link covering every problem-statement requirement (R0–R19 in [06-requirements-traceability.md](06-requirements-traceability.md)) and the five demo features from [10-differentiators.md](10-differentiators.md). Waves marked **Depth** in the table above come after the cut. No wave file was changed to define it.
+The smallest ordered set of waves that gives a complete, polished, demoable live link covering every problem-statement requirement (R0–R19 in [06-requirements-traceability.md](06-requirements-traceability.md)), the five demo features from [10-differentiators.md](10-differentiators.md) and the documentation a submission needs. Waves marked **Depth** in the table above come after the cut.
 
-**Order:** 1 → 2 → 3 → 4a → 4b → 5 → 6 → 7 → 8 → 9a → 9b → 9c → 10a → 10b → 11a → 11b → 12a → 12b → 13b → 13c → 14a. That is 21 of 24 waves. The live link exists from wave 2, becomes playable at 5, pilot-ready at 12a (pilot starts) and demo-complete at 12b; 13b adds the signed-record beat.
+**Order:** 1 → 2 → 3 → 4a → 4b → 5 → 6 → 7 → 8 → 9a → 9b → 9c → 10a → 10b → 11a → 11b → 12a → 12b → 13b → 13c → 14a → 15a. That is 22 of 25 waves. The live link exists from wave 2, becomes playable at 5, pilot-ready at 12a (pilot starts), demo-complete at 12b, and submission-ready at 15a; 13b adds the signed-record beat.
 
-**Why it is not smaller.** Every wave in the cut is either a requirement or a dependency of one, as the wave files state them. Examples: the sensor placement trainer (9c) needs the site builder (9b); the full AAR (12a) needs the recognition academy (11b); the signed record and competency matrix (13b) need 12a and 11b; the offline and LAN checks the demo relies on (14a) need the admin wave (13c).
+**Why it is not smaller.** Every wave in the cut is either a requirement or a dependency of one, as the wave files state them. Examples: the sensor placement trainer (9c) needs the site builder (9b); the full AAR (12a) needs the recognition academy (11b); the signed record and competency matrix (13b) need 12a and 11b; the offline and LAN checks the demo relies on (14a) need the admin wave (13c); the submission documentation (15a) depends on the cut waves with 14a last, and not on 13a or 14b.
 
 **PS coverage in the cut**
 
@@ -64,26 +65,53 @@ The smallest ordered set of waves that gives a complete, polished, demoable live
 |---|---|
 | R0 AI elements | 4b (AI assist), 11a (learner model, adaptive adversary) |
 | R1, R12 single and swarm threats | 8 |
+| R2 low cost | 15a (cost sheet), 14a |
 | R3, R9 weather, day/night, NV and thermal | 4a, 7 |
 | R5, R6, R7 recognise, classify, respond | 4a, 4b, 5, 6 |
 | R8, R16 varied scenarios, scripted and generated | 9a (with 9b for sites) |
 | R10 degraded sensors | 4a, injects in 10b |
 | R11 urban and rural terrain | 7 |
-| R13 unit level, offline | 10a, 10b, 13c, 14a (offline and LAN tests) |
-| R14, R2 minimal hardware, low cost | 7 (floor-laptop benchmark), 14a |
+| R13 unit level, offline | 10a, 10b, 13c, 14a (offline and LAN tests), 15a (instructor SOP) |
+| R14 minimal hardware | 7 (floor-laptop benchmark), 14a |
 | R17 decision-tree scoring | 6 |
 | R18 AAR, individual and unit | 12a |
 | R19 adjustable difficulty, anti-rote | 9a, 11a |
 | R15 desktop or VR-capable | Desktop in the cut; the VR mode is 14b (Depth). The PS says "desktop or VR-capable", so desktop meets it; no VR claim is made. |
 | R4 repetitions at scale | Mechanism in the cut; the measured figure comes from the pilot. |
+| Traceability, manuals, SOPs, final report | 15a |
 
 **Demo features in the cut (all five):** sensor placement trainer (9b, 9c), contact-report scoring (6), adaptive adversary (11a), counterfactual review (12b), signed record and competency matrix (13b). Director mode (10b) covers the inject beat.
 
-**Depth (after the cut):** 13a team mode, 14b WebXR, 15 documentation and release 1.0. Team mode is not needed by any PS clause or demo feature, so the demo's sector-handoff moment (7:00) is dropped or shown as a single-operator swarm run until 13a lands, and track handover (H5 second half) waits with it.
+**Depth (after the cut):** 13a team mode, 14b WebXR, 15b release 1.0 polish. Team mode is not needed by any PS clause or demo feature, so the demo's sector-handoff moment (7:00) is dropped or shown as a single-operator swarm run until 13a lands, and track handover (H5 second half) waits with it. Wave 15b documents whichever depth waves were built and adds pilot results.
 
-**Gaps in the cut, for the owner**
-- Wave 15 writes the user manual, instructor and admin SOPs, cost sheet and final report, and its file says it depends on all waves. A submission needs those documents, but running 15 inside the cut would mean relaxing that dependency, which this section does not do. Decision needed (also in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md)): run wave 15 right after 14a with 13a and 14b still open, or build 13a first.
-- Wave 14a only drafts the instructor SOP; R2's cost sheet exists nowhere before wave 15.
+### Checkpoints
+
+Three points where a reviewer can look at the live link and check what has been built. At each, `make smoke URL=<live url>` passes (`/healthz`, `/readyz`, `/api/v1/version`) and the permanent "fictional scenario · open-source parameters" label is visible.
+
+**Checkpoint A · after wave 8.** Playable single-operator trainer.
+- Sign in as a trainee, play the scripted day scenario on radar, EO/IR, RF and acoustic consoles with a fused track table and the simulated AI assist, then finish.
+- Rural and urban terrain, day, night, NV and thermal looks, modelled weather and degraded sensors.
+- Single drones, swarms, decoys and clutter (birds, kites, balloons, permitted civil drones).
+- Cue a sensor, fix a track swap, file a structured contact report, and see the ROE rule text and version when a response is blocked.
+- Scored debrief with the decision path and report grades; the same seed and actions reproduce the same result.
+- Verify: no ground truth reaches a trainee socket (test); the 12-client load test and the floor-laptop benchmark are recorded in `docs/PERFORMANCE.md`.
+- Not yet: generated scenarios, instructor tools, full AAR, adaptive drills.
+
+**Checkpoint B · after wave 12b.** Demo-complete, pilot running.
+- Instructor console: cohorts, launch, live monitor with ground truth, inject macros, annotations, pause and branch.
+- Generated scenarios marked "verified solvable by test run" with a novelty check; scripted library; scenario editor; site builder; sensor siting with coverage and blind spots.
+- Adaptive drills, weakness-biased adversary, stress and fatigue profiles, recognition academy and progression levels.
+- Seen-versus-truth replay, unit readiness dashboard, PDF and CSV export, counterfactual branches, clip export. `make demo` reproduces the seeded state labelled "reference data (seeded)".
+- Verify: demo must-work items pass as automated checks; the counterfactual with no change reproduces the original score.
+- Not yet: signed-record verification, competency matrix, admin tools, security review, submission documents.
+
+**Checkpoint C · after the full cut and wave 15a.** Submission-ready.
+- Signed records with a "Record chain verified" screen and CLI, competency matrix, PDF certificates with verification codes.
+- Admin: users, units, signed packs, backup and restore.
+- Accessibility pass with high-contrast and colour-blind-safe themes, low-bandwidth mode, recorded-feed adapter, security review, offline and two-laptop LAN tests.
+- User manual, instructor and admin SOPs, API docs, cost sheet, completed traceability matrix, final report with pilot figures only as measured (pending sections labelled), release notes and the demo rehearsal checklist.
+- Verify: tamper one byte of a record and verification fails at that event; the traceability matrix has no empty proof cell; the wording grep passes.
+- Not yet: team mode, WebXR, release 1.0 polish (depth).
 
 ## Deployed build
 

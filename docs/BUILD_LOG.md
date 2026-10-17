@@ -21,34 +21,69 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 
 Status values: Not started · In progress · Blocked · Done. A wave is Done only when its acceptance criteria are met, CI is green on `main`, and (from wave 2 on) the deployed build is verified.
 
-| Wave | Name | Depends on | Model | Deploy | Status |
-|---|---|---|---|---|---|
-| 1 | [Repo bootstrap](waves/wave-01-repo-bootstrap.md) | — | Sonnet | Deploy-ready (prod images, smoke test) | Not started |
-| 2 | [Design system + app shell](waves/wave-02-design-system-shell.md) | 1 | Sonnet | **PRIORITY MILESTONE: first live link** | Not started |
-| 3 | [Contracts + deterministic sim core](waves/wave-03-contracts-sim-core.md) | 1 | Opus | Keep live build green | Not started |
-| 4a | [Sensor models](waves/wave-04a-sensor-models.md) | 3 | Opus | Keep live build green | Not started |
-| 4b | [Tracking, fusion + AI assist](waves/wave-04b-tracking-ai-assist.md) | 4a | Opus | Keep live build green | Not started |
-| 5 | [Live-session vertical slice](waves/wave-05-live-session-slice.md) | 2, 4b | Sonnet | Redeploy: playable slice | Not started |
-| 6 | [Scoring + debrief](waves/wave-06-scoring-debrief.md) | 5 | Sonnet | Redeploy | Not started |
-| 7 | [3D realism + terrain packs](waves/wave-07-3d-realism-terrain.md) | 5 | Sonnet (Opus if gate fails) | Keep live build green | Not started |
-| 8 | [Threat breadth](waves/wave-08-threat-breadth.md) | 4a, 7 | Sonnet | Keep live build green | Not started |
-| 9a | [Scenario engine](waves/wave-09a-scenario-engine.md) | 6, 8 | Opus | Redeploy: generated scenarios | Not started |
-| 9b | [Site builder](waves/wave-09b-site-builder.md) | 9a, 7 | Sonnet | Redeploy | Not started |
-| 9c | [Sensor placement trainer](waves/wave-09c-sensor-placement.md) | 9b, 4a, 7 | Sonnet | Redeploy | Not started |
-| 10a | [Class management + rule packs](waves/wave-10a-class-management.md) | 5, 9a | Sonnet | Keep live build green | Not started |
-| 10b | [Live monitor + director mode](waves/wave-10b-director-mode.md) | 10a, 3, 6 | Sonnet | Keep live build green | Not started |
-| 11a | [Adaptive learning + adaptive adversary](waves/wave-11a-adaptive-learning.md) | 6, 9a | Sonnet | Keep live build green | Not started |
-| 11b | [Recognition academy + progression](waves/wave-11b-recognition-academy.md) | 4a, 8, 11a | Sonnet | Keep live build green | Not started |
-| 12a | [Full AAR + reports](waves/wave-12a-aar-reports.md) | 6, 10b, 11b | Sonnet | Redeploy: pilot-ready | Not started |
-| 12b | [Counterfactual review + briefing export](waves/wave-12b-counterfactual-aar.md) | 12a, 10b, 3 | Sonnet | Redeploy: demo-complete (signed-record beat in 13b) | Not started |
-| 13a | [Team mode](waves/wave-13a-team-mode.md) | 10b, 12a, 4b | Sonnet | Keep live build green | Not started |
-| 13b | [Signed records + competency matrix](waves/wave-13b-trust-competency.md) | 12a, 11b | Sonnet | Keep live build green | Not started |
-| 13c | [Admin + pack manager](waves/wave-13c-admin-packs.md) | 13b, 9a | Sonnet | Keep live build green | Not started |
-| 14a | [Hardening + accessibility](waves/wave-14a-hardening.md) | 7, 12b, 13c | Sonnet | Keep live build green | Not started |
-| 14b | [WebXR (optional)](waves/wave-14b-webxr.md) | 14a | Sonnet | Keep live build green | Not started |
-| 15 | [Docs + release 1.0](waves/wave-15-docs-release.md) | all (14b optional) | Sonnet | Release 1.0 | Not started |
+| Wave | Name | Depends on | Model | Deploy | Cut | Status |
+|---|---|---|---|---|---|---|
+| 1 | [Repo bootstrap](waves/wave-01-repo-bootstrap.md) | — | Sonnet | Deploy-ready (prod images, smoke test) | Cut | Not started |
+| 2 | [Design system + app shell](waves/wave-02-design-system-shell.md) | 1 | Sonnet | **PRIORITY MILESTONE: first live link** | Cut | Not started |
+| 3 | [Contracts + deterministic sim core](waves/wave-03-contracts-sim-core.md) | 1 | Opus | Keep live build green | Cut | Not started |
+| 4a | [Sensor models](waves/wave-04a-sensor-models.md) | 3 | Opus | Keep live build green | Cut | Not started |
+| 4b | [Tracking, fusion + AI assist](waves/wave-04b-tracking-ai-assist.md) | 4a | Opus | Keep live build green | Cut | Not started |
+| 5 | [Live-session vertical slice](waves/wave-05-live-session-slice.md) | 2, 4b | Sonnet | Redeploy: playable slice | Cut | Not started |
+| 6 | [Scoring + debrief](waves/wave-06-scoring-debrief.md) | 5 | Sonnet | Redeploy | Cut | Not started |
+| 7 | [3D realism + terrain packs](waves/wave-07-3d-realism-terrain.md) | 5 | Sonnet (Opus if gate fails) | Keep live build green | Cut | Not started |
+| 8 | [Threat breadth](waves/wave-08-threat-breadth.md) | 4a, 7 | Sonnet | Keep live build green | Cut | Not started |
+| 9a | [Scenario engine](waves/wave-09a-scenario-engine.md) | 6, 8 | Opus | Redeploy: generated scenarios | Cut | Not started |
+| 9b | [Site builder](waves/wave-09b-site-builder.md) | 9a, 7 | Sonnet | Redeploy | Cut | Not started |
+| 9c | [Sensor placement trainer](waves/wave-09c-sensor-placement.md) | 9b, 4a, 7 | Sonnet | Redeploy | Cut | Not started |
+| 10a | [Class management + rule packs](waves/wave-10a-class-management.md) | 5, 9a | Sonnet | Keep live build green | Cut | Not started |
+| 10b | [Live monitor + director mode](waves/wave-10b-director-mode.md) | 10a, 3, 6 | Sonnet | Keep live build green | Cut | Not started |
+| 11a | [Adaptive learning + adaptive adversary](waves/wave-11a-adaptive-learning.md) | 6, 9a | Sonnet | Keep live build green | Cut | Not started |
+| 11b | [Recognition academy + progression](waves/wave-11b-recognition-academy.md) | 4a, 8, 11a | Sonnet | Keep live build green | Cut | Not started |
+| 12a | [Full AAR + reports](waves/wave-12a-aar-reports.md) | 6, 10b, 11b | Sonnet | Redeploy: pilot-ready | Cut | Not started |
+| 12b | [Counterfactual review + briefing export](waves/wave-12b-counterfactual-aar.md) | 12a, 10b, 3 | Sonnet | Redeploy: demo-complete (signed-record beat in 13b) | Cut | Not started |
+| 13a | [Team mode](waves/wave-13a-team-mode.md) | 10b, 12a, 4b | Sonnet | Keep live build green | Depth | Not started |
+| 13b | [Signed records + competency matrix](waves/wave-13b-trust-competency.md) | 12a, 11b | Sonnet | Keep live build green | Cut | Not started |
+| 13c | [Admin + pack manager](waves/wave-13c-admin-packs.md) | 13b, 9a | Sonnet | Keep live build green | Cut | Not started |
+| 14a | [Hardening + accessibility](waves/wave-14a-hardening.md) | 7, 12b, 13c | Sonnet | Keep live build green | Cut | Not started |
+| 14b | [WebXR (optional)](waves/wave-14b-webxr.md) | 14a | Sonnet | Keep live build green | Depth | Not started |
+| 15 | [Docs + release 1.0](waves/wave-15-docs-release.md) | all (14b optional) | Sonnet | Release 1.0 | Depth | Not started |
 
 **Pilot** (the user's activity, not a wave): starts once wave 12a is Done. Waves 12b onward continue alongside it. The demo-complete live link is wave 12b.
+
+## Submission-ready cut
+
+The smallest ordered set of waves that gives a complete, polished, demoable live link covering every problem-statement requirement (R0–R19 in [06-requirements-traceability.md](06-requirements-traceability.md)) and the five demo features from [10-differentiators.md](10-differentiators.md). Waves marked **Depth** in the table above come after the cut. No wave file was changed to define it.
+
+**Order:** 1 → 2 → 3 → 4a → 4b → 5 → 6 → 7 → 8 → 9a → 9b → 9c → 10a → 10b → 11a → 11b → 12a → 12b → 13b → 13c → 14a. That is 21 of 24 waves. The live link exists from wave 2, becomes playable at 5, pilot-ready at 12a (pilot starts) and demo-complete at 12b; 13b adds the signed-record beat.
+
+**Why it is not smaller.** Every wave in the cut is either a requirement or a dependency of one, as the wave files state them. Examples: the sensor placement trainer (9c) needs the site builder (9b); the full AAR (12a) needs the recognition academy (11b); the signed record and competency matrix (13b) need 12a and 11b; the offline and LAN checks the demo relies on (14a) need the admin wave (13c).
+
+**PS coverage in the cut**
+
+| Requirement | Waves |
+|---|---|
+| R0 AI elements | 4b (AI assist), 11a (learner model, adaptive adversary) |
+| R1, R12 single and swarm threats | 8 |
+| R3, R9 weather, day/night, NV and thermal | 4a, 7 |
+| R5, R6, R7 recognise, classify, respond | 4a, 4b, 5, 6 |
+| R8, R16 varied scenarios, scripted and generated | 9a (with 9b for sites) |
+| R10 degraded sensors | 4a, injects in 10b |
+| R11 urban and rural terrain | 7 |
+| R13 unit level, offline | 10a, 10b, 13c, 14a (offline and LAN tests) |
+| R14, R2 minimal hardware, low cost | 7 (floor-laptop benchmark), 14a |
+| R17 decision-tree scoring | 6 |
+| R18 AAR, individual and unit | 12a |
+| R19 adjustable difficulty, anti-rote | 9a, 11a |
+| R15 desktop or VR-capable | Desktop in the cut; the VR mode is 14b (Depth). The PS says "desktop or VR-capable", so desktop meets it; no VR claim is made. |
+| R4 repetitions at scale | Mechanism in the cut; the measured figure comes from the pilot. |
+
+**Demo features in the cut (all five):** sensor placement trainer (9b, 9c), contact-report scoring (6), adaptive adversary (11a), counterfactual review (12b), signed record and competency matrix (13b). Director mode (10b) covers the inject beat.
+
+**Depth (after the cut):** 13a team mode, 14b WebXR, 15 documentation and release 1.0. Team mode is not needed by any PS clause or demo feature, so the demo's sector-handoff moment (7:00) is dropped or shown as a single-operator swarm run until 13a lands, and track handover (H5 second half) waits with it.
+
+**Gaps in the cut, for the owner**
+- Wave 15 writes the user manual, instructor and admin SOPs, cost sheet and final report, and its file says it depends on all waves. A submission needs those documents, but running 15 inside the cut would mean relaxing that dependency, which this section does not do. Decision needed (also in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md)): run wave 15 right after 14a with 13a and 14b still open, or build 13a first.
+- Wave 14a only drafts the instructor SOP; R2's cost sheet exists nowhere before wave 15.
 
 ## Deployed build
 

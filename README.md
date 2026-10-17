@@ -122,6 +122,12 @@ There is nothing to run yet. Wave 1 adds the repository skeleton and the `make` 
 
 First, a deployable foundation: the repository, the design system and a live link. Then the core: a deterministic simulation, sensor models and a playable single-operator session. Then the training layer: scoring, realism, more threat types, the scenario engine and the instructor console. Then what turns a simulator into a training system: adaptive drills, full after-action review, team mode, signed records and administration. A pilot with 12 volunteers starts once the full review is in place, and release 1.0 follows. Differentiating features such as an adaptive adversary, a sensor placement trainer and counterfactual review are scheduled into these waves in [docs/10-differentiators.md](docs/10-differentiators.md).
 
+### Submission-ready cut
+
+The smallest ordered set that gives a complete, polished, demoable live link covering every problem-statement requirement and the five demo features (sensor placement trainer, contact-report scoring, adaptive adversary, counterfactual review, signed record with competency matrix): waves 1, 2, 3, 4a, 4b, 5, 6, 7, 8, 9a, 9b, 9c, 10a, 10b, 11a, 11b, 12a, 12b, 13b, 13c, 14a. Desktop meets the "desktop or VR-capable" requirement; VR is depth.
+
+**Depth, after the cut:** team mode (13a), WebXR (14b) and the documentation and release wave (15). Details and open decisions are in [docs/BUILD_LOG.md](docs/BUILD_LOG.md).
+
 ---
 
 Built for Smart India Hackathon 2026, PS 26247. Maintained by Shikhar Dixit.

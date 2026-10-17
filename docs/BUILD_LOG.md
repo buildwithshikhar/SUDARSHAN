@@ -5,9 +5,9 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 ## Current position
 
 - **Phase:** wave 1 built and verified locally; awaiting CI confirmation.
-- **Next wave:** 1 · Repo bootstrap → [waves/wave-01-repo-bootstrap.md](waves/wave-01-repo-bootstrap.md)
+- **Next wave:** 2 · Design system + app shell → [waves/wave-02-design-system-shell.md](waves/wave-02-design-system-shell.md) (after wave 1 CI is confirmed)
 - **Next step:** confirm CI is green on `main`, then start wave 2.
-- **Main is:** green (docs only, no CI yet).
+- **Main is:** green locally at 41fd32e; the GitHub CI run is unconfirmed.
 - **Deployed build:** none yet. First live link is the wave 2 milestone.
 
 ## Planning updates

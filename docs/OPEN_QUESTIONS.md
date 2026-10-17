@@ -29,6 +29,7 @@ Everything the research marked unverified or undecided. Owner is **SD** (the use
 | Q-10 | **Secondary-source anchors**: Guvenc et al. 2018; Taha & Shoufan beyond the abstract; TC 25-20 primary text; ECD model names; SDT criterion form; Hunicke/Hamlet venue; FSRS data needs. | CC | Fetch the primary text or drop the citation. | Wave 15 (final report) |
 | Q-11 | **Drone-class cells** for the threat catalogue where the research only has secondary sources. | CC (wave 8) | Use X01 (CC0) and public specifications; mark unsupported values `verified: false`. | Wave 8 |
 | Q-12 | **Timing standards** for scoring (detect within N seconds) have no public doctrinal source. | SD | Accept them as fictional and editable, labelled so in the UI (current default). Revisit only if an instructor supplies a standard. | Wave 6 |
+| Q-19 | **API image does not ship `sim/` or `packs/`.** `infra/Dockerfile.api` copies `app/` only, so the sensor and sim packages (and the profile files they read) are absent from the production image. Nothing in the API imports them yet. | CC (wave 5) | When the live session first runs the sim in the API process, copy `services/api/sim` and `packs/` into the image and extend `make prod-check` to import the sim and load a pack. | Wave 5 |
 
 ### Product and pilot
 

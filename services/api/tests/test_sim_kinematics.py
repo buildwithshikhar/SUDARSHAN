@@ -303,3 +303,8 @@ def test_angle_wrapping() -> None:
     assert detmath.wrap180(190.0) == -170.0
     assert detmath.wrap180(-190.0) == 170.0
     assert detmath.wrap180(180.0) == -180.0
+
+
+@pytest.mark.parametrize("x", [-1e6, -37.0, -1.0, -0.4, 0.0, 1e-9, 0.7, 1.0, 1.5, 250.0])
+def test_atan_matches_libm_closely(x: float) -> None:
+    assert detmath.atan(x) == pytest.approx(math.atan(x), abs=2e-15)

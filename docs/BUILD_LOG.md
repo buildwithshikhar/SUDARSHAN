@@ -4,10 +4,10 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 
 ## Current position
 
-- **Phase:** wave 1 built and verified locally; awaiting CI confirmation.
-- **Next wave:** 2 · Design system + app shell → [waves/wave-02-design-system-shell.md](waves/wave-02-design-system-shell.md) (after wave 1 CI is confirmed)
-- **Next step:** confirm CI is green on `main`, then start wave 2.
-- **Main is:** green locally at 41fd32e; the GitHub CI run is unconfirmed.
+- **Phase:** wave 1 Done (CI confirmed green by owner, run URL pending); wave 2 in progress.
+- **Next wave:** 2 · Design system + app shell → [waves/wave-02-design-system-shell.md](waves/wave-02-design-system-shell.md) 
+- **Next step:** finish wave 2, then ask the owner to deploy (Azure for Students Linux VM, see DEPLOY.md).
+- **Main is:** green (CI confirmed by owner for the wave 1 closeout commit).
 - **Deployed build:** none yet. First live link is the wave 2 milestone.
 
 ## Planning updates
@@ -23,8 +23,8 @@ Status values: Not started · In progress · Blocked · Done. A wave is Done onl
 
 | Wave | Name | Depends on | Model | Deploy | Cut | Status |
 |---|---|---|---|---|---|---|
-| 1 | [Repo bootstrap](waves/wave-01-repo-bootstrap.md) | — | Sonnet | Deploy-ready (prod images, smoke test) | Cut | In progress |
-| 2 | [Design system + app shell](waves/wave-02-design-system-shell.md) | 1 | Sonnet | **PRIORITY MILESTONE: first live link** | Cut | Not started |
+| 1 | [Repo bootstrap](waves/wave-01-repo-bootstrap.md) | — | Sonnet | Deploy-ready (prod images, smoke test) | Cut | Done |
+| 2 | [Design system + app shell](waves/wave-02-design-system-shell.md) | 1 | Sonnet | **PRIORITY MILESTONE: first live link** | Cut | In progress |
 | 3 | [Contracts + deterministic sim core](waves/wave-03-contracts-sim-core.md) | 1 | Opus | Keep live build green | Cut | Not started |
 | 4a | [Sensor models](waves/wave-04a-sensor-models.md) | 3 | Opus | Keep live build green | Cut | Not started |
 | 4b | [Tracking, fusion + AI assist](waves/wave-04b-tracking-ai-assist.md) | 4a | Opus | Keep live build green | Cut | Not started |
@@ -171,7 +171,7 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 ### Wave 1 · Repo bootstrap
 
-- Status: In progress. All steps are merged and verified locally; **not Done until CI is confirmed green on `main`** (the repository is private and CI could not be read from this machine).
+- Status: Done. CI on the latest `main` commit was confirmed green by the owner in the GitHub Actions tab (confirmed green by owner, run URL pending). Claude Code could not read CI itself (`gh` is unusable on the build machine).
 - Started from commit: 24d8aca
 - Goal: a clean, production-shaped monorepo with CI green: health endpoints, admin bootstrap, a bilingual placeholder page, and Docker images ready to deploy.
 
@@ -219,10 +219,22 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 **Hindi:** all Hindi strings are unreviewed; the sheet is [i18n/HI_REVIEW.md](i18n/HI_REVIEW.md) and Q-15 stays open.
 
 **Open issues**
-- CI result on GitHub not seen (rechecked in the closeout: `gh` still unusable on this machine). The repository is private and `gh` on this machine is the wrong CPU architecture. Open the Actions tab and confirm the run for 7b16194 (jobs: api, web, e2e, secrets, docker). Fix any failure before starting wave 2.
+- Resolved: the owner confirmed CI green; run URL still to be pasted here. The repository is private and `gh` on this machine is the wrong CPU architecture. Open the Actions tab and confirm the run for 7b16194 (jobs: api, web, e2e, secrets, docker). Fix any failure before starting wave 2.
 - Port 8080 on this machine is held by another project's containers (`sih-*`), which were left untouched; local runs use `WEB_PORT=8081` in the git-ignored `.env`.
 - Playwright's Chromium (about 99 MiB) was downloaded with `npx playwright install`, a download beyond package registries that the wave's test requirement implies.
 - Hindi strings are drafted by Claude Code and need a human reviewer (Q-15).
 
 **Next wave entry point**
 - Confirm CI green on `main`, set wave 1 to Done, then start wave 2 (design system and app shell): read docs/waves/wave-02-design-system-shell.md and begin with the self-hosted fonts and the component primitives.
+
+### Wave 2 · Design system + app shell
+
+- Status: In progress
+- Started from commit: aef6521
+- Goal: the real design system, sign-in, role-based shell and bilingual UI, plus a deployment kit for an Azure for Students Linux VM, deployed as the first live link.
+
+**Done**
+- gate: wave 1 Done (owner-confirmed CI), Q-02 decided (Azure for Students, Linux VM)
+
+**Decisions**
+- Host is Azure for Students, Ubuntu 24.04 LTS, x86_64 (owner decision, Q-02).

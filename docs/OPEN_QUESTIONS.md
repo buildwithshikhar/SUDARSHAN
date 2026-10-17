@@ -9,7 +9,6 @@ Everything the research marked unverified or undecided. Owner is **SD** (the use
 | ID | Question | Owner | How to close | Needed by |
 |---|---|---|---|---|
 | Q-01 | **Choose a licence** for the repository. Depends on dataset terms: ODbL share-alike (G02), CC BY attribution (D14) and any pack we ship. No LICENSE file exists yet, by instruction. | SD | After Q-05 and Q-06: pick MIT, Apache-2.0 or AGPL-3.0 for code and CC BY for docs, check each against bundled packs, then add LICENSE and a NOTICE file in a separate commit. | Before the repo goes public or release 1.0 |
-| Q-02 | **Choice of host** for the live link: Docker-capable, persistent storage, reachable by evaluators. Render free is excluded. | SD | Read [HOSTING_OPTIONS.md](HOSTING_OPTIONS.md) (four options, prices unverified), pick a provider and note it in BUILD_LOG.md. Claude Code then adds host config to docs/DEPLOY.md. | Start of wave 2 deployment |
 | Q-03 | **SIH submission format** for the next milestone: required fields, file types and size limits, and whether a video or slides are needed beyond the live link. | SD | Read the SIH portal instructions and paste them into this file. Claude then prepares the matching material. | Before the next milestone |
 | Q-04 | **Floor laptop** for the benchmark gate: which machine, with what specs, will run the wave 7 harness. | SD | Name the machine and record specs in docs/PERFORMANCE.md. | Wave 7 |
 
@@ -47,4 +46,5 @@ Everything the research marked unverified or undecided. Owner is **SD** (the use
 |---|---|---|---|
 | — | Q1–Q6 from docs/00-gap-check.md (trainee, hardware and VR, next milestone, team, pilot size, Hindi) | Answered; see [DECISIONS.md](DECISIONS.md) ADR-002 to ADR-010 | 2026-10-17 |
 | — | Platform name | SUDARSHAN confirmed, ADR-001 | 2026-10-17 |
+| Q-02 | Choice of host for the live link | **Decided by owner:** Azure for Students, Linux VM (Ubuntu 24.04 LTS, x86_64). Options compared in [HOSTING_OPTIONS.md](HOSTING_OPTIONS.md); deployment kit and runbook in wave 2 ([DEPLOY.md](DEPLOY.md)). VM size to be chosen from the measured memory in HOSTING_OPTIONS.md. | 2026-10-17 |
 | Q-18 | Documentation inside the submission cut | Wave 15 split into 15a (in the cut) and 15b (depth), ADR-013 | 2026-10-17 |

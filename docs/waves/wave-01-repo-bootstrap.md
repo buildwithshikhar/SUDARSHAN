@@ -129,7 +129,7 @@ STEP 1 — Layout
 apps/web/        React 18 + TypeScript (strict) + Vite + Tailwind; Vitest; ESLint + Prettier; i18next (en, hi)
 services/api/    Python 3.12, FastAPI, SQLAlchemy 2 + Alembic, Pydantic v2, uv; pytest, ruff, mypy --strict
 packs/           rule-packs/, scenarios/, sensor-profiles/, terrain/ (README in each: "fictional / open-source parameters")
-infra/           docker-compose.yml (compose project name: sudarshan; services web [nginx serving built client], api [uvicorn], db [postgres:16, named volume]); docker-compose.prod.yml; Dockerfiles (multi-stage, non-root); nginx.conf
+infra/           docker-compose.yml (compose project name derived from brand.json by the Makefile, never hard-coded; services web [nginx serving built client], api [uvicorn], db [postgres:16, named volume]); docker-compose.prod.yml; Dockerfiles (multi-stage, non-root); nginx.conf
 brand.json       { "productName": "SUDARSHAN", "descriptor": "Counter-UAS Threat Recognition Trainer", "status": "confirmed" }
 Makefile         setup, dev, lint, typecheck, test, e2e, build, up, down, demo, smoke, create-admin
 .env.example     placeholders only

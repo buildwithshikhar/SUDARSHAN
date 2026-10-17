@@ -4,7 +4,7 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 
 ## Current position
 
-- **Phase:** planning complete, build not started.
+- **Phase:** wave 1 in progress.
 - **Next wave:** 1 · Repo bootstrap → [waves/wave-01-repo-bootstrap.md](waves/wave-01-repo-bootstrap.md)
 - **Next step:** paste the wave 1 prompt into Claude Code (Sonnet).
 - **Main is:** green (docs only, no CI yet).
@@ -23,7 +23,7 @@ Status values: Not started · In progress · Blocked · Done. A wave is Done onl
 
 | Wave | Name | Depends on | Model | Deploy | Cut | Status |
 |---|---|---|---|---|---|---|
-| 1 | [Repo bootstrap](waves/wave-01-repo-bootstrap.md) | — | Sonnet | Deploy-ready (prod images, smoke test) | Cut | Not started |
+| 1 | [Repo bootstrap](waves/wave-01-repo-bootstrap.md) | — | Sonnet | Deploy-ready (prod images, smoke test) | Cut | In progress |
 | 2 | [Design system + app shell](waves/wave-02-design-system-shell.md) | 1 | Sonnet | **PRIORITY MILESTONE: first live link** | Cut | Not started |
 | 3 | [Contracts + deterministic sim core](waves/wave-03-contracts-sim-core.md) | 1 | Opus | Keep live build green | Cut | Not started |
 | 4a | [Sensor models](waves/wave-04a-sensor-models.md) | 3 | Opus | Keep live build green | Cut | Not started |
@@ -169,4 +169,20 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 ## Wave entries
 
-None yet.
+### Wave 1 · Repo bootstrap
+
+- Status: In progress
+- Started from commit: 24d8aca (docs complete at 18f7913)
+- Goal: a clean, production-shaped monorepo with CI green: health endpoints, admin bootstrap, a bilingual placeholder page, and Docker images ready to deploy.
+
+**Done**
+- wave file completed with deliverables, tests, commit plan and verification checklist
+
+**Decisions**
+- Compose project name and image labels are derived from `brand.json` by the Makefile, because CLAUDE.md forbids hard-coding the product name in config (the wave prompt said `sudarshan`).
+- ADRs for this wave are numbered 015 and 016: 011–013 are taken and 014 is reserved for wave 3.
+- Python 3.12 comes from `uv` (host has 3.10 only); `uv` installed from PyPI with `pip --user`.
+
+**Open issues**
+- Docker daemon was not running at start; Docker Desktop launched.
+

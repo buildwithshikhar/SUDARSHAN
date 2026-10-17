@@ -76,3 +76,11 @@ Status values: **Accepted**, **Superseded by ADR-n**.
 - **Date:** 2026-10-17 · **Status:** Accepted · **Decided by:** user
 - **Decision:** 12 civilian student volunteers, 4 sessions each (about 30 minutes), starting once wave 12 is green. Consent form, pseudonymous IDs, no personal data beyond a call-sign and cohort.
 - **Consequences:** Effectiveness claims are limited to what this pilot measures (learning curves, a new-seed rote-learning test), at Kirkpatrick levels 1–2. With fewer than 8 volunteers we report case studies, not curves.
+
+## ADR-011 · Headline differentiators and README direction
+
+- **Date:** 2026-10-17 · **Status:** Accepted · **Decided by:** user
+- **Context:** The PS items are the floor; evaluators need visible capability beyond them. The README also needed to read as a product page, not a planning note.
+- **Decision:** Twelve headline features (H1–H12 in [10-differentiators.md](10-differentiators.md)), with five in the 10-minute demo: sensor placement trainer, contact-report scoring, adaptive adversary, counterfactual AAR, signed record with competency matrix. The README is product-led, lists every capability as Planned until merged and deployed, and keeps one neutral data line; the earlier "Honest data", "Scope and safety" and "Affiliation" sections are removed from it. The locked rules in CLAUDE.md are unchanged and still govern the UI labels and wording.
+- **Consequences:** Headline features are scheduled into existing waves, not new ones, and wave files change only when each wave starts. The README capability and status tables are updated as waves land.
+

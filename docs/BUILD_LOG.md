@@ -204,8 +204,22 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - Production images built: yes · `make prod-check` (production mode, throwaway project, admin bootstrap idempotent, seed-demo refused): pass · `make demo`, `make smoke`, `make e2e` on the demo stack: pass
 - Commit to deploy: not applicable yet; nothing is hosted until wave 2. Latest verified commit: 7b16194 (docs-only commits may follow).
 
+**Environment notes**
+- Local web port: another project's containers hold 8080 on this machine, so `WEB_PORT=8081` is set in the git-ignored `.env`; `make smoke` and `make e2e` read it. Do not commit `.env`.
+- Playwright's Chromium (about 99 MiB) was downloaded to the user cache (`~/Library/Caches/ms-playwright`) for tests only; it is not in the repo or the images.
+- `gh` on this machine is an x86_64 binary and does not run (bad CPU type); `openssl` has the same problem. Secrets are generated with Python, and CI status must be read in the browser or with a working `gh`.
+
+**UI review follow-ups** (from [evidence/wave-1/UI_REVIEW.md](evidence/wave-1/UI_REVIEW.md); heading hierarchy, Hindi label size and skeleton width are already fixed)
+- Wave 2: self-host IBM Plex Sans, Plex Mono and Noto Sans Devanagari, with `tabular-nums` (findings 3, 6).
+- Wave 2: give the canvas a real shell so the page is not 75% empty; replace the redundant Service and API status rows (1, 7).
+- Wave 2: add the ring-and-bearing mark to the header as inline SVG; first Carbon icons in one weight (8, 9).
+- Wave 2: error state names the failing endpoint and status (10).
+- Repeat the review on wave 2 screens with the 12 visual snapshots.
+
+**Hindi:** all Hindi strings are unreviewed; the sheet is [i18n/HI_REVIEW.md](i18n/HI_REVIEW.md) and Q-15 stays open.
+
 **Open issues**
-- CI result on GitHub not seen. The repository is private and `gh` on this machine is the wrong CPU architecture. Open the Actions tab and confirm the run for 7b16194 (jobs: api, web, e2e, secrets, docker). Fix any failure before starting wave 2.
+- CI result on GitHub not seen (rechecked in the closeout: `gh` still unusable on this machine). The repository is private and `gh` on this machine is the wrong CPU architecture. Open the Actions tab and confirm the run for 7b16194 (jobs: api, web, e2e, secrets, docker). Fix any failure before starting wave 2.
 - Port 8080 on this machine is held by another project's containers (`sih-*`), which were left untouched; local runs use `WEB_PORT=8081` in the git-ignored `.env`.
 - Playwright's Chromium (about 99 MiB) was downloaded with `npx playwright install`, a download beyond package registries that the wave's test requirement implies.
 - Hindi strings are drafted by Claude Code and need a human reviewer (Q-15).

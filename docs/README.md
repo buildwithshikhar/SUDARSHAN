@@ -13,6 +13,9 @@ Planning pack for SIH 2026 PS 26247, plus the working documents that drive the b
 | [DECISIONS.md](DECISIONS.md) | Decision log, one short ADR per decision. |
 | [DESIGN.md](DESIGN.md) | Design system tokens, rules for every screen and the banned list. |
 | [TRACEABILITY.md](TRACEABILITY.md) | Live requirements traceability; the built-proof column fills as waves land. |
+| [HOSTING_OPTIONS.md](HOSTING_OPTIONS.md) | Four Docker-capable hosting options compared for Q-02; all prices unverified. |
+| [i18n/HI_REVIEW.md](i18n/HI_REVIEW.md) | Every Hindi string with a blank reviewer-verdict column (unreviewed). |
+| [evidence/wave-1/UI_REVIEW.md](evidence/wave-1/UI_REVIEW.md) | Wave 1 screenshots and a frank UI critique. |
 | [RELEASE.md](RELEASE.md) | Release process stub, including the dataset-licence re-check. |
 
 ## Planning pack

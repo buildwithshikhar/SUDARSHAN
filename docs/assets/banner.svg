@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="280" viewBox="0 0 1200 280" role="img" aria-labelledby="t d">
+  <title id="t">SUDARSHAN</title>
+  <desc id="d">Wordmark with a ring-and-bearing mark. Tagline: Recognise. Classify. Respond.</desc>
+  <rect width="1200" height="280" fill="#14171C"/>
+  <rect x="0.5" y="0.5" width="1199" height="279" fill="none" stroke="#2A2F37"/>
+  <!-- mark: range rings with 12 bearing ticks and one contact -->
+  <g transform="translate(140 140)" fill="none" stroke="#8A93A0" stroke-width="1.5">
+    <circle r="84"/>
+    <circle r="56" stroke="#4B5360"/>
+    <circle r="28" stroke="#4B5360"/>
+    <g stroke="#8A93A0">
+      <path d="M0 -84v-10M0 84v10M-84 0h-10M84 0h10"/>
+      <path d="M42 -72.7l5 -8.7M72.7 -42l8.7 -5M72.7 42l8.7 5M42 72.7l5 8.7M-42 72.7l-5 8.7M-72.7 42l-8.7 5M-72.7 -42l-8.7 -5M-42 -72.7l-5 -8.7" stroke-width="1"/>
+    </g>
+    <path d="M0 0L59 -59" stroke="#E8EAED" stroke-width="2"/>
+    <rect x="52" y="-66" width="14" height="14" stroke="#4C9AFF" stroke-width="2"/>
+  </g>
+  <text x="290" y="150" font-family="'IBM Plex Sans','Helvetica Neue',Arial,sans-serif" font-size="68" font-weight="600" letter-spacing="10" fill="#E8EAED">SUDARSHAN</text>
+  <text x="293" y="196" font-family="'IBM Plex Mono',Menlo,Consolas,monospace" font-size="20" letter-spacing="3" fill="#8A93A0">RECOGNISE. CLASSIFY. RESPOND.</text>
+  <text x="293" y="232" font-family="'IBM Plex Sans','Helvetica Neue',Arial,sans-serif" font-size="15" fill="#6B7380">Counter-UAS Threat Recognition Trainer</text>
+</svg>

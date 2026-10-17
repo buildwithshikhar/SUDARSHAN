@@ -35,7 +35,7 @@ Everything the research marked unverified or undecided. Owner is **SD** (the use
 
 | ID | Question | Owner | How to close | Needed by |
 |---|---|---|---|---|
-| Q-13 | **Pilot logistics**: recruit 12 volunteers for 4 sessions, consent form text, and whether the institute needs ethics sign-off. | SD | Ask IILM whether sign-off is needed; draft the consent form; Claude Code adds data export and delete in wave 13. | Before wave 12 completes |
+| Q-13 | **Pilot logistics**: recruit 12 volunteers for 4 sessions, consent form text, and whether the institute needs ethics sign-off. | SD | Ask IILM whether sign-off is needed; draft the consent form; Claude Code adds data export and delete in wave 13c. | Before wave 12a completes |
 | Q-14 | **VR headset access**: none assumed. Decide whether any headset test is attempted. | SD | If none, keep the wording "VR mode, emulator-tested". | Wave 14 |
 | Q-15 | **Hindi translation review**: who reviews the HI strings for correct military and technical terms. | SD | Name a reviewer; Claude Code produces a glossary file for them in wave 2. | Wave 2 onward |
 | Q-16 | **Real Doppler RAD-DAR** dataset (D17) was not found. | SD | Supply a link, or the row stays dropped. | Optional |

@@ -2,6 +2,12 @@
 
 Planning pack for SIH 2026 PS 26247, plus the working documents that drive the build. Files 00–09 are the planning deliverables, moved here unchanged except for the confirmed platform name and status notes at the top of 00, 01 and 09.
 
+## Working documents
+
+| File | What it is |
+|---|---|
+| [DECISIONS.md](DECISIONS.md) | Decision log, one short ADR per decision. |
+
 ## Planning pack
 
 | File | What it is |

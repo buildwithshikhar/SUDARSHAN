@@ -9,6 +9,7 @@ Planning pack for SIH 2026 PS 26247, plus the working documents that drive the b
 | [BUILD_LOG.md](BUILD_LOG.md) | Resumable build state: wave list, status, deploy record and the rules every wave follows. |
 | [waves/](waves/README.md) | One file per build wave: scope, acceptance criteria, model and paste-ready Claude Code prompt. Wave 2 is the priority milestone (first live link). |
 | [DATA_REGISTER.md](DATA_REGISTER.md) | Operational dataset table: licence, what we may ship, calibration-only sources and items needing verification. |
+| [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) | Everything unverified or undecided, each with an owner and how to close it. |
 | [DECISIONS.md](DECISIONS.md) | Decision log, one short ADR per decision. |
 
 ## Planning pack

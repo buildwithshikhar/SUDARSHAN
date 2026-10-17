@@ -98,9 +98,13 @@ Status values: **Accepted**, **Superseded by ADR-n**.
 - **Decision:** 15a covers those documents, release notes for the submission and the demo rehearsal; it depends only on the cut waves, with 14a last, and joins the cut (22 of 25 waves). 15b covers the 1.0 polish, documentation of any depth wave built, and pilot results; it is depth, with 13a and 14b. Three review checkpoints are defined in the build log: A after wave 8, B after wave 12b, C after the cut and 15a.
 - **Consequences:** The cut ends at 15a. The wave 3 ADR for the RNG scheme and tick model is now ADR-014. Any depth wave built must be documented in 15b, and the manuals state what is not built.
 
-## ADR-014 · Reserved
+## ADR-014 · RNG scheme and tick model
 
-- Reserved for the wave 3 decision on the RNG scheme and tick model.
+- **Date:** 2026-10-18 · **Status:** Accepted · **Decided by:** Claude Code in wave 3 (recommended model: Opus), within ADR-016
+- **Context:** Replay, snapshots for director mode, counterfactual review, re-scoring and solvability checks need the same spec, seed and action log to give the same result on any machine. Golden files written on macOS (arm64) are checked in CI on Linux (x86_64).
+- **Decision:** A fixed 20 Hz tick; time is `tick / 20` from an integer counter, and pause stops ticking instead of being an action. Each tick runs a fixed order: actions, spawns, wind gust, drones in scenario order, tick increment. Randomness comes from one numpy PCG64 stream per subsystem, seeded by `SeedSequence(seed, spawn_key=(first 8 bytes of SHA-256 of the stream name,))`, so streams are independent and adding one never shifts another. Hashed state uses only correctly rounded IEEE operations (`+ - * /`, `sqrt`) and polynomial sin and cos: headings are unit vectors, and noise is a sum of uniforms instead of numpy's normal sampler. State and event hashes are SHA-256 over canonical JSON. The rules are in [SIM_CORE.md](SIM_CORE.md).
+- **Alternatives:** One global generator (rejected: any new draw shifts every later number). Python's `random` (rejected: no independent streams, and `hash()`-based seeding is salted per process). Variable time step (rejected: not reproducible). Plain `math.sin` and numpy normals (rejected: platform maths libraries may differ in the last bit, which grows into different hashes over thousands of ticks).
+- **Consequences:** Contributors follow the determinism rules in SIM_CORE.md. A change to a physics constant or the tick order is deliberate and regenerates the golden files. Vectorising with numpy later must avoid reductions and transcendentals on hashed state, or prove bit-equality across platforms first.
 
 ## ADR-015 · Monorepo and stack
 

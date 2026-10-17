@@ -96,3 +96,5 @@ jobs:
       - uses: docker/setup-buildx-action@v3
       - name: Build both images, start the production stack on a throwaway project, smoke it
         run: make prod-check
+      - name: Backup and restore round trip
+        run: make backup-test

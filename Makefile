@@ -14,7 +14,7 @@ COMPOSE_PROD = $(COMPOSE) -f infra/docker-compose.prod.yml
 rand = $$(python3 -c "import secrets; print(secrets.token_hex($(1)))")
 UV = $(shell command -v uv || echo $$HOME/Library/Python/3.10/bin/uv)
 
-.PHONY: setup env dev lint typecheck test e2e build up down demo smoke create-admin prod-check help
+.PHONY: setup env dev lint typecheck test e2e visual build up down demo smoke create-admin prod-check backup-test check-deploy build-amd64 help
 
 help:
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | sed 's/:.*##/\t/' || true
@@ -46,8 +46,11 @@ test: ## pytest (coverage gate) and vitest
 	cd services/api && $(UV) run pytest -q
 	cd apps/web && npm test
 
-e2e: ## Playwright smoke and axe against URL (default http://localhost:8080)
-	cd apps/web && PLAYWRIGHT_BASE_URL=$(URL) npx playwright test
+e2e: ## Playwright smoke, role and axe tests against URL (signed-in tests need the local demo stack)
+	@COMPOSE_CMD="$(COMPOSE)" URL=$(URL) infra/e2e.sh chromium
+
+visual: ## Playwright visual snapshots (per-platform baselines); add ARGS=--update-snapshots to refresh
+	@COMPOSE_CMD="$(COMPOSE)" URL=$(URL) infra/e2e.sh visual $(ARGS)
 
 build: ## build both production images
 	$(COMPOSE) build
@@ -68,18 +71,15 @@ smoke: ## health, readiness and version checks against URL
 create-admin: ## create the first administrator in the running stack (prompts, or uses FIRST_ADMIN_*)
 	$(COMPOSE) exec api python -m app.cli create-admin
 
-prod-check: ## build production images, run the production stack on a throwaway project, smoke it, remove it
-	@set -e; \
-	P=$(PROJECT)-prodcheck; F=.env.prodcheck; \
-	umask 077; \
-	printf 'SECRET_KEY=%s\nPOSTGRES_PASSWORD=%s\nWEB_PORT=18080\nFIRST_ADMIN_EMAIL=ops@prodcheck.invalid\nFIRST_ADMIN_PASSWORD=%s\n' \
-	  "$(call rand,32)" "$(call rand,16)" "$(call rand,16)" > $$F; \
-	C="docker compose -p $$P --env-file $$F -f infra/docker-compose.yml -f infra/docker-compose.prod.yml"; \
-	cleanup() { $$C down -v --remove-orphans >/dev/null 2>&1 || true; rm -f $$F; }; \
-	trap cleanup EXIT; \
-	$$C up -d --build --wait; \
-	EXPECT_ENV=production infra/smoke.sh http://localhost:18080; \
-	$$C exec -T api python -m app.cli create-admin | grep -q "exists: ops@prodcheck.invalid"; \
-	echo "prod-check: admin bootstrap is idempotent"; \
-	if $$C exec -T api python -m app.cli seed-demo; then echo "prod-check: FAIL seed-demo ran in production" >&2; exit 1; fi; \
-	echo "prod-check: PASS"
+prod-check: ## production images and stack on a throwaway project: smoke, page load, bootstrap, HTTPS, memory
+	@infra/prod-check.sh
+
+backup-test: ## backup and restore round trip on a throwaway project
+	@infra/backup-test.sh
+
+check-deploy: ## health, readiness, version and a page load against a deployed URL (URL=https://...)
+	@infra/check-deploy.sh $(URL)
+
+build-amd64: ## build linux/amd64 images (for an ARM Mac); see docs/DEPLOY.md
+	docker buildx build --platform linux/amd64 -f infra/Dockerfile.api -t $(PROJECT)-api:amd64 --load .
+	docker buildx build --platform linux/amd64 -f infra/Dockerfile.web -t $(PROJECT)-web:amd64 --load .

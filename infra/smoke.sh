@@ -2,6 +2,7 @@
 # Usage: infra/smoke.sh [URL]   (default http://localhost:8080)
 # Checks liveness, readiness and the version endpoint; exits non-zero on any failure.
 # EXPECT_ENV=production additionally asserts the reported environment.
+# CURL_OPTS=-k passes extra curl options (for example to accept a local test certificate).
 set -eu
 URL="${1:-http://localhost:8080}"
 URL="${URL%/}"
@@ -9,7 +10,8 @@ fail() { echo "smoke: FAIL $1" >&2; exit 1; }
 
 check() {
   path="$1"
-  body="$(curl -fsS --retry 10 --retry-delay 2 --retry-connrefused --max-time 5 "$URL$path")" \
+  # shellcheck disable=SC2086
+  body="$(curl -fsS ${CURL_OPTS:-} --retry 10 --retry-delay 2 --retry-connrefused --max-time 5 "$URL$path")" \
     || fail "$path did not return 200"
   echo "smoke: ok   $path"
   printf '%s' "$body"

@@ -171,7 +171,7 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 ### Wave 1 · Repo bootstrap
 
-- Status: Done. CI on the latest `main` commit was confirmed green by the owner in the GitHub Actions tab (confirmed green by owner, run URL pending). Claude Code could not read CI itself (`gh` is unusable on the build machine).
+- Status: Done. CI run #14 on `main` is green (owner-reported, 2026-10-18). Run #13 did not pass and was superseded by #14. Run URL: pending (see CI status under Wave 2).
 - Started from commit: 24d8aca
 - Goal: a clean, production-shaped monorepo with CI green: health endpoints, admin bootstrap, a bilingual placeholder page, and Docker images ready to deploy.
 
@@ -219,7 +219,7 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 **Hindi:** all Hindi strings are unreviewed; the sheet is [i18n/HI_REVIEW.md](i18n/HI_REVIEW.md) and Q-15 stays open.
 
 **Open issues**
-- Resolved: the owner confirmed CI green; run URL still pending (to be pasted here). The repository is private and `gh` on this machine is the wrong CPU architecture. Open the Actions tab and confirm the run for 7b16194 (jobs: api, web, e2e, secrets, docker). Fix any failure before starting wave 2.
+- Resolved: CI #14 is green; #13 did not pass and was superseded by #14. URL pending.
 - Port 8080 on this machine is held by another project's containers (`sih-*`), which were left untouched; local runs use `WEB_PORT=8081` in the git-ignored `.env`.
 - Playwright's Chromium (about 99 MiB) was downloaded with `npx playwright install`, a download beyond package registries that the wave's test requirement implies.
 - Hindi strings are drafted by Claude Code and need a human reviewer (Q-15).
@@ -277,14 +277,14 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - DEPLOY.md now states that images are built on the VM by default, adds the 2 GB swap step before the first build, documents building amd64 images on a Mac and loading them with `docker save` / `docker load` as the alternative (no registry), makes the DNS name label steps explicit, and adds a pre-deploy check that the name resolves and ports 80 and 443 are open. `deploy.sh up` warns when memory plus swap is under 3 GiB.
 
 **Open verifications**
-- **Rehearse `deploy.sh update` and `deploy.sh rollback` on the real VM** (procedure in DEPLOY.md, "Rehearsal"), then record here: date, VM size, commits involved, durations, anything that differed. Until then both are only syntax-checked.
+- **Update rehearsal: done on the real VM, 2026-10-18** (owner-reported; durations and any differences from DEPLOY.md were not supplied, add them here). **Rollback rehearsal: still open** (`deploy.sh rollback`, procedure in DEPLOY.md, "Rehearsal" steps 4 to 5); until it is run it is only syntax-checked.
 - First real certificate from a public CA and a first run of the images on x86_64: not yet done (Azure steps untested).
 
 **Follow-ups**
 - Visual snapshot baselines exist for macOS only. CI excludes the `visual` project until Linux baselines are generated (run `make visual ARGS=--update-snapshots` in a Linux environment, commit `e2e/__screenshots__/linux/`, then add the project to the CI job).
 
 **CI status**
-- Owner statement at the hardening request: CI on `main` is confirmed green. Claude Code cannot read CI itself (no usable `gh`). The wave 1 run URL is still pending and is to be pasted into the Wave 1 entry; the wave 2 run URL is pending as well.
+- Owner-reported on 2026-10-18: CI #14 (Wave 1 state), #18 (Wave 2) and #24 (hardening) are green; #13 did not pass and was superseded by #14. Run URLs: pending, because `gh` cannot run on the build machine (wrong CPU architecture) and a run URL contains an ID that cannot be derived from the run number. To close: paste the three URLs from the GitHub Actions tab here.
 
 **Open issues**
 - The new CI steps (`make prod-check` pulling the Caddy image, `make backup-test`, e2e with seeded accounts) first ran in CI after wave 2; confirm they stay green.

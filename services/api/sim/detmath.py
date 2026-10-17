@@ -21,10 +21,11 @@ _PIO2_HI = 1.5707963267948966
 _PIO2_LO = 6.123233995736766e-17
 
 
-def _poly(x2: float, coeffs: tuple[float, ...]) -> float:
+def _poly(x: float, coeffs: tuple[float, ...]) -> float:
+    """Horner evaluation, highest power first, in a fixed order."""
     acc = 0.0
     for c in reversed(coeffs):
-        acc = acc * x2 + c
+        acc = acc * x + c
     return acc
 
 
@@ -43,6 +44,70 @@ def sin(x: float) -> float:
 
 def cos(x: float) -> float:
     return _sincos(x)[1]
+
+
+# fdlibm split of ln 2: LN2_HI has trailing zero bits, so k * LN2_HI is exact for |k| < 2**20.
+_LN2_HI = 6.93147180369123816490e-01
+_LN2_LO = 1.90821492927058770002e-10
+_EXP = tuple(1.0 / math.factorial(n) for n in range(16))
+_ATAN = tuple((-1.0) ** k / (2 * k + 1) for k in range(14))
+_LOG = tuple(1.0 / (2 * k + 1) for k in range(14))
+
+
+def exp(x: float) -> float:
+    """e**x for |x| <= 700 (clamped), from a Taylor polynomial and an exact power-of-two scale."""
+    x = -700.0 if x < -700.0 else 700.0 if x > 700.0 else x
+    k = math.floor(x / 0.6931471805599453 + 0.5)
+    r = (x - k * _LN2_HI) - k * _LN2_LO
+    return math.ldexp(_poly(r, _EXP), k)
+
+
+def log(x: float) -> float:
+    """Natural logarithm for x > 0, from `frexp` (exact) and an atanh series."""
+    if not x > 0.0:
+        raise ValueError("log needs a positive argument")
+    m, e = math.frexp(x)
+    if m < 0.7071067811865476:
+        m *= 2.0
+        e -= 1
+    f = (m - 1.0) / (m + 1.0)
+    return e * _LN2_HI + (2.0 * f * _poly(f * f, _LOG) + e * _LN2_LO)
+
+
+def atan(x: float) -> float:
+    """Arctangent: two argument halvings (exact `sqrt`) then a short alternating series."""
+    a = -x if x < 0.0 else x
+    flip = a > 1.0
+    if flip:
+        a = 1.0 / a
+    for _ in range(2):
+        a = a / (1.0 + math.sqrt(1.0 + a * a))
+    r = 4.0 * a * _poly(a * a, _ATAN)
+    if flip:
+        r = PI / 2.0 - r
+    return -r if x < 0.0 else r
+
+
+def atan2(y: float, x: float) -> float:
+    """Angle of the vector (x, y) in radians, in (-pi, pi]; atan2(0, 0) is 0."""
+    ax, ay = abs(x), abs(y)
+    if ax == 0.0 and ay == 0.0:
+        return 0.0
+    r = atan(ay / ax) if ax >= ay else PI / 2.0 - atan(ax / ay)
+    if x < 0.0:
+        r = PI - r
+    return -r if y < 0.0 else r
+
+
+def wrap360(degrees: float) -> float:
+    """Wrap an angle in degrees into [0, 360)."""
+    r = degrees - 360.0 * math.floor(degrees / 360.0)
+    return 0.0 if r >= 360.0 else r
+
+
+def wrap180(degrees: float) -> float:
+    """Wrap an angle in degrees into [-180, 180)."""
+    return wrap360(degrees + 180.0) - 180.0
 
 
 def clamp(value: float, low: float, high: float) -> float:

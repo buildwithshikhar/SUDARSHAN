@@ -255,3 +255,51 @@ def test_subsystems_get_their_own_numpy_generator() -> None:
     rng = RngStreams(5)
     assert isinstance(rng["sensors"], np.random.Generator)
     assert rng["sensors"] is not rng["tracking"]
+
+
+# ---------------------------------------------------------------------------- exp, log, atan2
+
+
+@pytest.mark.parametrize("x", [i * 0.37 - 40.0 for i in range(217)])
+def test_exp_matches_libm_closely(x: float) -> None:
+    assert detmath.exp(x) == pytest.approx(math.exp(x), rel=1e-14)
+
+
+@pytest.mark.parametrize("x", [1e-9, 0.01, 0.5, 0.7071, 1.0, 1.4143, 2.0, 10.0, 12345.678, 3.2e8])
+def test_log_matches_libm_closely(x: float) -> None:
+    assert detmath.log(x) == pytest.approx(math.log(x), rel=1e-13, abs=1e-15)
+
+
+def test_log_refuses_non_positive_arguments() -> None:
+    for bad in (0.0, -1.0):
+        with pytest.raises(ValueError):
+            detmath.log(bad)
+
+
+def test_exp_and_log_invert_each_other() -> None:
+    for x in (-30.0, -1.5, 0.0, 0.25, 7.0, 55.0):
+        assert detmath.log(detmath.exp(x)) == pytest.approx(x, abs=1e-12)
+
+
+def test_exp_clamps_instead_of_overflowing() -> None:
+    assert math.isfinite(detmath.exp(1e6))
+    assert detmath.exp(-1e6) >= 0.0
+
+
+@pytest.mark.parametrize("y", [-9.0, -1.0, -0.2, 0.0, 0.3, 1.0, 40.0])
+@pytest.mark.parametrize("x", [-7.0, -1.0, -1e-3, 0.0, 1e-3, 2.0, 55.0])
+def test_atan2_matches_libm_closely(y: float, x: float) -> None:
+    assert detmath.atan2(y, x) == pytest.approx(math.atan2(y, x), abs=2e-15)
+
+
+def test_atan2_of_the_origin_is_zero() -> None:
+    assert detmath.atan2(0.0, 0.0) == 0.0
+
+
+def test_angle_wrapping() -> None:
+    assert detmath.wrap360(-1e-20) == 0.0
+    assert detmath.wrap360(-10.0) == 350.0
+    assert detmath.wrap360(725.0) == 5.0
+    assert detmath.wrap180(190.0) == -170.0
+    assert detmath.wrap180(-190.0) == 170.0
+    assert detmath.wrap180(180.0) == -180.0

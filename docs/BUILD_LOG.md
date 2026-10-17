@@ -4,11 +4,11 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 
 ## Current position
 
-- **Phase:** wave 3 in progress (contracts and deterministic sim core). Wave 2 code is complete; its live-link record (URL, deployed commit) is still owner-pending, and the owner asked for wave 3 to proceed in parallel.
-- **Current wave:** 3 · Contracts + deterministic sim core → [waves/wave-03-contracts-sim-core.md](waves/wave-03-contracts-sim-core.md)
-- **Next step:** owner confirms CI green for the wave 3 commits; then wave 4a (see the wave 3 entry's **Next wave entry point**).
-- **Main is:** green locally (lint, typecheck, unit, e2e, visual); CI per the wave entries.
-- **Deployed build:** owner-run update rehearsal on the Azure VM done 2026-10-18; URL and commit not yet recorded.
+- **Phase:** wave 4a in progress (sensor models), step 1 of 4 done. Wave 3 is complete locally and waits only for the owner to confirm CI; wave 4a started at the owner's instruction before that confirmation.
+- **Current wave:** 4a · Sensor models → [waves/wave-04a-sensor-models.md](waves/wave-04a-sensor-models.md)
+- **Next step:** wave 4a STEP 2 (radar and EO/IR) and STEP 3 (RF and acoustic) per the wave 4a entry's **Next wave entry point**. Owner still to confirm CI for the wave 3 and 4a step 1 commits, and to supply the deployed commit.
+- **Main is:** green locally (lint, typecheck, unit, `make prod-check`); CI result for the latest commits is owner-confirmed only (see the wave entries).
+- **Deployed build:** live at https://sudarshan.centralindia.cloudapp.azure.com (owner-reported, 2026-10-18); deployed commit not yet reported.
 
 ## Planning updates
 
@@ -27,7 +27,7 @@ Status values: Not started · In progress · Blocked · Done. A wave is Done onl
 | 1 | [Repo bootstrap](waves/wave-01-repo-bootstrap.md) | — | Sonnet | Deploy-ready (prod images, smoke test) | Cut | Done |
 | 2 | [Design system + app shell](waves/wave-02-design-system-shell.md) | 1 | Sonnet | **PRIORITY MILESTONE: first live link** | Cut | In progress |
 | 3 | [Contracts + deterministic sim core](waves/wave-03-contracts-sim-core.md) | 1 | Opus | Keep live build green | Cut | In progress |
-| 4a | [Sensor models](waves/wave-04a-sensor-models.md) | 3 | Opus | Keep live build green | Cut | Not started |
+| 4a | [Sensor models](waves/wave-04a-sensor-models.md) | 3 | Opus | Keep live build green | Cut | In progress |
 | 4b | [Tracking, fusion + AI assist](waves/wave-04b-tracking-ai-assist.md) | 4a | Opus | Keep live build green | Cut | Not started |
 | 5 | [Live-session vertical slice](waves/wave-05-live-session-slice.md) | 2, 4b | Sonnet | Redeploy: playable slice | Cut | Not started |
 | 6 | [Scoring + debrief](waves/wave-06-scoring-debrief.md) | 5 | Sonnet | Redeploy | Cut | Not started |
@@ -120,10 +120,10 @@ The user deploys; Claude Code never does. Fill this in when a deploy happens.
 
 | Field | Value |
 |---|---|
-| Host | not chosen (see [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md)) |
-| Live URL | — |
-| Deployed commit | — |
-| Last verified (`/healthz`, `/readyz`, `/api/v1/version`) | — |
+| Host | Azure for Students Linux VM, Central India region (owner decision Q-02) |
+| Live URL | https://sudarshan.centralindia.cloudapp.azure.com (wave 2 build; owner-reported, 2026-10-18) |
+| Deployed commit | not reported by the owner yet. Owner: paste the short hash here (`git rev-parse --short HEAD` on the VM, or the commit shown by `/api/v1/version`). Do not infer it from git history. |
+| Last verified (`/healthz`, `/readyz`, `/api/v1/version`) | not reported yet. Owner: run `make smoke URL=https://sudarshan.centralindia.cloudapp.azure.com` and `make check-deploy URL=...`, then record the date. |
 
 ## Rules for updating this log
 
@@ -287,6 +287,9 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 **CI status**
 - Owner-reported on 2026-10-18: CI #14 (Wave 1 state), #18 (Wave 2) and #24 (hardening) are green; #13 did not pass and was superseded by #14. Run URLs: pending, because `gh` cannot run on the build machine (wrong CPU architecture) and a run URL contains an ID that cannot be derived from the run number. To close: paste the three URLs from the GitHub Actions tab here.
 
+**Live link (owner-reported, 2026-10-18)**
+- URL https://sudarshan.centralindia.cloudapp.azure.com. The deployed commit and the smoke and check-deploy results were not supplied; they are recorded as pending under **Deployed build**.
+
 **Open issues**
 - The new CI steps (`make prod-check` pulling the Caddy image, `make backup-test`, e2e with seeded accounts) first ran in CI after wave 2; confirm they stay green.
 - Owner to deploy; then record the live URL and commit here and run `make smoke URL=<live url>` and `make check-deploy URL=<live url>`.
@@ -348,3 +351,43 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 **Next wave entry point**
 - After CI is confirmed green, set wave 3 to Done, then start wave 4a (sensor models): read docs/waves/wave-04a-sensor-models.md and begin STEP 1, the sensor framework in `services/api/sim/sensors/` (Sensor interface, degradation hooks, cue input), reading profiles through `app.contracts.loader` and drawing noise from the `sensors` RNG stream.
+
+### Wave 4a · Sensor models
+
+- Status: In progress. Step 1 (sensor framework) is merged and verified locally; steps 2 to 4 remain.
+- Started from commit: 5387056
+- Goal: physically-motivated radar, EO/IR, RF and acoustic detection models with degradations, every parameter sourced from the data register.
+- Gate note: the wave 4a prompt says to stop unless wave 3 is Done and main is green. Wave 3 is complete and green locally; the owner has not yet confirmed its CI run, and instructed this step to proceed. Set wave 3 to Done once CI is confirmed.
+
+**Done**
+- 6e4e382 feat(sim): deterministic exp, log, atan2 and angle wrapping (new `atan` too; all used by sensor geometry)
+- 7ca58c3 feat(api): optional class confusion tables in the sensor profile contract (`sensor-profile.v1` schema and TypeScript regenerated)
+- 418af43 feat(sim): sensor framework in `services/api/sim/sensors/` (Sensor template method, fixed draw budget, degradations, cueing, profile loader, suite and builder)
+- edf5d23 docs: sensor framework in SIM_CORE, ADR-017, changelog, R10 proof and Q-19
+- test(sim): cover atan for arguments beyond one
+
+**Decisions** (full reasoning in [ADR-017](DECISIONS.md))
+- Every candidate target takes a fixed 18 uniforms from the `sensors` stream whatever happens to it, so an outage, cue or probability change never shifts later noise.
+- Confusion tables sit in the sensor profile as an optional `confusion` object (additive, still `sensor-profile.v1`) with one register ID and `verified` flag per table and rows that must sum to 1; flat numbered parameters would not fit the 64-parameter limit.
+- Per-class signature figures (RCS, apparent size, and so on) are ordinary parameters named `<prefix>_<class_id>` with a `<prefix>_default` fallback (`SensorParams.for_class`). Steps 2 and 3 use this convention; do not invent another.
+- Degradations are runtime data (`Degradation`), not a scenario field, so `scenario.v1` is unchanged; instructor injects arrive in wave 10b. The suite is not yet part of `World.state()`; waves 4b and 5 wire it in.
+- Fictional fixed day length for EO/IR light: sunrise 06:00, sunset 18:00, one hour of linear twilight (no latitude is modelled).
+- The profile loader checks source IDs against the register only when given one (CI test does); the production image has no `docs/` directory.
+- Steps 2 and 3 must register their model with `register_model` and put the shared pieces (`polar_detection`, `report_class`, `degradation_effect`, `precision_factor`) to use rather than re-implement them.
+
+**Tests**
+- api: 904 passed, coverage 98.9% (sim package 100%) · web unit: 83 passed (includes the contract drift check) · e2e and visual: not run in this step (no web change beyond generated types)
+- New: `tests/test_sensor_framework.py`, `tests/test_sensor_profile.py` (geometry, daylight, fixed draw budget, two-process determinism, coverage, outage and sector outage, effects, cueing and expiry, snapshot restore, suite and builder, provenance rejection, row-normalised confusion tables), plus `detmath` accuracy tests. No existing test was skipped, disabled or weakened.
+
+**Deploy check**
+- Production images built: yes · `make prod-check` (production mode, HTTPS through Caddy, cookies, CSRF, bootstrap, memory): pass. No API image change (`sim/` is not in the image, Q-19).
+- Commit to deploy: not needed for this step (no user-facing change). Latest verified code commit: the last commit of this step on `main`.
+
+**Open issues**
+- CI result for the wave 3 and wave 4a step 1 commits: owner to confirm (all CI jobs except gitleaks, `docker build` on Linux and the Linux-only e2e were run locally).
+- Deployed commit and smoke date for the live link: owner to record under **Deployed build**.
+- Q-19: the API image does not ship `sim/` or `packs/`; fix in wave 5.
+- The stub `radar-generic-s` profile is still F01 placeholders and lacks the parameters a radar model will need (`fov`, signature figures, confusion table); step 2 replaces it with cited values (version 0.2.0) and updates the Kestrel scenario reference.
+
+**Next wave entry point**
+- STEP 2 and STEP 3 can run as two subagents in separate worktrees (radar and EO/IR; RF and acoustic). Each adds `sim/sensors/<modality>.py` with a class registered by `register_model`, a profile in `packs/sensor-profiles/`, and tests. Read docs/SIM_CORE.md "Sensor framework" first; use `tests/sensor_toy.py` as the pattern for a minimal model. Cited values come from docs/02-research.md section 2 and docs/DATA_REGISTER.md; anything secondary or UNVERIFIED carries `verified: false`, and a parameter source not in the register goes to docs/OPEN_QUESTIONS.md instead of a made-up ID. Steps 2 and 3 should not both edit `sim/sensors/__init__.py` in conflicting ways: add the import of the model module there in the merge, not in the branch.

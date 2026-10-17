@@ -15,7 +15,9 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "e2e": "playwright test",
-    "i18n:sheet": "node scripts/hi-review.mjs"
+    "i18n:sheet": "node scripts/hi-review.mjs",
+    "contracts:gen": "node scripts/contracts.mjs",
+    "contracts:check": "node scripts/contracts.mjs --check"
   },
   "dependencies": {
     "@carbon/icons-react": "^11.90.0",
@@ -45,6 +47,7 @@
     "eslint-plugin-react-refresh": "^0.5.7",
     "globals": "^17.13.0",
     "jsdom": "^29.1.1",
+    "json-schema-to-typescript": "16.0.0",
     "postcss": "^8.5.30",
     "prettier": "^3.9.10",
     "tailwindcss": "^3.4.19",

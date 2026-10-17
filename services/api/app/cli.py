@@ -55,14 +55,17 @@ def migrate() -> None:
 @cli.command("create-admin")
 def create_admin_command(
     email: str | None = typer.Option(None, envvar="FIRST_ADMIN_EMAIL"),
-    password: str | None = typer.Option(None, envvar="FIRST_ADMIN_PASSWORD"),
     if_configured: bool = typer.Option(
         False, "--if-configured", help="Do nothing, successfully, when the environment is not set."
     ),
 ) -> None:
-    """Create the first administrator (idempotent)."""
+    """Create the first administrator (idempotent).
+
+    The password is never a command-line argument (it would show in the process list and shell
+    history): it comes from FIRST_ADMIN_PASSWORD, or from a hidden prompt.
+    """
     email = email or None
-    password = password or None
+    password = os.environ.get("FIRST_ADMIN_PASSWORD") or None
     if if_configured and (email is None or password is None):
         typer.echo("first admin not configured; skipping")
         return
@@ -84,10 +87,13 @@ def create_admin_command(
 def create_user_command(
     email: str = typer.Option(..., help="Account email address"),
     role: Role = typer.Option(..., help="trainee, instructor or admin"),
-    password: str | None = typer.Option(None, envvar="NEW_USER_PASSWORD"),
 ) -> None:
-    """Create an account (idempotent). Password from NEW_USER_PASSWORD or a prompt."""
-    password = password or None
+    """Create an account (idempotent).
+
+    The password is never a command-line argument: it comes from NEW_USER_PASSWORD or from a
+    hidden prompt.
+    """
+    password = os.environ.get("NEW_USER_PASSWORD") or None
     if password is None:
         password = typer.prompt("Password", hide_input=True, confirmation_prompt=True)
     engine = make_engine(Settings().database_url)

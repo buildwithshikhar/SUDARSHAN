@@ -168,3 +168,40 @@ def test_seed_demo_uses_demo_password_when_set_and_rejects_weak_one(migrated: Se
     assert ok.exit_code == 0 and ok.output.count("fixed-demo-password") == 3
     bad = runner.invoke(cli, ["seed-demo"], env=_env(migrated, DEMO_PASSWORD="short"))
     assert bad.exit_code == 1 and "DEMO_PASSWORD rejected" in bad.output
+
+
+def test_passwords_are_never_accepted_as_command_line_arguments(migrated: Settings) -> None:
+    for args in (
+        ["create-admin", "--email", "a@unit.example", "--password", "a-long-password"],
+        [
+            "create-user",
+            "--email",
+            "a@unit.example",
+            "--role",
+            "admin",
+            "--password",
+            "a-long-password",
+        ],
+    ):
+        result = runner.invoke(cli, args, env=_env(migrated))
+        assert result.exit_code == 2
+        assert "No such option" in result.output
+    assert _users(migrated) == []
+
+
+def test_prompted_password_is_hidden_and_not_echoed(migrated: Settings) -> None:
+    secret = "a-long-password-xyz"
+    result = runner.invoke(
+        cli,
+        ["create-user", "--email", "t@unit.example", "--role", "trainee"],
+        env=_env(migrated),
+        input=f"{secret}\n{secret}\n",
+    )
+    assert result.exit_code == 0
+    assert secret not in result.output
+    env_run = runner.invoke(
+        cli,
+        ["create-admin"],
+        env=_env(migrated, FIRST_ADMIN_EMAIL="ops2@unit.example", FIRST_ADMIN_PASSWORD=secret),
+    )
+    assert env_run.exit_code == 0 and secret not in env_run.output

@@ -63,6 +63,10 @@ describe.each([
     expect(contrast(t, 'text-2', ground)).toBeGreaterThanOrEqual(4.5)
   })
 
+  it('text on an accent fill meets 4.5:1', () => {
+    expect(contrast(t, 'on-accent', 'accent')).toBeGreaterThanOrEqual(4.5)
+  })
+
   it.each(grounds)('accent text meets 4.5:1 on %s', (ground) => {
     expect(contrast(t, 'accent', ground)).toBeGreaterThanOrEqual(4.5)
   })

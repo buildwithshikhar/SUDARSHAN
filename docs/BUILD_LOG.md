@@ -364,7 +364,8 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - 7ca58c3 feat(api): optional class confusion tables in the sensor profile contract (`sensor-profile.v1` schema and TypeScript regenerated)
 - 418af43 feat(sim): sensor framework in `services/api/sim/sensors/` (Sensor template method, fixed draw budget, degradations, cueing, profile loader, suite and builder)
 - edf5d23 docs: sensor framework in SIM_CORE, ADR-017, changelog, R10 proof and Q-19
-- test(sim): cover atan for arguments beyond one
+- 902651c test(sim): cover atan for arguments beyond one
+- 0d7c2c5 docs: record wave 2 live URL and start the wave 4a entry in the build log
 
 **Decisions** (full reasoning in [ADR-017](DECISIONS.md))
 - Every candidate target takes a fixed 18 uniforms from the `sensors` stream whatever happens to it, so an outage, cue or probability change never shifts later noise.

@@ -1,0 +1,192 @@
+{
+  "$defs": {
+    "ActionRecord": {
+      "additionalProperties": false,
+      "description": "A trainee or instructor input, applied at the start of `tick`.",
+      "properties": {
+        "action": {
+          "anyOf": [
+            {
+              "enum": [
+                "designate",
+                "classify",
+                "assess",
+                "engage",
+                "hold",
+                "report"
+              ],
+              "type": "string"
+            },
+            {
+              "enum": [
+                "pause",
+                "resume",
+                "set-weather"
+              ],
+              "type": "string"
+            }
+          ],
+          "title": "Action"
+        },
+        "actor": {
+          "pattern": "^(sim|system|(trainee|instructor):[a-z0-9]+(?:-[a-z0-9]+)*)$",
+          "title": "Actor",
+          "type": "string"
+        },
+        "payload": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "default": {},
+          "title": "Payload",
+          "type": "object"
+        },
+        "tick": {
+          "minimum": 0,
+          "title": "Tick",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "tick",
+        "actor",
+        "action"
+      ],
+      "title": "ActionRecord",
+      "type": "object"
+    },
+    "EventRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "actor": {
+          "pattern": "^(sim|system|(trainee|instructor):[a-z0-9]+(?:-[a-z0-9]+)*)$",
+          "title": "Actor",
+          "type": "string"
+        },
+        "hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Hash",
+          "type": "string"
+        },
+        "payload": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Payload",
+          "type": "object"
+        },
+        "prev_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Prev Hash",
+          "type": "string"
+        },
+        "seq": {
+          "minimum": 0,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "t": {
+          "minimum": 0,
+          "title": "T",
+          "type": "number"
+        },
+        "type": {
+          "maxLength": 64,
+          "pattern": "^[a-z]+(\\.[a-z_]+)+$",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "seq",
+        "t",
+        "type",
+        "actor",
+        "payload",
+        "prev_hash",
+        "hash"
+      ],
+      "title": "EventRecord",
+      "type": "object"
+    },
+    "JsonValue": {},
+    "PackRef": {
+      "additionalProperties": false,
+      "description": "Reference to another versioned pack by ID and exact version.",
+      "properties": {
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "version": {
+          "pattern": "^(0|[1-9][0-9]*)(\\.(0|[1-9][0-9]*)){2}$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version"
+      ],
+      "title": "PackRef",
+      "type": "object"
+    }
+  },
+  "$id": "session-record.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Everything needed to replay a session and check the replay matches.",
+  "properties": {
+    "actions": {
+      "items": {
+        "$ref": "#/$defs/ActionRecord"
+      },
+      "title": "Actions",
+      "type": "array"
+    },
+    "contract": {
+      "const": "session-record.v1",
+      "title": "Contract",
+      "type": "string"
+    },
+    "events": {
+      "items": {
+        "$ref": "#/$defs/EventRecord"
+      },
+      "title": "Events",
+      "type": "array"
+    },
+    "final_state_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Final State Hash",
+      "type": "string"
+    },
+    "scenario": {
+      "$ref": "#/$defs/PackRef"
+    },
+    "seed": {
+      "maximum": 9223372036854775807,
+      "minimum": 0,
+      "title": "Seed",
+      "type": "integer"
+    },
+    "ticks": {
+      "minimum": 0,
+      "title": "Ticks",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "contract",
+    "scenario",
+    "seed",
+    "ticks",
+    "actions",
+    "events",
+    "final_state_hash"
+  ],
+  "title": "SessionRecord",
+  "type": "object"
+}

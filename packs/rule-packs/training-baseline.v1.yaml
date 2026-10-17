@@ -1,0 +1,61 @@
+# Fictional training rule set. Editable; not doctrine. Effector classes and figures are fictional.
+contract: rulepack.v1
+id: training-baseline
+version: 1.0.0
+title:
+  en: Training baseline rules
+  hi: प्रशिक्षण आधार नियम
+fictional: true
+default_action: hold
+
+effector_classes:
+  - id: ec-a
+    label:
+      en: Effector class A (generic, non-kinetic)
+      hi: प्रभावक वर्ग A (सामान्य, गैर-गतिज)
+    description:
+      en: Generic fictional soft response class used for training decisions only.
+      hi: केवल प्रशिक्षण निर्णयों के लिए प्रयुक्त सामान्य काल्पनिक सॉफ्ट प्रतिक्रिया वर्ग।
+    max_range: { value: 1850, unit: m, source_id: F01, verified: false }
+  - id: ec-b
+    label:
+      en: Effector class B (generic, kinetic)
+      hi: प्रभावक वर्ग B (सामान्य, गतिज)
+    description:
+      en: Generic fictional hard response class; release needs commander authority.
+      hi: सामान्य काल्पनिक हार्ड प्रतिक्रिया वर्ग; प्रयोग के लिए कमांडर का अधिकार आवश्यक है।
+    max_range: { value: 740, unit: m, source_id: F01, verified: false }
+
+rules:
+  - id: track-everything
+    title:
+      en: Designate and classify every contact
+      hi: हर संपर्क को चिह्नित और वर्गीकृत करें
+    when: {}
+    permits: [designate, classify, assess, report, hold]
+    authority: operator
+  - id: suspect-outer-zone
+    title:
+      en: Suspect contact in the outer zone may receive a class A response
+      hi: बाहरी क्षेत्र में संदिग्ध संपर्क पर वर्ग A प्रतिक्रिया दी जा सकती है
+    when:
+      identity_in: [suspect, hostile]
+      zone_role_in: [outer, inner]
+      min_confidence: 0.6
+    permits: [engage]
+    authority: operator
+    effector_classes: [ec-a]
+  - id: hostile-inner-zone
+    title:
+      en: Hostile contact in the inner zone may receive a class B response
+      hi: आंतरिक क्षेत्र में शत्रु संपर्क पर वर्ग B प्रतिक्रिया दी जा सकती है
+    when:
+      identity_in: [hostile]
+      zone_role_in: [inner]
+      min_confidence: 0.8
+    permits: [engage]
+    authority: commander
+    effector_classes: [ec-a, ec-b]
+
+weights: { detect: 0.25, classify: 0.25, assess: 0.15, respond: 0.2, report: 0.15 }
+thresholds: { detect_within_s: 12, classify_within_s: 25, report_within_s: 40 }

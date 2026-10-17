@@ -1,0 +1,59 @@
+{
+  "$defs": {
+    "JsonValue": {}
+  },
+  "$id": "event-record.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor": {
+      "pattern": "^(sim|system|(trainee|instructor):[a-z0-9]+(?:-[a-z0-9]+)*)$",
+      "title": "Actor",
+      "type": "string"
+    },
+    "hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Hash",
+      "type": "string"
+    },
+    "payload": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Payload",
+      "type": "object"
+    },
+    "prev_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Prev Hash",
+      "type": "string"
+    },
+    "seq": {
+      "minimum": 0,
+      "title": "Seq",
+      "type": "integer"
+    },
+    "t": {
+      "minimum": 0,
+      "title": "T",
+      "type": "number"
+    },
+    "type": {
+      "maxLength": 64,
+      "pattern": "^[a-z]+(\\.[a-z_]+)+$",
+      "title": "Type",
+      "type": "string"
+    }
+  },
+  "required": [
+    "seq",
+    "t",
+    "type",
+    "actor",
+    "payload",
+    "prev_hash",
+    "hash"
+  ],
+  "title": "EventRecord",
+  "type": "object"
+}

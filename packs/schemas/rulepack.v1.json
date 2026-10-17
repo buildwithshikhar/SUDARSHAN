@@ -1,0 +1,378 @@
+{
+  "$defs": {
+    "Condition": {
+      "additionalProperties": false,
+      "description": "All present fields must hold for a rule to apply; an absent field matches anything.",
+      "properties": {
+        "classification_in": {
+          "anyOf": [
+            {
+              "items": {
+                "maxLength": 64,
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Classification In"
+        },
+        "identity_in": {
+          "anyOf": [
+            {
+              "items": {
+                "enum": [
+                  "hostile",
+                  "suspect",
+                  "unknown",
+                  "neutral",
+                  "friend"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Identity In"
+        },
+        "min_confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Confidence"
+        },
+        "zone_role_in": {
+          "anyOf": [
+            {
+              "items": {
+                "enum": [
+                  "inner",
+                  "outer",
+                  "restricted"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Zone Role In"
+        }
+      },
+      "title": "Condition",
+      "type": "object"
+    },
+    "EffectorClass": {
+      "additionalProperties": false,
+      "description": "A generic, fictional response class. No real system names or performance figures.",
+      "properties": {
+        "description": {
+          "$ref": "#/$defs/Text"
+        },
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "$ref": "#/$defs/Text"
+        },
+        "max_range": {
+          "$ref": "#/$defs/Quantity"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "description",
+        "max_range"
+      ],
+      "title": "EffectorClass",
+      "type": "object"
+    },
+    "Quantity": {
+      "additionalProperties": false,
+      "description": "A numeric parameter with its unit and provenance.",
+      "properties": {
+        "source_id": {
+          "pattern": "^[DGWXF][0-9]{2}$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "unit": {
+          "maxLength": 24,
+          "pattern": "^[A-Za-z%°µ][A-Za-z0-9%°µ/^.\\-]*$",
+          "title": "Unit",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        },
+        "verified": {
+          "description": "True only when the value was checked against the source.",
+          "title": "Verified",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "value",
+        "unit",
+        "source_id",
+        "verified"
+      ],
+      "title": "Quantity",
+      "type": "object"
+    },
+    "Rule": {
+      "additionalProperties": false,
+      "properties": {
+        "authority": {
+          "enum": [
+            "operator",
+            "commander"
+          ],
+          "title": "Authority",
+          "type": "string"
+        },
+        "effector_classes": {
+          "default": [],
+          "items": {
+            "maxLength": 64,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "title": "Effector Classes",
+          "type": "array"
+        },
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "permits": {
+          "items": {
+            "enum": [
+              "designate",
+              "classify",
+              "assess",
+              "engage",
+              "hold",
+              "report"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Permits",
+          "type": "array"
+        },
+        "title": {
+          "$ref": "#/$defs/Text"
+        },
+        "when": {
+          "$ref": "#/$defs/Condition"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "when",
+        "permits",
+        "authority"
+      ],
+      "title": "Rule",
+      "type": "object"
+    },
+    "Text": {
+      "additionalProperties": false,
+      "description": "User-facing text in both interface languages.",
+      "properties": {
+        "en": {
+          "maxLength": 400,
+          "minLength": 1,
+          "title": "En",
+          "type": "string"
+        },
+        "hi": {
+          "maxLength": 400,
+          "minLength": 1,
+          "title": "Hi",
+          "type": "string"
+        }
+      },
+      "required": [
+        "en",
+        "hi"
+      ],
+      "title": "Text",
+      "type": "object"
+    },
+    "Thresholds": {
+      "additionalProperties": false,
+      "description": "Fictional, editable timing standards in seconds (no public doctrinal source; Q-12).",
+      "properties": {
+        "classify_within_s": {
+          "exclusiveMinimum": 0,
+          "maximum": 600,
+          "title": "Classify Within S",
+          "type": "number"
+        },
+        "detect_within_s": {
+          "exclusiveMinimum": 0,
+          "maximum": 600,
+          "title": "Detect Within S",
+          "type": "number"
+        },
+        "report_within_s": {
+          "exclusiveMinimum": 0,
+          "maximum": 600,
+          "title": "Report Within S",
+          "type": "number"
+        }
+      },
+      "required": [
+        "detect_within_s",
+        "classify_within_s",
+        "report_within_s"
+      ],
+      "title": "Thresholds",
+      "type": "object"
+    },
+    "Weights": {
+      "additionalProperties": false,
+      "properties": {
+        "assess": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Assess",
+          "type": "number"
+        },
+        "classify": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Classify",
+          "type": "number"
+        },
+        "detect": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Detect",
+          "type": "number"
+        },
+        "report": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Report",
+          "type": "number"
+        },
+        "respond": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Respond",
+          "type": "number"
+        }
+      },
+      "required": [
+        "detect",
+        "classify",
+        "assess",
+        "respond",
+        "report"
+      ],
+      "title": "Weights",
+      "type": "object"
+    }
+  },
+  "$id": "rulepack.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "contract": {
+      "const": "rulepack.v1",
+      "title": "Contract",
+      "type": "string"
+    },
+    "default_action": {
+      "const": "hold",
+      "title": "Default Action",
+      "type": "string"
+    },
+    "effector_classes": {
+      "items": {
+        "$ref": "#/$defs/EffectorClass"
+      },
+      "maxItems": 16,
+      "title": "Effector Classes",
+      "type": "array"
+    },
+    "fictional": {
+      "const": true,
+      "title": "Fictional",
+      "type": "boolean"
+    },
+    "id": {
+      "maxLength": 64,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "title": "Id",
+      "type": "string"
+    },
+    "rules": {
+      "items": {
+        "$ref": "#/$defs/Rule"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "title": "Rules",
+      "type": "array"
+    },
+    "thresholds": {
+      "$ref": "#/$defs/Thresholds"
+    },
+    "title": {
+      "$ref": "#/$defs/Text"
+    },
+    "version": {
+      "pattern": "^(0|[1-9][0-9]*)(\\.(0|[1-9][0-9]*)){2}$",
+      "title": "Version",
+      "type": "string"
+    },
+    "weights": {
+      "$ref": "#/$defs/Weights"
+    }
+  },
+  "required": [
+    "contract",
+    "id",
+    "version",
+    "title",
+    "fictional",
+    "default_action",
+    "effector_classes",
+    "rules",
+    "weights",
+    "thresholds"
+  ],
+  "title": "RulePack",
+  "type": "object"
+}

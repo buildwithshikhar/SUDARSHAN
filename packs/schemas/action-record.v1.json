@@ -1,0 +1,60 @@
+{
+  "$defs": {
+    "JsonValue": {}
+  },
+  "$id": "action-record.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A trainee or instructor input, applied at the start of `tick`.",
+  "properties": {
+    "action": {
+      "anyOf": [
+        {
+          "enum": [
+            "designate",
+            "classify",
+            "assess",
+            "engage",
+            "hold",
+            "report"
+          ],
+          "type": "string"
+        },
+        {
+          "enum": [
+            "pause",
+            "resume",
+            "set-weather"
+          ],
+          "type": "string"
+        }
+      ],
+      "title": "Action"
+    },
+    "actor": {
+      "pattern": "^(sim|system|(trainee|instructor):[a-z0-9]+(?:-[a-z0-9]+)*)$",
+      "title": "Actor",
+      "type": "string"
+    },
+    "payload": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "default": {},
+      "title": "Payload",
+      "type": "object"
+    },
+    "tick": {
+      "minimum": 0,
+      "title": "Tick",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "tick",
+    "actor",
+    "action"
+  ],
+  "title": "ActionRecord",
+  "type": "object"
+}

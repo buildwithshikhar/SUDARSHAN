@@ -1,0 +1,20 @@
+# Stub profile: the container is fixed in wave 3; the radar model that reads it arrives in wave 4a.
+# Every value is a project-authored fictional placeholder (F01) until calibrated and cited.
+contract: sensor-profile.v1
+id: radar-generic-s
+version: 0.1.0
+title:
+  en: Generic short-range surveillance radar (stub)
+  hi: सामान्य कम दूरी निगरानी रडार (प्रारंभिक)
+modality: radar
+fictional: true
+parameters:
+  instrumented_range: { value: 4600, unit: m, source_id: F01, verified: false }
+  update_interval: { value: 1.2, unit: s, source_id: F01, verified: false }
+  range_noise_sigma: { value: 7.5, unit: m, source_id: F01, verified: false }
+  bearing_noise_sigma: { value: 0.6, unit: deg, source_id: F01, verified: false }
+  min_elevation: { value: -2, unit: deg, source_id: F01, verified: false }
+  max_elevation: { value: 38, unit: deg, source_id: F01, verified: false }
+notes:
+  en: Placeholder figures for contract tests only. Replace with cited values in wave 4a.
+  hi: केवल अनुबंध परीक्षणों के लिए अस्थायी मान। वेव 4a में उद्धृत मानों से बदलें।

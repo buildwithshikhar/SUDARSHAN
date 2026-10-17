@@ -17,7 +17,7 @@ COMPOSE_PROD = $(COMPOSE) -f infra/docker-compose.prod.yml
 rand = $$(python3 -c "import secrets; print(secrets.token_hex($(1)))")
 UV = $(shell command -v uv || echo $$HOME/Library/Python/3.10/bin/uv)
 
-.PHONY: setup env dev lint typecheck test e2e visual build up down demo smoke create-admin prod-check backup-test check-deploy build-amd64 help
+.PHONY: setup env dev schemas lint typecheck test e2e visual build up down demo smoke create-admin prod-check backup-test check-deploy build-amd64 help
 
 help:
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | sed 's/:.*##/\t/' || true
@@ -36,6 +36,9 @@ env: ## create .env with random secrets if it does not exist
 dev: ## run API and web dev servers (two terminals: see README)
 	@echo "API: cd services/api && uv run uvicorn app.main:get_app --factory --reload"
 	@echo "Web: cd apps/web && npm run dev"
+
+schemas: ## export contract JSON Schemas to packs/schemas and regenerate the web TypeScript types
+	cd services/api && $(UV) run python -m app.contracts.export
 
 lint: ## ruff, eslint, prettier
 	cd services/api && $(UV) run ruff check . && $(UV) run ruff format --check .

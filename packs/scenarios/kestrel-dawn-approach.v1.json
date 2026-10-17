@@ -1,0 +1,89 @@
+{
+  "contract": "scenario.v1",
+  "id": "kestrel-dawn-approach",
+  "version": "1.0.0",
+  "title": { "en": "Kestrel Depot: dawn approach", "hi": "केस्ट्रल डिपो: भोर में आगमन" },
+  "summary": {
+    "en": "A small rotary contact approaches a fictional supply depot at first light; a fixed-wing contact transits the outer zone two minutes later.",
+    "hi": "भोर के समय एक छोटा रोटरी संपर्क काल्पनिक आपूर्ति डिपो की ओर आता है; दो मिनट बाद एक फिक्स्ड-विंग संपर्क बाहरी क्षेत्र से गुजरता है।"
+  },
+  "fictional": true,
+  "tick_hz": 20,
+  "default_seed": 240117,
+  "duration_s": 420,
+  "world": {
+    "terrain": { "kind": "flat", "elevation_m": 0 },
+    "half_extent_m": 6000,
+    "start_time_of_day_h": 5.75,
+    "weather": {
+      "condition": "haze",
+      "visibility_m": 4200,
+      "wind_speed_mps": 3.4,
+      "wind_from_deg": 245,
+      "gust_sigma_mps": 0.8,
+      "temperature_c": 17.5,
+      "cloud_cover_pct": 30
+    }
+  },
+  "rule_pack": { "id": "training-baseline", "version": "1.0.0" },
+  "zones": [
+    { "id": "inner", "role": "inner", "label": { "en": "Inner zone", "hi": "आंतरिक क्षेत्र" }, "center": { "x": 0, "y": 0, "z": 0 }, "radius_m": 900 },
+    { "id": "outer", "role": "outer", "label": { "en": "Outer zone", "hi": "बाहरी क्षेत्र" }, "center": { "x": 0, "y": 0, "z": 0 }, "radius_m": 3200 }
+  ],
+  "assets": [
+    { "id": "kestrel-depot", "label": { "en": "Kestrel Depot", "hi": "केस्ट्रल डिपो" }, "position": { "x": 0, "y": 0, "z": 0 } }
+  ],
+  "sensors": [
+    { "id": "radar-1", "profile": { "id": "radar-generic-s", "version": "0.1.0" }, "position": { "x": -140, "y": 85, "z": 6 }, "boresight_deg": 45 }
+  ],
+  "threats": [
+    {
+      "id": "contact-a",
+      "class_id": "rotary-small",
+      "label": { "en": "Contact A", "hi": "संपर्क A" },
+      "spawn_s": 8,
+      "start": { "x": 4300, "y": 3650, "z": 85 },
+      "start_heading_deg": 225,
+      "start_speed_mps": 11,
+      "limits": {
+        "max_speed_mps": 18,
+        "max_accel_mps2": 4,
+        "max_climb_mps": 5,
+        "max_descent_mps": 3.5,
+        "max_turn_rate_dps": 90,
+        "min_altitude_m": 5,
+        "max_altitude_m": 400
+      },
+      "route": [
+        { "position": { "x": 2650, "y": 2420, "z": 70 }, "speed_mps": 14 },
+        { "position": { "x": 1480, "y": 1730, "z": 55 }, "speed_mps": 12, "hold_s": 20 },
+        { "position": { "x": 620, "y": 410, "z": 40 }, "speed_mps": 9 }
+      ],
+      "on_route_end": "loiter"
+    },
+    {
+      "id": "contact-b",
+      "class_id": "fixed-wing-small",
+      "label": { "en": "Contact B", "hi": "संपर्क B" },
+      "spawn_s": 128,
+      "start": { "x": -5200, "y": 2900, "z": 240 },
+      "start_heading_deg": 100,
+      "start_speed_mps": 24,
+      "limits": {
+        "max_speed_mps": 31,
+        "max_accel_mps2": 2.5,
+        "max_climb_mps": 4,
+        "max_descent_mps": 5,
+        "max_turn_rate_dps": 20,
+        "min_altitude_m": 60,
+        "max_altitude_m": 1200
+      },
+      "route": [
+        { "position": { "x": -1900, "y": 2350, "z": 260 }, "speed_mps": 26 },
+        { "position": { "x": 1700, "y": 2750, "z": 280 }, "speed_mps": 27 },
+        { "position": { "x": 5600, "y": 1300, "z": 300 }, "speed_mps": 27 }
+      ],
+      "on_route_end": "despawn"
+    }
+  ]
+}

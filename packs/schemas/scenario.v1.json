@@ -1,0 +1,556 @@
+{
+  "$defs": {
+    "DefendedAsset": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "$ref": "#/$defs/Text"
+        },
+        "position": {
+          "$ref": "#/$defs/Vec3"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "position"
+      ],
+      "title": "DefendedAsset",
+      "type": "object"
+    },
+    "KinematicLimits": {
+      "additionalProperties": false,
+      "description": "Envelope of a threat class. Airspeed, not ground speed, is limited.",
+      "properties": {
+        "max_accel_mps2": {
+          "exclusiveMinimum": 0,
+          "maximum": 30,
+          "title": "Max Accel Mps2",
+          "type": "number"
+        },
+        "max_altitude_m": {
+          "exclusiveMinimum": 0,
+          "maximum": 10000,
+          "title": "Max Altitude M",
+          "type": "number"
+        },
+        "max_climb_mps": {
+          "exclusiveMinimum": 0,
+          "maximum": 30,
+          "title": "Max Climb Mps",
+          "type": "number"
+        },
+        "max_descent_mps": {
+          "exclusiveMinimum": 0,
+          "maximum": 30,
+          "title": "Max Descent Mps",
+          "type": "number"
+        },
+        "max_speed_mps": {
+          "exclusiveMinimum": 0,
+          "maximum": 120,
+          "title": "Max Speed Mps",
+          "type": "number"
+        },
+        "max_turn_rate_dps": {
+          "exclusiveMinimum": 0,
+          "maximum": 360,
+          "title": "Max Turn Rate Dps",
+          "type": "number"
+        },
+        "min_altitude_m": {
+          "maximum": 10000,
+          "minimum": 0,
+          "title": "Min Altitude M",
+          "type": "number"
+        }
+      },
+      "required": [
+        "max_speed_mps",
+        "max_accel_mps2",
+        "max_climb_mps",
+        "max_descent_mps",
+        "max_turn_rate_dps",
+        "min_altitude_m",
+        "max_altitude_m"
+      ],
+      "title": "KinematicLimits",
+      "type": "object"
+    },
+    "PackRef": {
+      "additionalProperties": false,
+      "description": "Reference to another versioned pack by ID and exact version.",
+      "properties": {
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "version": {
+          "pattern": "^(0|[1-9][0-9]*)(\\.(0|[1-9][0-9]*)){2}$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version"
+      ],
+      "title": "PackRef",
+      "type": "object"
+    },
+    "SensorPlacement": {
+      "additionalProperties": false,
+      "properties": {
+        "boresight_deg": {
+          "exclusiveMaximum": 360,
+          "minimum": 0,
+          "title": "Boresight Deg",
+          "type": "number"
+        },
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "position": {
+          "$ref": "#/$defs/Vec3"
+        },
+        "profile": {
+          "$ref": "#/$defs/PackRef"
+        }
+      },
+      "required": [
+        "id",
+        "profile",
+        "position",
+        "boresight_deg"
+      ],
+      "title": "SensorPlacement",
+      "type": "object"
+    },
+    "Terrain": {
+      "additionalProperties": false,
+      "properties": {
+        "elevation_m": {
+          "default": 0.0,
+          "title": "Elevation M",
+          "type": "number"
+        },
+        "kind": {
+          "const": "flat",
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "Terrain",
+      "type": "object"
+    },
+    "Text": {
+      "additionalProperties": false,
+      "description": "User-facing text in both interface languages.",
+      "properties": {
+        "en": {
+          "maxLength": 400,
+          "minLength": 1,
+          "title": "En",
+          "type": "string"
+        },
+        "hi": {
+          "maxLength": 400,
+          "minLength": 1,
+          "title": "Hi",
+          "type": "string"
+        }
+      },
+      "required": [
+        "en",
+        "hi"
+      ],
+      "title": "Text",
+      "type": "object"
+    },
+    "Threat": {
+      "additionalProperties": false,
+      "properties": {
+        "class_id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Class Id",
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "$ref": "#/$defs/Text"
+        },
+        "limits": {
+          "$ref": "#/$defs/KinematicLimits"
+        },
+        "on_route_end": {
+          "enum": [
+            "loiter",
+            "loop",
+            "despawn"
+          ],
+          "title": "On Route End",
+          "type": "string"
+        },
+        "route": {
+          "items": {
+            "$ref": "#/$defs/Waypoint"
+          },
+          "maxItems": 200,
+          "minItems": 1,
+          "title": "Route",
+          "type": "array"
+        },
+        "spawn_s": {
+          "minimum": 0,
+          "title": "Spawn S",
+          "type": "number"
+        },
+        "start": {
+          "$ref": "#/$defs/Vec3"
+        },
+        "start_heading_deg": {
+          "exclusiveMaximum": 360,
+          "minimum": 0,
+          "title": "Start Heading Deg",
+          "type": "number"
+        },
+        "start_speed_mps": {
+          "maximum": 120,
+          "minimum": 0,
+          "title": "Start Speed Mps",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "class_id",
+        "label",
+        "spawn_s",
+        "start",
+        "start_heading_deg",
+        "start_speed_mps",
+        "limits",
+        "route",
+        "on_route_end"
+      ],
+      "title": "Threat",
+      "type": "object"
+    },
+    "Vec3": {
+      "additionalProperties": false,
+      "description": "Local east-north-up position in metres; z is height above the flat ground plane.",
+      "properties": {
+        "x": {
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "title": "Y",
+          "type": "number"
+        },
+        "z": {
+          "title": "Z",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "z"
+      ],
+      "title": "Vec3",
+      "type": "object"
+    },
+    "Waypoint": {
+      "additionalProperties": false,
+      "properties": {
+        "hold_s": {
+          "default": 0.0,
+          "maximum": 3600,
+          "minimum": 0,
+          "title": "Hold S",
+          "type": "number"
+        },
+        "position": {
+          "$ref": "#/$defs/Vec3"
+        },
+        "speed_mps": {
+          "exclusiveMinimum": 0,
+          "maximum": 120,
+          "title": "Speed Mps",
+          "type": "number"
+        }
+      },
+      "required": [
+        "position",
+        "speed_mps"
+      ],
+      "title": "Waypoint",
+      "type": "object"
+    },
+    "Weather": {
+      "additionalProperties": false,
+      "description": "Modelled weather at session start. Wind blows from `wind_from_deg` (0 = north).",
+      "properties": {
+        "cloud_cover_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Cloud Cover Pct",
+          "type": "number"
+        },
+        "condition": {
+          "enum": [
+            "clear",
+            "haze",
+            "rain",
+            "fog",
+            "dust"
+          ],
+          "title": "Condition",
+          "type": "string"
+        },
+        "gust_sigma_mps": {
+          "maximum": 10,
+          "minimum": 0,
+          "title": "Gust Sigma Mps",
+          "type": "number"
+        },
+        "temperature_c": {
+          "maximum": 55,
+          "minimum": -40,
+          "title": "Temperature C",
+          "type": "number"
+        },
+        "visibility_m": {
+          "exclusiveMinimum": 0,
+          "maximum": 100000,
+          "title": "Visibility M",
+          "type": "number"
+        },
+        "wind_from_deg": {
+          "exclusiveMaximum": 360,
+          "minimum": 0,
+          "title": "Wind From Deg",
+          "type": "number"
+        },
+        "wind_speed_mps": {
+          "maximum": 40,
+          "minimum": 0,
+          "title": "Wind Speed Mps",
+          "type": "number"
+        }
+      },
+      "required": [
+        "condition",
+        "visibility_m",
+        "wind_speed_mps",
+        "wind_from_deg",
+        "gust_sigma_mps",
+        "temperature_c",
+        "cloud_cover_pct"
+      ],
+      "title": "Weather",
+      "type": "object"
+    },
+    "World": {
+      "additionalProperties": false,
+      "properties": {
+        "half_extent_m": {
+          "exclusiveMinimum": 0,
+          "maximum": 50000,
+          "title": "Half Extent M",
+          "type": "number"
+        },
+        "start_time_of_day_h": {
+          "exclusiveMaximum": 24,
+          "minimum": 0,
+          "title": "Start Time Of Day H",
+          "type": "number"
+        },
+        "terrain": {
+          "$ref": "#/$defs/Terrain"
+        },
+        "weather": {
+          "$ref": "#/$defs/Weather"
+        }
+      },
+      "required": [
+        "terrain",
+        "half_extent_m",
+        "start_time_of_day_h",
+        "weather"
+      ],
+      "title": "World",
+      "type": "object"
+    },
+    "Zone": {
+      "additionalProperties": false,
+      "description": "Circular zone on the ground plane around a centre point.",
+      "properties": {
+        "center": {
+          "$ref": "#/$defs/Vec3"
+        },
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "$ref": "#/$defs/Text"
+        },
+        "radius_m": {
+          "exclusiveMinimum": 0,
+          "maximum": 50000,
+          "title": "Radius M",
+          "type": "number"
+        },
+        "role": {
+          "enum": [
+            "inner",
+            "outer",
+            "restricted"
+          ],
+          "title": "Role",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "role",
+        "label",
+        "center",
+        "radius_m"
+      ],
+      "title": "Zone",
+      "type": "object"
+    }
+  },
+  "$id": "scenario.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "assets": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/DefendedAsset"
+      },
+      "maxItems": 32,
+      "title": "Assets",
+      "type": "array"
+    },
+    "contract": {
+      "const": "scenario.v1",
+      "title": "Contract",
+      "type": "string"
+    },
+    "default_seed": {
+      "maximum": 9223372036854775807,
+      "minimum": 0,
+      "title": "Default Seed",
+      "type": "integer"
+    },
+    "duration_s": {
+      "exclusiveMinimum": 0,
+      "maximum": 7200,
+      "title": "Duration S",
+      "type": "number"
+    },
+    "fictional": {
+      "const": true,
+      "title": "Fictional",
+      "type": "boolean"
+    },
+    "id": {
+      "maxLength": 64,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "title": "Id",
+      "type": "string"
+    },
+    "rule_pack": {
+      "$ref": "#/$defs/PackRef"
+    },
+    "sensors": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/SensorPlacement"
+      },
+      "maxItems": 32,
+      "title": "Sensors",
+      "type": "array"
+    },
+    "summary": {
+      "$ref": "#/$defs/Text"
+    },
+    "threats": {
+      "items": {
+        "$ref": "#/$defs/Threat"
+      },
+      "maxItems": 256,
+      "minItems": 1,
+      "title": "Threats",
+      "type": "array"
+    },
+    "tick_hz": {
+      "const": 20,
+      "default": 20,
+      "title": "Tick Hz",
+      "type": "integer"
+    },
+    "title": {
+      "$ref": "#/$defs/Text"
+    },
+    "version": {
+      "pattern": "^(0|[1-9][0-9]*)(\\.(0|[1-9][0-9]*)){2}$",
+      "title": "Version",
+      "type": "string"
+    },
+    "world": {
+      "$ref": "#/$defs/World"
+    },
+    "zones": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Zone"
+      },
+      "maxItems": 32,
+      "title": "Zones",
+      "type": "array"
+    }
+  },
+  "required": [
+    "contract",
+    "id",
+    "version",
+    "title",
+    "summary",
+    "fictional",
+    "default_seed",
+    "duration_s",
+    "world",
+    "rule_pack",
+    "threats"
+  ],
+  "title": "ScenarioSpec",
+  "type": "object"
+}

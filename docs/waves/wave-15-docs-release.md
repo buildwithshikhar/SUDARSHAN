@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Depends on | all |
+| Depends on | all (14b is optional) |
 | Recommended model | Sonnet |
 | Deployment | Release 1.0: the user deploys the release commit and tags it. |
 
@@ -41,7 +41,7 @@
 ````text
 ROLE: You are building wave 15 (Docs + release 1.0) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
 
-READ FIRST: docs/BUILD_LOG.md (confirm wave 14 is Done and main is green; if not, stop and tell me). Then: every doc in docs/README.md; docs/06-requirements-traceability.md; docs/08-demo.md.
+READ FIRST: docs/BUILD_LOG.md (confirm wave 14a is Done and main is green; if not, stop and tell me). Then: every doc in docs/README.md; docs/06-requirements-traceability.md; docs/08-demo.md.
 
 GOAL: Product-grade documentation, a completed traceability matrix and a rehearsed release.
 
@@ -78,7 +78,7 @@ STOP CONDITIONS — stop and report if:
 - a step needs credentials, or network beyond package registries and GitHub;
 - a Docker action would touch anything outside this repo's compose project;
 - CI fails 3 times on the same cause;
-- about 60% of the session is used before acceptance (commit green work, log it as wave 15.b, stop);
+- about 60% of the session is used before acceptance (commit green work, log it as wave 15.2, stop);
 - Never build features from later waves.
 
 FINAL OUTPUT TO ME: at most 10 lines — commits, test counts, CI result, deploy check (and the commit for me to deploy), anything skipped and why, and the first step of the pilot report and presentation.

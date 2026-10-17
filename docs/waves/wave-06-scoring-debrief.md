@@ -14,17 +14,21 @@
 - ROE hard-fail gate: engaging without positive ID, or engaging a neutral or friend, fails that threat.
 - Plain-language node explanations from EN/HI templates; weights and thresholds from the rule pack; each score records the rule-pack and scenario versions.
 - Signal-detection metrics per session: hit rate, false-alarm rate, d′ with a log-linear correction for 0 and 1 rates.
-- Debrief screen: score summary, node-by-node path per threat, first three lessons.
+- Structured contact reports: the trainee files what, where, how many, heading and confidence; each field is graded against ground truth with tolerances from the rule pack, giving a report-quality score separate from the decision score, plus a calibration check on stated confidence.
+- Track-management scoring: an unfixed swap, split or merge from wave 4b costs marks on the affected threat.
+- Debrief screen: score summary, node-by-node path per threat, report grades, first three lessons.
 
 ## Out of scope
 
-- The full AAR (wave 12).
+- The full AAR (wave 12a).
 
 ## Acceptance criteria
 
 - Golden event-log fixtures (at least 10, covering each node outcome and each hard-fail case) produce exactly the expected scores and explanations.
 - Property test: rushing into an ROE breach never scores higher than a compliant slower response.
 - d′ matches reference values for known hit and false-alarm rates.
+- A report with correct class, position within tolerance, count off by one and heading off by 40° gets the documented per-field marks, and re-scoring gives an identical result (test).
+- An unfixed seeded track swap lowers the affected threat's score; fixing it does not (test).
 - Debrief screen is axe-clean, bilingual, and shows rule-pack version and scenario seed.
 - `docs/TRACEABILITY.md` proof cells for R5, R6, R7 and R17 point to test IDs.
 - Every new user-facing string exists in EN and HI (key-parity check passes).
@@ -41,7 +45,7 @@
 ````text
 ROLE: You are building wave 6 (Scoring + debrief) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
 
-READ FIRST: docs/BUILD_LOG.md (confirm wave 5 is Done and main is green; if not, stop and tell me). Then: docs/02-research.md §4 (scoring and ROE), docs/05-architecture.md §3.3, docs/07-ui-map.md (Debrief).
+READ FIRST: docs/BUILD_LOG.md (confirm wave 5 is Done and main is green; if not, stop and tell me). Then: docs/10-differentiators.md (H4), docs/02-research.md §4 (scoring and ROE), docs/05-architecture.md §3.3, docs/07-ui-map.md (Debrief).
 
 GOAL: Explainable decision-tree scoring for every threat and a debrief screen that says why.
 
@@ -49,23 +53,27 @@ STEP 1 — Evaluator (main session)
 - services/api/app/scoring/: tree walk per threat over the event log and ground truth; node results with score, reason key and parameters.
 - ROE hard-fail gate; capped timing bands; weights from the rule pack.
 - SDT metrics with a log-linear correction.
+- Contact-report grader (per-field tolerances, calibration) and unfixed-track-error penalties.
 
 STEP 2 — Fixtures and tests (subagent A, worktree)
 - At least 10 golden logs with expected outputs; hypothesis property test for the no-reward-for-breach rule.
 
 STEP 3 — Debrief UI (subagent B, worktree)
 - Debrief screen per docs/07-ui-map.md; explanations rendered from EN/HI templates; empty, loading and error states.
+- Contact-report form in the decision panel (keyboard-operable, EN and HI).
 
 STEP 4 — Docs
-- docs/SCORING.md (tree, weights, explanation templates, honesty note that timing standards are fictional and editable). Update docs/TRACEABILITY.md proof cells.
+- docs/SCORING.md (tree, weights, report grading, explanation templates, honesty note that timing standards are fictional and editable). Update docs/TRACEABILITY.md proof cells.
 
 OUT OF SCOPE (do not build):
-- The full AAR (wave 12).
+- The full AAR (wave 12a).
 
 ACCEPTANCE (all must be true):
 - Golden event-log fixtures (at least 10, covering each node outcome and each hard-fail case) produce exactly the expected scores and explanations.
 - Property test: rushing into an ROE breach never scores higher than a compliant slower response.
 - d′ matches reference values for known hit and false-alarm rates.
+- A report with correct class, position within tolerance, count off by one and heading off by 40° gets the documented per-field marks, and re-scoring gives an identical result (test).
+- An unfixed seeded track swap lowers the affected threat's score; fixing it does not (test).
 - Debrief screen is axe-clean, bilingual, and shows rule-pack version and scenario seed.
 - `docs/TRACEABILITY.md` proof cells for R5, R6, R7 and R17 point to test IDs.
 - Every new user-facing string exists in EN and HI (key-parity check passes).
@@ -83,7 +91,7 @@ STOP CONDITIONS — stop and report if:
 - a step needs credentials, or network beyond package registries and GitHub;
 - a Docker action would touch anything outside this repo's compose project;
 - CI fails 3 times on the same cause;
-- about 60% of the session is used before acceptance (commit green work, log it as wave 6.b, stop);
+- about 60% of the session is used before acceptance (commit green work, log it as wave 6.2, stop);
 - Never build features from later waves.
 
 FINAL OUTPUT TO ME: at most 10 lines — commits, test counts, CI result, deploy check (and the commit for me to deploy), anything skipped and why, and the first step of wave 7.

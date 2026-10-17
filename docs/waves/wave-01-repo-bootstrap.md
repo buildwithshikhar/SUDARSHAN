@@ -107,7 +107,7 @@ STOP CONDITIONS — stop and report if:
 - a step needs credentials, or network beyond package registries and GitHub;
 - a Docker action would touch anything outside this repo's compose project;
 - CI fails 3 times on the same cause;
-- about 60% of the session is used before acceptance (commit green work, log it as wave 1.b, stop);
+- about 60% of the session is used before acceptance (commit green work, log it as wave 1.2, stop);
 - Never build features from later waves.
 
 FINAL OUTPUT TO ME: at most 10 lines — commits, test counts, CI result, deploy check (and the commit for me to deploy), anything skipped and why, and the first step of wave 2.

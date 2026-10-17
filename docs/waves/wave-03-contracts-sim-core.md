@@ -15,6 +15,7 @@
 - Hash-chained event log (SHA-256) and replay from spec + seed + action log.
 - TypeScript types generated from the JSON Schemas into `apps/web`, with a CI drift check.
 - One fictional example each: rule pack, sensor profile stub, scenario.
+- State snapshot and restore at any tick (used by director-mode branching and counterfactual review), and golden-file regression tests that pin sim behaviour.
 
 ## Out of scope
 
@@ -27,6 +28,8 @@
 - Tampering with any event breaks chain verification at that event.
 - Schemas validate the examples and reject malformed inputs (tests for each).
 - Property tests (hypothesis) keep kinematics inside the class limits.
+- Restoring a snapshot at tick N and running to tick M gives the same state hash as a straight run (test).
+- Changing a physics constant fails a golden-file test with a readable diff.
 - ADR added for the RNG scheme and tick model.
 - CI is green on `main` (lint, typecheck, unit, e2e, gitleaks, docker build).
 - Every feature in this wave has tests; no existing test was skipped, disabled or weakened.
@@ -60,6 +63,7 @@ STEP 3 — Event log and replay (subagent B, worktree)
 
 STEP 4 — Tests and docs (main session)
 - Determinism across two processes, replay equality, tamper detection, schema round-trips, hypothesis tests on kinematics.
+- Snapshot/restore: restore at tick N and run to M equals a straight run (state hash). Golden files for a fixed scenario set, with a readable diff on failure.
 - docs/SIM_CORE.md: tick model, RNG streams, determinism rules for future contributors.
 - ADR-013 in docs/DECISIONS.md: RNG scheme and tick model.
 
@@ -72,6 +76,8 @@ ACCEPTANCE (all must be true):
 - Tampering with any event breaks chain verification at that event.
 - Schemas validate the examples and reject malformed inputs (tests for each).
 - Property tests (hypothesis) keep kinematics inside the class limits.
+- Restoring a snapshot at tick N and running to tick M gives the same state hash as a straight run (test).
+- Changing a physics constant fails a golden-file test with a readable diff.
 - ADR added for the RNG scheme and tick model.
 - CI is green on `main` (lint, typecheck, unit, e2e, gitleaks, docker build).
 - Every feature in this wave has tests; no existing test was skipped, disabled or weakened.
@@ -80,14 +86,14 @@ ACCEPTANCE (all must be true):
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-LOG: Follow the rules in docs/BUILD_LOG.md. Add a "Wave 3" entry at the start, append each merged commit, record decisions, test counts and the deploy check, and write the exact first step of wave 4.
+LOG: Follow the rules in docs/BUILD_LOG.md. Add a "Wave 3" entry at the start, append each merged commit, record decisions, test counts and the deploy check, and write the exact first step of wave 4a.
 
 STOP CONDITIONS — stop and report if:
 - a step needs credentials, or network beyond package registries and GitHub;
 - a Docker action would touch anything outside this repo's compose project;
 - CI fails 3 times on the same cause;
-- about 60% of the session is used before acceptance (commit green work, log it as wave 3.b, stop);
+- about 60% of the session is used before acceptance (commit green work, log it as wave 3.2, stop);
 - Never build features from later waves.
 
-FINAL OUTPUT TO ME: at most 10 lines — commits, test counts, CI result, deploy check (and the commit for me to deploy), anything skipped and why, and the first step of wave 4.
+FINAL OUTPUT TO ME: at most 10 lines — commits, test counts, CI result, deploy check (and the commit for me to deploy), anything skipped and why, and the first step of wave 4a.
 ````

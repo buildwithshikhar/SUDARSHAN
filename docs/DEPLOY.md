@@ -180,7 +180,7 @@ The VM is x86_64. Images built on an Apple-silicon Mac are arm64 and will not ru
   echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
   ```
 
-- **Build on your Mac for x86_64** (slower, because it runs under emulation):
+- **Build on your Mac for x86_64** (the build uses emulation; on the maintainer's M-series laptop `make build-amd64` finished in about 1.5 minutes and produced `amd64` images, but the images were not run on an x86_64 machine):
 
   ```sh
   make build-amd64            # tags <project>-api:amd64 and <project>-web:amd64

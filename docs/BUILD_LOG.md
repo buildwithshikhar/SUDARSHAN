@@ -4,9 +4,9 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 
 ## Current position
 
-- **Phase:** wave 1 Done (CI confirmed green by owner, run URL pending); wave 2 in progress.
+- **Phase:** wave 2 built and verified locally; waiting for the owner to deploy.
 - **Next wave:** 2 · Design system + app shell → [waves/wave-02-design-system-shell.md](waves/wave-02-design-system-shell.md) 
-- **Next step:** finish wave 2, then ask the owner to deploy (Azure for Students Linux VM, see DEPLOY.md).
+- **Next step:** owner deploys following [DEPLOY.md](DEPLOY.md); then run `make smoke URL=...` and `make check-deploy URL=...` and record the result here.
 - **Main is:** green (CI confirmed by owner for the wave 1 closeout commit).
 - **Deployed build:** none yet. First live link is the wave 2 milestone.
 
@@ -229,12 +229,53 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 ### Wave 2 · Design system + app shell
 
-- Status: In progress
+- Status: In progress. All build steps are merged and verified locally; the milestone (a live link, an admin-created account signing in, `make smoke` and `make check-deploy` against it) needs the owner to deploy.
 - Started from commit: aef6521
 - Goal: the real design system, sign-in, role-based shell and bilingual UI, plus a deployment kit for an Azure for Students Linux VM, deployed as the first live link.
 
 **Done**
 - gate: wave 1 Done (owner-confirmed CI), Q-02 decided (Azure for Students, Linux VM)
+- docs: wave 2 file completed
+- feat(api): sessions, login, CSRF, rate limit, role guards, `create-user`, preferences, uploads directory
+- feat(web): self-hosted fonts and UI primitives; routing, auth, role-based shell and screens
+- test(web): component, auth, role, axe (EN/HI × dark/light) and visual tests; Hindi review sheet drift test
+- build: Caddy HTTPS override, `deploy.sh`, `backup.sh`, `restore.sh`, uploads volume
+- feat: `make check-deploy`, e2e seeding, `prod-check` extended (page load, bootstrap, cookies, CSRF, HTTPS, memory), `make backup-test`
+- docs: DEPLOY runbook, FONTS, DESIGN, hosting options with measured memory, wave 2 UI review and screenshots
 
 **Decisions**
 - Host is Azure for Students, Ubuntu 24.04 LTS, x86_64 (owner decision, Q-02).
+- Sessions are stored server-side with only the SHA-256 of the cookie token; `HttpOnly`, `SameSite=Lax`, `Secure` in production; CSRF token header on every unsafe request; failed-login limit (5 per 15 minutes per address and per account) held in process memory, so it applies per API instance.
+- Production also refuses demo accounts at sign-in, not only at start-up.
+- nginx passes the client address from Caddy's `X-Forwarded-For` and uvicorn trusts forwarded headers, because the API is reachable only through the web container; without this the login limit would key on the proxy and lock everyone out together.
+- A separately hosted frontend on another registrable domain does not work with `SameSite=Lax` cookies; the supported deployment is one origin (documented in DEPLOY.md section 12).
+- Sidebar modules come from one source list pinned to the UI map counts; modules not yet built route to an empty state naming their wave. Profile is built.
+- The reduced-motion rule uses `transition: none`, not a tiny duration, because a 0.01 ms transition still let axe read a half-changed colour; the stored theme and language are applied by a static script before first paint.
+- Visual snapshots have macOS baselines and run through `make visual`; the CI end-to-end job excludes them until Linux baselines exist. Signed-in e2e tests run one at a time because they share three seeded accounts.
+- `seed-demo` accepts `DEMO_PASSWORD` (non-production only) so e2e can sign in; the password is generated per run by `infra/e2e.sh` and never stored.
+
+**Tests**
+- api: 61 passed, 99% coverage (gate 90%) · web unit: 77 passed · e2e: 45 passed (axe zero violations in EN and HI, dark and light, on sign in, About, Not found, Offline and, signed in as each role, Status, a module page, Profile (both tabs), No access and the components page) · visual: 3 tests (5 snapshots) passed
+- `make lint typecheck test`, `make smoke`, `make check-deploy` (local), `make e2e`, `make visual`, `make prod-check` and `make backup-test` all pass; `make build-amd64` builds `amd64` images (about 1.5 minutes on this laptop).
+
+**Measured memory (local, not an Azure figure)**
+- Production stack idle 104 MiB, after light load 105 MiB, with Caddy 119 MiB (api 68, db 28, web 8, caddy 15). Detail and sizing advice in [HOSTING_OPTIONS.md](HOSTING_OPTIONS.md).
+
+**Deploy check**
+- Production images built: yes · `make prod-check` (production mode, HTTPS through Caddy on a local domain, HSTS and HTTP redirect, cookie flags, CSRF, admin bootstrap idempotent, seed-demo refused): pass · `make backup-test`: pass (a macOS-only pruning bug in `backup.sh` was found by the test and fixed)
+- Not tested: the Azure steps, a real certificate from a public CA, an x86_64 run of the images, `deploy.sh update` and `rollback` (syntax-checked only; they need a git remote).
+- Commit to deploy: the latest commit on `main` after this entry is pushed (record its hash here when you deploy).
+
+**UI review follow-ups** (from [evidence/wave-2/UI_REVIEW.md](evidence/wave-2/UI_REVIEW.md))
+- Sign-in page is sparse; top bar is busy and not responsive below about 1024 px; brand mark blurs at 24 px; Hindi body text may need 14 px after a native reader reviews it; error states do not name the failing request; Linux visual baselines for CI. Hindi stays unreviewed (Q-15).
+
+**Environment notes**
+- `WEB_PORT=8081` in the git-ignored `.env` on this machine (another project holds 8080). `make e2e` and `make visual` seed the three demo accounts in the local stack with a throwaway password.
+
+**Open issues**
+- CI for the wave 2 commits has not been seen (no usable `gh`); check the Actions tab. The new CI steps (`make prod-check` pulling the Caddy image, `make backup-test`, e2e with seeded accounts) run for the first time there.
+- The wave 1 CI run URL is still to be pasted.
+- Owner to deploy; then record the live URL and commit here and run `make smoke URL=<live url>` and `make check-deploy URL=<live url>`.
+
+**Next wave entry point**
+- After the deploy is verified and recorded: wave 3 (contracts and deterministic sim core), read docs/waves/wave-03-contracts-sim-core.md and start with the Pydantic contracts.

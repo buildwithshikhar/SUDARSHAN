@@ -39,6 +39,7 @@ dev: ## run API and web dev servers (two terminals: see README)
 
 schemas: ## export contract JSON Schemas to packs/schemas and regenerate the web TypeScript types
 	cd services/api && $(UV) run python -m app.contracts.export
+	cd apps/web && npm run contracts:gen
 
 lint: ## ruff, eslint, prettier
 	cd services/api && $(UV) run ruff check . && $(UV) run ruff format --check .

@@ -1,8 +1,7 @@
 // Generated from packs/schemas/session-record.v1.json by `npm run contracts:gen`. Do not edit.
 
 export type Action =
-  | ('designate' | 'classify' | 'assess' | 'engage' | 'hold' | 'report')
-  | ('pause' | 'resume' | 'set-weather')
+  ('designate' | 'classify' | 'assess' | 'engage' | 'hold' | 'report') | 'set-weather'
 export type Actor = string
 export type JsonValue = unknown
 export type Tick = number
@@ -35,6 +34,9 @@ export interface SessionRecord {
 }
 /**
  * A trainee or instructor input, applied at the start of `tick`.
+ *
+ * Pause and resume are not actions: a paused session simply stops ticking, so they never reach
+ * the simulation and cannot change its outcome.
  */
 export interface ActionRecord {
   action: Action

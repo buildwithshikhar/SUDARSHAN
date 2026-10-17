@@ -29,6 +29,8 @@ services:
       CORS_ORIGINS: ${CORS_ORIGINS:-}
       FIRST_ADMIN_EMAIL: ${FIRST_ADMIN_EMAIL:-}
       FIRST_ADMIN_PASSWORD: ${FIRST_ADMIN_PASSWORD:-}
+    volumes:
+      - uploads:/data/uploads
     depends_on:
       db:
         condition: service_healthy
@@ -49,3 +51,4 @@ services:
 
 volumes:
   db-data:
+  uploads:

@@ -1,0 +1,29 @@
+# Adds Caddy for automatic HTTPS in front of the web service.
+# Needs DOMAIN and ACME_EMAIL, ports 80 and 443 reachable from the internet, and DNS for DOMAIN
+# pointing at this machine. Layer it on top of the production override:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.https.yml up -d
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN to your domain or the VM's Azure DNS name}
+      ACME_EMAIL: ${ACME_EMAIL:?set ACME_EMAIL (used by the certificate authority for expiry notices)}
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+      - "${HTTPS_PORT:-443}:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      web:
+        condition: service_healthy
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]
+
+volumes:
+  caddy-data:
+  caddy-config:

@@ -1,0 +1,12 @@
+# Automatic HTTPS. Configured only through DOMAIN and ACME_EMAIL (see docker-compose.https.yml).
+# DOMAIN can be your own domain or the VM's Azure DNS name (<label>.<region>.cloudapp.azure.com).
+{
+	email {$ACME_EMAIL}
+}
+
+{$DOMAIN} {
+	encode zstd gzip
+	header Strict-Transport-Security "max-age=31536000"
+	# Caddy replaces any client-supplied X-Forwarded-For with the real client address.
+	reverse_proxy web:8080
+}

@@ -62,3 +62,6 @@ services/api/data/
 playwright-report/
 test-results/
 blob-report/
+backups/
+.deploy/
+.env.prodcheck

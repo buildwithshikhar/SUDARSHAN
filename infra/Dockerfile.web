@@ -10,7 +10,7 @@ ARG VITE_API_URL=
 ENV VITE_API_URL=${VITE_API_URL}
 RUN npm run build
 
-FROM nginxinc/nginx-unprivileged:1.27-alpine
+FROM nginxinc/nginx-unprivileged:1.29-alpine
 ARG PRODUCT_NAME=trainer
 ARG GIT_SHA=dev
 ARG BUILD_TIME=unknown

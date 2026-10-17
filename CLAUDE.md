@@ -67,6 +67,15 @@ Repo layout (created in wave 1): `apps/web/`, `services/api/`, `packs/` (rule pa
 
 Model choice: Sonnet by default. Opus only where a wrong design is expensive to undo (waves 3, 4 and 9, or wave 7 if the benchmark gate fails).
 
+## Wave execution protocol
+
+1. Read `docs/BUILD_LOG.md` first, then only the files the current wave file lists. Do not read other docs unless a step needs them.
+2. Make small conventional commits, one logical change per commit.
+3. Update `docs/BUILD_LOG.md` after every merged step.
+4. Before finishing, run the full test suite and `make smoke` against the production-mode stack.
+5. From wave 2 on, never leave the deployable build broken; fix or revert before stopping.
+6. Finish with a summary of at most 10 lines: what changed, test and smoke results, commit to deploy, open items, next step.
+
 ## Deployment is first-class
 
 - The first deployable slice (wave 2) goes live early. After that, every wave keeps the deployed build working.
@@ -130,3 +139,4 @@ Everything above except the LOCKED RULES is a baseline. A change that clearly ra
 - 2026-10-17: Instructions created.
 - 2026-10-17: Platform name confirmed as SUDARSHAN, held in one config value. Recorded decisions: operator plus detachment commander, 8 GB integrated-graphics floor, deployable live link as the next milestone, solo with Claude Code, 12 × 4 pilot, Hindi UI from wave 1, Three.js.
 - 2026-10-17: One resumable `docs/BUILD_LOG.md` replaces per-wave round logs; per-wave prompts live in `docs/waves/`. Reason: a single log is easier to resume after `/clear`.
+- 2026-10-17: Added the wave execution protocol. Reason: a short fixed checklist keeps every wave resumable and the deployed build green.

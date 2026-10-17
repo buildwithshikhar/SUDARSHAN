@@ -27,6 +27,7 @@ Planning pack for SIH 2026 PS 26247, plus the working documents that drive the b
 | [07-ui-map.md](07-ui-map.md) | Full UI map with counts, the live-session layout and the design-system direction. |
 | [08-demo.md](08-demo.md) | The 10-minute storytelling demo script and its must-work list. |
 | [09-build-waves.md](09-build-waves.md) | The original 15-wave build plan in dependency order, with the first wave 1 prompt. |
+| [10-differentiators.md](10-differentiators.md) | Prioritised features beyond the PS: 12 headline features, the 5-feature demo cut, waves and acceptance tests. |
 
 Section headings inside 00–09 keep their original deliverable numbers (01–09, 03b). Cross-references such as "see 02" or "(04)" use those numbers:
 

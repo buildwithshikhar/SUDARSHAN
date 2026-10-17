@@ -1,26 +1,156 @@
 {
   "app": {
     "skip": "Skip to content",
-    "scenarioLabel": "Fictional scenarios · open-source parameters"
+    "scenarioLabel": "Fictional scenarios · open-source parameters",
+    "loading": "Loading",
+    "retry": "Retry"
   },
   "controls": {
     "language": "Language",
     "theme": "Theme",
     "dark": "Dark",
-    "light": "Light"
+    "light": "Light",
+    "signOut": "Sign out",
+    "signingOut": "Signing out"
   },
-  "build": {
-    "title": "Build status",
-    "service": "Service",
+  "roles": {
+    "trainee": "Trainee",
+    "instructor": "Instructor",
+    "admin": "Administrator"
+  },
+  "nav": {
+    "aria": "Main navigation",
+    "status": "Status",
+    "about": "About and data notice",
+    "group": {
+      "train": "Train",
+      "review": "Review",
+      "account": "Account",
+      "class": "Class",
+      "run": "Run",
+      "content": "Content",
+      "administration": "Administration",
+      "trust": "Trust",
+      "system": "System"
+    },
+    "module": {
+      "today": "Today",
+      "drills": "Drills",
+      "recognition-library": "Recognition library",
+      "my-performance": "My performance",
+      "profile": "Profile",
+      "help": "Help and SOPs",
+      "cohorts": "Cohorts",
+      "trainees": "Trainees",
+      "live-sessions": "Live sessions",
+      "team-exercise": "Team exercise",
+      "scenarios": "Scenarios",
+      "generator": "Generator",
+      "rule-packs": "Rule packs",
+      "curricula": "Curricula",
+      "unit-aar": "Unit AAR",
+      "reports": "Reports",
+      "users-and-roles": "Users and roles",
+      "organisation": "Organisation",
+      "packs": "Packs",
+      "data-register": "Data register",
+      "records": "Records",
+      "health": "Health",
+      "settings": "Settings",
+      "backup": "Backup"
+    }
+  },
+  "page": {
+    "wave": "Wave {{wave}}",
+    "crumbStatus": "Status"
+  },
+  "signIn": {
+    "title": "Sign in",
+    "tagline": "Recognise. Classify. Respond.",
+    "intro": "Use the account your administrator created for you.",
+    "email": "Email address",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in",
+    "invalid": "Invalid email or password.",
+    "tooMany": "Too many failed attempts. Try again in {{seconds}} seconds.",
+    "unreachable": "The server is unreachable. Check the connection and try again.",
+    "emailRequired": "Enter your email address.",
+    "passwordRequired": "Enter your password.",
+    "demoHint": "Demo mode. Demo accounts are created by the seed command and shown once in its console output.",
+    "about": "About and data notice"
+  },
+  "status": {
+    "title": "Status",
+    "build": "Build",
     "version": "Version",
     "commit": "Commit",
     "built": "Built",
     "environment": "Environment",
     "apiStatus": "API status",
     "reachable": "Reachable",
-    "unreachable": "Unreachable",
+    "session": "Session",
+    "account": "Account",
+    "role": "Role",
+    "language": "Language",
+    "theme": "Theme",
+    "expires": "Session expires",
+    "expiresHint": "A session ends after a fixed period; you then sign in again.",
+    "modules": "Modules for your role",
+    "moduleCol": "Module",
+    "groupCol": "Group",
+    "arrivesCol": "Arrives",
+    "stateCol": "State",
+    "planned": "Planned",
+    "available": "Available",
     "loading": "Loading build information",
-    "error": "The API did not respond. Check that the service is running, then retry.",
+    "error": "The API did not respond. Check that the service is running, then retry."
+  },
+  "profile": {
+    "title": "Profile and preferences",
+    "tabs": "Profile sections",
+    "tabPreferences": "Language and theme",
+    "tabAccessibility": "Accessibility",
+    "language": "Language",
+    "theme": "Theme",
+    "saved": "Preferences saved to your account.",
+    "saveFailed": "Could not save to your account. The choice applies on this device only.",
+    "accessibilityIntro": "How the interface supports different ways of working.",
+    "accKeyboard": "Every control can be reached and used with the keyboard; focus is always visible.",
+    "accContrast": "Text and controls meet WCAG AA contrast in both themes, and colour is never the only cue.",
+    "accMotion": "Animation is limited to short state changes and is switched off when your system asks for reduced motion.",
+    "accLanguage": "The interface is available in English and Hindi."
+  },
+  "about": {
+    "title": "About and data notice",
+    "dataTitle": "Data notice",
+    "data1": "Sensor models are calibrated from open research datasets and published specifications; all scenarios are authored or procedurally generated.",
+    "data2": "No real operational or classified data is used. No claim of validated training effectiveness or doctrine accuracy is made; any effectiveness result will come only from our own measured pilot.",
+    "scopeTitle": "Scope",
+    "scope1": "Defensive training only: recognise, classify, respond. The platform contains no instructions for building, arming or operating attack drones and no real-world targeting detail.",
+    "scope2": "Rules of engagement are a fictional, editable rule set.",
+    "affiliationTitle": "Affiliation",
+    "affiliation": "This is an independent student project. It has no official affiliation with the Ministry of Defence, the Defence Services Staff College, DRDO, the Indian armed forces or any government programme.",
+    "back": "Back"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "No page exists at this address.",
+    "toStatus": "Go to status",
+    "toSignIn": "Go to sign in"
+  },
+  "noAccess": {
+    "title": "No access",
+    "body": "Your account role does not include this page.",
+    "action": "Go to status"
+  },
+  "offline": {
+    "title": "Server unreachable",
+    "body": "The application could not reach its server. Check the network connection, then retry.",
     "retry": "Retry"
+  },
+  "module": {
+    "arrives": "Arrives in wave {{wave}}",
+    "body": "This module is not built yet. It will appear here when that wave is delivered."
   }
 }

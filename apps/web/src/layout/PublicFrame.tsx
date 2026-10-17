@@ -10,7 +10,12 @@ export function StatusStrip({ children }: { children?: ReactNode }) {
   return (
     <footer className="flex min-h-8 items-center justify-between gap-4 border-t border-line bg-surface-1 px-4 py-1">
       <p className="micro-label m-0">{t('app.scenarioLabel')}</p>
-      {children}
+      <div className="num flex items-center gap-4 text-xs text-ink-2">
+        <Link to="/about" className="text-ink-2">
+          {t('nav.about')}
+        </Link>
+        {children}
+      </div>
     </footer>
   )
 }

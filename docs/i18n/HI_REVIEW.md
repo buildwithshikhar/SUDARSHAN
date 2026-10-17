@@ -70,7 +70,6 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `signIn.emailRequired` | Enter your email address. | अपना ईमेल पता दर्ज करें। |  |
 | `signIn.passwordRequired` | Enter your password. | अपना पासवर्ड दर्ज करें। |  |
 | `signIn.demoHint` | Demo mode. Demo accounts are created by the seed command and shown once in its console output. | डेमो मोड। डेमो खाते सीड कमांड से बनते हैं और उसके कंसोल आउटपुट में एक बार दिखाए जाते हैं। |  |
-| `signIn.about` | About and data notice | परिचय और डेटा सूचना |  |
 | `status.title` | Status | स्थिति |  |
 | `status.build` | Build | बिल्ड |  |
 | `status.version` | Version | संस्करण |  |
@@ -131,4 +130,4 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `module.arrives` | Arrives in wave {{wave}} | चरण {{wave}} में उपलब्ध होगा |  |
 | `module.body` | This module is not built yet. It will appear here when that wave is delivered. | यह मॉड्यूल अभी बना नहीं है। वह चरण पूरा होने पर यह यहाँ दिखाई देगा। |  |
 
-124 strings.
+123 strings.

@@ -77,8 +77,7 @@
     "unreachable": "The server is unreachable. Check the connection and try again.",
     "emailRequired": "Enter your email address.",
     "passwordRequired": "Enter your password.",
-    "demoHint": "Demo mode. Demo accounts are created by the seed command and shown once in its console output.",
-    "about": "About and data notice"
+    "demoHint": "Demo mode. Demo accounts are created by the seed command and shown once in its console output."
   },
   "status": {
     "title": "Status",

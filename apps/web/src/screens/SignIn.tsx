@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import brand from '../../../../brand.json'
 import { ApiError } from '../lib/api'
 import { useAuth } from '../lib/auth'
@@ -94,9 +94,6 @@ export function SignIn() {
           </Button>
           {demo && <InlineAlert tone="info">{t('signIn.demoHint')}</InlineAlert>}
         </form>
-        <p className="mt-3 text-sm">
-          <Link to="/about">{t('signIn.about')}</Link>
-        </p>
       </section>
     </div>
   )

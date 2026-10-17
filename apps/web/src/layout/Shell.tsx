@@ -84,16 +84,11 @@ export function Shell({ children }: { children: ReactNode }) {
       </div>
 
       <StatusStrip>
-        <div className="num flex items-center gap-4 text-xs text-ink-2">
-          <Link to="/about" className="text-ink-2">
-            {t('nav.about')}
-          </Link>
-          {info && (
-            <span>
-              {info.version} · {info.gitSha} · {info.env}
-            </span>
-          )}
-        </div>
+        {info && (
+          <span>
+            {info.version} · {info.gitSha} · {info.env}
+          </span>
+        )}
       </StatusStrip>
     </div>
   )

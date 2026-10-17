@@ -16,6 +16,7 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 - 2026-10-17: [10-differentiators.md](10-differentiators.md) added. Headline features: H1 adaptive adversary, H2 sensor placement trainer, H3 site builder, H4 contact-report scoring, H5 track management with association errors, H6 counterfactual AAR, H7 recognition academy, H8 competency matrix with signed records, H9 unit readiness dashboard, H10 scenario language and signed packs, H11 director mode, H12 stress and fatigue modelling. Demo five: H2, H4, H1, H6, H8. The wave files are not yet changed; pull an entry into its wave only when that wave starts and record it in the wave entry.
 - 2026-10-17: Wave execution protocol added to CLAUDE.md.
 - 2026-10-17: Headline features folded into the wave files and overloaded waves split (4a/4b, 9a/9b/9c, 10a/10b, 11a/11b, 12a/12b, 13a/13b/13c, 14a/14b); see ADR-012. Waves 1, 2, 3, 5, 6, 7, 8 and 15 keep their numbers; 3, 5, 6 and 15 gained scope or edits.
+- 2026-10-18: Sign-in page no longer links to About; the About and data notice page (`/about`, EN/HI) is linked from the footer on every page. No Help menu exists yet (wave 15a); link it there when built.
 
 ## Waves
 

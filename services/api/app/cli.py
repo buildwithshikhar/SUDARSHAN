@@ -1,5 +1,6 @@
 """Operations CLI: python -m app.cli <command>."""
 
+import os
 import secrets
 from pathlib import Path
 
@@ -12,7 +13,8 @@ from app.config import Settings
 from app.db import make_engine
 from app.guard import StartupError, validate_production
 from app.models import Role
-from app.users import UserError, create_admin, upsert_demo_user
+from app.passwords import WeakPasswordError, check_password
+from app.users import UserError, create_admin, create_user, upsert_demo_user
 
 cli = typer.Typer(add_completion=False, no_args_is_help=True)
 
@@ -78,6 +80,28 @@ def create_admin_command(
     typer.echo(f"admin {'created' if result.created else 'exists'}: {result.user.email}")
 
 
+@cli.command("create-user")
+def create_user_command(
+    email: str = typer.Option(..., help="Account email address"),
+    role: Role = typer.Option(..., help="trainee, instructor or admin"),
+    password: str | None = typer.Option(None, envvar="NEW_USER_PASSWORD"),
+) -> None:
+    """Create an account (idempotent). Password from NEW_USER_PASSWORD or a prompt."""
+    password = password or None
+    if password is None:
+        password = typer.prompt("Password", hide_input=True, confirmation_prompt=True)
+    engine = make_engine(Settings().database_url)
+    try:
+        with Session(engine, expire_on_commit=False) as session:
+            result = create_user(session, email, password, role)
+    except UserError as error:
+        typer.echo(f"error: {error}", err=True)
+        raise typer.Exit(code=1) from error
+    typer.echo(
+        f"user {'created' if result.created else 'exists'}: {result.user.email} ({role.value})"
+    )
+
+
 @cli.command("seed-demo")
 def seed_demo() -> None:
     """Create one admin, one instructor and one trainee for a demo. Never in production."""
@@ -85,11 +109,20 @@ def seed_demo() -> None:
     if settings.is_production:
         typer.echo("error: seed-demo refuses to run when APP_ENV=production", err=True)
         raise typer.Exit(code=2)
+    fixed = os.environ.get("DEMO_PASSWORD") or None
+    if fixed is not None:
+        try:
+            check_password(fixed)
+        except WeakPasswordError as error:
+            typer.echo(f"error: DEMO_PASSWORD rejected: {error}", err=True)
+            raise typer.Exit(code=1) from error
     engine = make_engine(settings.database_url)
-    typer.echo("Demo accounts (demo use only; passwords are new on every run):")
+    typer.echo(
+        "Demo accounts (demo use only; passwords are new on every run unless DEMO_PASSWORD is set):"
+    )
     with Session(engine) as session:
         for email, role in DEMO_ACCOUNTS:
-            password = secrets.token_urlsafe(12)
+            password = fixed or secrets.token_urlsafe(12)
             upsert_demo_user(session, email, role, password)
             typer.echo(f"  {role.value:<11} {email:<26} {password}")
 

@@ -1,15 +1,17 @@
 import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.brand import load_brand
 from app.config import Settings
-from app.db import make_engine
+from app.db import make_engine, make_session_factory
 from app.guard import StartupError, validate_production
-from app.routers import health, version
+from app.ratelimit import LoginRateLimiter
+from app.routers import auth, health, users, version
 
 log = logging.getLogger("app")
 
@@ -25,21 +27,29 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         except StartupError as error:
             log.error("%s", error)
             raise
+        Path(settings.upload_dir).mkdir(parents=True, exist_ok=True)
         yield
         engine.dispose()
 
     app = FastAPI(title=load_brand().productName, version=settings.app_version, lifespan=lifespan)
     app.state.settings = settings
     app.state.engine = engine
+    app.state.session_factory = make_session_factory(engine)
+    app.state.rate_limiter = LoginRateLimiter(
+        settings.login_max_attempts, settings.login_window_seconds
+    )
     if settings.cors_origin_list:
         app.add_middleware(
             CORSMiddleware,
             allow_origins=settings.cors_origin_list,
-            allow_methods=["GET"],
-            allow_headers=["*"],
+            allow_credentials=True,
+            allow_methods=["GET", "POST", "PATCH"],
+            allow_headers=["Content-Type", "X-CSRF-Token"],
         )
     app.include_router(health.router)
     app.include_router(version.router)
+    app.include_router(auth.router)
+    app.include_router(users.router)
     return app
 
 

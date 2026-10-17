@@ -28,6 +28,11 @@ class Settings(BaseSettings):
     git_sha: str = "dev"
     build_time: str = "unknown"
     app_version: str = "0.1.0"
+    upload_dir: str = "./data/uploads"
+    session_ttl_hours: int = 12
+    cookie_secure: bool | None = None
+    login_max_attempts: int = 5
+    login_window_seconds: int = 900
 
     @field_validator("first_admin_email", "first_admin_password", mode="before")
     @classmethod
@@ -37,6 +42,11 @@ class Settings(BaseSettings):
     @property
     def is_production(self) -> bool:
         return self.app_env == "production"
+
+    @property
+    def cookie_is_secure(self) -> bool:
+        """Secure cookies are mandatory in production; elsewhere they follow the setting."""
+        return True if self.is_production else bool(self.cookie_secure)
 
     @property
     def cors_origin_list(self) -> list[str]:

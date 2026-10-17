@@ -44,8 +44,11 @@ extend-exclude = ["alembic/versions"]
 select = ["E", "F", "I", "UP", "B", "SIM", "S"]
 ignore = ["S101"]
 
+[tool.ruff.lint.flake8-bugbear]
+extend-immutable-calls = ["fastapi.Depends", "typer.Option"]
+
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S105", "S106"]
+"tests/*" = ["S105", "S106", "B008", "E501"]
 
 [tool.mypy]
 python_version = "3.12"

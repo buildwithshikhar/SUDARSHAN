@@ -131,3 +131,40 @@ def test_check_passes_in_demo_and_fails_on_bad_production_secret(migrated: Setti
     assert "SECRET_KEY" in bad.output
     good = runner.invoke(cli, ["check"], env=_env(migrated, APP_ENV="production"))
     assert good.exit_code == 0 and "production" in good.output
+
+
+def test_create_user_creates_once_and_rejects_weak_or_conflicting(migrated: Settings) -> None:
+    base = ["create-user", "--email", "Ravi@Unit.example", "--role", "instructor"]
+    env = _env(migrated, NEW_USER_PASSWORD="a-long-password")
+    first = runner.invoke(cli, base, env=env)
+    second = runner.invoke(cli, base, env=env)
+    assert "created: ravi@unit.example (instructor)" in first.output
+    assert "exists: ravi@unit.example" in second.output
+    conflict = runner.invoke(
+        cli, ["create-user", "--email", "ravi@unit.example", "--role", "admin"], env=env
+    )
+    assert conflict.exit_code == 1 and "not admin" in conflict.output
+    weak = runner.invoke(
+        cli,
+        ["create-user", "--email", "x@unit.example", "--role", "trainee"],
+        env=_env(migrated, NEW_USER_PASSWORD="short"),
+    )
+    assert weak.exit_code == 1 and "at least 12" in weak.output
+    assert [u.email for u in _users(migrated)] == ["ravi@unit.example"]
+
+
+def test_create_user_prompts_for_password(migrated: Settings) -> None:
+    result = runner.invoke(
+        cli,
+        ["create-user", "--email", "t@unit.example", "--role", "trainee"],
+        env=_env(migrated),
+        input="a-long-password\na-long-password\n",
+    )
+    assert result.exit_code == 0 and "created: t@unit.example (trainee)" in result.output
+
+
+def test_seed_demo_uses_demo_password_when_set_and_rejects_weak_one(migrated: Settings) -> None:
+    ok = runner.invoke(cli, ["seed-demo"], env=_env(migrated, DEMO_PASSWORD="fixed-demo-password"))
+    assert ok.exit_code == 0 and ok.output.count("fixed-demo-password") == 3
+    bad = runner.invoke(cli, ["seed-demo"], env=_env(migrated, DEMO_PASSWORD="short"))
+    assert bad.exit_code == 1 and "DEMO_PASSWORD rejected" in bad.output

@@ -37,6 +37,12 @@
     @apply font-sans text-2xs uppercase text-ink-2;
     letter-spacing: 0.06em;
   }
+  /* Devanagari matras are not legible at 11 px; Hindi labels use 13 px without tracking or case. */
+  html[lang='hi'] .micro-label {
+    font-size: 13px;
+    line-height: 20px;
+    letter-spacing: 0;
+  }
   .num {
     @apply font-mono;
     font-variant-numeric: tabular-nums;

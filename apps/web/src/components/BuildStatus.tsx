@@ -12,7 +12,7 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
 }
 
 function Skeleton() {
-  return <span aria-hidden="true" className="block h-2 w-24 bg-surface-2" />
+  return <span aria-hidden="true" className="block h-2 w-[96px] bg-surface-2" />
 }
 
 export function BuildStatus() {
@@ -21,7 +21,7 @@ export function BuildStatus() {
 
   return (
     <section aria-labelledby="build-title" className="w-full max-w-[640px]">
-      <h1 id="build-title" className="micro-label mb-2 font-normal">
+      <h1 id="build-title" className="m-0 mb-3 text-md font-semibold">
         {t('build.title')}
       </h1>
 

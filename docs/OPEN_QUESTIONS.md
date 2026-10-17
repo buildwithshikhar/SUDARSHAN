@@ -9,7 +9,7 @@ Everything the research marked unverified or undecided. Owner is **SD** (the use
 | ID | Question | Owner | How to close | Needed by |
 |---|---|---|---|---|
 | Q-01 | **Choose a licence** for the repository. Depends on dataset terms: ODbL share-alike (G02), CC BY attribution (D14) and any pack we ship. No LICENSE file exists yet, by instruction. | SD | After Q-05 and Q-06: pick MIT, Apache-2.0 or AGPL-3.0 for code and CC BY for docs, check each against bundled packs, then add LICENSE and a NOTICE file in a separate commit. | Before the repo goes public or release 1.0 |
-| Q-02 | **Choice of host** for the live link: Docker-capable, persistent storage, reachable by evaluators. Render free is excluded. | SD | Pick a provider (VPS, or a container host with a volume) and note it in BUILD_LOG.md. Claude Code then adds host config to docs/DEPLOY.md. | Start of wave 2 deployment |
+| Q-02 | **Choice of host** for the live link: Docker-capable, persistent storage, reachable by evaluators. Render free is excluded. | SD | Read [HOSTING_OPTIONS.md](HOSTING_OPTIONS.md) (four options, prices unverified), pick a provider and note it in BUILD_LOG.md. Claude Code then adds host config to docs/DEPLOY.md. | Start of wave 2 deployment |
 | Q-03 | **SIH submission format** for the next milestone: required fields, file types and size limits, and whether a video or slides are needed beyond the live link. | SD | Read the SIH portal instructions and paste them into this file. Claude then prepares the matching material. | Before the next milestone |
 | Q-04 | **Floor laptop** for the benchmark gate: which machine, with what specs, will run the wave 7 harness. | SD | Name the machine and record specs in docs/PERFORMANCE.md. | Wave 7 |
 
@@ -37,7 +37,7 @@ Everything the research marked unverified or undecided. Owner is **SD** (the use
 |---|---|---|---|---|
 | Q-13 | **Pilot logistics**: recruit 12 volunteers for 4 sessions, consent form text, and whether the institute needs ethics sign-off. | SD | Ask IILM whether sign-off is needed; draft the consent form; Claude Code adds data export and delete in wave 13c. | Before wave 12a completes |
 | Q-14 | **VR headset access**: none assumed. Decide whether any headset test is attempted. | SD | If none, keep the wording "VR mode, emulator-tested". | Wave 14 |
-| Q-15 | **Hindi translation review**: who reviews the HI strings for correct military and technical terms. | SD | Name a reviewer; Claude Code produces a glossary file for them in wave 2. | Wave 2 onward |
+| Q-15 | **Hindi translation review**: who reviews the HI strings for correct military and technical terms. | SD | Name a reviewer. The review sheet [i18n/HI_REVIEW.md](i18n/HI_REVIEW.md) lists every Hindi string with a blank verdict column; all Hindi is unreviewed until that column is filled. Claude Code adds a glossary file in wave 2. | Wave 2 onward |
 | Q-16 | **Real Doppler RAD-DAR** dataset (D17) was not found. | SD | Supply a link, or the row stays dropped. | Optional |
 | Q-17 | **Optional AAR narration backend**: wave 12b ships a deterministic template narrator. Decide whether a local language-model backend is wanted, and which licence and hardware budget applies. | SD | Name a model that fits the 8 GB floor and has an open licence, or keep template-only. | Before wave 12b |
 

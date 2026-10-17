@@ -43,9 +43,11 @@ NC = non-commercial. R = research or academic use only. "Needs verification" lis
 | W03 | NOAA ISD | Station observations | Same NODD terms as W02 | Yes, with attribution | Yes | None |
 | W04 | IMD gridded data | Rainfall, temperature | IMD site: not stated; data.gov.in copies under GODL-India | Not until confirmed | Yes | IMD site licence; full GODL-India text |
 | X01 | UAV Database (NTNU) | Specification table, 93 UAVs | CC0 1.0 | Yes | Yes: threat envelopes | Type skew toward fixed-wing and research UAVs |
+| F01 | Project-authored fictional value | Any numeric parameter | Not applicable: written for this project, no external source | Yes | No: placeholder until a cited source replaces it | Always `verified: false`; replace with a cited register ID when calibrating |
 
 ## Summary
 
 - **May ship (with attribution):** D14, G01, G02, W01, W02, W03, X01. D12 only after the exact licence wording is confirmed.
 - **Calibration-only:** D01–D11, D13, D15, D16, D18, G03. D08, D12 and W04 may move to "may ship" once their licences are confirmed.
 - **Not found:** D17.
+- **Fictional placeholder:** F01 marks a value the project wrote itself (example packs, fictional effector figures). It is never presented as measured or sourced.

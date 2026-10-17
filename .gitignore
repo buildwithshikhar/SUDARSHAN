@@ -1,0 +1,58 @@
+# OS and editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+
+# Secrets (commit only .env.example)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.egg-info/
+build/
+dist/
+
+# Node
+node_modules/
+.pnpm-store/
+.npm/
+.vite/
+*.tsbuildinfo
+coverage/
+apps/web/dist/
+
+# Playwright
+playwright-report/
+test-results/
+blob-report/
+
+# Local databases and runtime data
+*.sqlite
+*.sqlite3
+*.db
+data/raw/
+data/cache/
+
+# Docker and local overrides
+docker-compose.override.yml
+infra/docker-compose.override.yml
+
+# Logs
+*.log

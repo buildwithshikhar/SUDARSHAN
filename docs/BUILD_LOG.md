@@ -4,9 +4,9 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 
 ## Current position
 
-- **Phase:** wave 1 in progress.
+- **Phase:** wave 1 built and verified locally; awaiting CI confirmation.
 - **Next wave:** 1 · Repo bootstrap → [waves/wave-01-repo-bootstrap.md](waves/wave-01-repo-bootstrap.md)
-- **Next step:** paste the wave 1 prompt into Claude Code (Sonnet).
+- **Next step:** confirm CI is green on `main`, then start wave 2.
 - **Main is:** green (docs only, no CI yet).
 - **Deployed build:** none yet. First live link is the wave 2 milestone.
 
@@ -171,18 +171,44 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 ### Wave 1 · Repo bootstrap
 
-- Status: In progress
-- Started from commit: 24d8aca (docs complete at 18f7913)
+- Status: In progress. All steps are merged and verified locally; **not Done until CI is confirmed green on `main`** (the repository is private and CI could not be read from this machine).
+- Started from commit: 24d8aca
 - Goal: a clean, production-shaped monorepo with CI green: health endpoints, admin bootstrap, a bilingual placeholder page, and Docker images ready to deploy.
 
 **Done**
 - wave file completed with deliverables, tests, commit plan and verification checklist
+- chore: scaffold monorepo layout, brand.json and pack READMEs
+- feat(api): settings, health endpoints, user model, migration, production guard, CLIs (create-admin, seed-demo, migrate, check)
+- feat(web): Vite app with tokens, i18n and the build-status screen
+- test(web): key parity, token contrast, screen states, Playwright smoke and axe
+- build: Dockerfiles, nginx, compose (dev and production), smoke script, Makefile
+- ci: workflow (api, web, e2e, secrets, docker) and Dependabot
+- docs: DESIGN, TRACEABILITY, SECURITY, RELEASE, CHANGELOG, ADR-015 and ADR-016
+- pushed to origin/main at 7b16194
 
 **Decisions**
 - Compose project name and image labels are derived from `brand.json` by the Makefile, because CLAUDE.md forbids hard-coding the product name in config (the wave prompt said `sudarshan`).
-- ADRs for this wave are numbered 015 and 016: 011–013 are taken and 014 is reserved for wave 3.
+- ADRs for this wave are 015 and 016: 011–013 are taken, 014 is reserved for wave 3 (placeholder in DECISIONS.md).
 - Python 3.12 comes from `uv` (host has 3.10 only); `uv` installed from PyPI with `pip --user`.
+- `users.is_demo` column added so the production guard can detect demo accounts.
+- The container entrypoint runs `check` (guard), `migrate`, `create-admin --if-configured`, then serves, so production never migrates under a bad configuration.
+- Language switch shows visible text "English" / "हिन्दी" (axe label-in-name rule rejected "EN" with a longer accessible name).
+- Random secrets come from Python, not `openssl` (the host `openssl` is an Intel-only binary).
+- Dev-only toolchain audit: `npm audit` reports 7 findings in the Tailwind 3 build chain; `npm audit --omit=dev` reports 0. Revisit with the Tailwind upgrade in wave 2.
+
+**Tests**
+- api: 36 passed · web: 25 passed · e2e: 8 passed (axe zero violations, EN/HI × dark/light, against the real nginx and Postgres stack) · coverage: 98% (gate 90%)
+- Fresh clone: `make setup && make lint typecheck test` passes.
+
+**Deploy check**
+- Production images built: yes · `make prod-check` (production mode, throwaway project, admin bootstrap idempotent, seed-demo refused): pass · `make demo`, `make smoke`, `make e2e` on the demo stack: pass
+- Commit to deploy: not applicable yet; nothing is hosted until wave 2. Latest verified commit: 7b16194 (docs-only commits may follow).
 
 **Open issues**
-- Docker daemon was not running at start; Docker Desktop launched.
+- CI result on GitHub not seen. The repository is private and `gh` on this machine is the wrong CPU architecture. Open the Actions tab and confirm the run for 7b16194 (jobs: api, web, e2e, secrets, docker). Fix any failure before starting wave 2.
+- Port 8080 on this machine is held by another project's containers (`sih-*`), which were left untouched; local runs use `WEB_PORT=8081` in the git-ignored `.env`.
+- Playwright's Chromium (about 99 MiB) was downloaded with `npx playwright install`, a download beyond package registries that the wave's test requirement implies.
+- Hindi strings are drafted by Claude Code and need a human reviewer (Q-15).
 
+**Next wave entry point**
+- Confirm CI green on `main`, set wave 1 to Done, then start wave 2 (design system and app shell): read docs/waves/wave-02-design-system-shell.md and begin with the self-hosted fonts and the component primitives.

@@ -98,3 +98,21 @@ Status values: **Accepted**, **Superseded by ADR-n**.
 - **Decision:** 15a covers those documents, release notes for the submission and the demo rehearsal; it depends only on the cut waves, with 14a last, and joins the cut (22 of 25 waves). 15b covers the 1.0 polish, documentation of any depth wave built, and pilot results; it is depth, with 13a and 14b. Three review checkpoints are defined in the build log: A after wave 8, B after wave 12b, C after the cut and 15a.
 - **Consequences:** The cut ends at 15a. The wave 3 ADR for the RNG scheme and tick model is now ADR-014. Any depth wave built must be documented in 15b, and the manuals state what is not built.
 
+## ADR-014 · Reserved
+
+- Reserved for the wave 3 decision on the RNG scheme and tick model.
+
+## ADR-015 · Monorepo and stack
+
+- **Date:** 2026-10-17 · **Status:** Accepted · **Decided by:** project standard (CLAUDE.md), recorded in wave 1
+- **Context:** One person builds everything with Claude Code, and the deliverable is a deployable live link.
+- **Decision:** One repository with `apps/web` (React, TypeScript strict, Vite, Tailwind, Vitest, Playwright), `services/api` (Python 3.12, FastAPI, SQLAlchemy 2, Alembic, Pydantic v2, uv), `packs/`, `infra/` and `docs/`. SQLite by default and Postgres 16 in compose. The product name lives only in `brand.json`; the Makefile derives the compose project name and image labels from it. Docker build context is the repository root so both images can read `brand.json`. Secrets come from the environment, and `make env` generates a git-ignored `.env`.
+- **Consequences:** Renaming the product is a one-line change plus a prose find-and-replace. Hosts must run Docker with persistent storage (ADR-006).
+
+## ADR-016 · Server-authoritative deterministic simulation
+
+- **Date:** 2026-10-17 · **Status:** Accepted · **Decided by:** project standard (CLAUDE.md), recorded in wave 1
+- **Context:** Replay, re-scoring, solvability checks, pause, branching and team mode all need one source of truth, and trainees must not be able to see ground truth.
+- **Decision:** The simulation runs on the server as a seeded, deterministic Python core at 20 Hz. The browser receives only what its sensors would report. Given the same scenario, seed and action log, the result is identical tick for tick.
+- **Consequences:** No simulation logic runs in the client. Determinism is tested in CI from wave 3, and snapshots enable branching and counterfactual review later.
+

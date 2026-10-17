@@ -29,6 +29,7 @@ How to run a wave: `/clear`, switch to the recommended model, paste the prompt, 
 | 13c | [Admin + pack manager](wave-13c-admin-packs.md) | 13b, 9a | Sonnet | Keep the live build green |
 | 14a | [Hardening + accessibility](wave-14a-hardening.md) | 7, 12b, 13c | Sonnet | Keep the live build green |
 | 14b | [WebXR (optional)](wave-14b-webxr.md) | 14a | Sonnet | Keep the live build green |
-| 15 | [Docs + release 1.0](wave-15-docs-release.md) | all (14b optional) | Sonnet | Release 1 |
+| 15a | [Submission documentation](wave-15a-submission-docs.md) | cut waves, 14a last | Sonnet | Redeploy: submission build |
+| 15b | [Release 1.0 polish (depth)](wave-15b-release-polish.md) | 15a, plus any depth wave built | Sonnet | Release 1 |
 
 Waves are split into lettered parts (for example 9a, 9b, 9c) where one session would be overloaded. A part is a full wave: its own acceptance, deploy check and log entry. If a session runs out before acceptance, the unfinished remainder is logged as `<wave>.2` (for example `9a.2`). Features beyond the problem statement are scheduled here from [../10-differentiators.md](../10-differentiators.md).

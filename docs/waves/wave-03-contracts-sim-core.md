@@ -65,7 +65,7 @@ STEP 4 — Tests and docs (main session)
 - Determinism across two processes, replay equality, tamper detection, schema round-trips, hypothesis tests on kinematics.
 - Snapshot/restore: restore at tick N and run to M equals a straight run (state hash). Golden files for a fixed scenario set, with a readable diff on failure.
 - docs/SIM_CORE.md: tick model, RNG streams, determinism rules for future contributors.
-- ADR-013 in docs/DECISIONS.md: RNG scheme and tick model.
+- ADR-014 in docs/DECISIONS.md: RNG scheme and tick model.
 
 OUT OF SCOPE (do not build):
 - Sensor models, WebSocket transport and any UI.

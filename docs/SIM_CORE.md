@@ -1,0 +1,85 @@
+# Simulation core
+
+The sim core (`services/api/sim/`) is the single source of truth for every session. It is pure Python and numpy: it imports nothing from FastAPI or the database, opens no sockets, starts no threads and never reads the wall clock. Given the same **scenario spec, seed and action log**, it produces the same events and the same state hash, tick for tick, in any process on any machine. Replay, re-scoring, snapshots for director mode, counterfactual review and solvability checks all depend on that, so it is tested in CI. The decision record is [ADR-014](DECISIONS.md#adr-014--rng-scheme-and-tick-model).
+
+Threat behaviour is kinematics only: a drone flies its scripted route inside its class limits. There is no guidance, pursuit or terminal behaviour, and the contracts have no field that could carry one (locked rule 2).
+
+## Contracts
+
+Versioned Pydantic models in `services/api/app/contracts/`, exported as JSON Schema (draft 2020-12) to `packs/schemas/` and generated as TypeScript into `apps/web/src/contracts/`.
+
+| Contract | File | Notes |
+|---|---|---|
+| `scenario.v1` | JSON | World (flat terrain, play area, time of day, weather), zones, defended assets, sensor placements, threats with class limits and routes. Local east-north-up metres; no latitude or longitude. |
+| `rulepack.v1` | YAML | Fictional, editable rules of engagement, generic effector classes, scoring weights (sum to 1) and timing thresholds. |
+| `sensor-profile.v1` | YAML | Every numeric parameter is `{value, unit, source_id, verified}`; `source_id` must be a row in [DATA_REGISTER.md](DATA_REGISTER.md). |
+| `event-record.v1` | JSONL | `{seq, t, type, actor, payload, prev_hash, hash}` |
+| `action-record.v1` | in a session record | A trainee or instructor input, applied at the start of its tick. |
+| `session-record.v1` | JSON | Inputs (scenario reference, seed, ticks, actions) and outputs (events, final state hash) of one session. |
+
+Every pack carries `contract`, `id`, a semantic `version` and `fictional: true`. Unknown fields are refused, models are immutable, and the YAML loader is safe-only and refuses duplicate keys.
+
+Change a contract in the Pydantic model, then run `make schemas` and commit the regenerated `packs/schemas/` and `apps/web/src/contracts/`. CI fails if either is stale (`tests/test_contracts.py`, `npm run contracts:check`). A breaking change is a new version (`scenario.v2`), never an edit to v1 once packs exist in the field.
+
+## Tick model
+
+- Fixed 20 Hz: one tick is exactly 0.05 s of simulation time. Time is `tick / 20`, computed from the integer tick, never accumulated.
+- The server decides when to tick. Pause means "stop calling `step`", so pause and resume never reach the simulation and cannot change a replay.
+- `World.step` always runs in this order:
+  1. apply the actions recorded for this tick, in log order;
+  2. spawn threats whose spawn tick has come, in scenario order (`spawn_tick = ceil(spawn_s × 20)`, rounded first so 0.15 s is tick 3);
+  3. advance the wind gust;
+  4. move every active drone, in scenario order, then retire drones that left the play area;
+  5. increment the tick.
+- Events carry the tick being processed. A session ends with `session.end`, whose payload holds the final state hash.
+
+Per drone, per tick: waypoint arrival and mode changes, heading (turn-rate limited), airspeed (acceleration limited), altitude (climb and descent limited and clamped to the altitude band), then position from the air velocity plus the wind. A waypoint counts as reached within the larger of 15 m and the current turn radius, so a slow-turning airframe cannot orbit it. Holding and end-of-route loitering fly a clockwise 120 m orbit. On route end a threat loiters, loops or despawns, as the scenario says.
+
+Measured on the build laptop (Apple silicon, Python 3.12): the Kestrel scenario with two drones runs 10,000 ticks in 0.064 s, about 6.4 µs per tick (155,000 ticks per second); a snapshot is about 9.5 kB of JSON.
+
+## Random streams
+
+- One numpy `PCG64` generator per subsystem, seeded from `SeedSequence(seed, spawn_key=(key,))`, where `key` is the first 8 bytes of SHA-256 of the stream name.
+- Streams: `weather`, `kinematics`, `spawn`, `sensors`, `tracking`, `adversary` (`sim/rng.py`, `STREAMS`). A stream depends only on the seed and its own name, so adding a stream or drawing more from one never shifts another. New subsystems add a name at the end of `STREAMS`.
+- Uniform draws use `Generator.random()` (53 random bits times 2⁻⁵³, exact). Gaussian-like noise uses the sum of four uniforms (`normalish`: zero mean, unit variance, bounded at ±2√3), because numpy's normal sampler can call the platform `log`.
+
+## Determinism rules for contributors
+
+1. No wall-clock time, `random`, `uuid4`, `os.urandom` or Python's `hash()` in `sim/`. Draw from a named stream.
+2. Iterate in a fixed order: scenario order, sorted keys or explicit lists. Never iterate a `set`, and never rely on the order of a dict built from unordered input.
+3. Values that feed the state hash use only `+ - * /`, `sqrt`, `floor`, comparisons and the polynomials in `sim/detmath.py`. Do not use `math.sin`, `math.atan2`, `numpy` transcendentals or numpy reductions (`sum`, `mean`) on hashed state: they may differ in the last bit between platforms. Keep headings as unit vectors.
+4. Hashed state is plain JSON (Python `float`, `int`, `str`, `bool`, `None`, lists and dicts). Convert numpy scalars with `float()`.
+5. Event payloads hold JSON values only; positions and speeds are rounded to 3 decimals there for readability. The state keeps full precision.
+6. A change to a constant in `sim/constants.py` or to the tick order is a behaviour change: regenerate the golden files on purpose and say why in the commit.
+
+## Event log
+
+`sim/eventlog.py`. Each record's `hash` is SHA-256 of the canonical JSON (sorted keys, compact separators, UTF-8, no NaN) of its other six fields; `prev_hash` links it to the previous record (64 zeros for the first). `verify(records, expected_head=None)` returns the position of the first bad record or `None`. Editing a record is caught at that record. A tamperer who also recomputes its hash is caught at the next record. The last record, and truncation, are caught only against a head kept elsewhere: wave 13b signs the head.
+
+## Snapshot, restore and replay
+
+- `World.snapshot()` returns the full state (tick, weather and gust, every RNG stream's state, every drone, event count and head) plus the event log so far, as plain JSON. `World.restore(spec, snapshot)` checks the scenario ID and version, the event chain and head, and the threat list, then continues exactly. Restoring at tick N and running to M gives the same state hash and events as a straight run (`tests/test_sim_world.py`).
+- `World.state_hash()` is SHA-256 of the canonical state without the event records; the event head stands in for them.
+- `sim.replay.run(spec, seed, actions, ticks)` returns the world and a `session-record.v1`. `replay(spec, record)` re-runs it and reports the first divergent event and whether the final state hash matches.
+
+## Golden files
+
+`services/api/tests/golden/*.txt` pin the event list, 10-second state samples and final state hash for a fixed set of cases (`tests/sim_cases.py`: the Kestrel scenario with three seeds and action logs, up to 12,000 ticks). A behaviour change prints a unified diff of the changed lines. To accept an intended change:
+
+```sh
+cd services/api
+UPDATE_GOLDEN=1 uv run pytest tests/test_sim_golden.py
+git diff tests/golden/   # read it, then commit with the reason
+```
+
+## Tests
+
+| What | Where |
+|---|---|
+| Examples validate; malformed inputs are refused by the models and the JSON Schemas; schemas and TS types are current | `tests/test_contracts.py`, `apps/web/tests/contracts.test.ts` |
+| Same inputs give the same hash after 10,000 ticks in two processes with different hash salts | `tests/test_sim_world.py` |
+| Replay reproduces every event and the final state; divergence is reported at the first different event | `tests/test_sim_world.py` |
+| Tampering with any event breaks verification at that event | `tests/test_eventlog.py`, `tests/test_sim_world.py` |
+| Kinematics stay inside the class limits (hypothesis) | `tests/test_sim_kinematics.py` |
+| Restore at N and run to M equals a straight run | `tests/test_sim_world.py` |
+| Changing a physics constant fails a golden file with a readable diff | `tests/test_sim_golden.py` |

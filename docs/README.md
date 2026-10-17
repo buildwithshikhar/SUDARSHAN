@@ -12,6 +12,7 @@ Planning pack for SIH 2026 PS 26247, plus the working documents that drive the b
 | [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) | Everything unverified or undecided, each with an owner and how to close it. |
 | [DECISIONS.md](DECISIONS.md) | Decision log, one short ADR per decision. |
 | [DESIGN.md](DESIGN.md) | Design system tokens, rules for every screen and the banned list. |
+| [SIM_CORE.md](SIM_CORE.md) | Simulation core: contracts, tick model, random streams, determinism rules, event log, snapshots, replay and golden files. |
 | [TRACEABILITY.md](TRACEABILITY.md) | Live requirements traceability; the built-proof column fills as waves land. |
 | [HOSTING_OPTIONS.md](HOSTING_OPTIONS.md) | Four Docker-capable hosting options compared for Q-02; all prices unverified. |
 | [i18n/HI_REVIEW.md](i18n/HI_REVIEW.md) | Every Hindi string with a blank reviewer-verdict column (unreviewed). |

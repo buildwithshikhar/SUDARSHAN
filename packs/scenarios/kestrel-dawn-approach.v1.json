@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "title": { "en": "Kestrel Depot: dawn approach", "hi": "केस्ट्रल डिपो: भोर में आगमन" },
   "summary": {
-    "en": "A small rotary contact approaches a fictional supply depot at first light; a fixed-wing contact transits the outer zone two minutes later.",
-    "hi": "भोर के समय एक छोटा रोटरी संपर्क काल्पनिक आपूर्ति डिपो की ओर आता है; दो मिनट बाद एक फिक्स्ड-विंग संपर्क बाहरी क्षेत्र से गुजरता है।"
+    "en": "A small rotary contact approaches a fictional supply depot at first light; a fixed-wing contact transits the outer zone about a minute and a half later.",
+    "hi": "भोर के समय एक छोटा रोटरी संपर्क काल्पनिक आपूर्ति डिपो की ओर आता है; लगभग डेढ़ मिनट बाद एक फिक्स्ड-विंग संपर्क बाहरी क्षेत्र से गुजरता है।"
   },
   "fictional": true,
   "tick_hz": 20,
@@ -42,7 +42,7 @@
       "class_id": "rotary-small",
       "label": { "en": "Contact A", "hi": "संपर्क A" },
       "spawn_s": 8,
-      "start": { "x": 4300, "y": 3650, "z": 85 },
+      "start": { "x": 3000, "y": 2700, "z": 85 },
       "start_heading_deg": 225,
       "start_speed_mps": 11,
       "limits": {
@@ -55,9 +55,9 @@
         "max_altitude_m": 400
       },
       "route": [
-        { "position": { "x": 2650, "y": 2420, "z": 70 }, "speed_mps": 14 },
-        { "position": { "x": 1480, "y": 1730, "z": 55 }, "speed_mps": 12, "hold_s": 20 },
-        { "position": { "x": 620, "y": 410, "z": 40 }, "speed_mps": 9 }
+        { "position": { "x": 2200, "y": 2050, "z": 70 }, "speed_mps": 16 },
+        { "position": { "x": 1300, "y": 1450, "z": 55 }, "speed_mps": 14, "hold_s": 15 },
+        { "position": { "x": 620, "y": 410, "z": 40 }, "speed_mps": 12 }
       ],
       "on_route_end": "loiter"
     },
@@ -65,10 +65,10 @@
       "id": "contact-b",
       "class_id": "fixed-wing-small",
       "label": { "en": "Contact B", "hi": "संपर्क B" },
-      "spawn_s": 128,
-      "start": { "x": -5200, "y": 2900, "z": 240 },
+      "spawn_s": 95,
+      "start": { "x": -4200, "y": 2600, "z": 240 },
       "start_heading_deg": 100,
-      "start_speed_mps": 24,
+      "start_speed_mps": 26,
       "limits": {
         "max_speed_mps": 31,
         "max_accel_mps2": 2.5,
@@ -79,9 +79,9 @@
         "max_altitude_m": 1200
       },
       "route": [
-        { "position": { "x": -1900, "y": 2350, "z": 260 }, "speed_mps": 26 },
-        { "position": { "x": 1700, "y": 2750, "z": 280 }, "speed_mps": 27 },
-        { "position": { "x": 5600, "y": 1300, "z": 300 }, "speed_mps": 27 }
+        { "position": { "x": -1500, "y": 2450, "z": 260 }, "speed_mps": 28 },
+        { "position": { "x": 1500, "y": 2650, "z": 280 }, "speed_mps": 29 },
+        { "position": { "x": 4300, "y": 1500, "z": 300 }, "speed_mps": 29 }
       ],
       "on_route_end": "despawn"
     }

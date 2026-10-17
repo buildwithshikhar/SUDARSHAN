@@ -6,7 +6,7 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 
 - **Phase:** wave 3 in progress (contracts and deterministic sim core). Wave 2 code is complete; its live-link record (URL, deployed commit) is still owner-pending, and the owner asked for wave 3 to proceed in parallel.
 - **Current wave:** 3 · Contracts + deterministic sim core → [waves/wave-03-contracts-sim-core.md](waves/wave-03-contracts-sim-core.md)
-- **Next step:** see the wave 3 entry's **Done** list and **Next wave entry point**.
+- **Next step:** owner confirms CI green for the wave 3 commits; then wave 4a (see the wave 3 entry's **Next wave entry point**).
 - **Main is:** green locally (lint, typecheck, unit, e2e, visual); CI per the wave entries.
 - **Deployed build:** owner-run update rehearsal on the Azure VM done 2026-10-18; URL and commit not yet recorded.
 
@@ -296,27 +296,55 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 ### Wave 3 · Contracts + deterministic sim core
 
-- Status: In progress
+- Status: In progress. Every acceptance criterion is met and verified locally; set to Done once the owner confirms the CI run for the last wave 3 commit is green (CI cannot be read from this machine: `gh` is an x86_64 binary and the repository is private).
 - Started from commit: 13ef48c
 - Goal: versioned contracts and a deterministic, replayable simulation core that every later wave builds on.
 
 **Done**
 - 89d38a6 build: `WEB_PORT` comes from the environment or command line before `.env` (run the demo on a free port: `WEB_PORT=8090 make demo`)
 - 13ef48c test(web): macOS visual baselines refreshed for the footer About link
+- 87514e6 docs: start wave 3 in the build log
+- ddaeffc docs: add F01 for project-authored fictional values to the data register
+- dcbadab feat(api): versioned contracts with JSON Schema export and fictional example packs
+- 1a7ed74 feat(sim): add the sim package with canonical JSON hashing
+- 26b5ab3 chore: ignore local agent worktrees
+- b02ca82 fix(api): keep pause and resume out of the action contract
+- a5cfc81 feat(web): generate contract types from the JSON Schemas with a CI drift check (subagent, worktree)
+- 9fe35d5 feat(sim): hash-chained event log with tamper detection (subagent, worktree)
+- df3b038 feat(sim): deterministic maths, named RNG streams and waypoint kinematics
+- 09c6ea0 feat(sim): fixed 20 Hz world tick, actions, snapshot/restore and replay
+- b6d3a13 test(sim): golden files that pin sim behaviour with a readable diff
+- 60b93de docs: add SIM_CORE with the tick model, RNG streams and determinism rules
+- 37a5580 docs: record ADR-014 on the RNG scheme and tick model
+- 61aae02 docs: changelog and traceability proofs for wave 3
+- 191c16a fix(build): pass WEB_PORT to the demo stack only, not to prod-check
 
 **Decisions**
-- Pack files carry a `contract` field (`scenario.v1`, `rulepack.v1`, `sensor-profile.v1`) instead of `schema`, which would shadow a Pydantic method; the loader dispatches on it.
+- Pack files carry a `contract` field (`scenario.v1`, `rulepack.v1`, `sensor-profile.v1`) instead of `schema`, which would shadow a Pydantic method; the loader dispatches on it and refuses duplicate YAML and JSON keys.
 - Register row F01 (project-authored fictional value, always `verified: false`) added so example packs and fictional effector figures cite something honest; a test checks every `source_id` in `packs/` exists in DATA_REGISTER.md.
 - Scenario positions are local east-north-up metres on flat ground (no latitude and longitude), so no real-world location can be encoded.
+- Pause and resume are not sim actions: a paused session stops ticking, so it cannot change a replay.
+- Hashed state uses only correctly rounded IEEE operations: headings are unit vectors, sin and cos are polynomials, noise is a sum of uniforms. Reason: golden files written on macOS arm64 are checked on Linux x86_64 in CI (ADR-014, SIM_CORE.md).
+- Added `session-record.v1` (inputs plus outputs of a session) as the replay format, beyond the four contracts the wave names.
+- Example scenario routes were shortened so both contacts finish within the 420 s duration under the modelled headwind.
+- `WEB_PORT` is passed to the demo stack's compose command only; exporting it overrode the throwaway prod-check and backup-test ports.
 
 **Tests**
-- pending
+- api: 511 passed, coverage 98.6% (sim package 100%) · web unit: 83 passed · e2e: 45 passed · visual: 3 passed (5 macOS snapshots)
+- Acceptance tests: identical hash after 10,000 ticks in two processes with different hash salts; replay reproduces every event and the final state; tampering detected at the edited event; examples validate and 43 malformed cases are refused (models and JSON Schemas); hypothesis keeps kinematics inside class limits (150 examples); restore at N and run to M equals a straight run (7 values of N); four physics constants each fail a golden file with a unified diff.
+
+**Measurements (build laptop, Apple silicon, Python 3.12)**
+- 10,000 ticks of the two-drone Kestrel scenario in 0.064 s (6.4 µs per tick); snapshot about 9.5 kB of JSON. API image 452 MB with numpy and PyYAML; production api container 68 MiB idle (numpy is not loaded by the API yet).
 
 **Deploy check**
-- pending
+- Production images built: yes · `make prod-check` (production mode, HTTPS through Caddy, cookies, CSRF, bootstrap, memory): pass · `make backup-test`: pass · `make smoke` on the demo stack (port 8081): pass
+- No user-facing change in this wave; the live build keeps working. Commit to deploy: the last wave 3 commit on `main` (record its hash in **Deployed build** when you redeploy, then run `make smoke URL=<live url>`).
+- Secrets: gitleaks runs in CI only (not installed locally); no credentials were added, and `.env` stays untracked.
 
 **Open issues**
-- pending
+- CI result for the wave 3 commits: owner to confirm (the CI jobs were all run locally and pass).
+- Wave 2's live URL and deployed commit are still unrecorded in **Deployed build**.
+- Sensor-profile example values are F01 placeholders; wave 4a replaces them with cited values.
 
 **Next wave entry point**
-- pending
+- After CI is confirmed green, set wave 3 to Done, then start wave 4a (sensor models): read docs/waves/wave-04a-sensor-models.md and begin STEP 1, the sensor framework in `services/api/sim/sensors/` (Sensor interface, degradation hooks, cue input), reading profiles through `app.contracts.loader` and drawing noise from the `sensors` RNG stream.

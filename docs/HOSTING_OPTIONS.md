@@ -2,6 +2,8 @@
 
 Prepared offline, without checking any provider's site. **Every price, limit, region, feature and policy below is unverified: check current pricing and terms before choosing.** Nothing here has been deployed or signed up for, and the choice is yours.
 
+> **Decision (2026-10-17):** the owner chose Azure for Students with a Linux VM (Q-02), which is option 1 below run on Azure. The runbook is [DEPLOY.md](DEPLOY.md). The comparison is kept as the record of the alternatives.
+
 ## What the platform needs
 
 | Need | Detail |
@@ -15,6 +17,29 @@ Prepared offline, without checking any provider's site. **Every price, limit, re
 | Low cost | A free or small monthly tier is enough for evaluators; no scale needed. |
 | Simple deploy by you | Ideally `git pull` and one command, with secrets in an `.env` file on the host. Claude Code prepares config and docs and never deploys. |
 | Optional | A separately hosted frontend (for example Vercel) needs `VITE_API_URL` at build time and `CORS_ORIGINS` on the API (see CLAUDE.md). The simplest path keeps web and API on one origin. |
+
+## Measured memory of the production stack (local measurement)
+
+Measured by `make prod-check` on the maintainer's laptop (Docker Desktop on Apple silicon, aarch64, 8 CPUs, a 4 GiB Docker VM), commit `048eab6`, 2026-10-17. **This is a local measurement of container memory, not a benchmark of any Azure VM.** It was taken with the wave 2 application, which has no simulation, no WebSocket sessions and almost no data, so it is the floor, not a forecast. The raw output is written to `build/prod-check-memory.txt` on every run.
+
+| Container | Idle after start and checks | After light load* | With Caddy (HTTPS) |
+|---|---|---|---|
+| api (FastAPI) | 68.1 MiB | 68.6 MiB | 67.8 MiB |
+| db (Postgres 16) | 27.8 MiB | 28.0 MiB | 28.1 MiB |
+| web (nginx) | 8.0 MiB | 7.9 MiB | 8.4 MiB |
+| caddy | not running | not running | 14.9 MiB |
+| **Total of containers** | **104 MiB** | **105 MiB** | **119 MiB** |
+
+\* 150 page loads, 150 version calls and 10 sign-ins from `curl`, one at a time. This says nothing about concurrent users.
+
+Image sizes on disk: api 361 MB, web 77 MB, Caddy 89 MB, Postgres 16 (alpine) 411 MB.
+
+What this means for choosing a VM size:
+
+- The running stack needs well under 200 MiB. The VM's operating system and the Docker daemon add to it (typically a few hundred MiB; *unverified for the Azure image, check `free -m` after setup*), so the run-time floor is roughly 1 GiB in total, and it will grow once waves 3 to 5 add the simulation and live sessions.
+- **Building** the images on the VM needs more than running them: the Python dependency install and the web build are the peaks. Plan on 2 GiB of RAM plus swap, or build on your laptop for x86_64 (see `docs/DEPLOY.md` section 9). This peak was not measured here.
+- A 2 GiB machine is enough to run the current stack with room to spare; a 4 GiB machine leaves headroom for the next waves and for building on the VM. Anything smaller than 2 GiB is not advised. *Azure size names, vCPU counts and prices are unverified; choose from the sizes the portal offers and check their price.*
+- Re-run `make prod-check` after each wave that adds load; the memory table is regenerated each time, and the wave 5 load test (12 simultaneous clients) will give the first realistic figure.
 
 ## Candidates
 

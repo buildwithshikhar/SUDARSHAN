@@ -30,8 +30,8 @@ parameters:
   rcs_default: { value: -16, unit: dBsm, source_id: D14, verified: false }
   # Aspect: effective RCS swings by +/- this many dB between nose/tail and broadside.
   aspect_swing_rotary_small: { value: 4, unit: dB, source_id: F01, verified: false }
-  aspect_swing_fixed_wing_small: { value: 6, unit: dB, source_id: F01, verified: false }
-  aspect_swing_bird: { value: 4, unit: dB, source_id: F01, verified: false }
+  aspect_swing_fixed_wing_small: { value: 4, unit: dB, source_id: F01, verified: false }
+  aspect_swing_bird: { value: 3, unit: dB, source_id: F01, verified: false }
   aspect_swing_default: { value: 4, unit: dB, source_id: F01, verified: false }
   # Low-slow-small: ground clutter near the horizon and a Doppler notch at zero radial speed.
   clutter_elevation: { value: 3, unit: deg, source_id: F01, verified: false }

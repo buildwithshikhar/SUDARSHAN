@@ -323,6 +323,12 @@ class LiveSession:
                     await asyncio.to_thread(manager.mark_started, self.info.id)
                     continue
                 assert self.world is not None
+                if manager.speed > 1.0 and self.conn.congested():
+                    # Faster than real time is not live play: wait for the client to catch up
+                    # instead of skipping frames it will be counting.
+                    self._anchor = None
+                    await self._wait(DT / manager.speed)
+                    continue
                 if self._anchor is None:
                     self._anchor = (now, self.world.tick)
                 base, first = self._anchor
@@ -452,7 +458,8 @@ class SessionManager:
         self.act_rate = act_rate
         self.clock = clock
         #: Ticks per wall second, in units of 20 Hz. Always 1.0 in service; tests run faster, which
-        #: is safe because simulation time never depends on wall time.
+        #: is safe because simulation time never depends on wall time. Above 1.0 a client that
+        #: falls behind slows the run down; at 1.0 it skips frames.
         self.speed = 1.0
         self.sessions: dict[str, LiveSession] = {}
         self.jitter_ms: deque[float] = deque(maxlen=_SAMPLES)

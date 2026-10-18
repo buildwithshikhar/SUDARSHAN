@@ -1,6 +1,7 @@
 """Test support for the live session: users, sign-in, sessions and a decoded WebSocket."""
 
-from collections.abc import Iterator
+import asyncio
+from collections.abc import Awaitable, Callable, Iterator, MutableMapping
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
@@ -32,6 +33,53 @@ ROLES = {
     "instructor": Role.instructor,
     "admin": Role.admin,
 }
+
+
+#: Frames the server may send ahead of what a test has read. Past this the writer waits, as a real
+#: socket does when the peer is slow, so the queue the loop watches fills and it skips frames.
+WINDOW = 50
+
+
+class Credit:
+    """Frames sent to one test socket and frames the test has read from it."""
+
+    def __init__(self) -> None:
+        self.sent = 0
+        self.read = 0
+        self.closed = False
+
+
+class Backpressure:
+    """Give the in-process WebSocket the flow control a network has.
+
+    Starlette's test socket buffers without limit, so at 100x the server finishes a whole scenario
+    in seconds while a slow reader is thousands of frames behind and the session's `ended`
+    message sits past the end of what the test reads. How far behind that is depends on the
+    machine, not on the code. Here the writer waits once `WINDOW` frames are unread.
+    """
+
+    def __init__(self, app: Callable[..., Awaitable[None]]) -> None:
+        self.app = app
+
+    async def __call__(
+        self,
+        scope: MutableMapping[str, Any],
+        receive: Callable[[], Awaitable[Any]],
+        send: Callable[[Any], Awaitable[None]],
+    ) -> None:
+        if scope["type"] != "websocket":
+            await self.app(scope, receive, send)
+            return
+        credit = scope.setdefault("credit", Credit())
+
+        async def paced(message: MutableMapping[str, Any]) -> None:
+            if message["type"] == "websocket.send":
+                while credit.sent - credit.read >= WINDOW and not credit.closed:
+                    await asyncio.sleep(0.001)
+                credit.sent += 1
+            await send(message)
+
+        await self.app(scope, receive, paced)
 
 
 def seed_users(settings: Settings) -> None:
@@ -74,6 +122,7 @@ class Socket:
 
     def recv(self) -> dict[str, Any]:
         data = self.ws.receive_bytes()
+        self.ws.scope["credit"].read += 1
         self.raw.append(data)
         message: dict[str, Any] = msgpack.unpackb(data, raw=False)
         return message
@@ -97,7 +146,10 @@ def connect(
     with client.websocket_connect(
         f"/api/v1/sessions/{session_id}/ws", headers=ORIGIN if headers is None else headers
     ) as ws:
-        yield Socket(ws)
+        try:
+            yield Socket(ws)
+        finally:
+            ws.scope["credit"].closed = True
 
 
 def live_app(tmp_path: Path, **overrides: object) -> TestClient:
@@ -105,7 +157,9 @@ def live_app(tmp_path: Path, **overrides: object) -> TestClient:
     settings = make_settings(tmp_path, **overrides)
     command.upgrade(_alembic_config(settings), "head")
     seed_users(settings)
-    return TestClient(create_app(settings))
+    app = create_app(settings)
+    app.add_middleware(Backpressure)
+    return TestClient(app)
 
 
 def expect_close(

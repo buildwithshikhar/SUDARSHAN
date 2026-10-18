@@ -140,6 +140,19 @@ class WeatherView(Contract):
     cloud_cover_pct: float
 
 
+class FlatTerrainView(Contract):
+    kind: Literal["flat"]
+    elevation_m: float
+
+
+class PackTerrainView(Contract):
+    """Which terrain pack to draw; the client fetches its files from `/api/v1/terrain/{id}/`."""
+
+    kind: Literal["pack"]
+    id: Slug
+    version: str
+
+
 class Briefing(Contract):
     """The scenario as the operator is briefed: the site, the sensors and the filed flights.
     Never the threats."""
@@ -151,6 +164,7 @@ class Briefing(Contract):
     duration_s: float
     start_time_of_day_h: float
     half_extent_m: float
+    terrain: Annotated[FlatTerrainView | PackTerrainView, Field(discriminator="kind")]
     weather: WeatherView
     zones: list[ZoneView]
     assets: list[AssetView]

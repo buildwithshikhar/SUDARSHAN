@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
+from hypothesis import settings as hypothesis_settings
 
 from alembic import command
 from app.cli import _alembic_config
@@ -10,6 +11,11 @@ from app.config import Settings
 from app.main import create_app
 
 STRONG_KEY = "k" * 48
+
+# Hypothesis' per-example deadline is a wall-clock limit, so a property test fails on a loaded
+# machine for reasons that are not the code's. No test relies on it.
+hypothesis_settings.register_profile("sudarshan", deadline=None)
+hypothesis_settings.load_profile("sudarshan")
 
 
 def make_settings(tmp_path: Path, **overrides: object) -> Settings:

@@ -51,6 +51,14 @@ class Config:
     admin_email: str | None = None
     admin_password: str | None = None
     scenario: str = SCENARIO
+    # When set, each client plays until it has received this many frames and pings every
+    # `PING_EVERY_FRAMES` frames, so a run's length and content do not depend on the wall clock.
+    # `seconds` then only bounds a hung run.
+    frames: int | None = None
+
+
+PING_EVERY_FRAMES = 20
+HANG_GUARD_S = 300.0
 
 
 @dataclass
@@ -154,16 +162,22 @@ async def _session(config: Config, ws: Any, ready: asyncio.Barrier, result: Clie
     plan: dict[str, list[tuple[int, str, dict[str, Any]]]] = {}
     pings: dict[float, float] = {}
     began = time.monotonic()
-    end_at = began + config.seconds
+    by_frames = config.frames is not None
+    end_at = began + (HANG_GUARD_S if by_frames else config.seconds)
     last_arrival: float | None = None
     next_ping = began + 1.0
 
+    async def ping(now: float) -> None:
+        stamp = float(f"{now:.6f}")
+        pings[stamp] = now
+        await send({"t": "ping", "ts": stamp})
+
     while (now := time.monotonic()) < end_at:
-        if now >= next_ping:
+        if by_frames and result.frames >= (config.frames or 0):
+            break
+        if not by_frames and now >= next_ping:
             next_ping += 1.0
-            stamp = float(f"{now:.6f}")
-            pings[stamp] = now
-            await send({"t": "ping", "ts": stamp})
+            await ping(now)
         try:
             message = await asyncio.wait_for(recv(), timeout=max(0.05, end_at - now))
         except TimeoutError:
@@ -189,6 +203,8 @@ async def _session(config: Config, ws: Any, ready: asyncio.Barrier, result: Clie
                 result.tick_gaps += tick - result.last_tick - 1
             result.last_tick = tick
             result.frames += 1
+            if by_frames and result.frames % PING_EVERY_FRAMES == 0:
+                await ping(arrived)
             result.events += len(message["events"])
             if last_arrival is not None:
                 result.dt_ms.append((arrived - last_arrival) * 1000.0)
@@ -403,6 +419,7 @@ async def run_load(config: Config) -> dict[str, Any]:
         "config": {
             "clients": config.clients,
             "seconds": config.seconds,
+            "frames": config.frames,
             "scenario": config.scenario,
             "own_server": own is not None,
         },
@@ -421,8 +438,13 @@ async def run_load(config: Config) -> dict[str, Any]:
 def render(report: dict[str, Any]) -> str:
     agg = report["aggregate"]
     lines = [
-        f"Live-session load: {agg['clients']} clients x {report['config']['seconds']:.0f} s "
-        f"(wall {report['wall_s']} s)",
+        f"Live-session load: {agg['clients']} clients x "
+        + (
+            f"{report['config']['frames']} frames "
+            if report["config"]["frames"] is not None
+            else f"{report['config']['seconds']:.0f} s "
+        )
+        + f"(wall {report['wall_s']} s)",
         f"  dropped sessions : {agg['dropped_sessions']}   verified at end: {agg['verified_sessions']}",
         "  frame rate (Hz)  : "
         f"min {agg['frame_rate_hz']['min']}  mean {agg['frame_rate_hz']['mean']}  "
@@ -469,6 +491,9 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Load test for the live session.")
     parser.add_argument("--clients", type=int, default=12)
     parser.add_argument("--seconds", type=float, default=300.0)
+    parser.add_argument(
+        "--frames", type=int, help="play for this many frames instead of --seconds (deterministic)"
+    )
     parser.add_argument("--url", help="drive a running server instead of starting one")
     parser.add_argument("--password", default=PASSWORD, help="password of the load-N accounts")
     parser.add_argument("--admin-email")
@@ -478,6 +503,7 @@ def main(argv: list[str] | None = None) -> int:
     config = Config(
         clients=args.clients,
         seconds=args.seconds,
+        frames=args.frames,
         url=args.url,
         password=args.password,
         admin_email=args.admin_email,

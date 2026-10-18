@@ -17,7 +17,7 @@ COMPOSE_PROD = $(COMPOSE) -f infra/docker-compose.prod.yml
 rand = $$(python3 -c "import secrets; print(secrets.token_hex($(1)))")
 UV = $(shell command -v uv || echo $$HOME/Library/Python/3.10/bin/uv)
 
-.PHONY: setup env dev schemas lint typecheck test e2e visual build up down demo smoke create-admin prod-check backup-test check-deploy build-amd64 help
+.PHONY: setup env dev schemas lint typecheck test e2e visual build up down demo smoke create-admin prod-check backup-test check-deploy build-amd64 terrain help
 
 help:
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | sed 's/:.*##/\t/' || true
@@ -74,6 +74,9 @@ demo: up ## start the stack and seed demo accounts (passwords printed once)
 
 smoke: ## health, readiness and version checks against URL
 	@infra/smoke.sh $(URL)
+
+terrain: ## bake the terrain packs from data/raw (TERRAIN_RAW=dir to override); needs the raw SRTM and OSM files
+	cd tools/terrain && $(UV) run python -m terrain bake all --raw $(abspath $(or $(TERRAIN_RAW),data/raw)) --out $(abspath packs/terrain)
 
 create-admin: ## create the first administrator in the running stack (prompts, or uses FIRST_ADMIN_*)
 	$(COMPOSE) exec api python -m app.cli create-admin

@@ -129,12 +129,14 @@ def test_the_welcome_is_the_briefing_and_never_the_threats(tmp_path: Path) -> No
         "duration_s",
         "start_time_of_day_h",
         "half_extent_m",
+        "terrain",
         "weather",
         "zones",
         "assets",
         "sensors",
         "filed_flights",
     }
+    assert briefing["terrain"] == {"kind": "flat", "elevation_m": 0.0}
     assert {s["modality"] for s in briefing["sensors"]} == {"radar", "eo", "rf"}
     assert briefing["filed_flights"] and briefing["zones"] and briefing["assets"]
     text = json.dumps(welcome)

@@ -330,6 +330,15 @@ Resulting fundamentals: rotary 200 Hz, fixed-wing 100 Hz, autonomous 180 Hz, bir
 
 **Honesty note.** Fictional parameters built from open research datasets and published specifications, in fictional scenarios. D10 (DroneAudioDataset, indoor recordings), D11 (DREGON) and D12 (Svanstrom multi-sensor set) are calibration-only: parameters are "calibrated from" them in structure, not trained on them, and none is marked verified. The 50-300 m detection range is from secondary literature (not in the data register), so the 300 m limit is a project value; long-range acoustic ranges are UNVERIFIED (Q-09). Weather is modelled, not measured.
 
+## Line of sight (wave 7)
+
+On flat ground nothing hides a target, as before. When the scenario names a terrain pack ([TERRAIN_PACKS.md](TERRAIN_PACKS.md)), radar and EO/IR lose a target whose straight line to the sensor passes below the terrain surface (bilinear on the baked heightmap) or through a building (footprints rasterised to a 5 m grid). The test runs after the detection draw, so hiding a target never shifts the random streams, and it uses only operations that give identical bits on every platform.
+
+- It is a geometric test. There is no diffraction, no multipath over the ridge, no partial foliage loss and no radar horizon beyond the straight line (no Earth curvature at these ranges).
+- A sensor is not blocked by the roof or mast it stands on: both end points of the segment are excluded.
+- Acoustic does not need line of sight (its model never did). **RF is not occluded in this wave**; a ridge that would shadow a control link is not modelled yet and is listed under open items.
+- Terrain heights are SRTM 30 m posts resampled to a 31.25 m grid; buildings without a height tag use a default of about 6 to 8.5 m. Both are open data, "reference data" in the product, and a ridge or roof can be a few metres off.
+
 ## Tracking
 
 Wave 4b. `services/api/sim/tracking/`. A tracker fuses the four sensors' reports into tracks, fails in the ways real trackers fail (swaps, splits, merges), can be told to cue a sensor onto a track, and a seeded stand-in AI assist comments on the fused tracks. Everything here is a fictional trainer model: parameters are project-authored (register ID F01, `verified: false`) and none of it is a claim about a real tracker, fusion system or classifier.

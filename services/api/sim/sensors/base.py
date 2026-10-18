@@ -45,6 +45,9 @@ class Sensor(ABC):
     modalities: ClassVar[tuple[str, ...]]
     #: True if the model supports `cue`; the profile then needs `fov_wide` and `fov_narrow` (deg).
     supports_cue: ClassVar[bool] = False
+    #: Terrain and buildings hide a target from this sensor (radar and EO/IR). Acoustic does not
+    #: need line of sight; RF is not occluded in this model (docs/SENSOR_MODELS.md).
+    needs_line_of_sight: ClassVar[bool] = False
     #: Parameters the model reads beyond `instrumented_range` and `update_interval`.
     required_params: ClassVar[tuple[str, ...]] = ()
     #: Confusion tables the model samples from; each must exist and cover every scenario class.
@@ -132,6 +135,9 @@ class Sensor(ABC):
             obs = Observation(t, truth, geometry, env, fx, draws)
             p = detmath.clamp(self.p_detect(obs) * fx.pd_factor, 0.0, 1.0)
             if draws.detect < p:
+                # After the draw, so hiding a target never shifts the random streams.
+                if self.needs_line_of_sight and self._hidden(world, truth):
+                    continue
                 found.append(self.measure(obs))
         # Called during an outage too, so its draws are taken and the stream never shifts.
         alarms = self.false_alarms(world, t, rng, env, fx)
@@ -140,6 +146,14 @@ class Sensor(ABC):
         # Provenance: one profile-level flag, so models cannot forget it (Q-20).
         reference = bool(self.params.unverified)
         return [replace(d, reference_data=reference) for d in found]
+
+    def _hidden(self, world: "World", truth: Truth) -> bool:
+        """Is the target behind terrain or a building as seen from this sensor?"""
+        terrain = world.terrain
+        if terrain is None:
+            return False
+        s = self.position
+        return terrain.blocked((s.x, s.y, s.z), (truth.x, truth.y, truth.z))
 
     def in_coverage(self, g: Geometry, fx: Effects) -> bool:
         if g.slant_range_m > self.instrumented_range_m:

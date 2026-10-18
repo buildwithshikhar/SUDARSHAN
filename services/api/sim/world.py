@@ -33,6 +33,7 @@ from .eventlog import EventLog
 from .kinematics import Envelope, position, step
 from .rng import RngStreams
 from .roe import OPERATOR_CLASSES, Context, RuleEngine
+from .terrain import Terrain, TerrainError, terrain_for
 
 if TYPE_CHECKING:
     from .tracking.picture import Picture
@@ -115,6 +116,14 @@ class World:
     ) -> None:
         self.spec = spec
         self.seed = seed
+        #: Ground and buildings that can hide a target from a line-of-sight sensor, or `None` for
+        #: flat ground, where nothing does.
+        self.terrain: Terrain | None = terrain_for(spec.world.terrain)
+        if self.terrain is not None and spec.world.half_extent_m > self.terrain.half_extent_m:
+            raise TerrainError(
+                f"play area (half extent {spec.world.half_extent_m:g} m) is larger than terrain "
+                f"pack {self.terrain.pack_id} ({self.terrain.half_extent_m:g} m)"
+            )
         #: The sensors, tracker, ground-truth ledger and AI assist of this session (wave 4b), or
         #: `None` for a bare world. When present, its state is part of `state()` and its hash.
         self.picture = picture
@@ -140,7 +149,23 @@ class World:
                 0,
                 "session.start",
                 "sim",
-                {"scenario": spec.id, "version": spec.version, "seed": seed},
+                {
+                    "scenario": spec.id,
+                    "version": spec.version,
+                    "seed": seed,
+                    # Only with a terrain pack, so flat-ground logs are unchanged.
+                    **(
+                        {}
+                        if self.terrain is None
+                        else {
+                            "terrain": {
+                                "id": self.terrain.pack_id,
+                                "version": self.terrain.version,
+                                "sha256": self.terrain.digest,
+                            }
+                        }
+                    ),
+                },
             )
 
     # ------------------------------------------------------------------ time

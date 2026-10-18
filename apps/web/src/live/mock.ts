@@ -136,6 +136,7 @@ export const MOCK_WELCOME: Welcome = {
     duration_s: DURATION_S,
     start_time_of_day_h: 15.6,
     half_extent_m: 5000,
+    terrain: { kind: 'flat', elevation_m: 0 },
     weather: {
       condition: 'clear',
       visibility_m: 9400,

@@ -15,7 +15,7 @@ from app.guard import StartupError, validate_production
 from app.live.catalog import ScenarioCatalog
 from app.live.manager import SessionManager
 from app.ratelimit import LoginRateLimiter
-from app.routers import auth, health, sessions, users, version
+from app.routers import auth, health, sessions, terrain, users, version
 
 log = logging.getLogger("app")
 
@@ -70,6 +70,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(auth.router)
     app.include_router(users.router)
     app.include_router(sessions.router)
+    app.include_router(terrain.router)
     return app
 
 

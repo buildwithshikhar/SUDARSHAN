@@ -31,6 +31,27 @@ jobs:
       - run: uv run mypy .
       - run: uv run pytest -q
 
+  terrain:
+    # The bake tool and the committed packs. The raw SRTM and OSM downloads are not in git, so
+    # CI checks the packs against their manifests and runs the synthetic-data tests.
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tools/terrain
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: tools/terrain/uv.lock
+      - run: uv python install 3.12
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run mypy src
+      - run: uv run pytest -q
+      - run: uv run python -m terrain verify ../../packs/terrain/heron-ridge ../../packs/terrain/osprey-town
+
   web:
     runs-on: ubuntu-latest
     defaults:
@@ -49,6 +70,8 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      - name: JavaScript budget (1.5 MB gzipped)
+        run: npm run bundle:check
 
   e2e:
     runs-on: ubuntu-latest

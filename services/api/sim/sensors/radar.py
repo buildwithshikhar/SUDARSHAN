@@ -45,6 +45,7 @@ def _logistic(x: float) -> float:
 class RadarSensor(Sensor):
     modalities = ("radar",)
     supports_cue = False
+    needs_line_of_sight = True
     required_params = (
         "sigma_range",
         "sigma_azimuth",

@@ -29,7 +29,7 @@ from .tracking_rig import Rig, drone, radar_params, scenario, sensor
 #: (see `crossing`) and this seed, track T001 and T002 exchange drones and the ledger records it at
 #: this tick. The default policy and the nominal one differ here: with the nominal policy this seed
 #: gives no swap.
-SWAP_SEED = 47
+SWAP_SEED = 1014
 SWAP_TICK = 648
 RADAR = Vec3(x=0, y=0, z=6)
 

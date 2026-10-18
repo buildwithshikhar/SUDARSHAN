@@ -395,7 +395,7 @@ def test_two_drones_flying_side_by_side_are_folded_into_one_track() -> None:
     # two tracks into one, which for two real drones is a merge error.
     run = crossing(6, NominalPolicy(), threats=formation_threats(12.0), ticks=700)
     merges = [(t, e.payload) for t, e in run.events if e.kind == "merge"]
-    assert [t for t, _ in merges] == [467]
+    assert [t for t, _ in merges] == [131]
     payload = merges[0][1]
     assert {payload["truth_dropped"], payload["truth_survivor"]} == {"alpha", "bravo"}
     assert run.rig.tracker.graveyard[payload["dropped"]]["reason"] == "duplicate"

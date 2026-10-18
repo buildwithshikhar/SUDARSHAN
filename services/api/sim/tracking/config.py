@@ -20,6 +20,10 @@ class TrackerConfig:
     init_speed_sigma_mps: float = 25.0
     #: Multiplies the chi-square gate thresholds; 1 is the 99 % gate.
     gate_scale: float = 1.0
+    #: A report no track claimed starts a new track only if it lies outside this multiple of the
+    #: gate around every confirmed or coasting track. Without it a lone target's gate-edge outlier
+    #: would start a second track, which is a split the target's geometry did not cause.
+    init_exclusion_scale: float = 2.5
     #: Floor on the angular measurement sigma, deg, so a very good sensor cannot make a gate vanish.
     min_sigma_angle_deg: float = 0.05
     #: Floor on the range measurement sigma, m.

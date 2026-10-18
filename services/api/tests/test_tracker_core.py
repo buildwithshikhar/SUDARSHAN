@@ -359,7 +359,41 @@ def test_association_under_clutter_keeps_the_real_track_on_the_real_target() -> 
         assert len(rig.events("init")) > 1, seed
 
 
-def test_two_targets_flying_as_one_are_folded_into_one_track() -> None:
+def confirmed_at(tracker: Tracker, track_id: str, x: float, vx: float) -> Track:
+    p = kalman.zeros()
+    for i in range(3):
+        p[i][i] = 100.0
+        p[i + 3][i + 3] = 4.0
+    track = Track(track_id, track_id, "confirmed", 0, 0, 0, 5, [x, 1500.0, 150.0, vx, 0.0, 0.0], p)
+    tracker.insert(track)
+    return track
+
+
+def test_two_confirmed_tracks_that_stay_indistinguishable_are_folded_into_one() -> None:
+    tracker = Tracker({"radar-1": ORIGIN}, config=TrackerConfig(duplicate_hold_s=1.0))
+    rng = RngStreams(1)
+    older, younger = tracker.allocate_id(), tracker.allocate_id()
+    confirmed_at(tracker, older, 0.0, 15.0)
+    confirmed_at(tracker, younger, 6.0, 15.5)
+    events = [e for tick in range(40) for e in tracker.update(tick, [], rng).events]
+    drops = [e for e in events if e.kind == "drop"]
+    assert [(e.track_id, e.payload["reason"], e.payload["merged_into"]) for e in drops] == [
+        (younger, "duplicate", older)
+    ]
+    assert drops[0].tick == 19  # the 20th consecutive tick at 20 Hz = one second
+
+
+def test_crossing_tracks_are_not_folded_however_close_they_pass() -> None:
+    tracker = Tracker({"radar-1": ORIGIN}, config=TrackerConfig(duplicate_hold_s=0.5))
+    rng = RngStreams(1)
+    confirmed_at(tracker, tracker.allocate_id(), 0.0, 15.0)
+    confirmed_at(tracker, tracker.allocate_id(), 3.0, -15.0)  # same place, opposite velocity
+    assert [e for tick in range(20) for e in tracker.update(tick, [], rng).events] == []
+
+
+def test_a_pair_the_radar_cannot_resolve_is_one_track_not_two() -> None:
+    # 8 m apart at 1.5 km with 16 m of cross-range noise: the second target's reports sit inside
+    # the first track's gate, so no second track is started (the unresolved-pair case).
     spec = scenario(
         [
             drone("alpha", "rotary-small", (-600, 1500, 150), 90, 15, [(1500, 1500, 150)]),
@@ -368,10 +402,24 @@ def test_two_targets_flying_as_one_are_folded_into_one_track() -> None:
     )
     rig = Rig(spec, 3, [sensor("radar-1", radar_params(), ORIGIN)])
     rig.step(2400)
-    drops = [e for _, r in rig.history for e in r.events if e.kind == "drop"]
-    folded = [e for e in drops if e.payload["reason"] == "duplicate"]
-    assert folded and folded[0].payload["merged_into"] < folded[0].track_id
-    assert len([t for t in rig.tracker.tracks.values() if t.status == "confirmed"]) == 1
+    assert [t.status for t in rig.tracker.tracks.values()] == ["confirmed"]
+    assert sum(len(r.ambiguities) for _, r in rig.history) > 0
+
+
+def test_a_lone_target_never_gets_a_second_track_from_a_gate_edge_outlier() -> None:
+    for seed in range(1, 41):
+        rig = Rig(lone_drone().spec, seed, [sensor("radar-1", radar_params(), ORIGIN)])
+        rig.step(1500)
+        assert len(rig.events("init")) == 1, seed
+
+
+def test_an_outlier_outside_the_exclusion_zone_still_starts_a_track() -> None:
+    tracker = Tracker({"radar-1": ORIGIN})
+    rng = RngStreams(1)
+    confirmed_at(tracker, tracker.allocate_id(), 0.0, 0.0)
+    far = Measurement.from_view(view(tick=0, azimuth_deg=135.0, range_m=1200.0, elevation_deg=3.0))
+    tracker.update(0, [far], rng)
+    assert sorted(tracker.tracks) == ["T001", "T002"]
 
 
 # ---------------------------------------------------------------- fusion across sensors

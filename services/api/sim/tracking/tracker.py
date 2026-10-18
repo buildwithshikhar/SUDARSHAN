@@ -216,14 +216,21 @@ class Tracker:
                 track.note_report(tick, sensor_id, m.reported_class, m.data_status)
                 result.associations.append(Association(track_id, m.ref, sensor_id))
             for i in resolution.spawn:
-                self._start(tick, measurements[i], result)
+                self._start_or_hold(tick, measurements[i], result)
         for i in indices:
-            if i not in claimed:
-                m = measurements[i]
-                if m.has_range:
-                    self._start(tick, m, result)
-                else:
-                    self._orphans.append(m)
+            if i not in claimed and not self._near_a_track(origin, measurements[i]):
+                self._start_or_hold(tick, measurements[i], result)
+
+    def _near_a_track(self, origin: Vec3, m: Measurement) -> bool:
+        """Is this unclaimed report an outlier of a track already holding a target?"""
+        for track in self.tracks.values():
+            if track.status == "tentative":
+                continue
+            rows = rows_for(m, origin, track.x, self.cfg)
+            limit = CHI2_GATE[len(rows)] * self.cfg.gate_scale * self.cfg.init_exclusion_scale
+            if self._cost(track, rows) <= limit:
+                return True
+        return False
 
     def _cost(self, track: Track, rows: list[Row]) -> float:
         total = 0.0
@@ -243,6 +250,13 @@ class Tracker:
             kalman.update_scalar(track.x, track.p, row.h, row.innovation - moved, row.r)
 
     # ------------------------------------------------------------------ initiation
+
+    def _start_or_hold(self, tick: int, m: Measurement, result: UpdateResult) -> None:
+        """A report no track took: a new track if it has a range, else wait for a partner."""
+        if m.has_range:
+            self._start(tick, m, result)
+        else:
+            self._orphans.append(m)
 
     def _start(self, tick: int, m: Measurement, result: UpdateResult) -> None:
         """A tentative track from a report that has a range."""

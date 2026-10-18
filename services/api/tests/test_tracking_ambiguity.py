@@ -315,10 +315,10 @@ def test_a_seed_repeats_exactly_and_different_seeds_differ() -> None:
 def test_targets_that_stay_apart_never_err_whatever_the_seed() -> None:
     # 300 seeds, the drones 1500 m apart in cross-range, no false alarms. The only components
     # the policy is ever asked about hold nothing to get wrong, it answers nominal every time, and
-    # the whole run is identical to one with the nominal policy. Seed 4 is the one run in which
-    # the tracker itself, on a noisy radar dropout, starts a second track on a drone it still has;
-    # the ledger reports that split, which happens without any error policy.
-    noise_splits = []
+    # the whole run is identical to one with the nominal policy, and the ledger records no error
+    # of any kind: the tracker's initiation-exclusion zone stops a lone drone's gate-edge outlier
+    # from starting a second track (before it existed, about 1 % of seeds split on noise alone).
+    errors = []
     spec = scenario(parallel_threats(1500.0))
     for seed in range(300):
         spy = Spy()
@@ -332,9 +332,9 @@ def test_targets_that_stay_apart_never_err_whatever_the_seed() -> None:
             assert run.kinds() == plain.kinds()
         kinds = [k for _, k in run.kinds()]
         assert "swap" not in kinds and "merge" not in kinds
-        if "split" in kinds:
-            noise_splits.append(seed)
-    assert noise_splits == [4]
+        if set(kinds) & {"swap", "split", "merge"}:
+            errors.append(seed)
+    assert errors == []
 
 
 def test_a_close_pair_is_asked_about_and_errs_in_every_mode_when_the_chances_are_raised() -> None:

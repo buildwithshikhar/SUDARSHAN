@@ -73,7 +73,7 @@ Each mark lost has a cost in the units of the contact's score (a node's shortfal
 
 ## Explanations
 
-The evaluator returns keys and parameters only. The console renders them from the `scoring.*` entries of the EN and HI message catalogues (`apps/web/src/i18n/`); `app/scoring/keys.py` lists every key and `tests/test_scoring_keys.py` fails if one is missing in either language. Parameters are rendered like this:
+The score also carries the scenario title and the pack's report weight, so the debrief needs no other request. The evaluator returns keys and parameters only. The console renders them from the `scoring.*` entries of the EN and HI message catalogues (`apps/web/src/i18n/`); `app/scoring/keys.py` lists every key and `tests/test_scoring_keys.py` fails if one is missing in either language. Parameters are rendered like this:
 
 - `class`, `given`, `actual` in a classify or report-what message: a class ID, shown as `live.class.<id>`.
 - `given`, `actual` in an assess message: an identity (`live.identity.<id>`) and a disposition (`scoring.disposition.<id>`).

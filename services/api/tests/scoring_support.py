@@ -53,6 +53,13 @@ def baseline() -> RulePack:
     return pack
 
 
+def pack_with(**scoring: Any) -> RulePack:
+    """The baseline pack with some `scoring` values replaced (the models are frozen)."""
+    data = baseline().model_dump(mode="json")
+    data["scoring"].update(scoring)
+    return RulePack.model_validate(data)
+
+
 # --------------------------------------------------------------------------------------- steps
 
 

@@ -5,6 +5,8 @@ The truth is one rotary drone 1000 m due north of the site, flying course 90, al
 1000 + e on bearing 0 is exactly e metres out along the line to the drone.
 """
 
+from typing import Any
+
 import pytest
 
 from app.contracts.score import FieldMark, ReportGrade
@@ -19,7 +21,7 @@ from .scoring_support import (
     truth,
 )
 
-PERFECT = {
+PERFECT: dict[str, Any] = {
     "class_id": "rotary-small",
     "bearing_deg": 0,
     "range_m": 1000,
@@ -29,7 +31,7 @@ PERFECT = {
 }
 
 
-def file(t: float = 50, *, tr: dict[str, object] | None = None, **fields: object) -> ReportGrade:
+def file(t: float = 50, *, tr: dict[str, Any] | None = None, **fields: Any) -> ReportGrade:
     """The grade of one report filed at `t` seconds (the first report of the drone was at 30 s)."""
     steps = [first_report(30, QUAD), act(t, "report", "T001", QUAD, truth=tr or truth(), **fields)]
     (threat,) = [x for x in score(steps).threats if x.threat_id == QUAD]
@@ -44,7 +46,7 @@ def marks(grade: ReportGrade) -> dict[str, FieldMark]:
 # ------------------------------------------------------------------------- the worked example
 
 
-WORKED = {
+WORKED: dict[str, Any] = {
     "class_id": "rotary-small",
     "bearing_deg": 0,
     "range_m": 1100,  # 100 m out, inside the 150 m tolerance

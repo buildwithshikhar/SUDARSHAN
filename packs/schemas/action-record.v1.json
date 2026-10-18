@@ -21,6 +21,16 @@
           "type": "string"
         },
         {
+          "enum": [
+            "track-relabel",
+            "track-merge",
+            "track-split",
+            "track-drop",
+            "sensor-cue"
+          ],
+          "type": "string"
+        },
+        {
           "const": "set-weather",
           "type": "string"
         }

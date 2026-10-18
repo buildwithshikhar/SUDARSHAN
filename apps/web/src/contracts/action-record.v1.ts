@@ -1,7 +1,9 @@
 // Generated from packs/schemas/action-record.v1.json by `npm run contracts:gen`. Do not edit.
 
 export type Action =
-  ('designate' | 'classify' | 'assess' | 'engage' | 'hold' | 'report') | 'set-weather'
+  | ('designate' | 'classify' | 'assess' | 'engage' | 'hold' | 'report')
+  | ('track-relabel' | 'track-merge' | 'track-split' | 'track-drop' | 'sensor-cue')
+  | 'set-weather'
 export type Actor = string
 export type JsonValue = unknown
 export type Tick = number

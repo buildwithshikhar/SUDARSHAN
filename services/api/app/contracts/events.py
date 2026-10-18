@@ -19,6 +19,10 @@ Payload = dict[str, JsonValue]
 
 GENESIS_HASH = "0" * 64
 
+#: Track management and sensor cueing (wave 4b). They are not responses, so a rule pack neither
+#: permits nor forbids them; they are logged like any other input and replay with the session.
+TrackAction = Literal["track-relabel", "track-merge", "track-split", "track-drop", "sensor-cue"]
+
 
 class EventRecord(Contract):
     seq: Annotated[int, Field(ge=0)]
@@ -40,7 +44,7 @@ class ActionRecord(Contract):
 
     tick: Annotated[int, Field(ge=0)]
     actor: Actor
-    action: Action | Literal["set-weather"]
+    action: Action | TrackAction | Literal["set-weather"]
     payload: Payload = {}
 
 

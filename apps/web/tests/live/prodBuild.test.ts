@@ -5,6 +5,7 @@ import { join, resolve } from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createTransport } from '../../src/live/createTransport'
 import { MOCK_MARKER, ScriptedTransport } from '../../src/live/mock'
+import { MOCK_SCORE_MARKER } from '../../src/live/mockScore'
 import { WebSocketTransport } from '../../src/live/transport'
 
 const webDir = resolve(import.meta.dirname, '../..')
@@ -49,6 +50,12 @@ describe('the scripted session is development only', () => {
       expect(text).not.toContain(MOCK_MARKER)
       expect(text).not.toContain('ScriptedTransport')
       expect(text).not.toContain('mock-session')
+      // nor is the scripted score the debrief shows for ?mock=1
+      expect(text).not.toContain(MOCK_SCORE_MARKER)
+      expect(text).not.toContain('th-quad')
+      expect(text).not.toContain('mockScore')
+      // sanity: the debrief itself is in the bundle
+      expect(text).toContain('/score')
       // the demo scenario's own text is not in the bundle either
       expect(text).not.toContain('Harrier Field')
       // sanity: the build is a real one with the live code in it

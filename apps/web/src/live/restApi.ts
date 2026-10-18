@@ -1,4 +1,5 @@
 /** REST calls for the live-session screens (docs/LIVE_SESSION.md). */
+import type { SessionScore } from '../contracts/score-result.v1'
 import { api } from '../lib/api'
 import type { Briefing } from './protocol'
 
@@ -56,6 +57,23 @@ export const getSession = (id: string, signal?: AbortSignal) =>
 
 export const getSessionLog = (id: string, signal?: AbortSignal) =>
   api<SessionLog>(`/api/v1/sessions/${encodeURIComponent(id)}/log`, { signal })
+
+/**
+ * The scored debrief of an ended session. `?mock=1` serves the scripted record in the dev server
+ * only: `import.meta.env.DEV` is a build-time constant, so the branch and the mock module are
+ * removed from production builds (tests/live/prodBuild.test.ts proves it).
+ */
+export async function getScore(
+  id: string,
+  signal?: AbortSignal,
+  search: string = window.location.search,
+): Promise<SessionScore> {
+  if (import.meta.env.DEV && new URLSearchParams(search).get('mock') === '1') {
+    const { MOCK_SCORE } = await import('./mockScore')
+    return MOCK_SCORE
+  }
+  return api<SessionScore>(`/api/v1/sessions/${encodeURIComponent(id)}/score`, { signal })
+}
 
 /** Text in either interface language; a plain string is shown as is. */
 export const localised = (text: Localised | undefined, lang: 'en' | 'hi'): string =>

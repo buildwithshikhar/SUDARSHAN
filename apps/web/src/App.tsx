@@ -15,6 +15,7 @@ import { AuthProvider, useAuth, type Role } from './lib/auth'
 import { VersionProvider, useVersion } from './lib/version'
 import { findModule } from './nav/modules'
 import { About } from './screens/About'
+import { Debrief } from './screens/Debrief'
 import { DevComponents } from './screens/DevComponents'
 import { ModulePlaceholder, NoAccess, NotFound, Offline } from './screens/Messages'
 import { LiveSessionPage } from './screens/LiveSession'
@@ -172,6 +173,14 @@ export function AppRoutes() {
         />
       </Route>
       <Route element={<RequireAuth />}>
+        <Route
+          path="/train/session/:id/debrief"
+          element={
+            <RoleGate roles={['trainee', 'instructor']}>
+              <Debrief />
+            </RoleGate>
+          }
+        />
         <Route
           path="/train/lobby"
           element={

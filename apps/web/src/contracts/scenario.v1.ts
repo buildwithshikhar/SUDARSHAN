@@ -14,11 +14,19 @@ export type Contract = 'scenario.v1'
 export type DefaultSeed = number
 export type DurationS = number
 export type Fictional = true
+export type FromS = number
 export type Id1 = string
+export type RadiusM = number
+export type ToS = number
+/**
+ * @maxItems 32
+ */
+export type FiledFlights = FiledFlight[]
 export type Id2 = string
+export type Id3 = string
 export type Version = string
 export type BoresightDeg = number
-export type Id3 = string
+export type Id4 = string
 /**
  * @maxItems 32
  */
@@ -29,7 +37,8 @@ export type Sensors = SensorPlacement[]
  */
 export type Threats = [Threat, ...Threat[]]
 export type ClassId = string
-export type Id4 = string
+export type Disposition = 'hostile' | 'civil-permitted' | 'clutter'
+export type Id5 = string
 export type MaxAccelMps2 = number
 export type MaxAltitudeM = number
 export type MaxClimbMps = number
@@ -61,8 +70,8 @@ export type TemperatureC = number
 export type VisibilityM = number
 export type WindFromDeg = number
 export type WindSpeedMps = number
-export type Id5 = string
-export type RadiusM = number
+export type Id6 = string
+export type RadiusM1 = number
 export type Role = 'inner' | 'outer' | 'restricted'
 /**
  * @maxItems 32
@@ -75,7 +84,8 @@ export interface ScenarioSpec {
   default_seed: DefaultSeed
   duration_s: DurationS
   fictional: Fictional
-  id: Id1
+  filed_flights?: FiledFlights
+  id: Id2
   rule_pack: PackRef
   sensors?: Sensors
   summary: Text
@@ -107,21 +117,35 @@ export interface Vec3 {
   z: Z
 }
 /**
+ * A civil flight plan the trainee is told about: an area and a time window, nothing more.
+ *
+ * It does not name the contact that flies it; matching a track to a plan is the trainee's job.
+ */
+export interface FiledFlight {
+  center: Vec3
+  from_s: FromS
+  id: Id1
+  label: Text
+  radius_m: RadiusM
+  to_s: ToS
+}
+/**
  * Reference to another versioned pack by ID and exact version.
  */
 export interface PackRef {
-  id: Id2
+  id: Id3
   version: Version
 }
 export interface SensorPlacement {
   boresight_deg: BoresightDeg
-  id: Id3
+  id: Id4
   position: Vec3
   profile: PackRef
 }
 export interface Threat {
   class_id: ClassId
-  id: Id4
+  disposition?: Disposition
+  id: Id5
   label: Text
   limits: KinematicLimits
   on_route_end: OnRouteEnd
@@ -175,8 +199,8 @@ export interface Weather {
  */
 export interface Zone {
   center: Vec3
-  id: Id5
+  id: Id6
   label: Text
-  radius_m: RadiusM
+  radius_m: RadiusM1
   role: Role
 }

@@ -183,6 +183,7 @@ class Picture:
             "reports": [dict(r) for r in self._reports],
             "tracks": self.tracker.views(tick),
             "assist": [self._latest[k] for k in sorted(self._latest)],
+            "sensors": [sensor.view(tick) for sensor in self.suite.sensors],
             "data_notice": DATA_NOTICE,
         }
 

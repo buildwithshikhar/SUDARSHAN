@@ -61,3 +61,6 @@ class SessionRecord(Contract):
     #: True when the session ran with the sensor, tracker, ledger and assist picture (wave 4b).
     #: Absent in records made before it, which read as False.
     picture: bool = False
+    #: True when operator actions on tracks were checked against the scenario's rule pack
+    #: (wave 5). Absent in earlier records, which read as False.
+    roe: bool = False

@@ -12,6 +12,7 @@ from itertools import groupby
 from app.contracts import ActionRecord, ScenarioSpec, SessionRecord
 from app.contracts.common import PackRef
 
+from .roe import load_rule_engine
 from .tracking.picture import Picture
 from .world import ActionError, World
 
@@ -46,10 +47,19 @@ def run(
     ticks: int,
     *,
     picture: bool = False,
+    roe: bool = False,
 ) -> tuple[World, SessionRecord]:
-    """Run a session; `picture=True` attaches the sensors, tracker, ledger and assist (wave 4b)."""
+    """Run a session; `picture=True` attaches the sensors, tracker, ledger and assist (wave 4b)
+    and `roe=True` the rules of engagement from the scenario's rule pack (wave 5)."""
     world = advance(
-        World(spec, seed, picture=Picture.build(spec, seed) if picture else None), ticks, actions
+        World(
+            spec,
+            seed,
+            picture=Picture.build(spec, seed) if picture else None,
+            roe=load_rule_engine(spec) if roe else None,
+        ),
+        ticks,
+        actions,
     )
     final = finish(world)
     record = SessionRecord(
@@ -61,6 +71,7 @@ def run(
         events=list(world.log.records),
         final_state_hash=final,
         picture=picture,
+        roe=roe,
     )
     return world, record
 
@@ -74,10 +85,12 @@ class ReplayResult:
 
 
 def replay(spec: ScenarioSpec, record: SessionRecord) -> ReplayResult:
-    """Re-run a record, with a sensor picture if the record says it had one."""
+    """Re-run a record, with a sensor picture and rules of engagement if the record had them."""
     if (record.scenario.id, record.scenario.version) != (spec.id, spec.version):
         raise ValueError("the session record is for a different scenario or version")
-    _, again = run(spec, record.seed, record.actions, record.ticks, picture=record.picture)
+    _, again = run(
+        spec, record.seed, record.actions, record.ticks, picture=record.picture, roe=record.roe
+    )
     diverged = next(
         (i for i, (a, b) in enumerate(zip(record.events, again.events, strict=False)) if a != b),
         None,

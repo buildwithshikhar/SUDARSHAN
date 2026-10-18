@@ -24,6 +24,50 @@
       "title": "DefendedAsset",
       "type": "object"
     },
+    "FiledFlight": {
+      "additionalProperties": false,
+      "description": "A civil flight plan the trainee is told about: an area and a time window, nothing more.\n\nIt does not name the contact that flies it; matching a track to a plan is the trainee's job.",
+      "properties": {
+        "center": {
+          "$ref": "#/$defs/Vec3"
+        },
+        "from_s": {
+          "minimum": 0,
+          "title": "From S",
+          "type": "number"
+        },
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "$ref": "#/$defs/Text"
+        },
+        "radius_m": {
+          "exclusiveMinimum": 0,
+          "maximum": 50000,
+          "title": "Radius M",
+          "type": "number"
+        },
+        "to_s": {
+          "exclusiveMinimum": 0,
+          "title": "To S",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "from_s",
+        "to_s",
+        "center",
+        "radius_m"
+      ],
+      "title": "FiledFlight",
+      "type": "object"
+    },
     "KinematicLimits": {
       "additionalProperties": false,
       "description": "Envelope of a threat class. Airspeed, not ground speed, is limited.",
@@ -188,6 +232,16 @@
           "maxLength": 64,
           "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
           "title": "Class Id",
+          "type": "string"
+        },
+        "disposition": {
+          "default": "hostile",
+          "enum": [
+            "hostile",
+            "civil-permitted",
+            "clutter"
+          ],
+          "title": "Disposition",
           "type": "string"
         },
         "id": {
@@ -480,6 +534,15 @@
       "const": true,
       "title": "Fictional",
       "type": "boolean"
+    },
+    "filed_flights": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/FiledFlight"
+      },
+      "maxItems": 32,
+      "title": "Filed Flights",
+      "type": "array"
     },
     "id": {
       "maxLength": 64,

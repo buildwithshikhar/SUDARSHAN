@@ -1,0 +1,1352 @@
+{
+  "$defs": {
+    "Ack": {
+      "additionalProperties": false,
+      "description": "The server received action `seq` (ok) or refused it before it reached the simulation.\nThe simulation's own decision (ROE verdict, rejection) arrives as events.",
+      "properties": {
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AckError"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "ok": {
+          "title": "Ok",
+          "type": "boolean"
+        },
+        "seq": {
+          "title": "Seq",
+          "type": "integer"
+        },
+        "t": {
+          "const": "ack",
+          "title": "T",
+          "type": "string"
+        },
+        "tick": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tick"
+        }
+      },
+      "required": [
+        "t",
+        "seq",
+        "ok"
+      ],
+      "title": "Ack",
+      "type": "object"
+    },
+    "AckError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "invalid",
+            "not-running",
+            "unknown-action",
+            "too-many"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "AckError",
+      "type": "object"
+    },
+    "AssetView": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "$ref": "#/$defs/Text"
+        },
+        "position": {
+          "$ref": "#/$defs/Vec3"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "position"
+      ],
+      "title": "AssetView",
+      "type": "object"
+    },
+    "AssistView": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "title": "Basis",
+          "type": "string"
+        },
+        "confidence": {
+          "title": "Confidence",
+          "type": "number"
+        },
+        "data_status": {
+          "enum": [
+            "reference",
+            "verified"
+          ],
+          "title": "Data Status",
+          "type": "string"
+        },
+        "flag": {
+          "enum": [
+            "threat",
+            "no-threat"
+          ],
+          "title": "Flag",
+          "type": "string"
+        },
+        "proposed_class": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Proposed Class"
+        },
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "tick": {
+          "title": "Tick",
+          "type": "integer"
+        },
+        "track": {
+          "title": "Track",
+          "type": "string"
+        }
+      },
+      "required": [
+        "track",
+        "tick",
+        "flag",
+        "proposed_class",
+        "confidence",
+        "source",
+        "basis",
+        "data_status"
+      ],
+      "title": "AssistView",
+      "type": "object"
+    },
+    "Briefing": {
+      "additionalProperties": false,
+      "description": "The scenario as the operator is briefed: the site, the sensors and the filed flights.\nNever the threats.",
+      "properties": {
+        "assets": {
+          "items": {
+            "$ref": "#/$defs/AssetView"
+          },
+          "title": "Assets",
+          "type": "array"
+        },
+        "duration_s": {
+          "title": "Duration S",
+          "type": "number"
+        },
+        "filed_flights": {
+          "items": {
+            "$ref": "#/$defs/FlightView"
+          },
+          "title": "Filed Flights",
+          "type": "array"
+        },
+        "half_extent_m": {
+          "title": "Half Extent M",
+          "type": "number"
+        },
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "sensors": {
+          "items": {
+            "$ref": "#/$defs/SensorSite"
+          },
+          "title": "Sensors",
+          "type": "array"
+        },
+        "start_time_of_day_h": {
+          "title": "Start Time Of Day H",
+          "type": "number"
+        },
+        "summary": {
+          "$ref": "#/$defs/Text"
+        },
+        "title": {
+          "$ref": "#/$defs/Text"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        },
+        "weather": {
+          "$ref": "#/$defs/WeatherView"
+        },
+        "zones": {
+          "items": {
+            "$ref": "#/$defs/ZoneView"
+          },
+          "title": "Zones",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "title",
+        "summary",
+        "duration_s",
+        "start_time_of_day_h",
+        "half_extent_m",
+        "weather",
+        "zones",
+        "assets",
+        "sensors",
+        "filed_flights"
+      ],
+      "title": "Briefing",
+      "type": "object"
+    },
+    "EffectorView": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "$ref": "#/$defs/Text"
+        },
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "$ref": "#/$defs/Text"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "description"
+      ],
+      "title": "EffectorView",
+      "type": "object"
+    },
+    "EndSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "duration_s": {
+          "title": "Duration S",
+          "type": "number"
+        },
+        "event_count": {
+          "title": "Event Count",
+          "type": "integer"
+        },
+        "final_state_hash": {
+          "title": "Final State Hash",
+          "type": "string"
+        },
+        "head": {
+          "title": "Head",
+          "type": "string"
+        },
+        "ticks": {
+          "title": "Ticks",
+          "type": "integer"
+        },
+        "verified": {
+          "title": "Verified",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "ticks",
+        "duration_s",
+        "event_count",
+        "head",
+        "final_state_hash",
+        "verified"
+      ],
+      "title": "EndSummary",
+      "type": "object"
+    },
+    "Ended": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "ended",
+            "abandoned"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "summary": {
+          "$ref": "#/$defs/EndSummary"
+        },
+        "t": {
+          "const": "ended",
+          "title": "T",
+          "type": "string"
+        }
+      },
+      "required": [
+        "t",
+        "status",
+        "summary"
+      ],
+      "title": "Ended",
+      "type": "object"
+    },
+    "Fault": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "t": {
+          "const": "error",
+          "title": "T",
+          "type": "string"
+        }
+      },
+      "required": [
+        "t",
+        "code",
+        "message"
+      ],
+      "title": "Fault",
+      "type": "object"
+    },
+    "FlightView": {
+      "additionalProperties": false,
+      "properties": {
+        "center": {
+          "$ref": "#/$defs/Vec3"
+        },
+        "from_s": {
+          "title": "From S",
+          "type": "number"
+        },
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "$ref": "#/$defs/Text"
+        },
+        "radius_m": {
+          "title": "Radius M",
+          "type": "number"
+        },
+        "to_s": {
+          "title": "To S",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "from_s",
+        "to_s",
+        "center",
+        "radius_m"
+      ],
+      "title": "FlightView",
+      "type": "object"
+    },
+    "Frame": {
+      "additionalProperties": false,
+      "description": "One simulation tick as the operator's sensors and tracker saw it.",
+      "properties": {
+        "assist": {
+          "items": {
+            "$ref": "#/$defs/AssistView"
+          },
+          "title": "Assist",
+          "type": "array"
+        },
+        "data_notice": {
+          "title": "Data Notice",
+          "type": "string"
+        },
+        "events": {
+          "items": {
+            "$ref": "#/$defs/TraineeEvent"
+          },
+          "title": "Events",
+          "type": "array"
+        },
+        "reports": {
+          "items": {
+            "$ref": "#/$defs/Report"
+          },
+          "title": "Reports",
+          "type": "array"
+        },
+        "sensors": {
+          "items": {
+            "$ref": "#/$defs/SensorStatus"
+          },
+          "title": "Sensors",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "lobby",
+            "running",
+            "ended",
+            "abandoned"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "t": {
+          "const": "frame",
+          "title": "T",
+          "type": "string"
+        },
+        "tick": {
+          "title": "Tick",
+          "type": "integer"
+        },
+        "time_of_day_h": {
+          "title": "Time Of Day H",
+          "type": "number"
+        },
+        "time_s": {
+          "title": "Time S",
+          "type": "number"
+        },
+        "tracks": {
+          "items": {
+            "$ref": "#/$defs/TrackView"
+          },
+          "title": "Tracks",
+          "type": "array"
+        }
+      },
+      "required": [
+        "t",
+        "tick",
+        "time_s",
+        "time_of_day_h",
+        "status",
+        "reports",
+        "tracks",
+        "assist",
+        "sensors",
+        "events",
+        "data_notice"
+      ],
+      "title": "Frame",
+      "type": "object"
+    },
+    "JsonValue": {},
+    "Pong": {
+      "additionalProperties": false,
+      "properties": {
+        "t": {
+          "const": "pong",
+          "title": "T",
+          "type": "string"
+        },
+        "tick": {
+          "title": "Tick",
+          "type": "integer"
+        },
+        "ts": {
+          "title": "Ts",
+          "type": "number"
+        }
+      },
+      "required": [
+        "t",
+        "ts",
+        "tick"
+      ],
+      "title": "Pong",
+      "type": "object"
+    },
+    "Report": {
+      "additionalProperties": false,
+      "description": "One sensor report this tick: a plot on the PPI, or something in the EO view.",
+      "properties": {
+        "azimuth_deg": {
+          "title": "Azimuth Deg",
+          "type": "number"
+        },
+        "data_status": {
+          "enum": [
+            "reference",
+            "verified"
+          ],
+          "title": "Data Status",
+          "type": "string"
+        },
+        "elevation_deg": {
+          "title": "Elevation Deg",
+          "type": "number"
+        },
+        "features": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          },
+          "title": "Features",
+          "type": "object"
+        },
+        "modality": {
+          "enum": [
+            "radar",
+            "eo",
+            "ir",
+            "rf",
+            "acoustic"
+          ],
+          "title": "Modality",
+          "type": "string"
+        },
+        "radial_speed_mps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Radial Speed Mps"
+        },
+        "range_m": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Range M"
+        },
+        "reported_class": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Reported Class"
+        },
+        "sensor_id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Sensor Id",
+          "type": "string"
+        },
+        "sigma_azimuth_deg": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Sigma Azimuth Deg"
+        },
+        "sigma_elevation_deg": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Sigma Elevation Deg"
+        },
+        "sigma_radial_mps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Sigma Radial Mps"
+        },
+        "sigma_range_m": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Sigma Range M"
+        },
+        "tick": {
+          "title": "Tick",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "sensor_id",
+        "modality",
+        "tick",
+        "azimuth_deg",
+        "elevation_deg",
+        "range_m",
+        "radial_speed_mps",
+        "sigma_range_m",
+        "sigma_azimuth_deg",
+        "sigma_elevation_deg",
+        "sigma_radial_mps",
+        "reported_class",
+        "features",
+        "data_status"
+      ],
+      "title": "Report",
+      "type": "object"
+    },
+    "RuleView": {
+      "additionalProperties": false,
+      "properties": {
+        "authority": {
+          "enum": [
+            "operator",
+            "commander"
+          ],
+          "title": "Authority",
+          "type": "string"
+        },
+        "effector_classes": {
+          "items": {
+            "maxLength": 64,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "title": "Effector Classes",
+          "type": "array"
+        },
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "permits": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Permits",
+          "type": "array"
+        },
+        "title": {
+          "$ref": "#/$defs/Text"
+        },
+        "when": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "When",
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "permits",
+        "authority",
+        "effector_classes",
+        "when"
+      ],
+      "title": "RuleView",
+      "type": "object"
+    },
+    "RulesView": {
+      "additionalProperties": false,
+      "description": "The rule pack in force, with its version, for the decision panel.",
+      "properties": {
+        "default_action": {
+          "const": "hold",
+          "title": "Default Action",
+          "type": "string"
+        },
+        "effector_classes": {
+          "items": {
+            "$ref": "#/$defs/EffectorView"
+          },
+          "title": "Effector Classes",
+          "type": "array"
+        },
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "rules": {
+          "items": {
+            "$ref": "#/$defs/RuleView"
+          },
+          "title": "Rules",
+          "type": "array"
+        },
+        "title": {
+          "$ref": "#/$defs/Text"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "title",
+        "default_action",
+        "effector_classes",
+        "rules"
+      ],
+      "title": "RulesView",
+      "type": "object"
+    },
+    "SensorSite": {
+      "additionalProperties": false,
+      "properties": {
+        "boresight_deg": {
+          "title": "Boresight Deg",
+          "type": "number"
+        },
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "modality": {
+          "enum": [
+            "radar",
+            "eo",
+            "ir",
+            "rf",
+            "acoustic"
+          ],
+          "title": "Modality",
+          "type": "string"
+        },
+        "position": {
+          "$ref": "#/$defs/Vec3"
+        },
+        "profile": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Profile",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "profile",
+        "modality",
+        "position",
+        "boresight_deg"
+      ],
+      "title": "SensorSite",
+      "type": "object"
+    },
+    "SensorStatus": {
+      "additionalProperties": false,
+      "properties": {
+        "bearing_deg": {
+          "title": "Bearing Deg",
+          "type": "number"
+        },
+        "cued": {
+          "title": "Cued",
+          "type": "boolean"
+        },
+        "data_status": {
+          "enum": [
+            "reference",
+            "verified"
+          ],
+          "title": "Data Status",
+          "type": "string"
+        },
+        "elevation_deg": {
+          "title": "Elevation Deg",
+          "type": "number"
+        },
+        "fov_deg": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Fov Deg"
+        },
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "modality": {
+          "enum": [
+            "radar",
+            "eo",
+            "ir",
+            "rf",
+            "acoustic"
+          ],
+          "title": "Modality",
+          "type": "string"
+        },
+        "outage": {
+          "title": "Outage",
+          "type": "boolean"
+        },
+        "position": {
+          "$ref": "#/$defs/Vec3"
+        },
+        "supports_cue": {
+          "title": "Supports Cue",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "modality",
+        "bearing_deg",
+        "elevation_deg",
+        "fov_deg",
+        "supports_cue",
+        "cued",
+        "outage",
+        "position",
+        "data_status"
+      ],
+      "title": "SensorStatus",
+      "type": "object"
+    },
+    "Status": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "lobby",
+            "running",
+            "ended",
+            "abandoned"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "t": {
+          "const": "status",
+          "title": "T",
+          "type": "string"
+        },
+        "tick": {
+          "title": "Tick",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "t",
+        "status",
+        "tick"
+      ],
+      "title": "Status",
+      "type": "object"
+    },
+    "Text": {
+      "additionalProperties": false,
+      "description": "User-facing text in both interface languages.",
+      "properties": {
+        "en": {
+          "maxLength": 400,
+          "minLength": 1,
+          "title": "En",
+          "type": "string"
+        },
+        "hi": {
+          "maxLength": 400,
+          "minLength": 1,
+          "title": "Hi",
+          "type": "string"
+        }
+      },
+      "required": [
+        "en",
+        "hi"
+      ],
+      "title": "Text",
+      "type": "object"
+    },
+    "TrackView": {
+      "additionalProperties": false,
+      "properties": {
+        "age_s": {
+          "title": "Age S",
+          "type": "number"
+        },
+        "class_estimate": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Class Estimate"
+        },
+        "class_support": {
+          "title": "Class Support",
+          "type": "number"
+        },
+        "data_status": {
+          "enum": [
+            "reference",
+            "verified"
+          ],
+          "title": "Data Status",
+          "type": "string"
+        },
+        "heading_deg": {
+          "title": "Heading Deg",
+          "type": "number"
+        },
+        "hits": {
+          "title": "Hits",
+          "type": "integer"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "position": {
+          "$ref": "#/$defs/Vec3"
+        },
+        "sensors": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Sensors",
+          "type": "array"
+        },
+        "sigma_position_m": {
+          "title": "Sigma Position M",
+          "type": "number"
+        },
+        "sigma_speed_mps": {
+          "title": "Sigma Speed Mps",
+          "type": "number"
+        },
+        "since_update_s": {
+          "title": "Since Update S",
+          "type": "number"
+        },
+        "speed_mps": {
+          "title": "Speed Mps",
+          "type": "number"
+        },
+        "status": {
+          "enum": [
+            "tentative",
+            "confirmed",
+            "coasting"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "tick": {
+          "title": "Tick",
+          "type": "integer"
+        },
+        "velocity": {
+          "$ref": "#/$defs/Vec3"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "status",
+        "tick",
+        "age_s",
+        "since_update_s",
+        "hits",
+        "position",
+        "velocity",
+        "speed_mps",
+        "heading_deg",
+        "sigma_position_m",
+        "sigma_speed_mps",
+        "class_estimate",
+        "class_support",
+        "sensors",
+        "data_status"
+      ],
+      "title": "TrackView",
+      "type": "object"
+    },
+    "TraineeEvent": {
+      "additionalProperties": false,
+      "description": "An event the trainee may see (`sim.audience`): tracker lifecycle, the operator's own\ncommands, rules verdicts and session start and end. No ground truth.",
+      "properties": {
+        "actor": {
+          "title": "Actor",
+          "type": "string"
+        },
+        "payload": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Payload",
+          "type": "object"
+        },
+        "seq": {
+          "title": "Seq",
+          "type": "integer"
+        },
+        "t": {
+          "title": "T",
+          "type": "number"
+        },
+        "type": {
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "seq",
+        "t",
+        "type",
+        "actor",
+        "payload"
+      ],
+      "title": "TraineeEvent",
+      "type": "object"
+    },
+    "Vec3": {
+      "additionalProperties": false,
+      "description": "Local east-north-up position in metres; z is height above the flat ground plane.",
+      "properties": {
+        "x": {
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "title": "Y",
+          "type": "number"
+        },
+        "z": {
+          "title": "Z",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "z"
+      ],
+      "title": "Vec3",
+      "type": "object"
+    },
+    "WeatherView": {
+      "additionalProperties": false,
+      "properties": {
+        "cloud_cover_pct": {
+          "title": "Cloud Cover Pct",
+          "type": "number"
+        },
+        "condition": {
+          "enum": [
+            "clear",
+            "haze",
+            "rain",
+            "fog",
+            "dust"
+          ],
+          "title": "Condition",
+          "type": "string"
+        },
+        "temperature_c": {
+          "title": "Temperature C",
+          "type": "number"
+        },
+        "visibility_m": {
+          "title": "Visibility M",
+          "type": "number"
+        },
+        "wind_from_deg": {
+          "title": "Wind From Deg",
+          "type": "number"
+        },
+        "wind_speed_mps": {
+          "title": "Wind Speed Mps",
+          "type": "number"
+        }
+      },
+      "required": [
+        "condition",
+        "visibility_m",
+        "wind_speed_mps",
+        "wind_from_deg",
+        "temperature_c",
+        "cloud_cover_pct"
+      ],
+      "title": "WeatherView",
+      "type": "object"
+    },
+    "Welcome": {
+      "additionalProperties": false,
+      "properties": {
+        "actions": {
+          "items": {
+            "enum": [
+              "designate",
+              "classify",
+              "assess",
+              "engage",
+              "hold",
+              "report",
+              "track-relabel",
+              "track-merge",
+              "track-split",
+              "track-drop",
+              "sensor-cue"
+            ],
+            "type": "string"
+          },
+          "title": "Actions",
+          "type": "array"
+        },
+        "briefing": {
+          "$ref": "#/$defs/Briefing"
+        },
+        "data_notice": {
+          "title": "Data Notice",
+          "type": "string"
+        },
+        "identities": {
+          "items": {
+            "enum": [
+              "hostile",
+              "suspect",
+              "unknown",
+              "neutral",
+              "friend"
+            ],
+            "type": "string"
+          },
+          "title": "Identities",
+          "type": "array"
+        },
+        "operator_classes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Operator Classes",
+          "type": "array"
+        },
+        "protocol": {
+          "const": 1,
+          "title": "Protocol",
+          "type": "integer"
+        },
+        "rules": {
+          "$ref": "#/$defs/RulesView"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "lobby",
+            "running",
+            "ended",
+            "abandoned"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "t": {
+          "const": "welcome",
+          "title": "T",
+          "type": "string"
+        },
+        "tick": {
+          "title": "Tick",
+          "type": "integer"
+        },
+        "tick_hz": {
+          "const": 20,
+          "title": "Tick Hz",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "t",
+        "protocol",
+        "session_id",
+        "status",
+        "tick_hz",
+        "tick",
+        "briefing",
+        "rules",
+        "operator_classes",
+        "identities",
+        "actions",
+        "data_notice"
+      ],
+      "title": "Welcome",
+      "type": "object"
+    },
+    "ZoneView": {
+      "additionalProperties": false,
+      "properties": {
+        "center": {
+          "$ref": "#/$defs/Vec3"
+        },
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "$ref": "#/$defs/Text"
+        },
+        "radius_m": {
+          "title": "Radius M",
+          "type": "number"
+        },
+        "role": {
+          "enum": [
+            "inner",
+            "outer",
+            "restricted"
+          ],
+          "title": "Role",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "role",
+        "label",
+        "center",
+        "radius_m"
+      ],
+      "title": "ZoneView",
+      "type": "object"
+    }
+  },
+  "$id": "live-server.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "discriminator": {
+    "mapping": {
+      "ack": "#/$defs/Ack",
+      "ended": "#/$defs/Ended",
+      "error": "#/$defs/Fault",
+      "frame": "#/$defs/Frame",
+      "pong": "#/$defs/Pong",
+      "status": "#/$defs/Status",
+      "welcome": "#/$defs/Welcome"
+    },
+    "propertyName": "t"
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/Welcome"
+    },
+    {
+      "$ref": "#/$defs/Frame"
+    },
+    {
+      "$ref": "#/$defs/Status"
+    },
+    {
+      "$ref": "#/$defs/Ack"
+    },
+    {
+      "$ref": "#/$defs/Pong"
+    },
+    {
+      "$ref": "#/$defs/Ended"
+    },
+    {
+      "$ref": "#/$defs/Fault"
+    }
+  ],
+  "title": "LiveServerMessage"
+}

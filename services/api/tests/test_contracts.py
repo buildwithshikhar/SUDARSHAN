@@ -51,12 +51,17 @@ def event(**changes: Any) -> dict[str, Any]:
 
 
 def test_there_is_one_example_of_each_pack_contract() -> None:
-    """One example per contract, except sensor profiles: wave 4a ships one per modality model."""
+    """One example per contract, except sensor profiles (wave 4a ships one per modality model)
+    and scenarios (wave 5 adds the playable Harrier Field scenario to the Kestrel example)."""
     contracts = sorted(raw(p)["contract"] for p in PACK_FILES)
     assert sorted(set(contracts)) == sorted(PACKS)
     for contract in PACKS:
-        if contract != "sensor-profile.v1":
+        if contract not in ("sensor-profile.v1", "scenario.v1"):
             assert contracts.count(contract) == 1
+    assert sorted(raw(p)["id"] for p in PACK_FILES if raw(p)["contract"] == "scenario.v1") == [
+        "harrier-morning-watch",
+        "kestrel-dawn-approach",
+    ]
 
 
 @pytest.mark.parametrize("path", PACK_FILES, ids=lambda p: p.name)

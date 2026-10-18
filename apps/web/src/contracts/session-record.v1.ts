@@ -18,6 +18,7 @@ export type Type = string
 export type Events = EventRecord[]
 export type FinalStateHash = string
 export type Picture = boolean
+export type Roe = boolean
 export type Id = string
 export type Version = string
 export type Seed = number
@@ -32,6 +33,7 @@ export interface SessionRecord {
   events: Events
   final_state_hash: FinalStateHash
   picture?: Picture
+  roe?: Roe
   scenario: PackRef
   seed: Seed
   ticks: Ticks

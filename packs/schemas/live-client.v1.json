@@ -1,0 +1,153 @@
+{
+  "$defs": {
+    "Act": {
+      "additionalProperties": false,
+      "description": "An operator input. `seq` is the client's own counter, echoed in the `ack`.",
+      "properties": {
+        "action": {
+          "enum": [
+            "designate",
+            "classify",
+            "assess",
+            "engage",
+            "hold",
+            "report",
+            "track-relabel",
+            "track-merge",
+            "track-split",
+            "track-drop",
+            "sensor-cue"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "payload": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "default": {},
+          "title": "Payload",
+          "type": "object"
+        },
+        "seq": {
+          "maximum": 2147483648,
+          "minimum": 0,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "t": {
+          "const": "act",
+          "title": "T",
+          "type": "string"
+        }
+      },
+      "required": [
+        "t",
+        "seq",
+        "action"
+      ],
+      "title": "Act",
+      "type": "object"
+    },
+    "End": {
+      "additionalProperties": false,
+      "description": "Finish the session now; the event log is stored and verified.",
+      "properties": {
+        "t": {
+          "const": "end",
+          "title": "T",
+          "type": "string"
+        }
+      },
+      "required": [
+        "t"
+      ],
+      "title": "End",
+      "type": "object"
+    },
+    "JsonValue": {},
+    "Leave": {
+      "additionalProperties": false,
+      "description": "Leave without ending; the session pauses until the trainee rejoins or the grace expires.",
+      "properties": {
+        "t": {
+          "const": "leave",
+          "title": "T",
+          "type": "string"
+        }
+      },
+      "required": [
+        "t"
+      ],
+      "title": "Leave",
+      "type": "object"
+    },
+    "Ping": {
+      "additionalProperties": false,
+      "description": "Latency probe: the server echoes `ts` unchanged.",
+      "properties": {
+        "t": {
+          "const": "ping",
+          "title": "T",
+          "type": "string"
+        },
+        "ts": {
+          "title": "Ts",
+          "type": "number"
+        }
+      },
+      "required": [
+        "t",
+        "ts"
+      ],
+      "title": "Ping",
+      "type": "object"
+    },
+    "Start": {
+      "additionalProperties": false,
+      "description": "Begin ticking (lobby to running).",
+      "properties": {
+        "t": {
+          "const": "start",
+          "title": "T",
+          "type": "string"
+        }
+      },
+      "required": [
+        "t"
+      ],
+      "title": "Start",
+      "type": "object"
+    }
+  },
+  "$id": "live-client.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "discriminator": {
+    "mapping": {
+      "act": "#/$defs/Act",
+      "end": "#/$defs/End",
+      "leave": "#/$defs/Leave",
+      "ping": "#/$defs/Ping",
+      "start": "#/$defs/Start"
+    },
+    "propertyName": "t"
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/Start"
+    },
+    {
+      "$ref": "#/$defs/End"
+    },
+    {
+      "$ref": "#/$defs/Act"
+    },
+    {
+      "$ref": "#/$defs/Ping"
+    },
+    {
+      "$ref": "#/$defs/Leave"
+    }
+  ],
+  "title": "LiveClientMessage"
+}

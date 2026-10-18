@@ -302,6 +302,27 @@ class Sensor(ABC):
         self._last_tick = state["last_tick"]
         self.degradations = [Degradation.from_state(d) for d in state["degradations"]]
 
+    def view(self, t: int) -> dict[str, Any]:
+        """Status for the operator's console: where the sensor looks and whether it works.
+        Pointing is as of the last update; no ground truth."""
+        point = self._pointing
+        return {
+            "id": self.id,
+            "modality": self.params.modality,
+            "bearing_deg": round(point.azimuth_deg, 3),
+            "elevation_deg": round(point.elevation_deg, 3),
+            "fov_deg": None if point.fov_deg is None else round(point.fov_deg, 3),
+            "supports_cue": self.supports_cue,
+            "cued": self._cue_until is not None and t < self._cue_until,
+            "outage": self.effects_at(t).outage,
+            "position": {
+                "x": self.position.x,
+                "y": self.position.y,
+                "z": self.position.z,
+            },
+            "data_status": "reference" if self.params.unverified else "verified",
+        }
+
     # ------------------------------------------------------------------ scenario check
 
     def check_scenario(self, spec: ScenarioSpec) -> None:

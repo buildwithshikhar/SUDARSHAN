@@ -32,6 +32,7 @@ from .entity import Drone
 from .eventlog import EventLog
 from .kinematics import Envelope, position, step
 from .rng import RngStreams
+from .roe import OPERATOR_CLASSES, Context, RuleEngine
 
 if TYPE_CHECKING:
     from .tracking.picture import Picture
@@ -78,6 +79,7 @@ class World:
         seed: int,
         *,
         picture: "Picture | None" = None,
+        roe: RuleEngine | None = None,
         _log: EventLog | None = None,
     ) -> None:
         self.spec = spec
@@ -87,6 +89,12 @@ class World:
         self.picture = picture
         if picture is not None and picture.seed != seed:
             raise ValueError("the picture was built for a different seed")
+        #: Rules of engagement for operator actions on tracks (wave 5). With a rule engine the
+        #: world also keeps the operator's assessment of each track, and hashes it.
+        self.roe = roe
+        if roe is not None and picture is None:
+            raise ValueError("rules of engagement apply to tracks, which need a sensor picture")
+        self.operator: dict[str, dict[str, Any]] = {}
         self.tick = 0
         self.rng = RngStreams(seed)
         self.weather = WeatherState.of(spec.world.weather)
@@ -200,6 +208,9 @@ class World:
 
     def _trainee_action(self, action: ActionRecord) -> None:
         payload = action.payload
+        if isinstance(payload.get("track"), str):
+            self._operator_action(action)
+            return
         target = payload.get("target")
         drone = next((d for d in self.drones if d.id == target), None)
         if action.action in ("hold", "report") and target is None:
@@ -223,6 +234,82 @@ class World:
             raise ActionError("engage needs an effector_class")
         self._emit(f"action.{action.action}", dict(payload), action.actor)
 
+    def _operator_action(self, action: ActionRecord) -> None:
+        """An operator action on a track the tracker shows (not on a drone id).
+
+        The ROE verdict is logged first (`roe.verdict`); only a permitted action takes effect and
+        is logged as `action.<name>`. `target`, the real drone behind the track, is added to the
+        logged action for scoring and is never sent to a trainee (`sim.audience`).
+        """
+        picture = self.picture
+        if picture is None:
+            raise ActionError("this session has no sensor picture")
+        payload, name = action.payload, action.action
+        track_id = str(payload["track"])
+        track = picture.tracker.tracks.get(track_id)
+        if track is None:
+            raise ActionError(f"no live track {track_id!r}")
+        known = {"track"} | ({"class_id"} if name == "classify" else set())
+        known |= {"identity"} if name == "assess" else set()
+        known |= {"effector_class"} if name == "engage" else set()
+        extra = sorted(set(payload) - known)
+        if extra:
+            raise ActionError(f"{name} does not take {', '.join(extra)}")
+        mine = self.operator.get(track_id, {})
+        if name == "classify" and payload.get("class_id") not in OPERATOR_CLASSES:
+            raise ActionError(f"classify needs a class_id, one of {', '.join(OPERATOR_CLASSES)}")
+        if name == "assess" and payload.get("identity") not in IDENTITIES:
+            raise ActionError(f"assess needs an identity, one of {', '.join(IDENTITIES)}")
+        effector = payload.get("effector_class")
+        if name == "engage" and not isinstance(effector, str):
+            raise ActionError("engage needs an effector_class")
+        if name == "engage" and self.roe is not None and effector not in self.roe.effectors:
+            raise ActionError(f"no effector class {effector!r} in the rule pack")
+        if self.roe is not None:
+            view = track.view(self.tick, TICK_HZ)
+            _, support = track.class_estimate()
+            ctx = Context(
+                identity=mine.get("identity"),
+                classification=mine.get("class_id"),
+                zone_role=self.roe.zone_role(view["position"]["x"], view["position"]["y"]),
+                confidence=support,
+            )
+            chosen = effector if name == "engage" and isinstance(effector, str) else None
+            verdict = self.roe.evaluate(name, ctx, chosen)
+            self._emit(
+                "roe.verdict",
+                {
+                    "action": name,
+                    "track": track_id,
+                    "effector_class": chosen,
+                    "context": ctx.view(),
+                    **verdict.payload(),
+                },
+            )
+            if not verdict.permitted:
+                return
+        # an assessment outlives neither its track nor a refusal
+        self.operator = {k: v for k, v in self.operator.items() if k in picture.tracker.tracks}
+        mine = self.operator.setdefault(track_id, {})
+        if name == "designate":
+            mine["designated"] = True
+        elif name == "classify":
+            mine["class_id"] = payload["class_id"]
+        elif name == "assess":
+            mine["identity"] = payload["identity"]
+        elif name == "hold":
+            mine["held"] = True
+        target = picture.ledger.identity_of(track_id)
+        drone = next((d for d in self.drones if d.id == target and d.status == "active"), None)
+        if drone is not None:
+            if name == "designate":
+                drone.designated = True
+            elif name == "classify":
+                drone.assigned_class = str(payload["class_id"])
+            elif name == "assess":
+                drone.assigned_identity = str(payload["identity"])
+        self._emit(f"action.{name}", {**payload, "target": target}, action.actor)
+
     # ------------------------------------------------------------------ state
 
     def state(self) -> dict[str, Any]:
@@ -241,6 +328,10 @@ class World:
         if self.picture is not None:
             # Only present when a picture is attached, so a bare world hashes as it always did.
             state["picture"] = self.picture.state()
+        if self.roe is not None:
+            state["operator"] = {
+                k: dict(sorted(v.items())) for k, v in sorted(self.operator.items())
+            }
         return state
 
     def state_hash(self) -> str:
@@ -252,7 +343,12 @@ class World:
 
     @classmethod
     def restore(
-        cls, spec: ScenarioSpec, snapshot: dict[str, Any], *, picture: "Picture | None" = None
+        cls,
+        spec: ScenarioSpec,
+        snapshot: dict[str, Any],
+        *,
+        picture: "Picture | None" = None,
+        roe: RuleEngine | None = None,
     ) -> "World":
         if snapshot.get("format") != SNAPSHOT_FORMAT:
             raise ValueError(f"not a {SNAPSHOT_FORMAT} snapshot")
@@ -270,7 +366,14 @@ class World:
                 if "picture" in snapshot
                 else "a sensor picture was given but the snapshot has none"
             )
-        world = cls(spec, int(snapshot["seed"]), picture=picture, _log=log)
+        if ("operator" in snapshot) != (roe is not None):
+            raise ValueError(
+                "the snapshot has operator state but no rule engine was given"
+                if "operator" in snapshot
+                else "a rule engine was given but the snapshot has no operator state"
+            )
+        world = cls(spec, int(snapshot["seed"]), picture=picture, roe=roe, _log=log)
+        world.operator = {k: dict(v) for k, v in snapshot.get("operator", {}).items()}
         world.tick = int(snapshot["tick"])
         world.weather = WeatherState(**snapshot["weather"])
         world.rng.restore(snapshot["rng"])

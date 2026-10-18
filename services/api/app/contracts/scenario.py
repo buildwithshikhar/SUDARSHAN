@@ -62,9 +62,16 @@ class Waypoint(Contract):
     hold_s: Annotated[float, Field(ge=0, le=3600)] = 0.0
 
 
+#: What a contact really is. Ground truth: never sent to a trainee during a session; scoring
+#: (wave 6) and the instructor use it.
+Disposition = Literal["hostile", "civil-permitted", "clutter"]
+
+
 class Threat(Contract):
     id: Slug
     class_id: Slug
+    #: Defaults to hostile so a scenario written before this field existed reads as before.
+    disposition: Disposition = "hostile"
     label: Text
     spawn_s: Annotated[float, Field(ge=0)]
     start: Vec3
@@ -107,6 +114,26 @@ class DefendedAsset(Contract):
     position: Vec3
 
 
+class FiledFlight(Contract):
+    """A civil flight plan the trainee is told about: an area and a time window, nothing more.
+
+    It does not name the contact that flies it; matching a track to a plan is the trainee's job.
+    """
+
+    id: Slug
+    label: Text
+    from_s: Annotated[float, Field(ge=0)]
+    to_s: Annotated[float, Field(gt=0)]
+    center: Vec3
+    radius_m: Annotated[float, Field(gt=0, le=50_000)]
+
+    @model_validator(mode="after")
+    def _window(self) -> Self:
+        if self.to_s <= self.from_s:
+            raise ValueError(f"filed flight {self.id}: the window must end after it starts")
+        return self
+
+
 class SensorPlacement(Contract):
     id: Slug
     profile: PackRef
@@ -129,6 +156,7 @@ class ScenarioSpec(Contract):
     zones: Annotated[list[Zone], Field(max_length=32)] = []
     assets: Annotated[list[DefendedAsset], Field(max_length=32)] = []
     sensors: Annotated[list[SensorPlacement], Field(max_length=32)] = []
+    filed_flights: Annotated[list[FiledFlight], Field(max_length=32)] = []
     threats: Annotated[list[Threat], Field(min_length=1, max_length=256)]
 
     @model_validator(mode="after")
@@ -136,6 +164,7 @@ class ScenarioSpec(Contract):
         unique([z.id for z in self.zones], "zone")
         unique([a.id for a in self.assets], "asset")
         unique([s.id for s in self.sensors], "sensor")
+        unique([f.id for f in self.filed_flights], "filed flight")
         unique([t.id for t in self.threats], "threat")
         h = self.world.half_extent_m
         for t in self.threats:

@@ -1,0 +1,440 @@
+{
+  "contract": "scenario.v1",
+  "id": "harrier-morning-watch",
+  "version": "1.0.0",
+  "title": {
+    "en": "Harrier Field: morning watch",
+    "hi": "हैरियर फ़ील्ड: प्रातः निगरानी"
+  },
+  "summary": {
+    "en": "Mid-morning, clear air, open farmland around a fictional airfield. A flock of birds works the north-east fields, a civil survey flight is filed to the south-west, and one unfiled small rotary contact approaches from the north-east.",
+    "hi": "सुबह के समय साफ़ मौसम, एक काल्पनिक हवाई पट्टी के आसपास खुले खेत। उत्तर-पूर्व के खेतों में पक्षियों का झुंड मँडरा रहा है, दक्षिण-पश्चिम में एक नागरिक सर्वे उड़ान दर्ज है, और उत्तर-पूर्व से एक अदर्ज छोटा रोटरी संपर्क आ रहा है।"
+  },
+  "fictional": true,
+  "tick_hz": 20,
+  "default_seed": 260118,
+  "duration_s": 420,
+  "world": {
+    "terrain": {
+      "kind": "flat",
+      "elevation_m": 0
+    },
+    "half_extent_m": 6000,
+    "start_time_of_day_h": 10.0,
+    "weather": {
+      "condition": "clear",
+      "visibility_m": 12000,
+      "wind_speed_mps": 2.8,
+      "wind_from_deg": 300,
+      "gust_sigma_mps": 0.6,
+      "temperature_c": 27.0,
+      "cloud_cover_pct": 20
+    }
+  },
+  "rule_pack": {
+    "id": "training-baseline",
+    "version": "1.0.0"
+  },
+  "zones": [
+    {
+      "id": "inner",
+      "role": "inner",
+      "label": {
+        "en": "Inner zone",
+        "hi": "आंतरिक क्षेत्र"
+      },
+      "center": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "radius_m": 900
+    },
+    {
+      "id": "outer",
+      "role": "outer",
+      "label": {
+        "en": "Outer zone",
+        "hi": "बाहरी क्षेत्र"
+      },
+      "center": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "radius_m": 3200
+    }
+  ],
+  "assets": [
+    {
+      "id": "harrier-field",
+      "label": {
+        "en": "Harrier Field",
+        "hi": "हैरियर फ़ील्ड"
+      },
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    }
+  ],
+  "sensors": [
+    {
+      "id": "radar-1",
+      "profile": {
+        "id": "radar-generic-s",
+        "version": "0.2.0"
+      },
+      "position": {
+        "x": -60,
+        "y": 40,
+        "z": 6
+      },
+      "boresight_deg": 0
+    },
+    {
+      "id": "eo-1",
+      "profile": {
+        "id": "eo-generic-day",
+        "version": "0.1.0"
+      },
+      "position": {
+        "x": -55,
+        "y": 45,
+        "z": 8
+      },
+      "boresight_deg": 30
+    },
+    {
+      "id": "rf-1",
+      "profile": {
+        "id": "rf-generic-passive",
+        "version": "1.0.0"
+      },
+      "position": {
+        "x": 70,
+        "y": -30,
+        "z": 4
+      },
+      "boresight_deg": 0
+    }
+  ],
+  "filed_flights": [
+    {
+      "id": "ff-survey-sw",
+      "label": {
+        "en": "Civil survey flight, south-west farmland",
+        "hi": "नागरिक सर्वे उड़ान, दक्षिण-पश्चिम खेत"
+      },
+      "from_s": 0,
+      "to_s": 420,
+      "center": {
+        "x": -1150,
+        "y": -1050,
+        "z": 60
+      },
+      "radius_m": 700
+    }
+  ],
+  "threats": [
+    {
+      "id": "contact-bird-1",
+      "class_id": "bird",
+      "disposition": "clutter",
+      "label": {
+        "en": "Contact bird 1",
+        "hi": "संपर्क पक्षी 1"
+      },
+      "spawn_s": 3,
+      "start": {
+        "x": 1800,
+        "y": -500,
+        "z": 45
+      },
+      "start_heading_deg": 200,
+      "start_speed_mps": 9,
+      "limits": {
+        "max_speed_mps": 18,
+        "max_accel_mps2": 6,
+        "max_climb_mps": 4,
+        "max_descent_mps": 5,
+        "max_turn_rate_dps": 120,
+        "min_altitude_m": 8,
+        "max_altitude_m": 180
+      },
+      "route": [
+        {
+          "position": {
+            "x": 1950,
+            "y": -550,
+            "z": 45
+          },
+          "speed_mps": 8
+        },
+        {
+          "position": {
+            "x": 1750,
+            "y": -350,
+            "z": 51
+          },
+          "speed_mps": 8
+        },
+        {
+          "position": {
+            "x": 1550,
+            "y": -550,
+            "z": 45
+          },
+          "speed_mps": 8
+        },
+        {
+          "position": {
+            "x": 1750,
+            "y": -750,
+            "z": 39
+          },
+          "speed_mps": 8
+        }
+      ],
+      "on_route_end": "loop"
+    },
+    {
+      "id": "contact-bird-2",
+      "class_id": "bird",
+      "disposition": "clutter",
+      "label": {
+        "en": "Contact bird 2",
+        "hi": "संपर्क पक्षी 2"
+      },
+      "spawn_s": 3.4,
+      "start": {
+        "x": 2150,
+        "y": -900,
+        "z": 52
+      },
+      "start_heading_deg": 195,
+      "start_speed_mps": 9,
+      "limits": {
+        "max_speed_mps": 18,
+        "max_accel_mps2": 6,
+        "max_climb_mps": 4,
+        "max_descent_mps": 5,
+        "max_turn_rate_dps": 120,
+        "min_altitude_m": 8,
+        "max_altitude_m": 180
+      },
+      "route": [
+        {
+          "position": {
+            "x": 2320,
+            "y": -950,
+            "z": 52
+          },
+          "speed_mps": 9
+        },
+        {
+          "position": {
+            "x": 2100,
+            "y": -730,
+            "z": 58
+          },
+          "speed_mps": 9
+        },
+        {
+          "position": {
+            "x": 1880,
+            "y": -950,
+            "z": 52
+          },
+          "speed_mps": 9
+        },
+        {
+          "position": {
+            "x": 2100,
+            "y": -1170,
+            "z": 46
+          },
+          "speed_mps": 9
+        }
+      ],
+      "on_route_end": "loop"
+    },
+    {
+      "id": "contact-bird-3",
+      "class_id": "bird",
+      "disposition": "clutter",
+      "label": {
+        "en": "Contact bird 3",
+        "hi": "संपर्क पक्षी 3"
+      },
+      "spawn_s": 3.8,
+      "start": {
+        "x": 1500,
+        "y": -1000,
+        "z": 40
+      },
+      "start_heading_deg": 190,
+      "start_speed_mps": 9,
+      "limits": {
+        "max_speed_mps": 18,
+        "max_accel_mps2": 6,
+        "max_climb_mps": 4,
+        "max_descent_mps": 5,
+        "max_turn_rate_dps": 120,
+        "min_altitude_m": 8,
+        "max_altitude_m": 180
+      },
+      "route": [
+        {
+          "position": {
+            "x": 1630,
+            "y": -1050,
+            "z": 40
+          },
+          "speed_mps": 8.5
+        },
+        {
+          "position": {
+            "x": 1450,
+            "y": -870,
+            "z": 46
+          },
+          "speed_mps": 8.5
+        },
+        {
+          "position": {
+            "x": 1270,
+            "y": -1050,
+            "z": 40
+          },
+          "speed_mps": 8.5
+        },
+        {
+          "position": {
+            "x": 1450,
+            "y": -1230,
+            "z": 34
+          },
+          "speed_mps": 8.5
+        }
+      ],
+      "on_route_end": "loop"
+    },
+    {
+      "id": "contact-quad",
+      "class_id": "rotary-small",
+      "disposition": "hostile",
+      "label": {
+        "en": "Contact quad",
+        "hi": "संपर्क क्वाड"
+      },
+      "spawn_s": 25,
+      "start": {
+        "x": 1250,
+        "y": 2900,
+        "z": 110
+      },
+      "start_heading_deg": 190,
+      "start_speed_mps": 12,
+      "limits": {
+        "max_speed_mps": 18,
+        "max_accel_mps2": 4,
+        "max_climb_mps": 5,
+        "max_descent_mps": 3.5,
+        "max_turn_rate_dps": 90,
+        "min_altitude_m": 5,
+        "max_altitude_m": 400
+      },
+      "route": [
+        {
+          "position": {
+            "x": 1000,
+            "y": 2200,
+            "z": 90
+          },
+          "speed_mps": 15
+        },
+        {
+          "position": {
+            "x": 700,
+            "y": 1300,
+            "z": 60
+          },
+          "speed_mps": 13,
+          "hold_s": 10
+        },
+        {
+          "position": {
+            "x": 300,
+            "y": 520,
+            "z": 35
+          },
+          "speed_mps": 10
+        }
+      ],
+      "on_route_end": "loiter"
+    },
+    {
+      "id": "contact-civil",
+      "class_id": "rotary-small",
+      "disposition": "civil-permitted",
+      "label": {
+        "en": "Contact civil",
+        "hi": "संपर्क नागरिक"
+      },
+      "spawn_s": 40,
+      "start": {
+        "x": -900,
+        "y": -800,
+        "z": 55
+      },
+      "start_heading_deg": 20,
+      "start_speed_mps": 6,
+      "limits": {
+        "max_speed_mps": 18,
+        "max_accel_mps2": 4,
+        "max_climb_mps": 5,
+        "max_descent_mps": 3.5,
+        "max_turn_rate_dps": 90,
+        "min_altitude_m": 5,
+        "max_altitude_m": 400
+      },
+      "route": [
+        {
+          "position": {
+            "x": -1200,
+            "y": -700,
+            "z": 60
+          },
+          "speed_mps": 7
+        },
+        {
+          "position": {
+            "x": -1500,
+            "y": -1000,
+            "z": 60
+          },
+          "speed_mps": 7
+        },
+        {
+          "position": {
+            "x": -1200,
+            "y": -1400,
+            "z": 60
+          },
+          "speed_mps": 7
+        },
+        {
+          "position": {
+            "x": -850,
+            "y": -1050,
+            "z": 60
+          },
+          "speed_mps": 7
+        }
+      ],
+      "on_route_end": "loop"
+    }
+  ]
+}

@@ -28,6 +28,8 @@ const publicNames = {
   'event-record.v1': 'EventRecordV1',
   'action-record.v1': 'ActionRecordV1',
   'session-record.v1': 'SessionRecordV1',
+  'live-client.v1': 'LiveClientMessageV1',
+  'live-server.v1': 'LiveServerMessageV1',
 }
 // Shared definitions appear in several schemas; each is exported once, from its owner.
 const sharedOwners = {

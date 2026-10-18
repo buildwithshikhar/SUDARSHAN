@@ -1,0 +1,47 @@
+# Threat class `autonomous-small` for the threat catalogue (docs/THREAT_CATALOGUE.md).
+# Honesty: a fictional class. Kinematics and signatures only. Every value is project-authored
+# (F01, verified: false) unless a register ID below names the figure the sensor profiles already
+# cited for it. The UAV Database (X01, CC0) has not been downloaded; extracting envelopes from it
+# is pending (Q-11).
+contract: threat-class.v1
+id: autonomous-small
+version: 1.0.0
+title:
+  en: "Small pre-programmed multirotor"
+  hi: "छोटा पूर्व-क्रमादेशित मल्टीरोटर"
+summary:
+  en: "A multirotor that flies a stored route with no control link. It has the airframe of a rotary-small drone and transmits nothing, so a passive RF detector never hears it."
+  hi: "एक मल्टीरोटर जो बिना कंट्रोल लिंक के संग्रहीत मार्ग पर उड़ता है। इसका ढाँचा rotary-small ड्रोन जैसा है और यह कुछ प्रसारित नहीं करता, इसलिए निष्क्रिय आरएफ संसूचक इसे कभी नहीं सुनता।"
+fictional: true
+category: drone
+recognition_class: rotary-small
+default_disposition: hostile
+uas_group: '1'
+# The widest limits a scenario threat of this class may use (scenario.KinematicLimits).
+envelope:
+  max_speed: { value: 18, unit: m/s, source_id: F01, verified: false }
+  cruise_speed: { value: 10, unit: m/s, source_id: F01, verified: false }
+  max_accel: { value: 4, unit: m/s2, source_id: F01, verified: false }
+  max_climb: { value: 5, unit: m/s, source_id: F01, verified: false }
+  max_descent: { value: 3.5, unit: m/s, source_id: F01, verified: false }
+  max_turn_rate: { value: 90, unit: deg/s, source_id: F01, verified: false }
+  min_altitude: { value: 5, unit: m, source_id: F01, verified: false }
+  max_altitude: { value: 400, unit: m, source_id: F01, verified: false }
+# Names are the sensor-profile parameters without the _<class> suffix.
+signature:
+  rcs: { value: -16, unit: dBsm, source_id: F01, verified: false }
+  aspect_swing: { value: 4, unit: dB, source_id: F01, verified: false }
+  size: { value: 0.39, unit: m, source_id: F01, verified: false }
+  contrast: { value: 1, unit: ratio, source_id: F01, verified: false }
+  contrast_eo: { value: 1, unit: ratio, source_id: F01, verified: false }
+  emits: { value: 0, unit: flag, source_id: F01, verified: false }
+  emitter_power: { value: 0, unit: dBm, source_id: F01, verified: false }
+  band: { value: 1, unit: index, source_id: F01, verified: false }
+  hop_rate: { value: 0, unit: Hz, source_id: F01, verified: false }
+  source_level: { value: 76, unit: dB, source_id: F01, verified: false }
+  blades: { value: 2, unit: count, source_id: D11, verified: false }
+  rpm: { value: 5400, unit: rpm, source_id: D11, verified: false }
+  harmonics: { value: 6, unit: count, source_id: D10, verified: false }
+notes:
+  en: "Acoustic figures are the ones the shipped acoustic profile already carried for this class (slightly quieter, 90 percent of the rotary-small rotor speed). Every other figure equals rotary-small except that it emits nothing."
+  hi: "ध्वनिक आँकड़े वही हैं जो भेजा गया ध्वनिक प्रोफ़ाइल इस वर्ग के लिए पहले से रखता था (थोड़ा शांत, rotary-small की रोटर गति का 90 प्रतिशत)। बाकी हर आँकड़ा rotary-small के बराबर है, सिवाय इसके कि यह कुछ प्रसारित नहीं करता।"

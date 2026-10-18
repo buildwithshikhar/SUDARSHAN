@@ -1,0 +1,47 @@
+# Threat class `balloon` for the threat catalogue (docs/THREAT_CATALOGUE.md).
+# Honesty: a fictional class. Kinematics and signatures only. Every value is project-authored
+# (F01, verified: false) unless a register ID below names the figure the sensor profiles already
+# cited for it. The UAV Database (X01, CC0) has not been downloaded; extracting envelopes from it
+# is pending (Q-11).
+contract: threat-class.v1
+id: balloon
+version: 1.0.0
+title:
+  en: "Balloon"
+  hi: "गुब्बारा"
+summary:
+  en: "A free balloon drifting with the wind: very slow, low radar return, no radio, no sound, cold in thermal."
+  hi: "हवा के साथ बहता मुक्त गुब्बारा: बहुत धीमा, कम रडार वापसी, कोई रेडियो नहीं, कोई ध्वनि नहीं, थर्मल में ठंडा।"
+fictional: true
+category: clutter
+recognition_class: balloon
+default_disposition: clutter
+uas_group: null
+# The widest limits a scenario threat of this class may use (scenario.KinematicLimits).
+envelope:
+  max_speed: { value: 6, unit: m/s, source_id: F01, verified: false }
+  cruise_speed: { value: 1.5, unit: m/s, source_id: F01, verified: false }
+  max_accel: { value: 0.5, unit: m/s2, source_id: F01, verified: false }
+  max_climb: { value: 3, unit: m/s, source_id: F01, verified: false }
+  max_descent: { value: 3, unit: m/s, source_id: F01, verified: false }
+  max_turn_rate: { value: 30, unit: deg/s, source_id: F01, verified: false }
+  min_altitude: { value: 20, unit: m, source_id: F01, verified: false }
+  max_altitude: { value: 1500, unit: m, source_id: F01, verified: false }
+# Names are the sensor-profile parameters without the _<class> suffix.
+signature:
+  rcs: { value: -26, unit: dBsm, source_id: F01, verified: false }
+  aspect_swing: { value: 0, unit: dB, source_id: F01, verified: false }
+  size: { value: 0.8, unit: m, source_id: F01, verified: false }
+  contrast: { value: 0.1, unit: ratio, source_id: F01, verified: false }
+  contrast_eo: { value: 1.2, unit: ratio, source_id: F01, verified: false }
+  emits: { value: 0, unit: flag, source_id: F01, verified: false }
+  emitter_power: { value: 0, unit: dBm, source_id: F01, verified: false }
+  band: { value: 1, unit: index, source_id: F01, verified: false }
+  hop_rate: { value: 0, unit: Hz, source_id: F01, verified: false }
+  source_level: { value: -10, unit: dB, source_id: F01, verified: false }
+  blades: { value: 0, unit: count, source_id: F01, verified: false }
+  rpm: { value: 0, unit: rpm, source_id: F01, verified: false }
+  harmonics: { value: 1, unit: count, source_id: F01, verified: false }
+notes:
+  en: "Aspect swing is 0 dB: a sphere looks the same from every side. A source level of -10 dB means no acoustic source in the model."
+  hi: "पहलू-परिवर्तन 0 dB है: गोला हर दिशा से एक जैसा दिखता है। -10 dB का स्रोत स्तर मॉडल में कोई ध्वनि स्रोत न होने का अर्थ रखता है।"

@@ -1,0 +1,47 @@
+# Threat class `decoy-small` for the threat catalogue (docs/THREAT_CATALOGUE.md).
+# Honesty: a fictional class. Kinematics and signatures only. Every value is project-authored
+# (F01, verified: false) unless a register ID below names the figure the sensor profiles already
+# cited for it. The UAV Database (X01, CC0) has not been downloaded; extracting envelopes from it
+# is pending (Q-11).
+contract: threat-class.v1
+id: decoy-small
+version: 1.0.0
+title:
+  en: "Small lightweight decoy"
+  hi: "छोटा हल्का डिकॉय"
+summary:
+  en: "A cheap, lightweight multirotor flown in numbers: weak radar return, quiet, no radio link and almost no thermal contrast. Slower than a camera quadcopter."
+  hi: "संख्या में उड़ाया जाने वाला सस्ता, हल्का मल्टीरोटर: कमज़ोर रडार वापसी, शांत, कोई रेडियो लिंक नहीं और लगभग शून्य तापीय कंट्रास्ट। कैमरा क्वाडकॉप्टर से धीमा।"
+fictional: true
+category: drone
+recognition_class: rotary-small
+default_disposition: hostile
+uas_group: '1'
+# The widest limits a scenario threat of this class may use (scenario.KinematicLimits).
+envelope:
+  max_speed: { value: 12, unit: m/s, source_id: F01, verified: false }
+  cruise_speed: { value: 8, unit: m/s, source_id: F01, verified: false }
+  max_accel: { value: 3, unit: m/s2, source_id: F01, verified: false }
+  max_climb: { value: 3, unit: m/s, source_id: F01, verified: false }
+  max_descent: { value: 3, unit: m/s, source_id: F01, verified: false }
+  max_turn_rate: { value: 60, unit: deg/s, source_id: F01, verified: false }
+  min_altitude: { value: 10, unit: m, source_id: F01, verified: false }
+  max_altitude: { value: 250, unit: m, source_id: F01, verified: false }
+# Names are the sensor-profile parameters without the _<class> suffix.
+signature:
+  rcs: { value: -20, unit: dBsm, source_id: F01, verified: false }
+  aspect_swing: { value: 3, unit: dB, source_id: F01, verified: false }
+  size: { value: 0.3, unit: m, source_id: F01, verified: false }
+  contrast: { value: 0.2, unit: ratio, source_id: F01, verified: false }
+  contrast_eo: { value: 0.8, unit: ratio, source_id: F01, verified: false }
+  emits: { value: 0, unit: flag, source_id: F01, verified: false }
+  emitter_power: { value: 0, unit: dBm, source_id: F01, verified: false }
+  band: { value: 1, unit: index, source_id: F01, verified: false }
+  hop_rate: { value: 0, unit: Hz, source_id: F01, verified: false }
+  source_level: { value: 68, unit: dB, source_id: F01, verified: false }
+  blades: { value: 2, unit: count, source_id: F01, verified: false }
+  rpm: { value: 7200, unit: rpm, source_id: F01, verified: false }
+  harmonics: { value: 4, unit: count, source_id: F01, verified: false }
+notes:
+  en: "Project-authored fictional class. Envelope and signature values are F01 and unverified; extraction from the UAV Database (X01) is pending (Q-11)."
+  hi: "परियोजना द्वारा लिखा गया काल्पनिक वर्ग। सीमा और हस्ताक्षर के मान F01 हैं और असत्यापित हैं; UAV Database (X01) से निष्कर्षण लंबित है (Q-11)।"

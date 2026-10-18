@@ -1,0 +1,47 @@
+# Threat class `fixed-wing-large` for the threat catalogue (docs/THREAT_CATALOGUE.md).
+# Honesty: a fictional class. Kinematics and signatures only. Every value is project-authored
+# (F01, verified: false) unless a register ID below names the figure the sensor profiles already
+# cited for it. The UAV Database (X01, CC0) has not been downloaded; extracting envelopes from it
+# is pending (Q-11).
+contract: threat-class.v1
+id: fixed-wing-large
+version: 1.0.0
+title:
+  en: "Large fixed-wing drone"
+  hi: "बड़ा फ़िक्स्ड-विंग ड्रोन"
+summary:
+  en: "A generic large fixed-wing drone of the Group 3 size class, flying high and fast on a long route. Every value is unverified; the Group 3 speed and altitude cells are unverified in the research."
+  hi: "Group 3 आकार वर्ग का सामान्य बड़ा फ़िक्स्ड-विंग ड्रोन, जो लंबे मार्ग पर ऊँचाई और तेज़ गति से उड़ता है। हर मान असत्यापित है; शोध में Group 3 की गति और ऊँचाई के खाने असत्यापित हैं।"
+fictional: true
+category: drone
+recognition_class: fixed-wing-large
+default_disposition: hostile
+uas_group: '3'
+# The widest limits a scenario threat of this class may use (scenario.KinematicLimits).
+envelope:
+  max_speed: { value: 90, unit: m/s, source_id: F01, verified: false }
+  cruise_speed: { value: 65, unit: m/s, source_id: F01, verified: false }
+  max_accel: { value: 2.5, unit: m/s2, source_id: F01, verified: false }
+  max_climb: { value: 8, unit: m/s, source_id: F01, verified: false }
+  max_descent: { value: 10, unit: m/s, source_id: F01, verified: false }
+  max_turn_rate: { value: 8, unit: deg/s, source_id: F01, verified: false }
+  min_altitude: { value: 300, unit: m, source_id: F01, verified: false }
+  max_altitude: { value: 5400, unit: m, source_id: F01, verified: false }
+# Names are the sensor-profile parameters without the _<class> suffix.
+signature:
+  rcs: { value: 3, unit: dBsm, source_id: F01, verified: false }
+  aspect_swing: { value: 6, unit: dB, source_id: F01, verified: false }
+  size: { value: 6, unit: m, source_id: F01, verified: false }
+  contrast: { value: 1, unit: ratio, source_id: F01, verified: false }
+  contrast_eo: { value: 1, unit: ratio, source_id: F01, verified: false }
+  emits: { value: 1, unit: flag, source_id: F01, verified: false }
+  emitter_power: { value: 33, unit: dBm, source_id: F01, verified: false }
+  band: { value: 5, unit: index, source_id: F01, verified: false }
+  hop_rate: { value: 0, unit: Hz, source_id: F01, verified: false }
+  source_level: { value: 86, unit: dB, source_id: F01, verified: false }
+  blades: { value: 3, unit: count, source_id: F01, verified: false }
+  rpm: { value: 2400, unit: rpm, source_id: F01, verified: false }
+  harmonics: { value: 6, unit: count, source_id: F01, verified: false }
+notes:
+  en: "UNVERIFIED throughout: the Group 3 speed and altitude cells are unverified in docs/02-research.md section 2."
+  hi: "पूरी तरह असत्यापित: docs/02-research.md खंड 2 में Group 3 की गति और ऊँचाई के खाने असत्यापित हैं।"

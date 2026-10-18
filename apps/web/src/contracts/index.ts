@@ -9,3 +9,4 @@ export type { ScenarioSpec as ScenarioV1, Text, Vec3, PackRef } from './scenario
 export type { SessionScore as ScoreResultV1 } from './score-result.v1'
 export type { SensorProfile as SensorProfileV1, Quantity } from './sensor-profile.v1'
 export type { SessionRecord as SessionRecordV1 } from './session-record.v1'
+export type { ThreatClass as ThreatClassV1 } from './threat-class.v1'

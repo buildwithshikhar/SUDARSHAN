@@ -14,8 +14,9 @@ from . import PACKS
 from .rulepack import RulePack
 from .scenario import ScenarioSpec
 from .sensor_profile import SensorProfile
+from .threat_class import ThreatClass
 
-Pack = ScenarioSpec | RulePack | SensorProfile
+Pack = ScenarioSpec | RulePack | SensorProfile | ThreatClass
 
 
 class PackError(ValueError):

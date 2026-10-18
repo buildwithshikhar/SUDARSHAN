@@ -52,7 +52,7 @@ class SensorProfile(Contract):
     parameters: Annotated[
         dict[ParamName, Quantity],
         # patternProperties alone lets other names through, so close the object in the schema too
-        Field(min_length=1, max_length=64, json_schema_extra={"additionalProperties": False}),
+        Field(min_length=1, max_length=128, json_schema_extra={"additionalProperties": False}),
     ]
     #: Class confusion tables by context (for example `default`, `thermal`).
     confusion: Annotated[dict[ParamName, ConfusionTable], Field(max_length=8)] = {}

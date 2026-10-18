@@ -6,9 +6,9 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 
 - **Phase:** wave 4a in progress (sensor models), step 1 of 4 done. Wave 3 is complete locally and waits only for the owner to confirm CI; wave 4a started at the owner's instruction before that confirmation.
 - **Current wave:** 4a · Sensor models → [waves/wave-04a-sensor-models.md](waves/wave-04a-sensor-models.md)
-- **Next step:** wave 4a STEP 2 (radar and EO/IR) and STEP 3 (RF and acoustic) per the wave 4a entry's **Next wave entry point**. Owner still to confirm CI for the wave 3 and 4a step 1 commits, and to supply the deployed commit.
+- **Next step:** wave 4a STEP 2 (radar and EO/IR) and STEP 3 (RF and acoustic) per the wave 4a entry's **Next wave entry point**. Owner still to confirm CI for the wave 3 and 4a step 1 commits, and to record the smoke date for the live link.
 - **Main is:** green locally (lint, typecheck, unit, `make prod-check`); CI result for the latest commits is owner-confirmed only (see the wave entries).
-- **Deployed build:** live at https://sudarshan.centralindia.cloudapp.azure.com (owner-reported, 2026-10-18); deployed commit not yet reported.
+- **Deployed build:** live at https://sudarshan.centralindia.cloudapp.azure.com, running commit b722313 (wave 2 build; owner-reported, 2026-10-18).
 
 ## Planning updates
 
@@ -122,7 +122,7 @@ The user deploys; Claude Code never does. Fill this in when a deploy happens.
 |---|---|
 | Host | Azure for Students Linux VM, Central India region (owner decision Q-02) |
 | Live URL | https://sudarshan.centralindia.cloudapp.azure.com (wave 2 build; owner-reported, 2026-10-18) |
-| Deployed commit | not reported by the owner yet. Owner: paste the short hash here (`git rev-parse --short HEAD` on the VM, or the commit shown by `/api/v1/version`). Do not infer it from git history. |
+| Deployed commit | b722313 (owner-reported, 2026-10-18). Later commits (waves 3 and 4a) are not deployed; none changes user-facing behaviour. |
 | Last verified (`/healthz`, `/readyz`, `/api/v1/version`) | not reported yet. Owner: run `make smoke URL=https://sudarshan.centralindia.cloudapp.azure.com` and `make check-deploy URL=...`, then record the date. |
 
 ## Rules for updating this log
@@ -346,7 +346,6 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 **Open issues**
 - CI result for the wave 3 commits: owner to confirm (the CI jobs were all run locally and pass).
-- Wave 2's live URL and deployed commit are still unrecorded in **Deployed build**.
 - Sensor-profile example values are F01 placeholders; wave 4a replaces them with cited values.
 
 **Next wave entry point**
@@ -386,7 +385,7 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 **Open issues**
 - CI result for the wave 3 and wave 4a step 1 commits: owner to confirm (all CI jobs except gitleaks, `docker build` on Linux and the Linux-only e2e were run locally).
-- Deployed commit and smoke date for the live link: owner to record under **Deployed build**.
+- Smoke date for the live link: owner to record under **Deployed build** (the deployed commit, b722313, is recorded).
 - Q-19: the API image does not ship `sim/` or `packs/`; fix in wave 5.
 - The stub `radar-generic-s` profile is still F01 placeholders and lacks the parameters a radar model will need (`fov`, signature figures, confusion table); step 2 replaces it with cited values (version 0.2.0) and updates the Kestrel scenario reference.
 

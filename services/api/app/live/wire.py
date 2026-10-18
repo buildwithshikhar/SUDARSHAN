@@ -107,6 +107,7 @@ def briefing(spec: ScenarioSpec, modalities: Mapping[str, str]) -> dict[str, Any
         "duration_s": spec.duration_s,
         "start_time_of_day_h": spec.world.start_time_of_day_h,
         "half_extent_m": spec.world.half_extent_m,
+        "terrain": spec.world.terrain.model_dump(),
         "weather": {
             "condition": weather.condition,
             "visibility_m": weather.visibility_m,

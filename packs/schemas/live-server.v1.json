@@ -208,6 +208,24 @@
         "summary": {
           "$ref": "#/$defs/Text"
         },
+        "terrain": {
+          "discriminator": {
+            "mapping": {
+              "flat": "#/$defs/FlatTerrainView",
+              "pack": "#/$defs/PackTerrainView"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/FlatTerrainView"
+            },
+            {
+              "$ref": "#/$defs/PackTerrainView"
+            }
+          ],
+          "title": "Terrain"
+        },
         "title": {
           "$ref": "#/$defs/Text"
         },
@@ -234,6 +252,7 @@
         "duration_s",
         "start_time_of_day_h",
         "half_extent_m",
+        "terrain",
         "weather",
         "zones",
         "assets",
@@ -357,6 +376,26 @@
         "message"
       ],
       "title": "Fault",
+      "type": "object"
+    },
+    "FlatTerrainView": {
+      "additionalProperties": false,
+      "properties": {
+        "elevation_m": {
+          "title": "Elevation M",
+          "type": "number"
+        },
+        "kind": {
+          "const": "flat",
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "elevation_m"
+      ],
+      "title": "FlatTerrainView",
       "type": "object"
     },
     "FlightView": {
@@ -486,6 +525,34 @@
       "type": "object"
     },
     "JsonValue": {},
+    "PackTerrainView": {
+      "additionalProperties": false,
+      "description": "Which terrain pack to draw; the client fetches its files from `/api/v1/terrain/{id}/`.",
+      "properties": {
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "pack",
+          "title": "Kind",
+          "type": "string"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "version"
+      ],
+      "title": "PackTerrainView",
+      "type": "object"
+    },
     "Pong": {
       "additionalProperties": false,
       "properties": {

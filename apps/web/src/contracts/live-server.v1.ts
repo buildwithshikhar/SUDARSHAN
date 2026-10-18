@@ -35,14 +35,20 @@ export type Modality = 'radar' | 'eo' | 'ir' | 'rf' | 'acoustic'
 export type Profile = string
 export type Sensors = SensorSite[]
 export type StartTimeOfDayH = number
+export type Terrain = FlatTerrainView | PackTerrainView
+export type ElevationM = number
+export type Kind = 'flat'
+export type Id4 = string
+export type Kind1 = 'pack'
 export type Version = string
+export type Version1 = string
 export type CloudCoverPct = number
 export type Condition = 'clear' | 'haze' | 'rain' | 'fog' | 'dust'
 export type TemperatureC = number
 export type VisibilityM = number
 export type WindFromDeg = number
 export type WindSpeedMps = number
-export type Id4 = string
+export type Id5 = string
 export type RadiusM1 = number
 export type Role = 'inner' | 'outer' | 'restricted'
 export type Zones = ZoneView[]
@@ -51,16 +57,16 @@ export type Identities = ('hostile' | 'suspect' | 'unknown' | 'neutral' | 'frien
 export type OperatorClasses = string[]
 export type Protocol = 1
 export type DefaultAction = 'hold'
-export type Id5 = string
-export type EffectorClasses = EffectorView[]
 export type Id6 = string
+export type EffectorClasses = EffectorView[]
+export type Id7 = string
 export type Authority = 'operator' | 'commander'
 export type EffectorClasses1 = string[]
-export type Id7 = string
+export type Id8 = string
 export type Permits = string[]
 export type JsonValue = unknown
 export type Rules = RuleView[]
-export type Version1 = string
+export type Version2 = string
 export type SessionId = string
 export type Status = 'lobby' | 'running' | 'ended' | 'abandoned'
 export type T = 'welcome'
@@ -100,7 +106,7 @@ export type Cued = boolean
 export type DataStatus2 = 'reference' | 'verified'
 export type ElevationDeg1 = number
 export type FovDeg = number | null
-export type Id8 = string
+export type Id9 = string
 export type Modality2 = 'radar' | 'eo' | 'ir' | 'rf' | 'acoustic'
 export type Outage = boolean
 export type PixelsH = number | null
@@ -117,7 +123,7 @@ export type ClassSupport = number
 export type DataStatus3 = 'reference' | 'verified'
 export type HeadingDeg = number
 export type Hits = number
-export type Id9 = string
+export type Id10 = string
 export type Label = string
 export type Sensors2 = string[]
 export type SigmaPositionM = number
@@ -178,8 +184,9 @@ export interface Briefing {
   sensors: Sensors
   start_time_of_day_h: StartTimeOfDayH
   summary: Text
+  terrain: Terrain
   title: Text
-  version: Version
+  version: Version1
   weather: WeatherView
   zones: Zones
 }
@@ -218,6 +225,18 @@ export interface SensorSite {
   position: Vec3
   profile: Profile
 }
+export interface FlatTerrainView {
+  elevation_m: ElevationM
+  kind: Kind
+}
+/**
+ * Which terrain pack to draw; the client fetches its files from `/api/v1/terrain/{id}/`.
+ */
+export interface PackTerrainView {
+  id: Id4
+  kind: Kind1
+  version: Version
+}
 export interface WeatherView {
   cloud_cover_pct: CloudCoverPct
   condition: Condition
@@ -228,7 +247,7 @@ export interface WeatherView {
 }
 export interface ZoneView {
   center: Vec3
-  id: Id4
+  id: Id5
   label: Text
   radius_m: RadiusM1
   role: Role
@@ -239,20 +258,20 @@ export interface ZoneView {
 export interface RulesView {
   default_action: DefaultAction
   effector_classes: EffectorClasses
-  id: Id6
+  id: Id7
   rules: Rules
   title: Text
-  version: Version1
+  version: Version2
 }
 export interface EffectorView {
   description: Text
-  id: Id5
+  id: Id6
   label: Text
 }
 export interface RuleView {
   authority: Authority
   effector_classes: EffectorClasses1
-  id: Id7
+  id: Id8
   permits: Permits
   title: Text
   when: When
@@ -328,7 +347,7 @@ export interface SensorStatus {
   data_status: DataStatus2
   elevation_deg: ElevationDeg1
   fov_deg: FovDeg
-  id: Id8
+  id: Id9
   modality: Modality2
   outage: Outage
   pixels_h?: PixelsH
@@ -342,7 +361,7 @@ export interface TrackView {
   data_status: DataStatus3
   heading_deg: HeadingDeg
   hits: Hits
-  id: Id9
+  id: Id10
   label: Label
   position: Vec3
   sensors: Sensors2

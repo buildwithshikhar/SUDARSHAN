@@ -219,6 +219,29 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.eo.noSensorBody` | The briefing lists no electro-optical sensor, so there is no camera view. | ब्रीफ़िंग में कोई विद्युत-प्रकाशीय सेंसर नहीं है, इसलिए कैमरा दृश्य नहीं है। |  |
 | `live.eo.noWebgl` | EO view unavailable (WebGL) | EO दृश्य उपलब्ध नहीं (WebGL) |  |
 | `live.eo.noWebglBody` | This browser cannot create a WebGL context. The radar, track table and decision panel still work; the EO picture is not drawn. | यह ब्राउज़र WebGL संदर्भ नहीं बना सकता। रडार, ट्रैक तालिका और निर्णय पैनल काम करते हैं; EO चित्र नहीं बनाया जाएगा। |  |
+| `live.eo.modeName.day` | Day TV | दिन TV |  |
+| `live.eo.modeName.night-vision` | Night vision | रात्रि दृष्टि |  |
+| `live.eo.modeName.thermal-white-hot` | White-hot | सफ़ेद-गर्म |  |
+| `live.eo.modeName.thermal-black-hot` | Black-hot | काला-गर्म |  |
+| `live.eo.modeHud.night-vision` | NV | NV |  |
+| `live.eo.modeHud.thermal-white-hot` | IR WHT | IR श्वे |  |
+| `live.eo.modeHud.thermal-black-hot` | IR BLK | IR काला |  |
+| `live.eo.modeHelpLabel` | About this picture | इस चित्र के बारे में |  |
+| `live.eo.modeHelp.thermal` | Thermal is a rendering model, not radiometric: surfaces get an apparent temperature from the time of day, then the picture is stretched by automatic gain. There are no real temperature readings. | थर्मल एक रेंडरिंग मॉडल है, रेडियोमेट्रिक नहीं: दिन के समय के अनुसार सतहों को आभासी तापमान दिया जाता है, फिर चित्र को स्वचालित गेन से फैलाया जाता है। इसमें वास्तविक तापमान रीडिंग नहीं हैं। |  |
+| `live.eo.modeHelp.night-vision` | Night vision is a rendering model: the scene is amplified, tinted green and given grain. It is not a measured image intensifier response. | रात्रि दृष्टि एक रेंडरिंग मॉडल है: दृश्य को प्रवर्धित किया जाता है, हरा रंग दिया जाता है और कण जोड़े जाते हैं। यह किसी मापी गई इमेज इंटेंसिफ़ायर प्रतिक्रिया का परिणाम नहीं है। |  |
+| `live.eo.agc` | AGC | AGC |  |
+| `live.eo.gain` | GAIN | गेन |  |
+| `live.eo.model` | MODEL | मॉडल |  |
+| `live.eo.refNote` | Sensor figures are reference data. | सेंसर के आँकड़े संदर्भ डेटा हैं। |  |
+| `live.eo.terrain.loading` | Loading terrain | भूभाग लोड हो रहा है |  |
+| `live.eo.terrain.label` | Terrain: {{name}} · reference data | भूभाग: {{name}} · संदर्भ डेटा |  |
+| `live.eo.terrain.error` | Terrain unavailable | भूभाग उपलब्ध नहीं |  |
+| `live.eo.terrain.errorBody` | The terrain pack could not be loaded, so the view shows flat ground. The session is not affected. | भूभाग पैक लोड नहीं हो सका, इसलिए दृश्य में समतल भूमि दिख रही है। सत्र पर कोई प्रभाव नहीं है। |  |
+| `live.eo.quality.label` | Graphics | ग्राफ़िक्स |  |
+| `live.eo.quality.auto` | Auto | स्वचालित |  |
+| `live.eo.quality.high` | High | उच्च |  |
+| `live.eo.quality.medium` | Medium | मध्यम |  |
+| `live.eo.quality.low` | Low | निम्न |  |
 | `live.ppi.title` | Radar PPI | रडार PPI |  |
 | `live.ppi.scale` | {{range}} km · sweep {{period}} s | {{range}} किमी · स्वीप {{period}} से |  |
 | `live.ppi.aria` | Radar plan position indicator, range {{range}} kilometres. Tracks are listed in the track table. | रडार प्लान पोज़िशन इंडिकेटर, परास {{range}} किलोमीटर। ट्रैक, ट्रैक तालिका में सूचीबद्ध हैं। |  |
@@ -683,4 +706,4 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `debrief.empty.title` | No contact was presented | कोई संपर्क प्रस्तुत नहीं हुआ |  |
 | `debrief.empty.body` | No sensor reported any scenario contact before the session ended, so there is nothing to score. | सत्र समाप्त होने तक किसी सेंसर ने कोई परिदृश्य संपर्क रिपोर्ट नहीं किया, इसलिए अंक देने को कुछ नहीं है। |  |
 
-676 strings.
+699 strings.

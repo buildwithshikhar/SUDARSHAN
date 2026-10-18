@@ -474,6 +474,49 @@ export function evaluateRoe(
   }
 }
 
+/**
+ * Scenario variants for the dev-server mock (`?mock=1&eo=thermal&terrain=fixture-ridge&rain=1&hour=22`):
+ * the EO camera type, a terrain pack, rain and the start hour. They exist so the 3D view can be
+ * exercised without the API; none of this ships in production builds.
+ */
+export interface MockVariant {
+  eo?: 'day' | 'nv' | 'thermal'
+  terrain?: string
+  condition?: Welcome['briefing']['weather']['condition']
+  hour?: number
+}
+
+const EO_PROFILE = { day: 'eo-generic-day', nv: 'eo-generic-nv', thermal: 'ir-generic-thermal' }
+
+/** The welcome for a variant; the unchanged `MOCK_WELCOME` when there is none. */
+export function mockWelcome(variant: MockVariant = {}): Welcome {
+  if (!variant.eo && !variant.terrain && !variant.condition && variant.hour === undefined) {
+    return MOCK_WELCOME
+  }
+  const briefing = {
+    ...MOCK_WELCOME.briefing,
+    start_time_of_day_h: variant.hour ?? MOCK_WELCOME.briefing.start_time_of_day_h,
+    weather: {
+      ...MOCK_WELCOME.briefing.weather,
+      condition: variant.condition ?? MOCK_WELCOME.briefing.weather.condition,
+    },
+    sensors: MOCK_WELCOME.briefing.sensors.map((s) =>
+      s.id === 'eo-1' && variant.eo
+        ? {
+            ...s,
+            modality: variant.eo === 'thermal' ? ('ir' as const) : s.modality,
+            profile: EO_PROFILE[variant.eo],
+          }
+        : s,
+    ),
+  }
+  // `terrain` is not in the generated contract yet; the web app reads it tolerantly.
+  const withTerrain = variant.terrain
+    ? { ...briefing, terrain: { kind: 'pack', id: variant.terrain, version: '1.0.0' } }
+    : briefing
+  return { ...MOCK_WELCOME, briefing: withTerrain }
+}
+
 export class MockWorld {
   tick = 0
   status: SessionStatus = 'lobby'
@@ -487,6 +530,13 @@ export class MockWorld {
   private events: TraineeEvent[] = []
   private eventCount = 0
   readonly pointing: Pointing = { ...EO_HOME, cuedUntil: -1, cuedTrack: null }
+  private readonly eoModality: 'eo' | 'ir'
+  private readonly startHour: number
+
+  constructor(variant: MockVariant = {}) {
+    this.eoModality = variant.eo === 'thermal' ? 'ir' : 'eo'
+    this.startHour = variant.hour ?? MOCK_WELCOME.briefing.start_time_of_day_h
+  }
 
   get timeS(): number {
     return this.tick / TICK_HZ
@@ -703,7 +753,7 @@ export class MockWorld {
       reports.push({
         tick: this.tick,
         sensor_id: 'eo-1',
-        modality: 'eo',
+        modality: this.eoModality,
         azimuth_deg: round(wrap360(polar.bearingDeg + 0.02 * wobble(k, t)), 3),
         elevation_deg: round(polar.elevationDeg + 0.02 * wobble(k + 1, t), 3),
         range_m: null,
@@ -857,7 +907,7 @@ export class MockWorld {
       },
       {
         id: 'eo-1',
-        modality: 'eo',
+        modality: this.eoModality,
         position: EO.position,
         bearing_deg: round(p.bearing, 3),
         elevation_deg: round(p.elevation, 3),
@@ -888,7 +938,7 @@ export class MockWorld {
       t: 'frame',
       tick: this.tick,
       time_s: round(t, 2),
-      time_of_day_h: round(MOCK_WELCOME.briefing.start_time_of_day_h + t / 3600, 4),
+      time_of_day_h: round(this.startHour + t / 3600, 4),
       status: this.status,
       reports,
       tracks: this.liveTracks().map((track) => this.trackView(track, t)),
@@ -1117,12 +1167,15 @@ export interface ScriptedOptions {
   speed?: number
   /** Simulated server round trip for ping, in ms. */
   latencyMs?: number
+  /** Camera type, terrain, weather and hour. */
+  variant?: MockVariant
 }
 
 export class ScriptedTransport implements Transport {
   readonly marker = MOCK_MARKER
   private handlers: TransportHandlers | null = null
-  private world = new MockWorld()
+  private world: MockWorld
+  private readonly welcome: Welcome
   private timer: ReturnType<typeof setInterval> | null = null
   private seq = 0
   private closed = false
@@ -1132,6 +1185,8 @@ export class ScriptedTransport implements Transport {
   constructor(options: ScriptedOptions = {}) {
     this.speed = Math.max(0.1, options.speed ?? 1)
     this.latencyMs = options.latencyMs ?? 19
+    this.world = new MockWorld(options.variant)
+    this.welcome = mockWelcome(options.variant)
   }
 
   open(handlers: TransportHandlers): void {
@@ -1142,7 +1197,7 @@ export class ScriptedTransport implements Transport {
       if (this.closed) return
       handlers.onConnection({ state: 'open', closeCode: null, attempt: 0 })
       handlers.onLatency(this.latencyMs)
-      this.send(MOCK_WELCOME)
+      this.send(this.welcome)
       this.send(this.world.snapshot())
     }, 40)
   }

@@ -3,12 +3,12 @@
  * metric frame (x east, y north, z up, origin at the pack centre), heights relative to a datum,
  * meshes written Y-up for three.js with three = (x, z, -y).
  *
- * The briefing's `terrain` field is not in the generated contract yet. `terrainOf` is the one
- * tolerant accessor; when the contract carries the field it is replaced by a typed read.
+ * The descriptor is the generated contract's `Briefing['terrain']`; `terrainOf` is the one
+ * tolerant accessor (a missing field from an older server means flat ground).
  */
+import type { Briefing } from '../protocol'
 
-export type TerrainDescriptor =
-  { kind: 'flat'; elevation_m: number } | { kind: 'pack'; id: string; version: string }
+export type TerrainDescriptor = Briefing['terrain']
 
 export const FLAT_GROUND: TerrainDescriptor = { kind: 'flat', elevation_m: 0 }
 

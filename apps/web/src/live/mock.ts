@@ -511,11 +511,10 @@ export function mockWelcome(variant: MockVariant = {}): Welcome {
         : s,
     ),
   }
-  // `terrain` is not in the generated contract yet; the web app reads it tolerantly.
-  const withTerrain = variant.terrain
-    ? { ...briefing, terrain: { kind: 'pack', id: variant.terrain, version: '1.0.0' } }
-    : briefing
-  return { ...MOCK_WELCOME, briefing: withTerrain }
+  const terrain: Welcome['briefing']['terrain'] = variant.terrain
+    ? { kind: 'pack', id: variant.terrain, version: '1.0.0' }
+    : briefing.terrain
+  return { ...MOCK_WELCOME, briefing: { ...briefing, terrain } }
 }
 
 export class MockWorld {

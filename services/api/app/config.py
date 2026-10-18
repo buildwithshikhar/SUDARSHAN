@@ -33,6 +33,12 @@ class Settings(BaseSettings):
     cookie_secure: bool | None = None
     login_max_attempts: int = 5
     login_window_seconds: int = 900
+    #: Live sessions (docs/LIVE_SESSION.md): seconds a session waits for its trainee to return.
+    session_grace_s: float = 120.0
+    #: Live sessions held in memory at once; one more is refused with close code 1013.
+    max_live_sessions: int = 32
+    #: Operator `act` messages allowed per second per session (a burst of the same size is allowed).
+    live_act_rate: int = 20
 
     @field_validator("first_admin_email", "first_admin_password", mode="before")
     @classmethod

@@ -52,3 +52,12 @@ def clean_env(monkeypatch: pytest.MonkeyPatch) -> None:
         "BRAND_FILE",
     ):
         monkeypatch.delenv(name, raising=False)
+
+
+@pytest.fixture
+def live_client(tmp_path: Path) -> Iterator[TestClient]:
+    """The app with the four test users (trainee, trainee2, instructor, admin) and a short grace."""
+    from tests.live_support import live_app
+
+    with live_app(tmp_path, session_grace_s=0.4) as client:
+        yield client

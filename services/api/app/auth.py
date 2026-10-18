@@ -53,8 +53,11 @@ def _as_utc(value: datetime) -> datetime:
     return value if value.tzinfo else value.replace(tzinfo=UTC)
 
 
-def current_principal(request: Request, db: Session = Depends(get_db)) -> Principal:
-    token = request.cookies.get(COOKIE_NAME)
+def resolve_principal(db: Session, token: str | None) -> Principal:
+    """The principal behind a session cookie value; 401 for a missing, unknown or expired one.
+
+    Shared by the HTTP dependency and the WebSocket upgrade, which has no `Request`.
+    """
     unauthorised = HTTPException(status.HTTP_401_UNAUTHORIZED, "Not signed in")
     if not token:
         raise unauthorised
@@ -69,6 +72,10 @@ def current_principal(request: Request, db: Session = Depends(get_db)) -> Princi
     if user is None:
         raise unauthorised
     return Principal(user, record)
+
+
+def current_principal(request: Request, db: Session = Depends(get_db)) -> Principal:
+    return resolve_principal(db, request.cookies.get(COOKIE_NAME))
 
 
 def require_csrf(request: Request, principal: Principal = Depends(current_principal)) -> Principal:

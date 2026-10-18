@@ -1,0 +1,143 @@
+import AxeBuilder from '@axe-core/playwright'
+import { expect, type Page } from '@playwright/test'
+
+export interface Prefs {
+  language: 'en' | 'hi'
+  theme: 'dark' | 'light'
+  role?: 'trainee' | 'instructor' | 'admin'
+}
+
+const json = (body: unknown, status = 200) => ({
+  status,
+  contentType: 'application/json',
+  body: JSON.stringify(body),
+})
+
+export const SCENARIO = {
+  id: 'harrier-field-afternoon-watch',
+  version: '0.3.1-mock',
+  title: { en: 'Harrier Field: afternoon watch', hi: 'हैरियर फील्ड: दोपहर की निगरानी' },
+  summary: {
+    en: 'A small rotary contact closes on the field from the north-east while a civil survey flight and a bird flock work the outer zone.',
+    hi: 'एक छोटा रोटरी संपर्क उत्तर-पूर्व से मैदान की ओर आता है, जबकि एक नागरिक सर्वे उड़ान और पक्षियों का झुंड बाहरी क्षेत्र में हैं।',
+  },
+  duration_s: 64,
+  default_seed: 240117,
+  start_time_of_day_h: 15.6,
+  weather_condition: 'clear',
+}
+
+/** Answers the REST calls the signed-in app makes; nothing leaves the dev server. */
+export async function installApi(
+  page: Page,
+  prefs: Prefs,
+  options: { scenarios?: unknown[]; scenariosStatus?: number; logVerified?: boolean } = {},
+) {
+  const user = {
+    id: 'u-trainee',
+    email: 'trainee@demo.invalid',
+    role: prefs.role ?? 'trainee',
+    language: prefs.language,
+    theme: prefs.theme,
+  }
+  await page.route('**/api/v1/version', (route) =>
+    route.fulfill(
+      json({
+        productName: 'SUDARSHAN',
+        descriptor: 'Counter-UAS Threat Recognition Trainer',
+        version: '0.1.0',
+        gitSha: 'abc1234',
+        buildTime: '2026-10-18T00:00:00Z',
+        env: 'demo',
+      }),
+    ),
+  )
+  await page.route('**/api/v1/auth/me', (route) =>
+    route.fulfill(json({ user, csrf: 'csrf-mock', expiresAt: '2026-10-18T23:00:00+00:00' })),
+  )
+  await page.route('**/api/v1/auth/me/preferences', (route) => route.fulfill(json(user)))
+  await page.route('**/api/v1/scenarios', (route) =>
+    options.scenariosStatus && options.scenariosStatus !== 200
+      ? route.fulfill(json({ detail: 'down' }, options.scenariosStatus))
+      : route.fulfill(json(options.scenarios ?? [SCENARIO])),
+  )
+  await page.route('**/api/v1/sessions', (route) =>
+    route.fulfill(
+      json({
+        id: 'mock-session',
+        scenario_id: SCENARIO.id,
+        scenario_version: SCENARIO.version,
+        seed: SCENARIO.default_seed,
+        status: 'lobby',
+        created_at: '2026-10-18T09:00:00+00:00',
+        started_at: null,
+        ended_at: null,
+        ticks: 0,
+      }),
+    ),
+  )
+  await page.route('**/api/v1/sessions/*/log', (route) =>
+    route.fulfill(
+      json(
+        options.logVerified === false
+          ? {
+              verified: false,
+              first_bad_seq: 41,
+              event_count: 88,
+              head: 'ab'.repeat(32),
+              final_state_hash: 'cd'.repeat(32),
+              events: [],
+            }
+          : {
+              verified: true,
+              first_bad_seq: null,
+              event_count: 112,
+              head: 'c41f09a7d3e85b62f01a9c7e3d54b8a60e2f719cd8350a46b7e91f2c05d38a14',
+              final_state_hash: '7be2d05a91c4f836e0b1a7d92c5f4803ad61e97b2c08f5d34a1e6b90c7d2f853',
+              events: [],
+            },
+      ),
+    ),
+  )
+  await page.route('**/api/v1/sessions/mock-session', (route) =>
+    route.fulfill(
+      json({
+        id: 'mock-session',
+        scenario_id: SCENARIO.id,
+        scenario_version: SCENARIO.version,
+        seed: SCENARIO.default_seed,
+        status: 'ended',
+        created_at: '2026-10-18T09:00:00+00:00',
+        started_at: '2026-10-18T09:01:00+00:00',
+        ended_at: '2026-10-18T09:02:04+00:00',
+        ticks: 1280,
+      }),
+    ),
+  )
+}
+
+export const sessionUrl = (speed = 4) => `/train/session/mock-session?mock=1&speed=${speed}`
+
+/** Open the workspace, begin the session with the keyboard and wait for the first contacts. */
+export async function beginSession(page: Page, contacts = 4) {
+  await page.goto(sessionUrl())
+  const begin = page.getByRole('button', { name: /Begin session|सत्र आरंभ करें/ })
+  await expect(begin).toBeFocused()
+  await page.keyboard.press('Enter')
+  await expect(page.locator('table').first().locator('tbody tr')).toHaveCount(contacts, {
+    timeout: 30_000,
+  })
+}
+
+export async function expectClean(page: Page) {
+  await page.evaluate(() => document.fonts.ready)
+  const results = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+    .analyze()
+  expect(
+    results.violations.map(
+      (v) =>
+        `${v.id}: ${v.nodes.map((n) => `${n.target.join(' ')} ${JSON.stringify(n.any[0]?.data ?? {})}`).join(', ')}`,
+    ),
+  ).toEqual([])
+}

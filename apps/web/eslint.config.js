@@ -21,4 +21,9 @@ export default tseslint.config(
     files: ['src/lib/**/*.{ts,tsx}', 'src/live/**/*.{ts,tsx}'],
     rules: { 'react-refresh/only-export-components': 'off' },
   },
+  {
+    // Tests assert on values they have just built; `!` there is a shorthand, not a hidden risk.
+    files: ['tests/**/*.{ts,tsx}', 'e2e/**/*.ts'],
+    rules: { '@typescript-eslint/no-non-null-assertion': 'off' },
+  },
 )

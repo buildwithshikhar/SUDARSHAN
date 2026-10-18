@@ -61,6 +61,15 @@ grep -qi 'set-cookie: session=.*Secure' .deploy/headers || die "session cookie i
 [ "$(curl -sS -o /dev/null -w '%{http_code}' -b "$jar" -X POST "$base/api/v1/auth/logout")" = "403" ] || die "logout without CSRF token was accepted"
 rm -f .deploy/headers
 
+say "terrain packs are served, and the CSP lets the 3D scene read its textures"
+for pack in heron-ridge osprey-town; do
+  [ "$(curl -sS -o /dev/null -w '%{http_code}' -b "$jar" "$base/api/v1/terrain/$pack/manifest.json")" = "200" ] || die "terrain pack $pack is not served"
+done
+[ "$(curl -sS -o /dev/null -w '%{http_code}' "$base/api/v1/terrain/heron-ridge/manifest.json")" = "401" ] || die "terrain files are served without signing in"
+csp="$(curl -sSI "$base/" | grep -i '^content-security-policy:')"
+echo "$csp" | grep -q "connect-src 'self' blob:" || die "CSP connect-src does not allow blob: (glTF textures)"
+echo "$csp" | grep -q "img-src 'self' data: blob:" || die "CSP img-src does not allow blob:"
+
 measure() {
   local label="$1" ids
   ids="$(compose ps -q)"

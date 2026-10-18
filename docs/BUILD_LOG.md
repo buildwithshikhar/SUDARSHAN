@@ -4,10 +4,10 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 
 ## Current position
 
-- **Phase:** wave 6 complete (scoring and debrief); every acceptance criterion has a passing test except the post-deploy check (map under the wave 6 entry). CI for the wave 3, 4a, 4b, 5 and 6 commits is **pending owner confirmation** (CI cannot be read from this machine), so wave 3 stays In progress and waves 4a, 4b, 5 and 6 are recorded as Done with CI pending.
-- **Current wave:** 7 · 3D realism + terrain packs → [waves/wave-07-3d-realism-terrain.md](waves/wave-07-3d-realism-terrain.md) (not started)
-- **Next step:** start wave 7 at the entry point under the wave 6 entry (it needs the SRTM and OSM raw downloads in `data/raw/`). Owner still to confirm CI for the wave 3, 4a, 4b, 5 and 6 commits, approve Q-23, redeploy, run the wave 5 and 6 post-deploy checks, and record the smoke date for the live link.
-- **Main is:** green locally (lint, typecheck, unit, e2e, visual, `make prod-check`); CI result for the latest commits is owner-confirmed only (see the wave entries).
+- **Phase:** wave 7 built (3D realism and terrain packs); every acceptance criterion has a passing test except the floor-laptop benchmark (the owner runs `/bench`; harness and protocol in [PERFORMANCE.md](PERFORMANCE.md)), CI confirmation and the post-deploy check (map under the wave 7 entry). CI for the wave 3, 4a, 4b, 5, 6 and 7 commits is **pending owner confirmation** (CI cannot be read from this machine), so wave 3 stays In progress and waves 4a to 6 are recorded as Done with CI pending; wave 7 stays In progress until the gate is recorded.
+- **Current wave:** 7 · 3D realism + terrain packs → [waves/wave-07-3d-realism-terrain.md](waves/wave-07-3d-realism-terrain.md) (built; gate pending)
+- **Next step:** the owner runs `/bench` on the floor laptop and records the result in PERFORMANCE.md (if the gate fails, stop: the fix continues on Opus). Then wave 8 at the entry point under the wave 7 entry. Owner also to confirm CI for the wave 3 to 7 commits, answer Q-23 (consoles), Q-25 to Q-27, redeploy, run the wave 5, 6 and 7 post-deploy checks, and record the smoke date.
+- **Main is:** green locally (lint, typecheck, unit, real-stack e2e, visual, `make prod-check`); one pre-existing mock-e2e test fails (see the wave 7 entry); CI result for the latest commits is owner-confirmed only.
 - **Deployed build:** live at https://sudarshan.centralindia.cloudapp.azure.com, running commit b722313 (wave 2 build; owner-reported, 2026-10-18).
 
 ## Planning updates
@@ -31,7 +31,7 @@ Status values: Not started · In progress · Blocked · Done. A wave is Done onl
 | 4b | [Tracking, fusion + AI assist](waves/wave-04b-tracking-ai-assist.md) | 4a | Opus | Keep live build green | Cut | Done (CI pending) |
 | 5 | [Live-session vertical slice](waves/wave-05-live-session-slice.md) | 2, 4b | Sonnet | Redeploy: playable slice | Cut | Done (CI pending) |
 | 6 | [Scoring + debrief](waves/wave-06-scoring-debrief.md) | 5 | Sonnet | Redeploy | Cut | Done (CI pending) |
-| 7 | [3D realism + terrain packs](waves/wave-07-3d-realism-terrain.md) | 5 | Sonnet (Opus if gate fails) | Keep live build green | Cut | Not started |
+| 7 | [3D realism + terrain packs](waves/wave-07-3d-realism-terrain.md) | 5 | Sonnet (Opus if gate fails) | Keep live build green | Cut | In progress (built; floor-laptop gate and CI pending) |
 | 8 | [Threat breadth](waves/wave-08-threat-breadth.md) | 4a, 7 | Sonnet | Keep live build green | Cut | Not started |
 | 9a | [Scenario engine](waves/wave-09a-scenario-engine.md) | 6, 8 | Opus | Redeploy: generated scenarios | Cut | Not started |
 | 9b | [Site builder](waves/wave-09b-site-builder.md) | 9a, 7 | Sonnet | Redeploy | Cut | Not started |
@@ -626,3 +626,65 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 **Next wave entry point**
 - Wave 7 (3D realism and terrain packs): read docs/waves/wave-07-3d-realism-terrain.md. First step: STEP 1, the terrain pipeline in `tools/terrain/` (an SRTM tile and an OSM extract that you download into `data/raw/`, which git ignores, baked to a heightmap mesh, building glTF and a pack manifest with attribution), then LOS occlusion in the sim core from the baked heightmap. This step needs the raw downloads and Q-04 (the floor laptop) for the benchmark gate: if the raw data is not in `data/raw/`, stop and ask for it. Wave 7 also needs your confirmation on Q-23 (consoles) before wave 8 starts.
+
+### Wave 7 · 3D realism + terrain packs
+
+- Status: In progress. Everything the build can prove has a passing test (map below). Outstanding: the owner's floor-laptop run of `/bench` (the gate), CI confirmation, the redeploy and the post-deploy check.
+- Started from commit: 4dd9610
+- Goal: a convincing offline 3D scene on real-shaped generic terrain that meets the benchmark gate on the floor laptop.
+- Done by: main session (flaky tests, format, line of sight, contract, endpoint, scenario, bench, CI, docs) and two Sonnet subagents in separate worktrees (A: bake pipeline and packs; B: scene look, loader, quality tiers). B hit a session rate limit once and was resumed from its saved work.
+
+**Done**
+- 8fde989 test(api): the two load-sensitive tests are deterministic. The load harness has a frame-count mode (`--frames`) and its test asserts structure, not speed (timing arithmetic is checked on synthetic samples); Hypothesis has no per-example deadline. Each ran 5 times quiet and 5 times under 8 CPU burners, all green.
+- bf59307 docs: [TERRAIN_PACKS.md](TERRAIN_PACKS.md), the binding pack format
+- 232734b feat(sim): `sim/terrain.py` (ground, building raster, `blocked`), `scenario.v1` terrain union, radar and EO/IR occlusion after the draw
+- 43055e1 feat(api): `GET /api/v1/terrain/{pack}/{file}`, briefing `terrain`
+- Step 1, subagent A, merged at fb350d6: `tools/terrain` (own uv project, `make terrain`, `python -m terrain bake|scan|verify`), packs `heron-ridge` (rural, 1.9 MB, 41 buildings, 704 trees, 141 m relief) and `osprey-town` (urban, 2.6 MB, 1,125 buildings, 45 trees), reproducible byte for byte, attribution shipped
+- 863b2ab feat(packs): datum is the lowest post (heights never negative), packs re-baked; scenario "Heron Ridge: low approach"; CI `terrain` job
+- Step 2, subagent B, merged at 51c2d0c: terrain loader and `heightAt`, EO scene (terrain, buildings, trees with wind sway, sun, moon and stars, ACES, height fog, rain), thermal white-hot and black-hot and night-vision passes, reticle readouts, quality tiers with an fps probe, EN and HI strings
+- 48be352 feat(web): `/bench` harness and JS budget script (`npm run bundle:check`, in CI); docs (ADR-021, traceability R9, R11, R14, performance protocol, Q-25 to Q-27)
+- 47d0bac feat(api): `sim-check` loads the terrain pack of every pack scenario (so the production image proves it ships them)
+- Fix found only on the real stack: the nginx CSP (`connect-src 'self'`) blocked the glTF loader's `blob:` texture fetch, so the terrain drew untextured; now `img-src 'self' data: blob:; connect-src 'self' blob:`, covered by `e2e/terrain.spec.ts` and by `make prod-check` (which also checks the pack files are served and need sign-in)
+
+**Acceptance map**
+| Criterion | Proof |
+|---|---|
+| Packs reproducible from the bake scripts; raw downloads outside git; attribution ships | `tools/terrain/tests` (69; two bakes byte-identical, hashes verified), `python -m terrain verify`, CI `terrain` job; `data/raw/` is git-ignored; `ATTRIBUTION.md` in each pack |
+| LOS: a target behind terrain or a building is not detected | `tests/test_terrain_los.py` (29: ridge, building, roof, shipped packs, sensors, random streams unchanged), `tests/test_heron_ridge_scenario.py` (the village delays the hostile track from 31 s to 58 s) |
+| JS bundle at most 1.5 MB gzipped (CI) | `npm run bundle:check` in CI: 319 kB total, 144 kB first load |
+| First load at most 8 s from the local server | Not measured separately; the first-load JS is 144 kB and the scene chunk loads lazily with the session. To record with the floor laptop run. |
+| Benchmark gate on the floor laptop | **Pending owner.** Harness: `/bench` (`tests/live/bench.test.ts`, `e2e/mock/bench.spec.ts` against the real baked pack). No figure is claimed. |
+| EN and HI for every new string | `tests/i18n.test.ts` parity, `tests/live/i18nCoverage.test.ts`; HI review sheet regenerated (Q-15) |
+| New screens: states, keyboard, axe | `/bench` (idle, loading, running, done, error; keyboard; axe en and hi) in `e2e/mock/bench.spec.ts`; EO controls in `e2e/mock/eo3d.spec.ts` |
+| Tests for every feature; none weakened | API 2,535 passed (99.09% coverage); web unit 443 (324 before); tools 69; real-stack e2e 51 (50 before); mock e2e 77 of 78 (see below); visual 4. Assertions edited, none loosened: the briefing key set and scenario list gained `terrain` and the new scenario, one workspace test title was reworded by B with its assertions unchanged |
+| Production images build; stack passes smoke | `make prod-check`: see the deploy check below; `make smoke` on the demo stack (port 8081): PASS |
+| CI green | lint, typecheck, unit, real-stack e2e, visual pass locally; gitleaks and the Linux `docker build` run only in CI: **pending owner confirmation** |
+| Deployed build still works after the redeploy | **Pending owner** (steps below) |
+
+**Decisions**
+- ADR-021 (datum at the lowest post, flat or pack terrain, line of sight after the draw, the serving contract and the gate definition).
+- The pack scenario authors `z` as height above the datum, so "ground plus 12 m" is written as the sum; the contract does not know ground height (a later wave may add an AGL helper).
+- Tests that exercise terrain build tiny synthetic packs, not the 4.5 MB shipped ones; two tests also load the shipped packs.
+- The new scenario is checked for what it claims (the pack is on disk, sensors and flights sit above the ground, terrain delays the hostile track but it is tracked at about 1.2 km, outside twice the inner zone). It is **not** claimed "verified solvable" because no oracle-defender run was done; that belongs to wave 9a.
+- Real coordinates appear only in `tools/terrain/areas.json` (Q-27); no pack file or screen names a place. The osprey-town centre sits 1.8 km east of the town centre because the SRTM tile starts at 74.0 E.
+
+**Tests**
+- api: 2,535 passed, coverage 99.09% · tools/terrain: 69 · web unit: 443 passed · real-stack e2e: 51 passed · mock e2e: 77 passed, 1 failed (`report.spec.ts` "Escape cancels without filing, and Skip details files a bare report": the Skip details button detaches and re-attaches until the 90 s timeout; it fails on 4dd9610, before this wave, as well as on every later commit, so it is not caused by wave 7, and it is not in CI, which runs the real stack only; cause not found, to fix at the next touch of the report dialog) · visual: 4 passed.
+
+**Deploy check**
+- Production images built: yes · `make prod-check` (production mode, HTTPS through Caddy; now also checks both packs are served to a signed-in user and refused to a signed-out one, the CSP allows `blob:`, and `sim-check` loads the pack of every pack scenario): see the result line in the final report · `make smoke` on the demo stack (port 8081): pass
+- Commit to deploy: the last commit on `main` after this entry (the hash is in the final report). This build changes the web app, the API image (`sim/terrain.py`, `packs/terrain/` about 4.5 MB, `packs/scenarios/heron-ridge-low-approach`), and the nginx CSP (rebuild the web image). No migration.
+- Post-deploy check (owner): (1) sign in as a trainee, open Drills, create a "Heron Ridge: low approach" session, begin it and confirm the status reads Connected, the EO view shows textured farmland with "Terrain: Heron Ridge · reference data", and tracks appear (the quad should appear late, behind the village); (2) open the browser console and confirm no Content Security Policy errors; (3) `make smoke URL=https://sudarshan.centralindia.cloudapp.azure.com` and `make check-deploy URL=...`; (4) record the date under **Deployed build**. The benchmark is separate: `/bench` exists only when the API reports demo mode, so the live production host does not serve it. On the floor laptop run `make demo` (or serve it from the instructor laptop on the LAN), sign in as a demo account, open `/bench`, and record the JSON in PERFORMANCE.md.
+
+**Open issues**
+- The benchmark gate has not been run on the floor laptop (Q-04). If it fails, stop and say so; the fix continues on Opus.
+- CI result for the wave 3, 4a, 4b, 5, 6 and 7 commits: owner to confirm.
+- Hindi strings (`/bench`, EO mode and graphics controls) are unreviewed drafts (Q-15).
+- Q-25 (RF is not occluded), Q-26 (thin building coverage, default heights), Q-27 (coordinates in git), Q-06 (ODbL position recorded, owner to confirm), Q-23 still open.
+- The thermal look has been judged on software rendering only; the white-hot ground can saturate under automatic gain on a flat scene. Revisit with real-GPU screenshots.
+- The mock EO camera keeps its flat-ground position when a terrain pack is named in the dev-server mock, so mock screenshots of a pack put the camera under the ground; real sessions place sensors from the scenario.
+- One pre-existing mock-e2e failure (above).
+
+**Next wave entry point**
+- First, the owner's benchmark and the Q-23 decision. Then wave 8 (threat breadth): read docs/waves/wave-08-threat-breadth.md. First step: STEP 1, the catalogue in `packs/threats/` (YAML per class with envelope and signature parameters, each with a register source ID; generic names only; clutter types). Wave 8 must re-run `/bench` with the real 24-drone swarm and 30 birds in place of the placeholder markers, and every class must instantiate in both terrain packs (`packs/terrain/heron-ridge` and `osprey-town`). If Q-23 is approved, the RF waterfall and acoustic spectrogram consoles are its new first step.
+

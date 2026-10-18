@@ -334,6 +334,12 @@ class LiveSession:
                 late = now - due
                 if late > LAG_LIMIT_S:
                     manager.lag_drops += 1
+                    log.warning(
+                        "session %s dropped %.2f s of lag at tick %d",
+                        self.info.id,
+                        late,
+                        self.world.tick,
+                    )
                     self._anchor = (now, self.world.tick)
                     late = 0.0
                 manager.jitter_ms.append(late * 1000.0)

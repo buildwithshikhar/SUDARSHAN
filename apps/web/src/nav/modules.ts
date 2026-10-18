@@ -5,9 +5,21 @@
  */
 import type { Role } from '../lib/auth'
 
+/** A screen inside a module, for modules that have more than one (docs/07-ui-map.md). */
+export interface NavScreen {
+  slug: string
+  /** Route pattern. */
+  path: string
+  /** Roles that may open it. */
+  roles: Role[]
+}
+
 export interface NavModule {
   slug: string
   wave: string
+  /** Where the sidebar link goes, when the module is built and has its own routes. */
+  home?: string
+  screens?: NavScreen[]
 }
 
 export interface NavGroup {
@@ -21,7 +33,15 @@ export const NAV: Record<Role, NavGroup[]> = {
       id: 'train',
       modules: [
         { slug: 'today', wave: '11a' },
-        { slug: 'drills', wave: '5' },
+        {
+          slug: 'drills',
+          wave: '5',
+          home: '/train/lobby',
+          screens: [
+            { slug: 'session-lobby', path: '/train/lobby', roles: ['trainee', 'instructor'] },
+            { slug: 'live-session', path: '/train/session/:id', roles: ['trainee', 'instructor'] },
+          ],
+        },
         { slug: 'recognition-library', wave: '11b' },
       ],
     },
@@ -93,8 +113,8 @@ export const NAV: Record<Role, NavGroup[]> = {
   ],
 }
 
-/** Profile and Help are shown to every role in a shared Account group; profile is built now. */
-export const ACCOUNT_BUILT = new Set(['profile'])
+/** Modules with a real screen behind them; the rest show an empty state naming their wave. */
+export const ACCOUNT_BUILT = new Set(['profile', 'drills'])
 
 /** The counted sidebar groups: trainee Account (Profile, Help) is shared, so it is listed apart. */
 export function sidebarGroups(role: Role): NavGroup[] {
@@ -115,5 +135,7 @@ export function findModule(
 }
 
 export function modulePath(role: Role, groupId: string, slug: string): string {
+  const home = findModule(role, slug)?.module.home
+  if (home) return home
   return groupId === 'account' ? `/account/${slug}` : `/${role}/${slug}`
 }

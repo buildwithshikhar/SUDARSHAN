@@ -581,4 +581,5 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - New truth events and fields instead of re-simulating at scoring time: `ledger.first_report`, `target` on cue and verdict events, `truth` on a filed report. They are scoring-only and stripped for a trainee (`sim.audience`).
 - A clutter or civil contact the operator never acted on is left out of the mean (`worked: false`): leaving it alone is correct. A hostile contact never worked scores 0.
 - The report is graded separately and combined by the pack's `weights.report`; the score is stored when the session ends.
+- Q-23 resolved on paper only: proposed that wave 8 (threat breadth) owns the RF waterfall and acoustic spectrogram consoles as a new first step (reasons in OPEN_QUESTIONS Q-23). Nothing was built, and no wave file was changed; the owner approves the move.
 

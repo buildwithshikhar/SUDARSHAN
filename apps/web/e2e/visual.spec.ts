@@ -33,3 +33,17 @@ test('shell @visual', async ({ page }) => {
   })
   await choose(page, 'en', 'dark', true)
 })
+
+test('session lobby @visual', async ({ page }) => {
+  test.skip(!PASSWORD, 'E2E_PASSWORD not set; run through make visual')
+  await signIn(page, 'trainee')
+  await page.goto('/train/lobby')
+  await expect(page.getByRole('heading', { name: 'Session lobby' })).toBeVisible()
+  await expect(page.getByText('training-baseline 1.0.0').first()).toBeVisible()
+  await page.evaluate(() => document.fonts.ready)
+  const dynamic = [page.getByRole('contentinfo')]
+  await expect(page).toHaveScreenshot('session-lobby-en-dark.png', { ...options, mask: dynamic })
+  await choose(page, 'hi', 'light', true)
+  await expect(page).toHaveScreenshot('session-lobby-hi-light.png', { ...options, mask: dynamic })
+  await choose(page, 'en', 'dark', true)
+})

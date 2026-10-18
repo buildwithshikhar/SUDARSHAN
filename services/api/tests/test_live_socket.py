@@ -472,3 +472,20 @@ def stored_record(client: TestClient, session_id: str) -> dict[str, Any]:
         assert row is not None and row.record is not None
         record: dict[str, Any] = json.loads(row.record)
         return record
+
+
+def test_the_radar_only_kestrel_scenario_also_plays_to_the_end(live_client: TestClient) -> None:
+    """A scenario without an EO sensor is still playable; the briefing simply lists no camera."""
+    from tests.live_support import fast
+
+    csrf = login(live_client)
+    row = create_session(live_client, csrf, scenario="kestrel-dawn-approach")
+    fast(live_client, 400.0)
+    with connect(live_client, row["id"]) as sock:
+        welcome = sock.until("welcome")
+        assert [s["modality"] for s in welcome["briefing"]["sensors"]] == ["radar"]
+        sock.send({"t": "start"})
+        sock.until("ended", limit=20000)
+    log = live_client.get(f"/api/v1/sessions/{row['id']}/log").json()
+    assert log["verified"] is True
+    assert log["events"][-1]["type"] == "session.end"

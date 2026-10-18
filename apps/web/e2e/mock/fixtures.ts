@@ -1,6 +1,8 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, type Page } from '@playwright/test'
 
+import { MOCK_SCORE, MOCK_SCORE_EMPTY } from '../../src/live/mockScore'
+
 export interface Prefs {
   language: 'en' | 'hi'
   theme: 'dark' | 'light'
@@ -115,6 +117,37 @@ export async function installApi(
     ),
   )
 }
+
+export type ScoreReply = 'populated' | 'empty' | 'not-ended' | 'not-found' | 'network' | 'slow'
+
+/**
+ * Serves `GET /api/v1/sessions/{id}/score` from the scripted record. Load the page without
+ * `?mock=1` so the request goes through the route; 'slow' holds the reply until `release()`.
+ */
+export async function installScore(page: Page, reply: ScoreReply = 'populated') {
+  let release: () => void = () => undefined
+  const gate = new Promise<void>((resolve) => (release = resolve))
+  await page.route('**/api/v1/sessions/*/score', async (route) => {
+    switch (reply) {
+      case 'not-ended':
+        return route.fulfill(json({ detail: 'the session has not ended' }, 409))
+      case 'not-found':
+        return route.fulfill(json({ detail: 'session not found' }, 404))
+      case 'network':
+        return route.abort('failed')
+      case 'empty':
+        return route.fulfill(json(MOCK_SCORE_EMPTY))
+      case 'slow':
+        await gate
+        return route.fulfill(json(MOCK_SCORE))
+      default:
+        return route.fulfill(json(MOCK_SCORE))
+    }
+  })
+  return { release }
+}
+
+export const debriefUrl = '/train/session/mock-session/debrief'
 
 export const sessionUrl = (speed = 4) => `/train/session/mock-session?mock=1&speed=${speed}`
 

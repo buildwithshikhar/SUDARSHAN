@@ -206,6 +206,28 @@ describe('Dialog', () => {
   })
 })
 
+describe('Dialog reopened before its close event arrives', () => {
+  it('is not closed again by the late event for the close before it', () => {
+    const onClose = vi.fn()
+    const props = { title: 'Confirm', onClose, children: 'Body' }
+    const { rerender } = render(<Dialog open {...props} />)
+    const dialog = screen.getByRole('dialog', { name: 'Confirm', hidden: true })
+    // the browser fires `close` after the task that called close(); hold that event back
+    const fire = dialog.dispatchEvent.bind(dialog)
+    const held: Event[] = []
+    dialog.dispatchEvent = (event: Event) =>
+      event.type === 'close' ? !held.push(event) : fire(event)
+    rerender(<Dialog open={false} {...props} />)
+    rerender(<Dialog open {...props} />)
+    expect(held).toHaveLength(1)
+    fire(held[0] as Event)
+    expect(onClose).not.toHaveBeenCalled()
+    // a close the browser makes on its own (Escape) still reaches the parent
+    fire(new Event('close'))
+    expect(onClose).toHaveBeenCalledTimes(1)
+  })
+})
+
 describe('Tooltip', () => {
   it('describes its trigger on focus and hides on blur and Escape', async () => {
     render(

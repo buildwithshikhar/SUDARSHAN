@@ -1,0 +1,39 @@
+{
+  "format": "terrain-pack.v1",
+  "id": "fixture-ridge",
+  "version": "1.0.0",
+  "name": "Fixture Ridge",
+  "kind": "rural",
+  "label": "reference data · test fixture",
+  "frame": {
+    "half_extent_m": 400,
+    "datum_m": 100
+  },
+  "heightmap": {
+    "file": "heights.i16",
+    "size": 9,
+    "cell_m": 100,
+    "scale_m": 0.1,
+    "min_m": -3.9,
+    "max_m": 11.7
+  },
+  "buildings": {
+    "file": "buildings.json",
+    "count": 3
+  },
+  "vegetation": {
+    "file": "vegetation.json",
+    "count": 60
+  },
+  "meshes": {
+    "terrain": "terrain.glb",
+    "buildings": "buildings.glb"
+  },
+  "files": {
+    "heights.i16": "c84ba9f5b825f766d95d1c624128c31ae17e12a94de695b819a9c9dacbe78850",
+    "buildings.json": "2b39e571289793fbb40b3596378ead1960b55726296cd62295b1d650ec0da8c9",
+    "vegetation.json": "0083d00154bbb3a2420625caa3f2b00f7ccc515decb7aa74004a1d6e2061f81a",
+    "terrain.glb": "ad34f5386d399b665d25dd0e65ee08ca951db704539e1c249b298dccc165cb9b",
+    "buildings.glb": "db4dcb3362e13a8212750ed3db9ee415bfeef4f7f8800a2132b0a03721d4c5ea"
+  }
+}

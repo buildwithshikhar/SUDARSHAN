@@ -147,7 +147,9 @@ def _score_threat(
 
     fail = _hard_fail(threat, facts)
     if fail is not None:
-        findings.insert(0, fail.model_copy(update={"cost": min(1.0, max(0.0, total))}))
+        # validated again so the cost is rounded like every other mark (model_copy skips validation)
+        cost = min(1.0, max(0.0, total))
+        findings.insert(0, Finding.model_validate({**fail.model_dump(), "cost": cost}))
         score = 0.0
     else:
         score = max(0.0, total - penalty)

@@ -4,9 +4,9 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 
 ## Current position
 
-- **Phase:** wave 5 complete (live-session vertical slice); every acceptance criterion has a passing test or measurement except the post-deploy check (map under the wave 5 entry). CI for the wave 3, 4a, 4b and 5 commits is **pending owner confirmation** (CI cannot be read from this machine), so wave 3 stays In progress and waves 4a, 4b and 5 are recorded as Done with CI pending.
-- **Current wave:** 6 · Scoring + debrief → [waves/wave-06-scoring-debrief.md](waves/wave-06-scoring-debrief.md) (in progress; see the wave 6 entry)
-- **Next step:** start wave 6 at the entry point under the wave 5 entry. Owner still to confirm CI for the wave 3, 4a, 4b and 5 commits, redeploy, run the wave 5 post-deploy check, and record the smoke date for the live link.
+- **Phase:** wave 6 complete (scoring and debrief); every acceptance criterion has a passing test except the post-deploy check (map under the wave 6 entry). CI for the wave 3, 4a, 4b, 5 and 6 commits is **pending owner confirmation** (CI cannot be read from this machine), so wave 3 stays In progress and waves 4a, 4b, 5 and 6 are recorded as Done with CI pending.
+- **Current wave:** 7 · 3D realism + terrain packs → [waves/wave-07-3d-realism-terrain.md](waves/wave-07-3d-realism-terrain.md) (not started)
+- **Next step:** start wave 7 at the entry point under the wave 6 entry (it needs the SRTM and OSM raw downloads in `data/raw/`). Owner still to confirm CI for the wave 3, 4a, 4b, 5 and 6 commits, approve Q-23, redeploy, run the wave 5 and 6 post-deploy checks, and record the smoke date for the live link.
 - **Main is:** green locally (lint, typecheck, unit, e2e, visual, `make prod-check`); CI result for the latest commits is owner-confirmed only (see the wave entries).
 - **Deployed build:** live at https://sudarshan.centralindia.cloudapp.azure.com, running commit b722313 (wave 2 build; owner-reported, 2026-10-18).
 
@@ -30,7 +30,7 @@ Status values: Not started · In progress · Blocked · Done. A wave is Done onl
 | 4a | [Sensor models](waves/wave-04a-sensor-models.md) | 3 | Opus | Keep live build green | Cut | Done (CI pending) |
 | 4b | [Tracking, fusion + AI assist](waves/wave-04b-tracking-ai-assist.md) | 4a | Opus | Keep live build green | Cut | Done (CI pending) |
 | 5 | [Live-session vertical slice](waves/wave-05-live-session-slice.md) | 2, 4b | Sonnet | Redeploy: playable slice | Cut | Done (CI pending) |
-| 6 | [Scoring + debrief](waves/wave-06-scoring-debrief.md) | 5 | Sonnet | Redeploy | Cut | In progress |
+| 6 | [Scoring + debrief](waves/wave-06-scoring-debrief.md) | 5 | Sonnet | Redeploy | Cut | Done (CI pending) |
 | 7 | [3D realism + terrain packs](waves/wave-07-3d-realism-terrain.md) | 5 | Sonnet (Opus if gate fails) | Keep live build green | Cut | Not started |
 | 8 | [Threat breadth](waves/wave-08-threat-breadth.md) | 4a, 7 | Sonnet | Keep live build green | Cut | Not started |
 | 9a | [Scenario engine](waves/wave-09a-scenario-engine.md) | 6, 8 | Opus | Redeploy: generated scenarios | Cut | Not started |
@@ -569,17 +569,60 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 ### Wave 6 · Scoring + debrief
 
-- Status: In progress
+- Status: Done, CI pending. Every acceptance criterion has a passing test (map below). Outstanding: the owner's confirmation of the CI run (gitleaks and the Linux `docker build` run only in CI), the redeploy, and the post-deploy check.
 - Started from commit: e881ca0
 - Goal: explainable decision-tree scoring for every threat and a debrief screen that says why.
+- Done by: main session (evaluator, sim truth events, contracts, endpoint, integration, real-stack e2e) and two Sonnet subagents in separate worktrees (A: golden fixtures and property tests; B: debrief screen, report form, EN/HI templates). Both hit a session rate limit once and were resumed from their saved work.
 
 **Done**
 - 9bf2ad5 feat(api): evaluator `app/scoring/`, `score-result.v1`, pack `scoring` section, `ledger.first_report`, report truth, migration 0004, `GET /sessions/{id}/score`, `docs/SCORING.md`
+- d23bc70 docs: Q-23 proposal (wave 8 owns the RF and acoustic consoles; nothing built)
+- fa8d226 test(api): score endpoint, storage, re-scoring, ownership, migration 0004
+- Step 2, subagent A, merged at 6692d2d: 37 hand-derived golden fixtures, properties, d′, report, track-error, unit and edge tests; two evaluator fixes (a rounding gap in a hard-fail cost; floating-point noise in report quality)
+- 7143341 fix(scoring): from A's review: a breach earns nothing in Respond (`respond.breach`), a blocked attempt is costed once in contact-score units, lesson ties sort on rounded costs; seven goldens re-derived by hand
+- Step 3, subagent B, merged at fa60f63: Debrief screen, contact-report form, `renderReason` with EN and HI templates for all 71 keys, mock score and Playwright mock specs
+- fa60f63 `score-result.v1` gains `scenario_title` and `report_weight` (B's request; no second request in the debrief); `tests/test_scoring_keys.py`
+- 75b40f8 real-stack debrief e2e, traceability proofs for R5, R6, R7, R17, changelog, README
+
+**Acceptance map**
+| Criterion | Proof |
+|---|---|
+| Golden fixtures (at least 10) cover each node outcome and each hard-fail case and give exactly the expected scores and explanations | `tests/test_scoring_golden.py`: 37 hand-derived cases in `tests/golden/scoring/` (expected values derived independently with exact fractions, then compared with the evaluator) |
+| Rushing into an ROE breach never scores higher than a compliant slower response | `tests/test_scoring_properties.py::test_a_rushed_roe_breach_never_beats_a_slower_compliant_response` (hypothesis) and companions |
+| d′ matches reference values, with the log-linear correction | `tests/test_scoring_sdt.py` (24) |
+| A report with correct class, position in tolerance, count off by one, heading 40° out gets the documented marks; re-scoring is identical | `tests/test_scoring_report.py` (61), golden case 37 (the worked example in SCORING.md) |
+| An unfixed seeded track swap lowers the affected threat's score; fixing it does not | `tests/test_scoring_track_errors.py` (real simulation, Kestrel seed 195, relabel at tick 640) |
+| Debrief is axe-clean, bilingual, shows rule-pack version and seed | `e2e/debrief.spec.ts` (real stack: EN dark and HI light, axe, `training-baseline 1.0.0`, seed), `e2e/mock/debrief.spec.ts`, `e2e/mock/a11y.spec.ts` |
+| Traceability proof cells for R5, R6, R7, R17 | `docs/TRACEABILITY.md` |
+| Every new string in EN and HI; every new screen has the four states; keyboard; axe | `tests/test_scoring_keys.py`, `tests/live/scoringKeys.test.ts`, `tests/live/debrief.test.tsx` (loading, empty, 409, 404, network), `tests/live/reportForm.test.tsx`, `e2e/mock/report.spec.ts` |
+| Production images build; production stack passes smoke | `make prod-check`: PASS; `make smoke` on the demo stack: PASS |
+| CI green | lint, typecheck, unit, e2e, visual, mock e2e pass locally; gitleaks and the Linux `docker build` run only in CI: **pending owner confirmation** |
+| Deployed build still works after the redeploy | **Pending owner** (steps below) |
 
 **Decisions**
-- The rule pack gained an optional `scoring` section and `thresholds.respond_within_s` with defaults, written out in the baseline pack, which stays at 1.0.0: no session has been stored against it in the field (wave 5 is not deployed), and bumping it would churn about twenty existing assertions. From the first pilot session a pack content change bumps its version.
+- The rule pack gained an optional `scoring` section and `thresholds.respond_within_s` with defaults, written out in the baseline pack, which stays at 1.0.0: no session has been stored against it in the field (waves 5 and 6 are not deployed) and a bump would churn about twenty existing assertions. From the first pilot session a pack content change bumps its version.
 - New truth events and fields instead of re-simulating at scoring time: `ledger.first_report`, `target` on cue and verdict events, `truth` on a filed report. They are scoring-only and stripped for a trainee (`sim.audience`).
-- A clutter or civil contact the operator never acted on is left out of the mean (`worked: false`): leaving it alone is correct. A hostile contact never worked scores 0.
-- The report is graded separately and combined by the pack's `weights.report`; the score is stored when the session ends.
-- Q-23 resolved on paper only: proposed that wave 8 (threat breadth) owns the RF waterfall and acoustic spectrogram consoles as a new first step (reasons in OPEN_QUESTIONS Q-23). Nothing was built, and no wave file was changed; the owner approves the move.
+- A clutter or civil contact the operator never acted on is left out of the mean (`worked: false`); a hostile contact never worked scores 0. A breach scores 0 and its Respond node earns nothing. A blocked attempt is not a breach.
+- The report is graded separately and combined by the pack's `weights.report`. The score is computed and stored when the session ends (0.2 ms for a full session) and recorded with the pack and scenario versions.
+- Q-23 resolved on paper only: wave 8 (threat breadth) is proposed as the owner of the RF waterfall and acoustic spectrogram consoles, as a new first step (reasons in OPEN_QUESTIONS Q-23). No wave file was changed and nothing was built; the owner approves the move.
+- Existing assertions edited, none loosened: the migration 0003 test now upgrades to 0003 rather than head; the socket payload tests gained report cases; B replaced the "scoring is not part of this build" assertion and fixed two waits on a stale transport.
 
+**Tests**
+- api: 2,485 passed, coverage 99.08% (about 300 new) · web unit: 324 passed (281 before) · e2e (real stack): 50 (48 before plus 2 debrief) · mock e2e: 67 · visual: 4 · `make lint typecheck test` pass
+- Two existing tests are timing-sensitive under heavy parallel load and failed once in subagent A's loaded run, passing alone and in the quiet full run: `test_eventlog.py::test_property_round_trip_and_verify` (hypothesis deadline) and `test_load_smoke.py::test_the_load_harness_runs_and_reports`.
+
+**Deploy check**
+- Production images built: yes · `make prod-check` (production mode, HTTPS through Caddy, `sim-check` in the API container): pass · `make smoke` on the demo stack (port 8081): pass
+- Commit to deploy: the last commit on `main` after this entry (the hash is in the final report; record it under **Deployed build** when you redeploy). The build adds migration 0004, which the container entrypoint applies at start, and the Debrief screen.
+- Post-deploy check (owner): create a trainee on the live host (`docker compose ... exec api python -m app.cli create-user --email <address> --role trainee`, password from the prompt or `NEW_USER_PASSWORD`); sign in, play a Harrier Field session for a minute, file a contact report from the Respond step, end the session, open the debrief and check it shows the rule pack `training-baseline 1.0.0`, the seed and the first three lessons; then `make smoke URL=https://sudarshan.centralindia.cloudapp.azure.com` and `make check-deploy URL=...`, and record the date under **Deployed build**.
+
+**Open issues**
+- CI result for the wave 3, 4a, 4b, 5 and 6 commits: owner to confirm.
+- Hindi strings (71 scoring messages and the debrief screen) are unreviewed drafts (Q-15); the review sheet was regenerated.
+- Q-23: owner to approve moving the RF and acoustic consoles into wave 8 (proposal recorded; nothing built). Q-24 stands.
+- Effector class IDs show raw (`ec-a`) in the debrief because the score carries no rule-pack labels.
+- The score measures what was done against this scenario's fictional rules; it is not claimed as a validated measure of skill, and no timing standard has a public doctrinal source (Q-12).
+- The two timing-sensitive tests above should get a longer hypothesis deadline or a looser bound if they flake in CI.
+
+**Next wave entry point**
+- Wave 7 (3D realism and terrain packs): read docs/waves/wave-07-3d-realism-terrain.md. First step: STEP 1, the terrain pipeline in `tools/terrain/` (an SRTM tile and an OSM extract that you download into `data/raw/`, which git ignores, baked to a heightmap mesh, building glTF and a pack manifest with attribution), then LOS occlusion in the sim core from the baked heightmap. This step needs the raw downloads and Q-04 (the floor laptop) for the benchmark gate: if the raw data is not in `data/raw/`, stop and ask for it. Wave 7 also needs your confirmation on Q-23 (consoles) before wave 8 starts.

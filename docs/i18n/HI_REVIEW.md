@@ -643,7 +643,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `debrief.contacts.reason` | What happened | क्या हुआ |  |
 | `debrief.contacts.findings` | Findings | निष्कर्ष |  |
 | `debrief.contacts.findingCost` | Cost {{points}} pts | लागत {{points}} अंक |  |
-| `debrief.contacts.reportRow` | Graded separately below | नीचे अलग से अंकित |  |
+| `debrief.contacts.reportRow` | Graded below | नीचे अंकित |  |
 | `debrief.contacts.ofWeight` | {{points}} of {{weight}} | {{weight}} में से {{points}} |  |
 | `debrief.hardFail.title` | Hard fail: rules of engagement breached | कठोर विफलता: कार्रवाई के नियमों का उल्लंघन |  |
 | `debrief.hardFail.score` | Contact score 0. The nodes below show the path that was taken. | संपर्क स्कोर 0। नीचे के चरण अपनाया गया मार्ग दिखाते हैं। |  |

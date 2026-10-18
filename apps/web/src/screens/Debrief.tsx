@@ -153,11 +153,12 @@ function DebriefBody({
         <p className="m-0 text-xs text-ink-2">{t('debrief.truthNote')}</p>
       </div>
 
-      <RecordPanel score={score} title={title ? localised(title, lang) : null} />
-
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
         <SummaryPanel score={score} />
-        <LessonsPanel score={score} lang={lang} />
+        <div className="flex flex-col gap-4">
+          <LessonsPanel score={score} lang={lang} />
+          <RecordPanel score={score} title={title ? localised(title, lang) : null} />
+        </div>
       </div>
 
       {!presented && (
@@ -199,7 +200,7 @@ function RecordPanel({ score, title }: { score: SessionScore; title: string | nu
   const { t } = useTranslation()
   return (
     <Panel title={t('debrief.record.title')} flush>
-      <dl className="m-0 grid grid-cols-1 md:grid-cols-2 md:[&>div:nth-last-child(2)]:border-b-0">
+      <dl className="m-0">
         <Fact label={t('debrief.record.scenario')}>
           <span className="font-sans font-semibold">{title ?? score.scenario.id}</span>
         </Fact>
@@ -244,7 +245,9 @@ function MeasureTable({ caption, rows }: { caption: string; rows: Measure[] }) {
       render: (r) => (
         <span className={r.strong ? 'text-lg font-semibold' : ''}>
           {r.value}
-          {r.note && <span className="ml-2 text-xs font-normal text-ink-2">{r.note}</span>}
+          {r.note && (
+            <span className="ml-2 whitespace-nowrap text-xs font-normal text-ink-2">{r.note}</span>
+          )}
         </span>
       ),
     },

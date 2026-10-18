@@ -852,7 +852,7 @@
       "reason": "क्या हुआ",
       "findings": "निष्कर्ष",
       "findingCost": "लागत {{points}} अंक",
-      "reportRow": "नीचे अलग से अंकित",
+      "reportRow": "नीचे अंकित",
       "ofWeight": "{{weight}} में से {{points}}"
     },
     "hardFail": {

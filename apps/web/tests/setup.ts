@@ -1,8 +1,11 @@
 import '@testing-library/jest-dom/vitest'
 import { afterEach } from 'vitest'
-import { cleanup } from '@testing-library/react'
+import { cleanup, configure } from '@testing-library/react'
 import { setCsrfToken } from '../src/lib/api'
 import { setLanguage, setTheme } from '../src/lib/prefs'
+
+// The suite runs next to a production build; give findBy and waitFor room when the CPU is busy.
+configure({ asyncUtilTimeout: 5000 })
 
 // jsdom does not implement the modal <dialog> methods.
 if (!HTMLDialogElement.prototype.showModal) {

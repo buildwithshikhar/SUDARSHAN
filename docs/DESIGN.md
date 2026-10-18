@@ -80,3 +80,15 @@ The live session workspace (`apps/web/src/screens/LiveSession.tsx`, panels and v
 ## Review
 
 From wave 2 a Playwright visual-snapshot set covers the 12 key screens and is reviewed against this list every wave.
+
+## Debrief (wave 6)
+
+The Debrief (`apps/web/src/screens/Debrief.tsx`, route `/train/session/:id/debrief`) opens from the session-ended view and reads `GET /sessions/{id}/score`. It is a records screen inside the normal frame, not a dashboard: tables with captions, monospace tabular figures, 1 px borders, no tiles, charts, gradients or donuts.
+
+- **Order.** The reference-scoring note and the ground-truth note first; then the score summary (session, decision and report score; d′, criterion, hit and false-alarm rates with counts, and the log-linear correction note when it was applied) beside the first three lessons and the record (scenario, versions, seed, rule pack); then one section per scored contact; then a quiet "Not scored" group.
+- **Contact.** The heading names the real class and disposition ("Contact quad: Small rotary, hostile"), the only place ground truth is shown. A table gives each node's weight, points, mark and the reason as a sentence from the `scoring.*` templates (EN and HI), then the findings, then the report grades (reported against real, tolerance, weight, mark, reason).
+- **Hard fail.** A banner with a heavy outline, a stop icon and the breach in words, above the path, with the contact score stated as 0. Colour reinforces it and is never the only cue.
+- **Reasons.** `apps/web/src/live/scoring.ts` renders a key and its parameters by the rules in SCORING.md; a parameter the evaluator did not send shows as a dash. A test reads `services/api/app/scoring/keys.py` and fails when any key lacks an English or Hindi template.
+- **States.** Loading, empty (no contact presented), 409 session not ended, 404 no record, network failure and a generic error, each with its own text.
+
+The contact-report form is a dialog opened by "Report up the chain" in the Respond step: class (keys 1 to 4, 0 clears), bearing and range from the site, count, heading and confidence in percent. Position and heading start from the selected track. Fields are optional and checked against the simulation's ranges; "Skip details" files a bare report.

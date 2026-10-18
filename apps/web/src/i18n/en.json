@@ -852,7 +852,7 @@
       "reason": "What happened",
       "findings": "Findings",
       "findingCost": "Cost {{points}} pts",
-      "reportRow": "Graded separately below",
+      "reportRow": "Graded below",
       "ofWeight": "{{points}} of {{weight}}"
     },
     "hardFail": {

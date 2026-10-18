@@ -17,6 +17,10 @@ DRAWS_PER_CANDIDATE = 2 + 4 * 4
 
 FeatureValue = float | str | bool
 
+#: `data_status` values on everything a trainee sees that is derived from sensor parameters.
+DATA_REFERENCE = "reference"
+DATA_VERIFIED = "verified"
+
 
 @dataclass(frozen=True, slots=True)
 class Draws:
@@ -42,7 +46,8 @@ class Detection:
     """One report from one sensor: noisy measurements, never ground truth.
 
     `truth_id` links a report to the drone that caused it, for scoring and the instructor view.
-    It is `None` for a false alarm. It must never reach a trainee: use `trainee_view`.
+    It is `None` for a false alarm. It must never reach a trainee: use `trainee_view`, which is
+    also the tracker's only input (docs/SENSOR_MODELS.md, "Tracking").
     """
 
     sensor_id: str
@@ -60,6 +65,9 @@ class Detection:
     reported_class: str | None = None
     #: Modality-specific cues (for example a micro-Doppler class, a hop-pattern flag).
     features: dict[str, FeatureValue] = field(default_factory=dict)
+    #: True unless every parameter behind the report is `verified: true` (Q-20). Fails safe: a
+    #: detection built without provenance is labelled as reference data.
+    reference_data: bool = True
 
     @property
     def false_alarm(self) -> bool:
@@ -72,7 +80,11 @@ class Detection:
         return data
 
     def trainee_view(self) -> dict[str, Any]:
-        """What a trainee's console may show: no ground-truth reference."""
+        """What a trainee's console may show: no ground-truth reference.
+
+        `data_status` is `"reference"` when any parameter behind the figures is still
+        `verified: false` (Q-20): the console must then show them as reference data.
+        """
         return {
             "sensor_id": self.sensor_id,
             "modality": self.modality,
@@ -88,6 +100,7 @@ class Detection:
             "features": {
                 k: _r(v) if isinstance(v, float) else v for k, v in sorted(self.features.items())
             },
+            "data_status": DATA_REFERENCE if self.reference_data else DATA_VERIFIED,
         }
 
 

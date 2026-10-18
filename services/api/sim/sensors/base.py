@@ -10,7 +10,7 @@ optionally, false alarms, a degradation response and a precision hook).
 
 import math
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import TYPE_CHECKING, Any, ClassVar
 
 from app.contracts import TICK_HZ
@@ -135,7 +135,9 @@ class Sensor(ABC):
         alarms = self.false_alarms(world, t, rng, env, fx)
         if not fx.outage:
             found.extend(alarms)
-        return found
+        # Provenance: one profile-level flag, so models cannot forget it (Q-20).
+        reference = bool(self.params.unverified)
+        return [replace(d, reference_data=reference) for d in found]
 
     def in_coverage(self, g: Geometry, fx: Effects) -> bool:
         if g.slant_range_m > self.instrumented_range_m:

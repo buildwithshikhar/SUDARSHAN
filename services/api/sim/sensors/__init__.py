@@ -10,7 +10,7 @@ from .base import Observation, Sensor
 from .confusion import ConfusionMatrix
 from .cue import DEFAULT_CUE_HOLD_S, CueRequest, CueResult, Pointing
 from .degradation import KINDS, Degradation, Effects
-from .detection import DRAWS_PER_CANDIDATE, Detection, Draws
+from .detection import DATA_REFERENCE, DATA_VERIFIED, DRAWS_PER_CANDIDATE, Detection, Draws
 from .geometry import Environment, Geometry, Truth
 from .profile import (
     ProfileError,
@@ -29,6 +29,8 @@ __all__ = [
     "eoir",
     "radar",
     "rf",
+    "DATA_REFERENCE",
+    "DATA_VERIFIED",
     "DEFAULT_CUE_HOLD_S",
     "DRAWS_PER_CANDIDATE",
     "KINDS",

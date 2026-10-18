@@ -17,6 +17,7 @@ export type T = number
 export type Type = string
 export type Events = EventRecord[]
 export type FinalStateHash = string
+export type Picture = boolean
 export type Id = string
 export type Version = string
 export type Seed = number
@@ -30,6 +31,7 @@ export interface SessionRecord {
   contract: Contract
   events: Events
   final_state_hash: FinalStateHash
+  picture?: Picture
   scenario: PackRef
   seed: Seed
   ticks: Ticks

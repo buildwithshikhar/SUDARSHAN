@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 from pydantic import JsonValue
 
-from app.contracts import ActionRecord, ScenarioSpec
+from app.contracts import ActionRecord, ScenarioSpec, SessionRecord
 from app.contracts.common import Vec3
 from sim import replay
 from sim.sensors import SensorSuite
@@ -116,8 +116,25 @@ def test_replay_reproduces_a_session_with_a_picture_and_notices_one_without() ->
     spec = kestrel_with_sensors()
     actions = [act(60, OPERATOR, "designate", target="contact-a")]
     _, record = replay.run(spec, 11, actions, 1200, picture=True)
-    assert replay.replay(spec, record, picture=True).matches
-    assert not replay.replay(spec, record).matches
+    assert record.picture is True
+    assert replay.replay(spec, record).matches  # nothing is passed: the record says
+    assert not replay.replay(spec, record.model_copy(update={"picture": False})).matches
+
+
+def test_a_session_without_a_picture_records_that_and_replays_without_one() -> None:
+    spec = kestrel_with_sensors()
+    _, record = replay.run(spec, 11, [], 300)
+    assert record.picture is False
+    assert replay.replay(spec, record).matches
+    assert not replay.replay(spec, record.model_copy(update={"picture": True})).matches
+
+
+def test_a_record_made_before_the_flag_existed_reads_as_having_no_picture() -> None:
+    spec = kestrel_with_sensors()
+    _, record = replay.run(spec, 11, [], 300)
+    old = record.model_dump(mode="json")
+    del old["picture"]
+    assert SessionRecord.model_validate(old).picture is False
 
 
 def test_restoring_a_snapshot_continues_exactly() -> None:

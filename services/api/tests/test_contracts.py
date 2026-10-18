@@ -92,6 +92,9 @@ def test_event_action_and_session_records_validate() -> None:
         }
     )
     jsonschema.validate(session.model_dump(mode="json"), schema("session-record.v1"))
+    assert session.picture is False  # absent means a session without the sensor picture
+    with_picture = session.model_copy(update={"picture": True})
+    jsonschema.validate(with_picture.model_dump(mode="json"), schema("session-record.v1"))
     jsonschema.validate(action.model_dump(mode="json"), schema("action-record.v1"))
     jsonschema.validate(record.model_dump(mode="json"), schema("event-record.v1"))
 

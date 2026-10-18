@@ -60,6 +60,7 @@ def run(
         actions=ordered(actions),
         events=list(world.log.records),
         final_state_hash=final,
+        picture=picture,
     )
     return world, record
 
@@ -72,11 +73,11 @@ class ReplayResult:
     final_state_hash: str
 
 
-def replay(spec: ScenarioSpec, record: SessionRecord, *, picture: bool = False) -> ReplayResult:
-    """Re-run a record; `picture=True` if it was recorded with one (the record does not say)."""
+def replay(spec: ScenarioSpec, record: SessionRecord) -> ReplayResult:
+    """Re-run a record, with a sensor picture if the record says it had one."""
     if (record.scenario.id, record.scenario.version) != (spec.id, spec.version):
         raise ValueError("the session record is for a different scenario or version")
-    _, again = run(spec, record.seed, record.actions, record.ticks, picture=picture)
+    _, again = run(spec, record.seed, record.actions, record.ticks, picture=record.picture)
     diverged = next(
         (i for i, (a, b) in enumerate(zip(record.events, again.events, strict=False)) if a != b),
         None,

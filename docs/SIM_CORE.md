@@ -61,7 +61,7 @@ Measured on the build laptop (Apple silicon, Python 3.12): the Kestrel scenario 
 
 - `World.snapshot()` returns the full state (tick, weather and gust, every RNG stream's state, every drone, event count and head) plus the event log so far, as plain JSON. `World.restore(spec, snapshot)` checks the scenario ID and version, the event chain and head, and the threat list, then continues exactly. Restoring at tick N and running to M gives the same state hash and events as a straight run (`tests/test_sim_world.py`).
 - `World.state_hash()` is SHA-256 of the canonical state without the event records; the event head stands in for them.
-- `sim.replay.run(spec, seed, actions, ticks)` returns the world and a `session-record.v1`. `replay(spec, record)` re-runs it and reports the first divergent event and whether the final state hash matches.
+- `sim.replay.run(spec, seed, actions, ticks)` returns the world and a `session-record.v1`. `session-record.v1` has a `picture` flag (default false; records without it read as false), set by `run(..., picture=True)`. `replay(spec, record)` re-runs it, with a picture when the record says it had one, and reports the first divergent event and whether the final state hash matches.
 
 ## Sensor framework
 

@@ -58,3 +58,6 @@ class SessionRecord(Contract):
     actions: list[ActionRecord]
     events: list[EventRecord]
     final_state_hash: Sha256Hex
+    #: True when the session ran with the sensor, tracker, ledger and assist picture (wave 4b).
+    #: Absent in records made before it, which read as False.
+    picture: bool = False

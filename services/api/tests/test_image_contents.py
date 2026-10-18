@@ -40,6 +40,10 @@ def test_the_sim_check_runs_a_scenario_with_a_picture() -> None:
     assert run_sim_check(20).startswith("sim ok: ")
 
 
+def test_the_sim_check_loads_the_terrain_pack_of_a_pack_scenario() -> None:
+    assert "terrain heron-ridge" in run_sim_check(20)
+
+
 def test_the_cli_command_reports_success() -> None:
     result = CliRunner().invoke(cli, ["sim-check"])
     assert result.exit_code == 0

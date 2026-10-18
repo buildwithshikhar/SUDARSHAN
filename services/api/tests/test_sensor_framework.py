@@ -743,12 +743,12 @@ def test_models_register_once_per_modality(monkeypatch: pytest.MonkeyPatch) -> N
     monkeypatch.setattr("sim.sensors.suite.MODELS", dict(MODELS))
     from sim.sensors import suite
 
-    class Rf(ToySensor):
-        modalities = ("rf",)
+    class Spare(ToySensor):
+        modalities = ("spare",)  # not a real modality, so this holds once every model registers
 
-    assert register_model(Rf) is Rf and suite.MODELS["rf"] is Rf
+    assert register_model(Spare) is Spare and suite.MODELS["spare"] is Spare
     with pytest.raises(ValueError, match="already registered"):
-        register_model(Rf)
+        register_model(Spare)
 
 
 def test_the_default_profile_directory_holds_the_shipped_profiles() -> None:

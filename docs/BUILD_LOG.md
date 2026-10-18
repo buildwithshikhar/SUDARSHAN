@@ -384,10 +384,12 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 **Tests**
 - api: 904 passed, coverage 98.9% (sim package 100%) · web unit: 83 passed (includes the contract drift check) · e2e and visual: not run in this step (no web change beyond generated types)
-- New: `tests/test_sensor_framework.py`, `tests/test_sensor_profile.py` (geometry, daylight, fixed draw budget, two-process determinism, coverage, outage and sector outage, effects, cueing and expiry, snapshot restore, suite and builder, provenance rejection, row-normalised confusion tables), plus `detmath` accuracy tests. No existing test was skipped, disabled or weakened.
+- After steps 2 and 3: api 1,290 passed, coverage 99.2% (every sim module 100%), web unit 83 passed; `make lint typecheck test` green. New: `test_sensor_radar.py`, `test_sensor_eoir.py`, `test_sensor_rf.py`, `test_sensor_acoustic.py`, `test_sensor_models_together.py`. e2e and visual not run (no web change).
+- Step 1 detail: `tests/test_sensor_framework.py`, `tests/test_sensor_profile.py` (geometry, daylight, fixed draw budget, two-process determinism, coverage, outage and sector outage, effects, cueing and expiry, snapshot restore, suite and builder, provenance rejection, row-normalised confusion tables), plus `detmath` accuracy tests. No existing test was skipped, disabled or weakened.
 
 **Deploy check**
 - Production images built: yes · `make prod-check` (production mode, HTTPS through Caddy, cookies, CSRF, bootstrap, memory): pass. No API image change (`sim/` is not in the image, Q-19).
+- After steps 2 and 3: `make prod-check` pass again (it runs `smoke.sh` against the production-mode stack; api 68 MiB idle, 210 MiB for the four containers). Still no API image change.
 - Commit to deploy: not needed for this step (no user-facing change). Latest verified code commit: the last commit of this step on `main`.
 
 **Open issues**

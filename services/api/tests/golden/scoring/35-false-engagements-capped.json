@@ -1,0 +1,162 @@
+{
+  "description": "Four engagements on a false track: 4 x 0.15 = 0.60, capped at 0.45. No false track was assessed, so none is a noise trial.",
+  "steps": [
+    {"op": "first_report", "t": 30, "drone": "contact-quad", "sensor": "radar-1", "modality": "radar"},
+    {"op": "act", "t": 35, "action": "classify", "track": "T001", "target": "contact-quad", "payload": {"class_id": "rotary-small"}},
+    {"op": "act", "t": 37, "action": "assess", "track": "T001", "target": "contact-quad", "payload": {"identity": "hostile"}},
+    {"op": "act", "t": 60, "action": "engage", "track": "T001", "target": "contact-quad", "payload": {"effector_class": "ec-a"}},
+    {"op": "act", "t": 100, "action": "engage", "track": "T009", "target": null, "payload": {"effector_class": "ec-a"}},
+    {"op": "act", "t": 110, "action": "engage", "track": "T009", "target": null, "payload": {"effector_class": "ec-a"}},
+    {"op": "act", "t": 120, "action": "engage", "track": "T009", "target": null, "payload": {"effector_class": "ec-a"}},
+    {"op": "act", "t": 130, "action": "engage", "track": "T009", "target": null, "payload": {"effector_class": "ec-a"}}
+  ],
+  "expect": {
+    "threats": {
+      "contact-quad": {
+        "worked": true,
+        "nodes": {
+          "detect": {
+            "score": 1.0,
+            "reason": "detect.band",
+            "params": {
+              "seconds": 5.0,
+              "standard": 12.0,
+              "first_action": "classify",
+              "track": "T001"
+            }
+          },
+          "classify": {
+            "score": 1.0,
+            "reason": "classify.correct",
+            "params": {
+              "class": "rotary-small",
+              "seconds": 5.0,
+              "standard": 25.0,
+              "timing": 1.0,
+              "changes": 0
+            }
+          },
+          "assess": {
+            "score": 1.0,
+            "reason": "assess.exact",
+            "params": {
+              "given": "hostile",
+              "actual": "hostile"
+            }
+          },
+          "respond": {
+            "score": 1.0,
+            "reason": "respond.engage",
+            "params": {
+              "seconds": 30.0,
+              "standard": 45.0,
+              "timing": 1.0,
+              "blocked_attempts": 0,
+              "effector": "ec-a"
+            }
+          }
+        },
+        "decision": 1.0,
+        "report": {
+          "filed": false,
+          "reports_filed": 0,
+          "reason": "report.missing",
+          "params": {},
+          "quality": 0.0,
+          "timeliness": null,
+          "score": 0.0,
+          "fields": []
+        },
+        "hard_fail": false,
+        "findings": [],
+        "score": 0.85
+      }
+    },
+    "not_presented": [
+      "contact-bird-1",
+      "contact-bird-2",
+      "contact-bird-3",
+      "contact-civil"
+    ],
+    "session": {
+      "score": 0.4,
+      "decision_score": 1.0,
+      "report_score": 0.0,
+      "findings": [
+        {
+          "reason": "finding.false-engagement",
+          "params": {
+            "t": 100.0,
+            "track": "T009"
+          },
+          "cost": 0.15
+        },
+        {
+          "reason": "finding.false-engagement",
+          "params": {
+            "t": 110.0,
+            "track": "T009"
+          },
+          "cost": 0.15
+        },
+        {
+          "reason": "finding.false-engagement",
+          "params": {
+            "t": 120.0,
+            "track": "T009"
+          },
+          "cost": 0.15
+        },
+        {
+          "reason": "finding.false-engagement",
+          "params": {
+            "t": 130.0,
+            "track": "T009"
+          },
+          "cost": 0.15
+        }
+      ]
+    },
+    "sdt": {
+      "signal_trials": 1,
+      "noise_trials": 0,
+      "hits": 1,
+      "misses": 0,
+      "false_alarms": 0,
+      "correct_rejections": 0,
+      "hit_rate": 1.0,
+      "false_alarm_rate": null,
+      "corrected": false,
+      "hit_rate_used": 1.0,
+      "false_alarm_rate_used": null,
+      "d_prime": null,
+      "criterion": null
+    },
+    "lessons": [
+      {
+        "key": "lesson.report.missing",
+        "threat_id": "contact-quad",
+        "cost": 0.15,
+        "params": {}
+      },
+      {
+        "key": "lesson.false-engagement",
+        "threat_id": null,
+        "cost": 0.15,
+        "params": {
+          "t": 100.0,
+          "track": "T009"
+        }
+      },
+      {
+        "key": "lesson.false-engagement",
+        "threat_id": null,
+        "cost": 0.15,
+        "params": {
+          "t": 110.0,
+          "track": "T009"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "description": "No sensor reported any contact: nothing to score, every session figure is null, the SDT block is empty.",
+  "steps": [
+    {"op": "other", "t": 1.0, "type": "sim.started", "payload": {}}
+  ],
+  "expect": {
+    "threats": {},
+    "not_presented": [
+      "contact-bird-1",
+      "contact-bird-2",
+      "contact-bird-3",
+      "contact-quad",
+      "contact-civil"
+    ],
+    "session": {
+      "score": null,
+      "decision_score": null,
+      "report_score": null,
+      "findings": []
+    },
+    "sdt": {
+      "signal_trials": 0,
+      "noise_trials": 0,
+      "hits": 0,
+      "misses": 0,
+      "false_alarms": 0,
+      "correct_rejections": 0,
+      "hit_rate": null,
+      "false_alarm_rate": null,
+      "corrected": false,
+      "hit_rate_used": null,
+      "false_alarm_rate_used": null,
+      "d_prime": null,
+      "criterion": null
+    },
+    "lessons": []
+  }
+}

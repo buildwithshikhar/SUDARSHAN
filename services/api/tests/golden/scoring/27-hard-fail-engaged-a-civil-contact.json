@@ -1,0 +1,108 @@
+{
+  "description": "An engagement that went ahead on a civil flight (assessed hostile, the rules permitted it): the contact scores 0 whatever the nodes earned; the finding's cost is the score lost.",
+  "steps": [
+    {"op": "first_report", "t": 8, "drone": "contact-civil", "sensor": "radar-1", "modality": "radar"},
+    {"op": "act", "t": 12, "action": "classify", "track": "T002", "target": "contact-civil", "payload": {"class_id": "rotary-small"}},
+    {"op": "act", "t": 14, "action": "assess", "track": "T002", "target": "contact-civil", "payload": {"identity": "hostile"}},
+    {"op": "act", "t": 20, "action": "engage", "track": "T002", "target": "contact-civil", "payload": {"effector_class": "ec-a"}}
+  ],
+  "expect": {
+    "threats": {
+      "contact-civil": {
+        "worked": true,
+        "nodes": {
+          "detect": {
+            "score": 1.0,
+            "reason": "detect.band",
+            "params": {
+              "seconds": 4.0,
+              "standard": 12.0,
+              "first_action": "classify",
+              "track": "T002"
+            }
+          },
+          "classify": {
+            "score": 1.0,
+            "reason": "classify.correct",
+            "params": {
+              "class": "rotary-small",
+              "seconds": 4.0,
+              "standard": 25.0,
+              "timing": 1.0,
+              "changes": 0
+            }
+          },
+          "assess": {
+            "score": 0.0,
+            "reason": "assess.wrong",
+            "params": {
+              "given": "hostile",
+              "actual": "civil-permitted"
+            }
+          },
+          "respond": {
+            "score": 1.0,
+            "reason": "respond.hold-fire",
+            "params": {
+              "blocked_attempts": 0
+            }
+          }
+        },
+        "decision": 0.8235,
+        "report": null,
+        "hard_fail": true,
+        "findings": [
+          {
+            "reason": "finding.hard-fail.engaged-non-hostile",
+            "params": {
+              "t": 20.0,
+              "track": "T002",
+              "actual": "civil-permitted"
+            },
+            "cost": 0.8235
+          }
+        ],
+        "score": 0.0
+      }
+    },
+    "not_presented": [
+      "contact-bird-1",
+      "contact-bird-2",
+      "contact-bird-3",
+      "contact-quad"
+    ],
+    "session": {
+      "score": 0.0,
+      "decision_score": 0.0,
+      "report_score": null,
+      "findings": []
+    },
+    "sdt": {
+      "signal_trials": 0,
+      "noise_trials": 1,
+      "hits": 0,
+      "misses": 0,
+      "false_alarms": 1,
+      "correct_rejections": 0,
+      "hit_rate": null,
+      "false_alarm_rate": 1.0,
+      "corrected": false,
+      "hit_rate_used": null,
+      "false_alarm_rate_used": 1.0,
+      "d_prime": null,
+      "criterion": null
+    },
+    "lessons": [
+      {
+        "key": "lesson.hard-fail.engaged-non-hostile",
+        "threat_id": "contact-civil",
+        "cost": 0.8235,
+        "params": {
+          "t": 20.0,
+          "track": "T002",
+          "actual": "civil-permitted"
+        }
+      }
+    ]
+  }
+}

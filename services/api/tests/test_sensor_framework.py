@@ -808,3 +808,13 @@ def test_a_sensor_with_no_pointed_field_covers_every_bearing() -> None:
     world, truth = scene()
     s = make(BareSensor, truth, fov_wide=None, fov_narrow=None, boresight=180.0)
     assert s.pointing.fov_deg is None and len(s.detect(world, 200, world.rng)) == 1
+
+
+def test_a_camera_reports_its_pixel_count_for_the_console_and_a_radar_does_not() -> None:
+    from tests.live_helpers import harrier_world
+
+    world = harrier_world()
+    assert world.picture is not None
+    views = {v["id"]: v for v in (s.view(0) for s in world.picture.suite.sensors)}
+    assert views["eo-1"]["pixels_h"] == 1920
+    assert views["radar-1"]["pixels_h"] is None

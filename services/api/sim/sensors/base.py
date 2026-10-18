@@ -79,6 +79,8 @@ class Sensor(ABC):
         self._slew_rate = params.optional("slew_rate", "deg/s")
         hold_s = params.optional("cue_hold", "s")
         self._hold_ticks = math.floor((DEFAULT_CUE_HOLD_S if hold_s is None else hold_s) * TICK_HZ)
+        pixels = params.optional("pixels_h", "px")
+        self._pixels_h = None if pixels is None else round(pixels)
         self.home = Pointing(placement.boresight_deg, 0.0, params.optional("fov_wide", "deg"))
         self._pointing = self.home
         self._target = self.home
@@ -312,6 +314,7 @@ class Sensor(ABC):
             "bearing_deg": round(point.azimuth_deg, 3),
             "elevation_deg": round(point.elevation_deg, 3),
             "fov_deg": None if point.fov_deg is None else round(point.fov_deg, 3),
+            "pixels_h": self._pixels_h,
             "supports_cue": self.supports_cue,
             "cued": self._cue_until is not None and t < self._cue_until,
             "outage": self.effects_at(t).outage,

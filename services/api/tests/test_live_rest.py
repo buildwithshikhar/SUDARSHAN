@@ -70,7 +70,15 @@ def test_scenarios_lists_the_playable_ones(live_client: TestClient) -> None:
         "default_seed",
         "start_time_of_day_h",
         "weather_condition",
+        "briefing",
+        "rule_pack",
     }
+    assert harrier["rule_pack"]["id"] == "training-baseline"
+    assert harrier["rule_pack"]["version"] == "1.0.0" and harrier["rule_pack"]["title"]["hi"]
+    assert [s["modality"] for s in harrier["briefing"]["sensors"]] == ["radar", "eo", "rf"]
+    assert len(harrier["briefing"]["filed_flights"]) == 1
+    for word in ("contact-", "disposition", "threats"):
+        assert word not in str(harrier), word
     assert harrier["duration_s"] == 420 and harrier["title"]["en"] and harrier["title"]["hi"]
     assert [s["id"] for s in listed] == sorted(s["id"] for s in listed)
     assert "threats" not in json.dumps(listed)

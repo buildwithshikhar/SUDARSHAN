@@ -868,6 +868,18 @@
           "title": "Outage",
           "type": "boolean"
         },
+        "pixels_h": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pixels H"
+        },
         "position": {
           "$ref": "#/$defs/Vec3"
         },

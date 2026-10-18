@@ -60,6 +60,9 @@ class ScenarioOut(BaseModel):
     default_seed: int
     start_time_of_day_h: float
     weather_condition: str
+    #: The scenario as a trainee is briefed (never the threats) and the rule pack it names.
+    briefing: dict[str, Any]
+    rule_pack: dict[str, Any]
 
 
 @router.get("/scenarios", dependencies=[Depends(PLAYER)])
@@ -77,6 +80,12 @@ def scenarios(request: Request) -> list[ScenarioOut]:
                 default_seed=spec.default_seed,
                 start_time_of_day_h=spec.world.start_time_of_day_h,
                 weather_condition=spec.world.weather.condition,
+                briefing=wire.briefing(spec, entry.modalities),
+                rule_pack={
+                    "id": entry.engine.pack.id,
+                    "version": entry.engine.pack.version,
+                    "title": entry.engine.pack.title.model_dump(),
+                },
             )
         )
     return sorted(out, key=lambda s: s.id)

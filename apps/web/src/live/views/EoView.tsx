@@ -55,8 +55,12 @@ export function EoView({ sensorId }: { sensorId: string | null }) {
       if (!frame || frame.tick === lastTick) return
       lastTick = frame.tick
       const fovBySensor: Record<string, number | null> = {}
-      for (const s of frame.sensors) fovBySensor[s.id] = s.fov_deg
-      hold.ingest(frame.reports, fovBySensor, performance.now())
+      const pixelsBySensor: Record<string, number | null | undefined> = {}
+      for (const s of frame.sensors) {
+        fovBySensor[s.id] = s.fov_deg
+        pixelsBySensor[s.id] = s.pixels_h
+      }
+      hold.ingest(frame.reports, fovBySensor, performance.now(), pixelsBySensor)
     }
     const unsubscribe = session.store.subscribe(ingest)
     ingest()

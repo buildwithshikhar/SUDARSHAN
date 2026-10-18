@@ -85,3 +85,15 @@ describe('EO report hold', () => {
     expect(hold.active(0)[0]!.shape).toBe('bird')
   })
 })
+
+describe('the sensor pixel count', () => {
+  it('sets the angular size when the sensor reports it', () => {
+    const wide = new ReportHold()
+    wide.ingest([report()], FOV, 0, { 'eo-1': 960 })
+    const narrow = new ReportHold()
+    narrow.ingest([report()], FOV, 0, { 'eo-1': 1920 })
+    const a = wide.active(0)[0]
+    const b = narrow.active(0)[0]
+    expect(a?.sizeDeg).toBeCloseTo((b?.sizeDeg ?? 0) * 2, 6)
+  })
+})

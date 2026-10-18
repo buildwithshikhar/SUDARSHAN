@@ -207,6 +207,8 @@ class SensorStatus(Contract):
     cued: bool
     outage: bool
     position: Vec3
+    #: Pixels across the field of view (cameras), so a console can turn `apparent_px` into an angle.
+    pixels_h: int | None = None
     data_status: DataStatus
 
 

@@ -41,13 +41,14 @@ export class ReportHold {
     reports: readonly Report[],
     fovBySensor: Record<string, number | null>,
     nowMs: number,
+    pixelsBySensor: Record<string, number | null | undefined> = {},
   ): void {
     for (const r of reports) {
       if (r.modality !== 'eo' && r.modality !== 'ir') continue
       const px = r.features.apparent_px
       const fov = fovBySensor[r.sensor_id]
       if (typeof px !== 'number' || fov === null || fov === undefined) continue
-      const sizeDeg = angularSizeDeg(px, fov)
+      const sizeDeg = angularSizeDeg(px, fov, pixelsBySensor[r.sensor_id] ?? undefined)
       const radius = Math.max(0.35, fov * 0.08)
       const near = this.held.find(
         (h) =>

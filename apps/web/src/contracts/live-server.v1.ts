@@ -103,6 +103,7 @@ export type FovDeg = number | null
 export type Id8 = string
 export type Modality2 = 'radar' | 'eo' | 'ir' | 'rf' | 'acoustic'
 export type Outage = boolean
+export type PixelsH = number | null
 export type SupportsCue = boolean
 export type Sensors1 = SensorStatus[]
 export type Status1 = 'lobby' | 'running' | 'ended' | 'abandoned'
@@ -330,6 +331,7 @@ export interface SensorStatus {
   id: Id8
   modality: Modality2
   outage: Outage
+  pixels_h?: PixelsH
   position: Vec3
   supports_cue: SupportsCue
 }

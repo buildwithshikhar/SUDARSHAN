@@ -19,6 +19,8 @@ class CatalogEntry:
     spec: ScenarioSpec
     #: The rule engine is a pure function of the pack, so sessions share it.
     engine: RuleEngine
+    #: Sensor modality by sensor ID, for the briefing.
+    modalities: dict[str, str]
 
 
 class ScenarioCatalog:
@@ -38,11 +40,13 @@ class ScenarioCatalog:
                 if not isinstance(spec, ScenarioSpec):
                     continue
                 engine = load_rule_engine(spec)
-                Picture.build(spec, spec.default_seed)  # the sensors must load
+                picture = Picture.build(spec, spec.default_seed)  # the sensors must load
             except Exception as error:  # noqa: BLE001 - an unplayable scenario is only not listed
                 log.warning("scenario %s is not playable: %r", path.name, error)
                 continue
-            found[spec.id] = CatalogEntry(spec, engine)
+            found[spec.id] = CatalogEntry(
+                spec, engine, {s.id: s.params.modality for s in picture.suite.sensors}
+            )
         return found
 
     def entries(self) -> dict[str, CatalogEntry]:

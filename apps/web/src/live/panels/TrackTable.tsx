@@ -139,7 +139,12 @@ export function TrackTable() {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="min-h-0 flex-1 overflow-auto">
+      <div
+        className="min-h-0 flex-1 overflow-auto"
+        tabIndex={0}
+        role="group"
+        aria-label={t('live.table.title')}
+      >
         <Table
           caption={t('live.table.caption')}
           columns={columns}

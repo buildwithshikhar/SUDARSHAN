@@ -15,15 +15,6 @@ const MAX_PIXEL_RATIO = 1.5
 /** A target is never drawn smaller than this many canvas pixels, so a point stays visible. */
 const MIN_DRAW_PX = 3
 
-export function webglAvailable(): boolean {
-  try {
-    const canvas = document.createElement('canvas')
-    return !!(canvas.getContext('webgl2') ?? canvas.getContext('webgl'))
-  } catch {
-    return false
-  }
-}
-
 const enu = (v: Vec3): THREE.Vector3 => new THREE.Vector3(v.x, v.z, -v.y)
 
 function srgb(r: number, g: number, b: number): THREE.Color {
@@ -259,7 +250,14 @@ export class EoScene {
       const angle = Math.max(report.sizeDeg, minDeg) * DEG
       const world = 2 * DRAW_DISTANCE * Math.tan(angle / 2)
       entry.group.scale.setScalar(world)
-      entry.group.rotation.set(0.35, (report.key * 1.9) % (Math.PI * 2), 0)
+      // Face the camera, then pose the model: aircraft seen from above at a slant, birds side on.
+      entry.group.lookAt(cam)
+      const spin = (report.key * 1.9) % (Math.PI * 2)
+      if (entry.shape === 'bird') entry.group.rotateY(Math.PI / 2 + 0.3 * Math.sin(spin))
+      else if (entry.shape !== 'point') {
+        entry.group.rotateX(Math.PI / 2 - 0.45)
+        entry.group.rotateY(spin)
+      }
       const flap = Math.sin(opts.nowMs / 70 + report.key)
       entry.wings.forEach((wing, i) => {
         wing.rotation.z = (i === 0 ? 1 : -1) * (0.35 + 0.45 * flap)

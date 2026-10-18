@@ -271,6 +271,7 @@
     "eo": {
       "title": "EO view · {{sensor}}",
       "titlePlain": "EO view",
+      "loading": "Loading the EO view",
       "mode": "Mode",
       "modeTv": "Day TV",
       "cue": "Cue onto track",

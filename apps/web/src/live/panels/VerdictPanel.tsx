@@ -32,6 +32,7 @@ export function VerdictPanel({ welcome }: { welcome: Welcome }) {
   return (
     <div
       role={blocked ? 'alert' : 'status'}
+      tabIndex={0}
       data-testid="verdict"
       data-permitted={text.permitted ? 'true' : 'false'}
       className={`flex h-full min-h-0 flex-col gap-1 overflow-auto p-2 ${blocked ? 'border-2 border-track-hostile bg-surface-2' : 'border-l-2 border-track-neutral'}`}
@@ -60,7 +61,8 @@ export function VerdictPanel({ welcome }: { welcome: Welcome }) {
           <span className="text-ink-2">{t('live.verdict.rule')}</span> {text.rule}
         </p>
       )}
-      <p className="m-0 text-xs">{text.reason}</p>
+      {/* The table below states what is unmet; the sentence adds nothing there. */}
+      {text.unmet.length === 0 && <p className="m-0 text-xs">{text.reason}</p>}
       {text.unmet.length > 0 && (
         <table className="w-full border-collapse text-xs">
           <caption className="sr-only">{t('live.verdict.unmetCaption')}</caption>

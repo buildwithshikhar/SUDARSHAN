@@ -36,14 +36,19 @@ export function SensorStatus() {
   const { t } = useTranslation()
   const frame = useLive((s) => s.frame)
   return (
-    <div className="flex h-full min-h-0 flex-col gap-2 overflow-auto p-2 text-xs">
+    <div
+      className="flex h-full min-h-0 flex-col gap-2 overflow-auto p-2 text-xs"
+      tabIndex={0}
+      role="group"
+      aria-label={t('live.sensors.title')}
+    >
       <section aria-labelledby="sensors-h">
         <h3 id="sensors-h" className="micro-label m-0 mb-1">
           {t('live.sensors.title')}
         </h3>
         <ul className="m-0 flex list-none flex-col gap-1 p-0">
           {(frame?.sensors ?? []).map((s) => (
-            <li key={s.id} className="border-b border-line pb-1 last:border-b-0">
+            <li key={s.id} className="border-b border-line pb-0.5 last:border-b-0">
               <div className="flex justify-between gap-2">
                 <span className="num">{s.id}</span>
                 <span>
@@ -54,7 +59,7 @@ export function SensorStatus() {
                       : t('live.sensors.ok')}
                 </span>
               </div>
-              <div className="num text-ink-2">
+              <div className={`num text-ink-2 ${s.fov_deg === null ? 'hidden 2xl:block' : ''}`}>
                 {t(`live.modality.${s.modality}`)} · {fmtBearing(s.bearing_deg)}
                 {s.fov_deg !== null ? ` · ${s.fov_deg.toFixed(1)}°` : ''}
               </div>

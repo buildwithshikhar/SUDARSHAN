@@ -271,6 +271,7 @@
     "eo": {
       "title": "EO दृश्य · {{sensor}}",
       "titlePlain": "EO दृश्य",
+      "loading": "EO दृश्य लोड हो रहा है",
       "mode": "मोड",
       "modeTv": "दिन TV",
       "cue": "ट्रैक पर क्यू करें",

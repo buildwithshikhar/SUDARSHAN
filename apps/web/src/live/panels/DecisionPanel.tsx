@@ -167,7 +167,12 @@ export function DecisionPanel({
         <span className="num ml-auto text-xs text-ink-2">{track ? `${track.label}` : ''}</span>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-auto p-2">
+      <div
+        className="min-h-0 flex-1 overflow-auto p-2"
+        tabIndex={0}
+        role="group"
+        aria-label={t('live.decision.title')}
+      >
         {!track && (
           <div className="flex h-full flex-col justify-center gap-1">
             <p className="m-0 text-sm font-semibold">{t('live.decision.noTrack')}</p>
@@ -208,7 +213,7 @@ export function DecisionPanel({
         {track && decision.step && (
           <div className="flex flex-col gap-2">
             <ol
-              className="m-0 grid list-none grid-cols-1 gap-1 p-0 sm:grid-cols-2"
+              className="m-0 grid list-none grid-cols-1 gap-1 p-0 2xl:grid-cols-2"
               aria-label={t(`live.decision.step.${decision.step}`)}
             >
               {options.map((option, index) => {
@@ -219,6 +224,7 @@ export function DecisionPanel({
                       type="button"
                       data-decision-option=""
                       aria-pressed={on}
+                      title={label(option)}
                       onClick={() => controls.choose(index)}
                       className={`flex h-6 w-full items-center gap-2 border px-2 text-left text-xs ${
                         on

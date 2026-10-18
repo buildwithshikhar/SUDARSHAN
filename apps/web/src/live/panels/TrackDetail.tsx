@@ -28,7 +28,7 @@ export function rfLinkFor(
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="grid min-h-4 grid-cols-[80px_1fr] items-baseline gap-2">
+    <div className="grid shrink-0 grid-cols-[80px_1fr] items-baseline gap-2">
       <dt className="text-xs text-ink-2">{label}</dt>
       <dd className="num m-0 text-xs">{children}</dd>
     </div>
@@ -72,7 +72,11 @@ export function TrackDetail({ welcome }: { welcome: Welcome }) {
   const identity = assessments[track.id]
 
   return (
-    <dl className="m-0 grid h-full grid-cols-1 content-start gap-y-0.5 overflow-auto px-3 py-2">
+    <dl
+      tabIndex={0}
+      aria-label={t('live.detail.title')}
+      className="m-0 flex h-full flex-col gap-0.5 overflow-auto px-3 py-2"
+    >
       <Row label={t('live.detail.track')}>
         {track.label}
         {track.label !== track.id && <span className="text-ink-2"> ({track.id})</span>} ·{' '}

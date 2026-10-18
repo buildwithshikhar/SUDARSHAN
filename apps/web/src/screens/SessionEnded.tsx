@@ -93,26 +93,28 @@ export function SessionEnded({ id, summary }: { id: string; summary: EndSummary 
               ))}
               <div className="grid min-h-8 grid-cols-[176px_1fr] items-center px-3">
                 <dt className="text-sm text-ink-2">{t('live.ended.verification')}</dt>
-                <dd
-                  className="m-0 flex items-center gap-2 text-sm"
-                  role="status"
-                  data-testid="log-verification"
-                >
-                  {load.log.verified ? (
-                    <>
-                      <CheckmarkFilled
-                        size={16}
-                        aria-hidden="true"
-                        className="text-track-neutral"
-                      />
-                      {t('live.ended.verified')}
-                    </>
-                  ) : (
-                    <>
-                      <ErrorFilled size={16} aria-hidden="true" className="text-track-hostile" />
-                      {t('live.ended.failed', { seq: load.log.first_bad_seq ?? '—' })}
-                    </>
-                  )}
+                <dd className="m-0 text-sm">
+                  <span
+                    className="flex items-center gap-2"
+                    role="status"
+                    data-testid="log-verification"
+                  >
+                    {load.log.verified ? (
+                      <>
+                        <CheckmarkFilled
+                          size={16}
+                          aria-hidden="true"
+                          className="text-track-neutral"
+                        />
+                        {t('live.ended.verified')}
+                      </>
+                    ) : (
+                      <>
+                        <ErrorFilled size={16} aria-hidden="true" className="text-track-hostile" />
+                        {t('live.ended.failed', { seq: load.log.first_bad_seq ?? '—' })}
+                      </>
+                    )}
+                  </span>
                 </dd>
               </div>
             </dl>

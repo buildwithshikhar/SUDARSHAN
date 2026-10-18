@@ -5,7 +5,8 @@ import { useLive, useLiveSession } from '../context'
 import { sensorPose } from '../store'
 import { EoHud } from './EoHud'
 import { ReportHold } from './eoHold'
-import { EoScene, webglAvailable } from './eoScene'
+import { EoScene } from './eoScene'
+import { webglAvailable } from './webgl'
 
 /**
  * The EO sensor's picture: a three.js scene drawn from the sensor's pointing, its field of view

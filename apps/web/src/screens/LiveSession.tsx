@@ -1,5 +1,5 @@
 import { Play } from '@carbon/icons-react'
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router-dom'
 import { Shell } from '../layout/Shell'
@@ -17,7 +17,6 @@ import { TrackDetail } from '../live/panels/TrackDetail'
 import { TrackTable } from '../live/panels/TrackTable'
 import { VerdictPanel } from '../live/panels/VerdictPanel'
 import { STAGE_ID, useWorkspaceControls } from '../live/useWorkspaceControls'
-import { EoView } from '../live/views/EoView'
 import { PpiView, ppiRangeMax } from '../live/views/PpiView'
 import { localised } from '../live/restApi'
 import { Button } from '../ui/Button'
@@ -26,6 +25,9 @@ import { Panel } from '../ui/Panel'
 import { Segmented } from '../ui/Segmented'
 import { ErrorState, LoadingState } from '../ui/States'
 import { SessionEnded } from './SessionEnded'
+
+// three.js is large and only this screen needs it, so the EO view loads on demand.
+const EoView = lazy(() => import('../live/views/EoView').then((m) => ({ default: m.EoView })))
 
 /** Route /train/session/:id: opens the transport, then shows the workspace or why it cannot. */
 export function LiveSessionPage() {
@@ -215,7 +217,9 @@ function Workspace() {
             </div>
           }
         >
-          <EoView sensorId={eoId} />
+          <Suspense fallback={<LoadingState label={t('live.eo.loading')} />}>
+            <EoView sensorId={eoId} />
+          </Suspense>
           {status === 'lobby' && <ReadyCard />}
         </Panel>
 
@@ -269,7 +273,7 @@ function Workspace() {
           <div className="col-span-4 flex min-h-0 flex-col gap-px">
             <Panel
               title={t('live.verdict.title')}
-              className="flex min-h-0 flex-[3] flex-col"
+              className="flex min-h-0 flex-[5] flex-col"
               bodyClassName="min-h-0 flex-1"
               flush
             >

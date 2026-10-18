@@ -322,7 +322,7 @@ const EO = site('eo-1')
 const RF = site('rf-1')
 const RADAR_PERIOD_S = 1.2
 const EO_HOME = { bearing: EO.boresight_deg, elevation: 4.2, fov: 24.4 }
-const EO_NARROW_FOV = 4.3
+const EO_NARROW_FOV = 2.6
 const EO_SLEW_DPS = 30
 const CUE_HOLD_S = 12
 

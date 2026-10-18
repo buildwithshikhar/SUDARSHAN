@@ -200,6 +200,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.end.confirm` | End session | सत्र समाप्त करें |  |
 | `live.eo.title` | EO view · {{sensor}} | EO दृश्य · {{sensor}} |  |
 | `live.eo.titlePlain` | EO view | EO दृश्य |  |
+| `live.eo.loading` | Loading the EO view | EO दृश्य लोड हो रहा है |  |
 | `live.eo.mode` | Mode | मोड |  |
 | `live.eo.modeTv` | Day TV | दिन TV |  |
 | `live.eo.cue` | Cue onto track | ट्रैक पर क्यू करें |  |
@@ -452,4 +453,4 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.kit.keyboard` | Controls | नियंत्रण |  |
 | `live.kit.keyboardValue` | Keyboard first; mouse works | कीबोर्ड प्रमुख; माउस भी चलता है |  |
 
-445 strings.
+446 strings.

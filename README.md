@@ -13,7 +13,7 @@ Sensor models are calibrated from open research datasets and published specifica
 | Planning pack, data register, decisions | Done |
 | Wave 1 · Repo bootstrap | Not started |
 | Wave 2 · Design system and app shell (first live link) | Not started |
-| Waves 3, 4a, 4b · Contracts, deterministic sim core, sensor models, tracking and AI assist | Waves 3 and 4a built, CI confirmation pending; 4b not started |
+| Waves 3, 4a, 4b · Contracts, deterministic sim core, sensor models, tracking and AI assist | Waves 3, 4a and 4b built, CI confirmation pending |
 | Wave 5 · Live-session vertical slice | Not started |
 | Waves 6–8 · Scoring and contact reports, 3D realism and terrain, threat breadth | Not started |
 | Waves 9a–9c · Scenario engine, site builder, sensor placement trainer | Not started |

@@ -28,6 +28,7 @@ Change a contract in the Pydantic model, then run `make schemas` and commit the 
 - `World.step` always runs in this order:
   1. apply the actions recorded for this tick, in log order;
   2. spawn threats whose spawn tick has come, in scenario order (`spawn_tick = ceil(spawn_s × 20)`, rounded first so 0.15 s is tick 3);
+  2b. if the world has a sensor picture (wave 4b, below): the sensors report, the tracker updates, the ledger and the assist run;
   3. advance the wind gust;
   4. move every active drone, in scenario order, then retire drones that left the play area;
   5. increment the tick.
@@ -75,9 +76,19 @@ Measured on the build laptop (Apple silicon, Python 3.12): the Kestrel scenario 
 - **Output.** `Detection` carries noisy azimuth and elevation, optional range and radial speed, the one-sigma values actually applied, a reported class and modality features. `truth_id` links it to the drone for scoring and the instructor; `Detection.trainee_view()` omits it, and false alarms have the same shape as real contacts.
 
 The four modality models are in `sim/sensors/radar.py`, `eoir.py` (modalities `eo` and `ir`), `rf.py` and `acoustic.py`, registered when `sim.sensors` is imported. Their equations, parameters with register IDs and honesty notes are in [SENSOR_MODELS.md](SENSOR_MODELS.md). Micro-Doppler in the radar reuses the detect draw divided by `p` (uniform given a hit) so it costs no extra random numbers.
-- **State.** `Sensor.state()` and `SensorSuite.state()` return plain JSON (pointing, cue expiry, degradations); with the `sensors` stream state in the world snapshot, restoring both continues exactly (`tests/test_sensor_framework.py`). The suite is not yet part of `World.state()`: waves 4b and 5 decide when it ticks and how detections become events.
+- **State.** `Sensor.state()` and `SensorSuite.state()` return plain JSON (pointing, cue expiry, degradations); with the `sensors` stream state in the world snapshot, restoring both continues exactly (`tests/test_sensor_framework.py`). Inside a session the suite belongs to the sensor picture, which ticks it (below).
 
 Geometry (`Geometry.between`) gives compass azimuth, elevation, slant and ground range, radial speed and aspect. It uses `detmath.atan2` and the other deterministic maths (`exp`, `log`, `wrap360`), never `math.atan2`, because detections reach the event log.
+
+## Sensor picture and tracking
+
+`services/api/sim/tracking/` (wave 4b). `Picture` bundles a `SensorSuite`, a `Tracker`, a `TruthLedger` and an `AiAssist`. A `World` built with `picture=Picture.build(spec, seed)` runs `Picture.update` once per tick (step 2b, after the tick's actions and spawns, before anything moves) and sends the actions `track-relabel`, `track-merge`, `track-split`, `track-drop` and `sensor-cue` to `Picture.apply`; a rejected one is logged as `action.rejected`. Without a picture the world is unchanged and hashes as before.
+
+- **State.** `World.state()` gains a `picture` key only when one is attached, so every existing golden file is untouched. It holds the suite, tracker, ledger and assist state, the report counter and the ground-truth reference of recent reports (kept for 2 s for triangulation, then forgotten). Snapshots copy; `World.restore(spec, snapshot, picture=Picture.build(spec, seed))` needs a picture exactly when the snapshot has one.
+- **Replay.** `replay.run(..., picture=True)` and `replay.replay(..., picture=True)`. The session record does not yet say whether it had a picture; the caller must know (wave 5 always records with one).
+- **Streams.** The tracker takes exactly one uniform per report from `tracking`; the sensors keep the `sensors` stream; the assist uses no stream (keyed SHA-256 draws), so nothing here shifts another subsystem.
+- **Events.** `track.init|confirm|coast|resume|drop`, `track.relabel|merge|split`, `sensor.cue` carry no ground truth (`picture.TRAINEE_EVENT_TYPES`). `ledger.swap|split|merge|restored` and `assist.assess` name true drones and are for the instructor and scoring (`TRUTH_EVENT_TYPES`). The model, the error model and the assist are in [SENSOR_MODELS.md](SENSOR_MODELS.md), "Tracking".
+- **Tracker input.** `Measurement.from_view(Detection.trainee_view())` only; it refuses `truth_id`. Ground truth reaches the ledger through the report's reference number, kept inside the picture.
 
 ## Golden files
 
@@ -101,4 +112,9 @@ git diff tests/golden/   # read it, then commit with the reason
 | Restore at N and run to M equals a straight run | `tests/test_sim_world.py` |
 | Changing a physics constant fails a golden file with a readable diff | `tests/test_sim_golden.py` |
 | Sensor framework: geometry, fixed draw budget, determinism in two processes, coverage, degradations, cueing, restore, profile provenance, row-normalised confusion tables | `tests/test_sensor_framework.py`, `tests/test_sensor_profile.py` |
+| Tracker, association, lifecycle, triangulation, Kalman filter | `tests/test_tracker_core.py`, `test_tracker_edges.py` |
+| Association errors, truth ledger, track commands, cue-to-track | `tests/test_tracking_ambiguity.py`, `test_tracking_ledger.py`, `test_tracking_commands.py`, `test_tracking_cueing.py` |
+| Simulated AI assist rates and reproducibility | `tests/test_tracking_assist.py` |
+| Picture in the world: determinism, replay, snapshot, actions, who sees what | `tests/test_tracking_wiring.py`, `test_contract_track_actions.py` |
+| Reference-data labels on trainee-visible figures (Q-20) | `tests/test_sensor_provenance.py` |
 | Sensor models: P(d) never rises with range, weather and time of day move it as documented, RF-silent targets are never detected by RF, micro-Doppler separates rotor from bird, a cue narrows the EO/IR field and improves precision, shipped profiles load against the register and list their unverified values | `tests/test_sensor_radar.py`, `test_sensor_eoir.py`, `test_sensor_rf.py`, `test_sensor_acoustic.py` |

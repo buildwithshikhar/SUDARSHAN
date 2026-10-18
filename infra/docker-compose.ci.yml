@@ -1,0 +1,20 @@
+# Linux test runner that mirrors the CI api job. Run with: make ci-api ARGS="tests/test_live_rest.py -x"
+services:
+  ci-api:
+    image: python:3.12-slim
+    cpus: ${CI_CPUS:-2}
+    platform: ${CI_PLATFORM:-linux/amd64}
+    working_dir: /repo/services/api
+    environment:
+      UV_PROJECT_ENVIRONMENT: /opt/venv
+      UV_LINK_MODE: copy
+      UV_CACHE_DIR: /opt/uv-cache
+    volumes:
+      - ..:/repo
+      - ci-venv:/opt/venv
+      - ci-uv-cache:/opt/uv-cache
+    entrypoint: ["sh", "-c", "pip install -q uv && uv sync -q --frozen && exec \"$$@\"", "--"]
+
+volumes:
+  ci-venv:
+  ci-uv-cache:

@@ -45,6 +45,12 @@ SENSOR_ID = "s-1"
 __all__ = ["AcousticSensor", "RfSensor"]
 
 
+def num(value: object) -> float:
+    """A feature value known to be a number."""
+    assert isinstance(value, float)
+    return value
+
+
 def q(value: float, unit: str, source: str = "F01") -> dict[str, Any]:
     return {"value": value, "unit": unit, "source_id": source, "verified": False}
 
@@ -81,6 +87,7 @@ def build[S](
     cls: Callable[[SensorPlacement, SensorParams], S],
     path: Path,
     position: Vec3 | None = None,
+    /,
     **over: dict[str, Any] | None,
 ) -> S:
     p = params(path, **over)

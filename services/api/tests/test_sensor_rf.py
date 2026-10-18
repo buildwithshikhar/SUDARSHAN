@@ -40,6 +40,7 @@ from .sensor_rfac import (
     RfSensor,
     build,
     env,
+    num,
     observe,
     params_from,
     profile_data,
@@ -254,7 +255,7 @@ def test_noise_moves_the_estimates_and_is_scaled_by_the_degradation() -> None:
     draws = Draws(0.0, 0.0, (1.0, 1.0, 1.0, 1.0))
     base = s.measure(observe(s, "rotary-small", 800.0, draws=draws))
     exact = s.measure(observe(s, "rotary-small", 800.0))
-    assert base.features["rssi_dbm"] == sig(exact.features["rssi_dbm"]) + 2.5  # type: ignore[operator]
+    assert base.features["rssi_dbm"] == num(exact.features["rssi_dbm"]) + 2.5
     assert base.features["hop_rate_hz"] == 80.0 * (1.0 + 5.0)
     down = Draws(0.0, 0.0, (-1.0, -1.0, -1.0, -1.0))
     assert s.measure(observe(s, "rotary-small", 800.0, draws=down)).features["hop_rate_hz"] == 0.0

@@ -50,9 +50,13 @@ def event(**changes: Any) -> dict[str, Any]:
 # ---------------------------------------------------------------------------- examples
 
 
-def test_there_is_one_example_of_each_pack_contract() -> None:
-    contracts = sorted(raw(p)["contract"] for p in PACK_FILES)
-    assert contracts == sorted(PACKS)
+def test_there_is_at_least_one_example_of_each_pack_contract() -> None:
+    """Every contract has an example, and no example uses a contract that does not exist.
+
+    Wave 4a ships several sensor profiles, so a contract may have more than one example.
+    """
+    contracts = {raw(p)["contract"] for p in PACK_FILES}
+    assert contracts == set(PACKS)
 
 
 @pytest.mark.parametrize("path", PACK_FILES, ids=lambda p: p.name)

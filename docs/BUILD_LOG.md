@@ -5,7 +5,7 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 ## Current position
 
 - **Phase:** wave 4b complete (tracking, fusion and AI assist); every acceptance criterion has a passing test (map under the wave 4b entry). CI for the wave 3, 4a and 4b commits is **pending owner confirmation** (CI cannot be read from this machine), so wave 3 stays In progress and waves 4a and 4b are recorded as Done with CI pending.
-- **Current wave:** 5 · Live-session vertical slice → [waves/wave-05-live-session-slice.md](waves/wave-05-live-session-slice.md) (not started)
+- **Current wave:** 5 · Live-session vertical slice → [waves/wave-05-live-session-slice.md](waves/wave-05-live-session-slice.md) (in progress; see the wave 5 entry)
 - **Next step:** start wave 5 at the entry point under the wave 4b entry. Owner still to confirm CI for the wave 3, 4a and 4b commits, and to record the smoke date for the live link.
 - **Main is:** green locally (lint, typecheck, unit, e2e, visual, `make prod-check`); CI result for the latest commits is owner-confirmed only (see the wave entries).
 - **Deployed build:** live at https://sudarshan.centralindia.cloudapp.azure.com, running commit b722313 (wave 2 build; owner-reported, 2026-10-18).
@@ -29,7 +29,7 @@ Status values: Not started · In progress · Blocked · Done. A wave is Done onl
 | 3 | [Contracts + deterministic sim core](waves/wave-03-contracts-sim-core.md) | 1 | Opus | Keep live build green | Cut | In progress |
 | 4a | [Sensor models](waves/wave-04a-sensor-models.md) | 3 | Opus | Keep live build green | Cut | Done (CI pending) |
 | 4b | [Tracking, fusion + AI assist](waves/wave-04b-tracking-ai-assist.md) | 4a | Opus | Keep live build green | Cut | Done (CI pending) |
-| 5 | [Live-session vertical slice](waves/wave-05-live-session-slice.md) | 2, 4b | Sonnet | Redeploy: playable slice | Cut | Not started |
+| 5 | [Live-session vertical slice](waves/wave-05-live-session-slice.md) | 2, 4b | Sonnet | Redeploy: playable slice | Cut | In progress |
 | 6 | [Scoring + debrief](waves/wave-06-scoring-debrief.md) | 5 | Sonnet | Redeploy | Cut | Not started |
 | 7 | [3D realism + terrain packs](waves/wave-07-3d-realism-terrain.md) | 5 | Sonnet (Opus if gate fails) | Keep live build green | Cut | Not started |
 | 8 | [Threat breadth](waves/wave-08-threat-breadth.md) | 4a, 7 | Sonnet | Keep live build green | Cut | Not started |
@@ -496,3 +496,20 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 **Next wave entry point**
 - Wave 5 (live-session slice): read docs/waves/wave-05-live-session-slice.md. First step: close Q-19 (copy `services/api/sim` and `packs/` into `infra/Dockerfile.api`, extend `make prod-check` to import `sim` and build a `Picture` for the example scenario), then the WebSocket protocol. Send a trainee only `picture.TRAINEE_EVENT_TYPES` and `Picture.trainee_frame()`; add the "no ground truth reaches a trainee socket" test against them.
+
+### Wave 5 · Live-session vertical slice
+
+- Status: In progress
+- Started from commit: 1f65e46
+- Goal: one scripted scenario playable end to end in the browser, server-authoritative, on the live link.
+
+**Done**
+- 7d48c6f build(api): `sim/` and `packs/` ship in the API image; `make prod-check` runs `sim-check` inside it (Q-19 closed)
+- c80fffa feat(sim): operator actions on tracks, ROE engine, trainee allow-list, Harrier Field scenario, live protocol contracts, `docs/LIVE_SESSION.md`, ADR-020
+
+**Decisions** (ADR-020)
+- Operators act on tracks, never drone IDs; the real drone is logged as `target` for scoring and stripped for trainees.
+- ROE verdicts cite the permitting rule or the closest one (with what is missing) and always the pack version; no change to `rulepack.v1`.
+- The EO view is drawn from EO reports, so there is no server-side entity list to leak.
+- Test pins adjusted: `test_there_is_one_example_of_each_pack_contract` now names the two scenario packs (additive; nothing loosened).
+

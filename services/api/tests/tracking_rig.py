@@ -40,9 +40,7 @@ def drone(
         start={"x": start[0], "y": start[1], "z": start[2]},
         start_heading_deg=heading_deg,
         start_speed_mps=speed,
-        route=[
-            {"position": {"x": x, "y": y, "z": z}, "speed_mps": speed} for (x, y, z) in route
-        ],
+        route=[{"position": {"x": x, "y": y, "z": z}, "speed_mps": speed} for (x, y, z) in route],
         on_route_end="loiter",
     )
     return base

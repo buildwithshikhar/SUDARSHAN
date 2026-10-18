@@ -15,7 +15,7 @@ CHI2_GATE: dict[int, float] = {1: 6.635, 2: 9.210, 3: 11.345, 4: 13.277}
 class TrackerConfig:
     #: Process noise: one-sigma acceleration of a manoeuvring small drone, m/s^2 (continuous white
     #: noise, so the result does not depend on how often the filter is stepped).
-    accel_sigma_mps2: float = 3.0
+    accel_sigma_mps2: float = 2.0
     #: One-sigma speed uncertainty of a new track, m/s.
     init_speed_sigma_mps: float = 25.0
     #: Multiplies the chi-square gate thresholds; 1 is the 99 % gate.
@@ -36,9 +36,11 @@ class TrackerConfig:
     coast_after_s: float = 3.0
     #: A coasting track with no report for this long is dropped.
     drop_after_s: float = 15.0
-    #: Two confirmed tracks closer than this for `duplicate_hold_s` are one track (the younger is
-    #: dropped). If they were two targets, that is a merge error.
-    duplicate_distance_m: float = 20.0
+    #: Two confirmed tracks whose position and velocity estimates are statistically
+    #: indistinguishable (squared distance over the summed variances below this, chi-square with
+    #: 6 degrees of freedom at 95 %) for `duplicate_hold_s` are one track: the younger is dropped.
+    #: If they were two targets, that is a merge error.
+    duplicate_gate: float = 12.592
     duplicate_hold_s: float = 3.0
     #: Bearing-only reports with no track are held this long to be paired across sensors.
     triangulation_window_s: float = 0.5

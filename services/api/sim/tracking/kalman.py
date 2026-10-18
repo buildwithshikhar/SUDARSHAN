@@ -83,10 +83,19 @@ def innovation_variance(p: Matrix, h: Vector, r: float) -> float:
     return s
 
 
+def position_variance(p: Matrix) -> float:
+    """Mean variance over the three position axes, m^2."""
+    return (p[0][0] + p[1][1] + p[2][2]) / 3.0
+
+
+def speed_variance(p: Matrix) -> float:
+    return (p[3][3] + p[4][4] + p[5][5]) / 3.0
+
+
 def position_sigma(p: Matrix) -> float:
     """One-sigma position uncertainty (root of the mean position variance), m."""
-    return math.sqrt((p[0][0] + p[1][1] + p[2][2]) / 3.0)
+    return math.sqrt(position_variance(p))
 
 
 def speed_sigma(p: Matrix) -> float:
-    return math.sqrt((p[3][3] + p[4][4] + p[5][5]) / 3.0)
+    return math.sqrt(speed_variance(p))

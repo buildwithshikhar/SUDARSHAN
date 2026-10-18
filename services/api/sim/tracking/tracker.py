@@ -395,17 +395,14 @@ class Tracker:
         self._fold_duplicates(tick, result)
 
     def _fold_duplicates(self, tick: int, result: UpdateResult) -> None:
-        """Two confirmed tracks that stay closer than the duplicate distance are one track."""
-        cfg = self.cfg
-        hold = round(cfg.duplicate_hold_s * self.tick_hz)
-        limit = cfg.duplicate_distance_m * cfg.duplicate_distance_m
+        """Two confirmed tracks that stay statistically indistinguishable are one track."""
+        hold = round(self.cfg.duplicate_hold_s * self.tick_hz)
         confirmed = [t for t in self.tracks.values() if t.status == "confirmed"]
         near: set[str] = set()
         for a in range(len(confirmed)):
             for b in range(a + 1, len(confirmed)):
-                ta, tb = confirmed[a], confirmed[b]
-                if sum_sq([ta.x[i] - tb.x[i] for i in range(3)]) <= limit:
-                    near.add(f"{ta.id}|{tb.id}")
+                if self._same_target(confirmed[a], confirmed[b]):
+                    near.add(f"{confirmed[a].id}|{confirmed[b].id}")
         self._close = {k: self._close.get(k, 0) + 1 for k in sorted(near)}
         for key in sorted(self._close):
             if self._close[key] < hold:
@@ -416,6 +413,14 @@ class Tracker:
         self._close = {
             k: v for k, v in self._close.items() if all(t in self.tracks for t in k.split("|"))
         }
+
+    def _same_target(self, a: Track, b: Track) -> bool:
+        """Position and velocity differ by no more than their summed uncertainty allows."""
+        var_p = kalman.position_variance(a.p) + kalman.position_variance(b.p)
+        var_v = kalman.speed_variance(a.p) + kalman.speed_variance(b.p)
+        d2 = sum_sq([a.x[i] - b.x[i] for i in range(3)]) / var_p
+        d2 += sum_sq([a.x[i] - b.x[i] for i in range(3, 6)]) / var_v
+        return d2 <= self.cfg.duplicate_gate
 
     # ------------------------------------------------------------------ snapshot
 

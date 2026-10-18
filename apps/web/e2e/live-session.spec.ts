@@ -155,8 +155,11 @@ test('the workspace is axe-clean in Hindi light with tracks on screen', async ({
   })
   await expectClean(page)
   // restore the account's preferences for the tests that follow (the workspace has no switcher)
-  await page.goto('/profile')
-  await choose(page, 'en', 'dark', true)
+  const restored = await page.request.patch('/api/v1/auth/me/preferences', {
+    headers: { 'X-CSRF-Token': me.csrf },
+    data: { language: 'en', theme: 'dark' },
+  })
+  expect(restored.ok()).toBe(true)
 })
 
 test('a trainee cannot open another account’s session', async ({ page, browser }) => {

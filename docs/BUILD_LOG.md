@@ -4,9 +4,9 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 
 ## Current position
 
-- **Phase:** wave 4b complete (tracking, fusion and AI assist); every acceptance criterion has a passing test (map under the wave 4b entry). CI for the wave 3, 4a and 4b commits is **pending owner confirmation** (CI cannot be read from this machine), so wave 3 stays In progress and waves 4a and 4b are recorded as Done with CI pending.
-- **Current wave:** 5 · Live-session vertical slice → [waves/wave-05-live-session-slice.md](waves/wave-05-live-session-slice.md) (in progress; see the wave 5 entry)
-- **Next step:** start wave 5 at the entry point under the wave 4b entry. Owner still to confirm CI for the wave 3, 4a and 4b commits, and to record the smoke date for the live link.
+- **Phase:** wave 5 complete (live-session vertical slice); every acceptance criterion has a passing test or measurement except the post-deploy check (map under the wave 5 entry). CI for the wave 3, 4a, 4b and 5 commits is **pending owner confirmation** (CI cannot be read from this machine), so wave 3 stays In progress and waves 4a, 4b and 5 are recorded as Done with CI pending.
+- **Current wave:** 6 · Scoring + debrief → [waves/wave-06-scoring-debrief.md](waves/wave-06-scoring-debrief.md) (not started)
+- **Next step:** start wave 6 at the entry point under the wave 5 entry. Owner still to confirm CI for the wave 3, 4a, 4b and 5 commits, redeploy, run the wave 5 post-deploy check, and record the smoke date for the live link.
 - **Main is:** green locally (lint, typecheck, unit, e2e, visual, `make prod-check`); CI result for the latest commits is owner-confirmed only (see the wave entries).
 - **Deployed build:** live at https://sudarshan.centralindia.cloudapp.azure.com, running commit b722313 (wave 2 build; owner-reported, 2026-10-18).
 
@@ -29,7 +29,7 @@ Status values: Not started · In progress · Blocked · Done. A wave is Done onl
 | 3 | [Contracts + deterministic sim core](waves/wave-03-contracts-sim-core.md) | 1 | Opus | Keep live build green | Cut | In progress |
 | 4a | [Sensor models](waves/wave-04a-sensor-models.md) | 3 | Opus | Keep live build green | Cut | Done (CI pending) |
 | 4b | [Tracking, fusion + AI assist](waves/wave-04b-tracking-ai-assist.md) | 4a | Opus | Keep live build green | Cut | Done (CI pending) |
-| 5 | [Live-session vertical slice](waves/wave-05-live-session-slice.md) | 2, 4b | Sonnet | Redeploy: playable slice | Cut | In progress |
+| 5 | [Live-session vertical slice](waves/wave-05-live-session-slice.md) | 2, 4b | Sonnet | Redeploy: playable slice | Cut | Done (CI pending) |
 | 6 | [Scoring + debrief](waves/wave-06-scoring-debrief.md) | 5 | Sonnet | Redeploy | Cut | Not started |
 | 7 | [3D realism + terrain packs](waves/wave-07-3d-realism-terrain.md) | 5 | Sonnet (Opus if gate fails) | Keep live build green | Cut | Not started |
 | 8 | [Threat breadth](waves/wave-08-threat-breadth.md) | 4a, 7 | Sonnet | Keep live build green | Cut | Not started |
@@ -499,19 +499,70 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 ### Wave 5 · Live-session vertical slice
 
-- Status: In progress
+- Status: Done, CI pending. Every acceptance criterion has a passing test or measurement (map below). Outstanding: the owner's confirmation of the CI run (gitleaks and the Linux `docker build` run only in CI), the redeploy, and the post-deploy check.
 - Started from commit: 1f65e46
 - Goal: one scripted scenario playable end to end in the browser, server-authoritative, on the live link.
+- Done by: main session (sim, ROE, scenario, contracts, integration, e2e) and two Sonnet subagents in separate worktrees (A: server transport; B: workspace UI), both merged by the main session.
 
 **Done**
 - 7d48c6f build(api): `sim/` and `packs/` ship in the API image; `make prod-check` runs `sim-check` inside it (Q-19 closed)
-- c80fffa feat(sim): operator actions on tracks, ROE engine, trainee allow-list, Harrier Field scenario, live protocol contracts, `docs/LIVE_SESSION.md`, ADR-020
-- Step 1, subagent A (worktree, Sonnet), merged: live session manager, MessagePack wire format, REST and WebSocket endpoints, `training_sessions` table (migration 0003), nginx WebSocket upgrade, load harness (`tests/load/run_load.py`); 13 commits 56a954e..310a2bc
-- build(api): uvicorn `--ws-max-size 65536` so an oversized client frame is refused early
+- c80fffa feat(sim): operator actions on tracks, ROE engine, trainee allow-list, Harrier Field scenario, live protocol contracts, `docs/LIVE_SESSION.md`, ADR-020; tests `test_roe.py`, `test_world_operator.py`, `test_audience.py`, `test_harrier_scenario.py`
+- Step 1, subagent A, merged at de13f03: live session manager, MessagePack wire format, REST and WebSocket endpoints, `training_sessions` table (migration 0003), nginx WebSocket upgrade, load harness (13 commits 56a954e..310a2bc)
+- 8ed02d8 build(api): uvicorn `--ws-max-size 65536`
+- Step 2, subagent B, merged at e1dfd44: protocol client, store, key flow, scripted mock session, EO view, radar PPI, track table, decision panel, lobby, workspace and ended screens, EN and HI strings, DESIGN.md "Workspace" (9 commits 420f6ce..7e1d3b1)
+- bcc275a feat(api): the scenario list carries the briefing and rule pack; sensor status carries `pixels_h` (both asked for by B; the EO angular size no longer hard-codes 1920)
+- Step 3 tests: real-stack e2e `e2e/live-session.spec.ts` (keyboard only: cue, relabel, classify, assess, a blocked response, end, log verified; axe in Hindi light; a stranger cannot open another account's session), lobby visual snapshots, a Kestrel socket test; docs (PERFORMANCE.md, SIM_CORE, TRACEABILITY, CHANGELOG, Q-23, Q-24)
+
+**Acceptance map**
+| Criterion | Proof |
+|---|---|
+| A trainee signs in, starts the scenario, detects, classifies, responds, finishes; the log verifies | `e2e/live-session.spec.ts` (real nginx, API and Postgres, keyboard only; reads `/sessions/{id}/log` and asserts `verified`); `test_live_socket.py` plays whole sessions |
+| No ground truth reaches a trainee socket | `test_live_no_truth.py` (a whole session over a real socket, every frame scanned for drone IDs, `truth`, `disposition`, `true_class`, `ledger`, `threat.`), `test_audience.py`, `test_live_protocol.py` (every message validates against the Pydantic model and the JSON Schema) |
+| Load test: 12 clients, 5 minutes, jitter and latency, no dropped session | Table below; `docs/PERFORMANCE.md` |
+| The ROE validator blocks a forbidden response and shows rule text and version | `test_roe.py`, `test_world_operator.py`, e2e (verdict shows the rule title, `training-baseline 1.0.0` and the unmet condition), `e2e/mock/workspace.spec.ts` |
+| A cue and a relabel from the UI appear in the event log and change the track table | `e2e/live-session.spec.ts` (table shows `ALPHA-1`; log holds `sensor.cue` and `track.relabel`) |
+| Keyboard-operable and axe-clean | e2e keyboard run; axe on the populated workspace in English dark and Hindi light (real stack) and on the mock suite (EN/HI, dark/light) |
+| EN and HI for every new string | `tests/live/i18nCoverage.test.ts` and the existing key-parity test; Hindi is an unreviewed draft (Q-15) |
+| Every new screen has populated, empty, loading and error states | `tests/live/lobby.test.tsx`, `tests/live/workspace.test.tsx`, `e2e/mock/screens.spec.ts` |
+| Reference data labelled (Q-20) | track table REF marker and legend, detail strip (`workspace.test.tsx`); `data_status` on every frame item (`test_live_protocol.py`) |
+| Event log stored at session end, verified on read | `test_live_rest.py` (tamper detection at the edited sequence number, `?deep=1` replay) |
+| Lint, typecheck, unit, e2e, visual, prod-check, smoke pass locally | Test counts below |
+| After the user redeploys, an admin-created trainee can play on the live link | **Pending owner** (steps below) |
 
 **Decisions** (ADR-020)
 - Operators act on tracks, never drone IDs; the real drone is logged as `target` for scoring and stripped for trainees.
-- ROE verdicts cite the permitting rule or the closest one (with what is missing) and always the pack version; no change to `rulepack.v1`.
-- The EO view is drawn from EO reports, so there is no server-side entity list to leak.
-- Test pins adjusted: `test_there_is_one_example_of_each_pack_contract` now names the two scenario packs (additive; nothing loosened).
+- ROE verdicts cite the permitting rule or the closest one (with what is missing) and always the pack version; no change to `rulepack.v1`. An effector mismatch counts double when picking the closest rule.
+- The EO view is drawn from EO reports at the sensor's angular size, so there is no server-side entity list to leak.
+- A disconnect pauses the session (no ticks) and a grace of 120 s abandons it; one API worker holds all running sessions.
+- The world is built at first connect (lobby), not at first `start`, because the lobby frame needs the sensors; nothing has ticked, so the state is identical (subagent A).
+- A WebSocket with no `Origin` header is accepted (a browser always sends one; the load client does not); cross-site and `null` origins are refused at the handshake. nginx now forwards `Host $http_host` so the check sees the port.
+- Tuning the Harrier scenario: a first layout put the quadcopter's path through the bird flock and produced 91 identity swaps in 420 s; the flock was moved to the south-east, away from the approach.
+- Test pins adjusted, additive only: `test_there_is_one_example_of_each_pack_contract` names the two scenario packs; the scenario-list key-set assertion gained `briefing` and `rule_pack`; two web tests that used the unbuilt Drills module as their placeholder now use Today (subagent B). Nothing was skipped, disabled or loosened.
 
+**Tests**
+- api: 2,186 passed, coverage 99.21% (about 150 new) · web unit: 281 passed (83 before) · e2e (real stack): 48 (45 before plus 3 live-session) · mock e2e: 40 · visual: 4 (two new lobby snapshots) · `make lint typecheck test` pass
+- The first full e2e run failed once in the Hindi axe test's cleanup step (a UI language switch on the profile page never settled); the cleanup now resets preferences through the API, and the spec passed three times afterwards.
+
+**Load test** (12 clients x 300 s, loopback, quiet build laptop, one API process; 2026-10-18)
+- Sessions dropped 0 (12 of 12 verified); frame rate 20.0 Hz, 0 tick gaps (71,988 frames)
+- Message latency (ping RTT): p50 3.1 ms, p95 14.3, p99 19.3, max 36.1
+- Inter-frame arrival jitter (|dt - 50 ms|): p50 0.8 ms, p95 9.4, p99 19.5, max 163.2
+- Server tick lateness: p50 0.7 ms, p95 3.9, p99 10.1, max 146.1; tick cost p50 0.7 ms, p99 2.6; lag drops 0; 25% of one core, 90 MB resident
+- A first run during heavy parallel builds showed 24 lag drops (whole-process stalls of about 0.5 s) and is not quoted. Re-run on the LAN and the deployed host before quoting there.
+
+**Deploy check**
+- Production images built: yes · `make prod-check` (production mode, HTTPS through Caddy, now also `sim-check` in the API container): pass · `make smoke` on the demo stack (port 8081): pass
+- Commit to deploy: the last commit on `main` after this entry (the hash is in the final report; record it under **Deployed build** when you redeploy). This build changes the web app, the API image (`sim/`, `packs/`, `msgpack`), nginx (WebSocket upgrade) and adds migration 0003, which the container entrypoint applies at start.
+- Post-deploy check (owner): (1) create a trainee on the live host, for example `docker compose exec api python -m app.cli create-user --email <address> --role trainee` (the password comes from the prompt or `NEW_USER_PASSWORD`, never an argument); (2) sign in at https://sudarshan.centralindia.cloudapp.azure.com, open Drills, create a Harrier Field session, begin it, and confirm the status reads Connected and tracks appear; (3) `make smoke URL=https://sudarshan.centralindia.cloudapp.azure.com` and `make check-deploy URL=...`; (4) record the date under **Deployed build**. If the status stays "Connecting", the proxy in front of nginx is not passing WebSocket upgrades (Caddy does by default).
+
+**Open issues**
+- CI result for the wave 3, 4a, 4b and 5 commits: owner to confirm.
+- Hindi strings are unreviewed drafts (Q-15); the review sheet was regenerated.
+- Q-23: no wave owns the RF waterfall and acoustic spectrogram consoles; checkpoint A needs them. Q-24: Kestrel is also playable (radar only).
+- The first-run load figures above are loopback only; LAN and deployed-host runs are still to do. Single worker only; more than one API worker needs session affinity.
+- A trainee cannot yet use a commander-authority rule (class B response): team mode is wave 13a.
+- `connect-src 'self'` in the nginx CSP should cover same-origin WebSockets in current browsers; older Safari may need an explicit `ws:`/`wss:` entry (untested).
+- The workspace has no instructor navigation entry (instructors reach the lobby by URL); wave 10a adds the instructor flow.
+
+**Next wave entry point**
+- Wave 6 (scoring and debrief): read docs/waves/wave-06-scoring-debrief.md. First step: STEP 1, the evaluator in `services/api/app/scoring/`, walking each threat's Detect, Classify, Assess, Respond tree over the stored event log and ground truth. Its inputs already exist: `roe.verdict` and `action.*` (with `target`) for the operator's calls, `threat.spawn`, `ledger.*` and `assist.assess` for truth, `Threat.disposition` for what each contact really was, and `GET /api/v1/sessions/{id}/log` for the stored log. Replace the session ended screen's "Scoring and debrief are not part of this build" note with the debrief.

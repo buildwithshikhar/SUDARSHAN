@@ -29,6 +29,8 @@ function result(id: PhaseResult['id'], fpsMedian: number, fps5th: number): Phase
     p95Ms: 1000 / fps5th,
     p99Ms: 40,
     maxMs: 60,
+    slowFrames: 0,
+    interruptions: 0,
   }
 }
 
@@ -151,26 +153,54 @@ describe('BenchRunner', () => {
     expect(log.indexOf('auto')).toBeGreaterThan(log.indexOf('begin auto'))
   })
 
-  it('ignores a gap longer than a second (a hidden tab) instead of counting it', () => {
-    const calls: number[] = []
+  function runWith(times: number[], interrupted?: () => boolean, measureMs = 500): PhaseResult {
     const hooks: BenchHooks = {
       begin: () => undefined,
       draw: () => undefined,
       autoFrame: () => null,
       tier: () => 'high',
+      interrupted,
     }
     const runner = new BenchRunner(hooks, [
-      { id: 'high', tier: 'high', mode: 'day', warmupMs: 0, measureMs: 500 },
+      { id: 'high', tier: 'high', mode: 'day', warmupMs: 0, measureMs },
     ])
-    for (const t of [0, 16, 32, 5032, 5048, 5064, 5600]) {
-      calls.push(t)
+    for (const t of times) {
       const s = runner.step(t)
-      if (s.status === 'done') {
-        expect(s.phases[0]?.maxMs).toBeLessThan(1000)
-        return
-      }
+      if (s.status === 'done') return s.phases[0] as PhaseResult
     }
     throw new Error('the run did not finish')
+  }
+
+  it('counts a slow frame instead of dropping it (Q-28: software rendering, 2 s a frame)', () => {
+    // Every interval is over a second: the old one-second filter recorded zero frames here.
+    const r = runWith([0, 2000, 4000, 6000], undefined, 5000)
+    expect(r.frames).toBe(3)
+    expect(r.slowFrames).toBe(3)
+    expect(r.interruptions).toBe(0)
+    expect(r.fpsMedian).toBeCloseTo(0.5, 2)
+    expect(r.maxMs).toBe(2000)
+  })
+
+  it('leaves out the interval across a hidden tab, as the page reports it', () => {
+    let hidden = false
+    const times = [0, 16, 32, 5032, 5048, 5064, 5600]
+    let i = 0
+    const r = runWith(times, () => {
+      i++
+      // The page reports one pause, on the frame that follows the 5 s gap (the fourth step).
+      const was = i === 4 && !hidden
+      if (was) hidden = true
+      return was
+    })
+    expect(r.interruptions).toBe(1)
+    expect(r.maxMs).toBeLessThan(1000)
+    expect(r.slowFrames).toBe(0)
+  })
+
+  it('treats an interval over a minute with no known cause as an interruption', () => {
+    const r = runWith([0, 16, 32, 90_000, 90_016, 90_600])
+    expect(r.interruptions).toBe(1)
+    expect(r.maxMs).toBeLessThan(1000)
   })
 
   it('has the five documented phases', () => {

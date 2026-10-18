@@ -972,7 +972,8 @@
       "median": "Median fps",
       "p5": "5th pct fps",
       "p99": "99th pct ms",
-      "frames": "Frames"
+      "frames": "Frames",
+      "slow": "Slow frames"
     },
     "phase": {
       "high": "High tier",

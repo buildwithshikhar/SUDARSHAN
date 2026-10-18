@@ -85,6 +85,11 @@ export function Bench() {
     const eye = { x: 0, y: 0, z: heightAt(pack, 0, 0) + 30 }
     let tier: Tier = 'high'
     const phases = new URLSearchParams(window.location.search).has('quick') ? quickPhases() : PHASES
+    let interrupted = false
+    const onVisibility = () => {
+      if (document.visibilityState === 'hidden') interrupted = true
+    }
+    document.addEventListener('visibilitychange', onVisibility)
     const runner = new BenchRunner(
       {
         begin: (spec: PhaseSpec) => {
@@ -117,6 +122,11 @@ export function Bench() {
           return event ? event.tier : null
         },
         tier: () => tier,
+        interrupted: () => {
+          const was = interrupted
+          interrupted = false
+          return was
+        },
       },
       phases,
     )
@@ -155,6 +165,7 @@ export function Bench() {
       setState({ status: 'done', result })
     }
     const teardown = () => {
+      document.removeEventListener('visibilitychange', onVisibility)
       live = false
       cancelAnimationFrame(raf)
       qualityStore.setChoice(previousChoice)
@@ -293,6 +304,13 @@ function Results({ result }: { result: BenchResult }) {
       key: 'frames',
       header: t('bench.col.frames'),
       render: (p) => p.frames,
+      align: 'right',
+      mono: true,
+    },
+    {
+      key: 'slow',
+      header: t('bench.col.slow'),
+      render: (p) => p.slowFrames,
       align: 'right',
       mono: true,
     },

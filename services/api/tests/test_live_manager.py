@@ -223,10 +223,7 @@ def test_a_store_that_fails_is_reported_unverified(
 
 
 def test_a_vanished_row_is_reported_unverified(live_client: TestClient) -> None:
-    row = started(live_client)
-    manager = manager_of(live_client)
-    assert manager.store("not-a-session", "ended", _record()) is False
-    del row
+    assert manager_of(live_client).store("not-a-session", "ended", _record()) is False
 
 
 def _record() -> Any:
@@ -292,3 +289,11 @@ def test_the_join_frame_replays_the_events_so_far(live_client: TestClient) -> No
     assert types[0] == "session.start" and "track.confirm" in types
     assert [e["seq"] for e in join["events"]] == sorted(e["seq"] for e in join["events"])
     assert wire.trainee_events([]) == []
+
+
+def test_a_session_that_is_finishing_refuses_a_new_connection(live_client: TestClient) -> None:
+    row = started(live_client)
+    with connect(live_client, row["id"]) as sock:
+        sock.until("frame")
+        manager_of(live_client).sessions[row["id"]].status = "ended"  # as `_finish` sets it
+        assert expect_close(live_client, row["id"]) == 4409

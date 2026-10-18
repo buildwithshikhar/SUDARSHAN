@@ -472,7 +472,7 @@ class SessionManager:
         except Exception:
             self.sessions.pop(info.id, None)
             raise
-        if live._end is not None or live.done.is_set():
+        if live._end is not None or live.done.is_set() or live.status in ("ended", "abandoned"):
             raise Refused(CLOSE_ENDED, "The session has ended.")
         conn = Connection(ws, info.user_id)
         live.attach(conn)

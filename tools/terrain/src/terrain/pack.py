@@ -362,4 +362,3 @@ def verify_pack(pack_dir: Path) -> list[str]:
         except (ValueError, struct.error) as exc:
             errors.append(f"{key} mesh is not a valid GLB: {exc}")
     return errors
-

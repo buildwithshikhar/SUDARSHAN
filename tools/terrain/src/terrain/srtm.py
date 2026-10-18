@@ -85,10 +85,11 @@ class SrtmTile:
         steps = self.samples - 1
         row = (self.lat_sw + 1 - lat) * steps
         col = (lon - self.lon_sw) * steps
-        r_lo = max(int(np.floor(np.min(row))) - 2, 0)
-        r_hi = min(int(np.ceil(np.max(row))) + 3, self.samples)
-        c_lo = max(int(np.floor(np.min(col))) - 2, 0)
-        c_hi = min(int(np.ceil(np.max(col))) + 3, self.samples)
+        pad = 64  # margin so a void on the window edge still has valid neighbours to fill from
+        r_lo = max(int(np.floor(np.min(row))) - pad, 0)
+        r_hi = min(int(np.ceil(np.max(row))) + pad + 1, self.samples)
+        c_lo = max(int(np.floor(np.min(col))) - pad, 0)
+        c_hi = min(int(np.ceil(np.max(col))) + pad + 1, self.samples)
         win = self.raw[r_lo:r_hi, c_lo:c_hi].astype(np.float64)
         void = self.raw[r_lo:r_hi, c_lo:c_hi] == VOID
         if void.any():

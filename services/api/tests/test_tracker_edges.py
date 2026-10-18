@@ -123,3 +123,38 @@ def test_a_resolution_that_is_not_a_reading_of_its_component_is_refused() -> Non
 def test_the_configuration_can_be_written_out_whole() -> None:
     state = TrackerConfig().to_state()
     assert state["confirm_hits"] == 3 and TrackerConfig(**state) == TrackerConfig()
+
+
+def test_rays_that_meet_behind_the_sensors_or_too_far_away_make_no_track() -> None:
+    sites = {"a": Vec3(x=0.0, y=0.0, z=0.0), "b": Vec3(x=1000.0, y=0.0, z=0.0)}
+    behind = Tracker(sites)
+    # the lines cross at (500, 500), which is behind both sensors for these bearings
+    ms = [
+        Measurement.from_view(
+            view(
+                sensor_id=k,
+                tick=0,
+                azimuth_deg=az,
+                elevation_deg=0.0,
+                range_m=None,
+                radial_speed_mps=None,
+                sigma_range_m=None,
+            )
+        )
+        for k, az in (("a", 225.0), ("b", 135.0))
+    ]
+    behind.update(0, ms, RngStreams(1))
+    assert behind.tracks == {}
+    far = Tracker(sites, config=TrackerConfig(triangulation_max_range_m=100.0))
+    far.update(0, [bearing(k, v, (500.0, 500.0, 0.0)) for k, v in sites.items()], RngStreams(1))
+    assert far.tracks == {}
+
+
+def test_three_duplicates_fold_into_the_oldest_with_one_drop_each() -> None:
+    tracker = Tracker({"radar-1": ORIGIN}, config=TrackerConfig(duplicate_hold_s=0.5))
+    for _ in range(3):
+        tracker.insert(bare_track(tracker.allocate_id()))
+    events = [e for t in range(30) for e in tracker.update(t, [], RngStreams(1)).events]
+    drops = [(e.track_id, e.payload["merged_into"]) for e in events if e.kind == "drop"]
+    assert drops == [("T002", "T001"), ("T003", "T001")]
+    assert list(tracker.tracks) == ["T001"]

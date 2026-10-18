@@ -25,12 +25,16 @@ const fake = () => holder.current as unknown as FakeTransport
 const push = (message: LiveServerMessage) => act(() => fake().push(message))
 
 async function running(language = 'en') {
+  // a stale transport from the previous test must not satisfy the wait for the new one
+  holder.current = null
   mockApi({
     'GET /api/v1/version': { body: version() },
     'GET /api/v1/auth/me': { body: session(makeUser('trainee', { language })) },
   })
   renderApp('/train/session/abc')
-  await waitFor(() => expect(holder.current).not.toBeNull())
+  await waitFor(() =>
+    expect((holder.current as FakeTransport | null)?.handlers ?? null).not.toBeNull(),
+  )
   act(() => fake().connection({ state: 'open' }))
   await push(welcome())
   await push(frame({ status: 'running', tracks: [track('T011')] }))

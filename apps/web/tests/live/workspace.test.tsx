@@ -40,6 +40,8 @@ function signedIn(
   extra = {},
   language = 'en',
 ) {
+  // a stale transport from the previous test must not satisfy the wait for the new one
+  holder.current = null
   return mockApi({
     'GET /api/v1/version': { body: version() },
     'GET /api/v1/auth/me': { body: session(makeUser(role, { language })) },
@@ -67,7 +69,9 @@ const two = (extra: Partial<Frame> = {}) =>
 async function running(extra: Partial<Frame> = {}, language = 'en') {
   signedIn('trainee', {}, language)
   renderApp('/train/session/abc')
-  await waitFor(() => expect(holder.current).not.toBeNull())
+  await waitFor(() =>
+    expect((holder.current as FakeTransport | null)?.handlers ?? null).not.toBeNull(),
+  )
   connection({ state: 'open' })
   await push(welcome())
   await push(two({ status: 'running', ...extra }))
@@ -85,7 +89,9 @@ describe('opening a session', () => {
   it('shows the briefing and a Begin button in the lobby state, and sends start', async () => {
     signedIn()
     renderApp('/train/session/abc')
-    await waitFor(() => expect(holder.current).not.toBeNull())
+    await waitFor(() =>
+      expect((holder.current as FakeTransport | null)?.handlers ?? null).not.toBeNull(),
+    )
     connection({ state: 'open' })
     await push(welcome())
     await push(frame({ status: 'lobby', tracks: [] }))
@@ -107,7 +113,9 @@ describe('opening a session', () => {
   it('shows the empty state while no contact is held', async () => {
     signedIn()
     renderApp('/train/session/abc')
-    await waitFor(() => expect(holder.current).not.toBeNull())
+    await waitFor(() =>
+      expect((holder.current as FakeTransport | null)?.handlers ?? null).not.toBeNull(),
+    )
     connection({ state: 'open' })
     await push(welcome())
     await push(frame({ status: 'running', tracks: [] }))
@@ -149,7 +157,9 @@ describe('connection states', () => {
   ])('explains close code %i when the session never opened', async (code, title) => {
     signedIn()
     renderApp('/train/session/abc')
-    await waitFor(() => expect(holder.current).not.toBeNull())
+    await waitFor(() =>
+      expect((holder.current as FakeTransport | null)?.handlers ?? null).not.toBeNull(),
+    )
     await connection({ state: 'closed', closeCode: code })
     expect(await screen.findByText(title)).toBeInTheDocument()
     expect(screen.getByTestId('session-failure')).toHaveAttribute('data-code', String(code))
@@ -158,7 +168,9 @@ describe('connection states', () => {
   it('turns 4409 into the ended view and reads the stored log', async () => {
     signedIn()
     renderApp('/train/session/abc')
-    await waitFor(() => expect(holder.current).not.toBeNull())
+    await waitFor(() =>
+      expect((holder.current as FakeTransport | null)?.handlers ?? null).not.toBeNull(),
+    )
     await connection({ state: 'closed', closeCode: 4409 })
     expect(await screen.findByText('Event log verified')).toBeInTheDocument()
     expect(screen.getByText('640')).toBeInTheDocument()
@@ -201,7 +213,9 @@ describe('session ended view', () => {
       'GET /api/v1/sessions/abc/log': { body: { ...LOG_OK, verified: false, first_bad_seq: 41 } },
     })
     renderApp('/train/session/abc')
-    await waitFor(() => expect(holder.current).not.toBeNull())
+    await waitFor(() =>
+      expect((holder.current as FakeTransport | null)?.handlers ?? null).not.toBeNull(),
+    )
     connection({ state: 'open' })
     await push(welcome())
     await push(two({ status: 'running' }))
@@ -214,7 +228,9 @@ describe('session ended view', () => {
   it('has an error state with a retry when the log cannot be read', async () => {
     signedIn('trainee', { 'GET /api/v1/sessions/abc/log': { status: 500, body: { detail: 'x' } } })
     renderApp('/train/session/abc')
-    await waitFor(() => expect(holder.current).not.toBeNull())
+    await waitFor(() =>
+      expect((holder.current as FakeTransport | null)?.handlers ?? null).not.toBeNull(),
+    )
     connection({ state: 'open' })
     await push(welcome())
     await push(two({ status: 'running' }))
@@ -639,7 +655,9 @@ describe('who may open it', () => {
   it('leaves the session when the page goes away', async () => {
     signedIn()
     const { unmount } = renderApp('/train/session/abc')
-    await waitFor(() => expect(holder.current).not.toBeNull())
+    await waitFor(() =>
+      expect((holder.current as FakeTransport | null)?.handlers ?? null).not.toBeNull(),
+    )
     const transport = fake()
     unmount()
     expect(transport.control).toEqual(['leave', 'close'])

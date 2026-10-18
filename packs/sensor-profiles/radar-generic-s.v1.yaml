@@ -1,20 +1,102 @@
-# Stub profile: the container is fixed in wave 3; the radar model that reads it arrives in wave 4a.
-# Every value is a project-authored fictional placeholder (F01) until calibrated and cited.
+# Generic short-range surveillance radar for the detection model in services/api/sim/sensors/radar.py.
+# Honesty: this is a fictional radar. System figures (power budget, clutter, noise, false alarms) are
+# project-authored (F01). The cross-section values sit inside the published small-multirotor and
+# bird ranges quoted in docs/02-research.md section 2 and are attributed to the D14 reference set,
+# but they were NOT extracted from the D14 files, so they stay verified: false (docs/DATA_REGISTER.md).
 contract: sensor-profile.v1
 id: radar-generic-s
-version: 0.1.0
+version: 0.2.0
 title:
-  en: Generic short-range surveillance radar (stub)
-  hi: सामान्य कम दूरी निगरानी रडार (प्रारंभिक)
+  en: Generic short-range surveillance radar
+  hi: सामान्य कम दूरी निगरानी रडार
 modality: radar
 fictional: true
 parameters:
+  # Coverage and update
   instrumented_range: { value: 4600, unit: m, source_id: F01, verified: false }
   update_interval: { value: 1.2, unit: s, source_id: F01, verified: false }
-  range_noise_sigma: { value: 7.5, unit: m, source_id: F01, verified: false }
-  bearing_noise_sigma: { value: 0.6, unit: deg, source_id: F01, verified: false }
   min_elevation: { value: -2, unit: deg, source_id: F01, verified: false }
   max_elevation: { value: 38, unit: deg, source_id: F01, verified: false }
+  # Radar equation: SNR (dB) at snr_ref_range for a 0 dBsm target, then R^-4; Pd is a logistic in
+  # the margin over detection_threshold.
+  snr_ref: { value: 45, unit: dB, source_id: F01, verified: false }
+  snr_ref_range: { value: 1000, unit: m, source_id: F01, verified: false }
+  detection_threshold: { value: 13, unit: dB, source_id: F01, verified: false }
+  pd_slope: { value: 2.5, unit: dB, source_id: F01, verified: false }
+  # Radar cross-section by class (literature range: small multirotor -20 to -8 dBsm, birds -30 to -19 dBsm).
+  rcs_rotary_small: { value: -16, unit: dBsm, source_id: D14, verified: false }
+  rcs_fixed_wing_small: { value: -10, unit: dBsm, source_id: D14, verified: false }
+  rcs_bird: { value: -22, unit: dBsm, source_id: D14, verified: false }
+  rcs_default: { value: -16, unit: dBsm, source_id: D14, verified: false }
+  # Aspect: effective RCS swings by +/- this many dB between nose/tail and broadside.
+  aspect_swing_rotary_small: { value: 4, unit: dB, source_id: F01, verified: false }
+  aspect_swing_fixed_wing_small: { value: 6, unit: dB, source_id: F01, verified: false }
+  aspect_swing_bird: { value: 4, unit: dB, source_id: F01, verified: false }
+  aspect_swing_default: { value: 4, unit: dB, source_id: F01, verified: false }
+  # Low-slow-small: ground clutter near the horizon and a Doppler notch at zero radial speed.
+  clutter_elevation: { value: 3, unit: deg, source_id: F01, verified: false }
+  clutter_floor_loss: { value: 3, unit: dB, source_id: F01, verified: false }
+  notch_speed: { value: 2.5, unit: m/s, source_id: F01, verified: false }
+  notch_depth: { value: 12, unit: dB, source_id: F01, verified: false }
+  # Modelled weather: one-way loss per km by condition, scaled by reference visibility / visibility.
+  weather_ref_visibility: { value: 5000, unit: m, source_id: F01, verified: false }
+  loss_clear: { value: 0, unit: dB/km, source_id: F01, verified: false }
+  loss_haze: { value: 0.01, unit: dB/km, source_id: F01, verified: false }
+  loss_fog: { value: 0.02, unit: dB/km, source_id: F01, verified: false }
+  loss_dust: { value: 0.04, unit: dB/km, source_id: F01, verified: false }
+  loss_rain: { value: 0.25, unit: dB/km, source_id: F01, verified: false }
+  # Measurement noise at noise_ref_snr; it grows as the square root of the SNR shortfall.
+  sigma_range: { value: 7.5, unit: m, source_id: F01, verified: false }
+  sigma_azimuth: { value: 0.6, unit: deg, source_id: F01, verified: false }
+  sigma_elevation: { value: 1.0, unit: deg, source_id: F01, verified: false }
+  sigma_radial: { value: 0.4, unit: m/s, source_id: F01, verified: false }
+  noise_ref_snr: { value: 20, unit: dB, source_id: F01, verified: false }
+  # Micro-Doppler: resolved when SNR clears the detection threshold by md_resolve_margin.
+  md_resolve_margin: { value: 6, unit: dB, source_id: F01, verified: false }
+  md_resolve_slope: { value: 2, unit: dB, source_id: F01, verified: false }
+  md_hz_rotor: { value: 120, unit: Hz, source_id: F01, verified: false }
+  # UNVERIFIED (Q-09): the bird wing-beat band of 5-20 Hz is from a secondary source only.
+  md_hz_wing_beat: { value: 12, unit: Hz, source_id: F01, verified: false }
+  md_hz_spread: { value: 0.1, unit: ratio, source_id: F01, verified: false }
+  # Clutter plots: expected per update, over a fixed number of slots.
+  false_alarm_rate: { value: 0.2, unit: count, source_id: F01, verified: false }
+  false_alarm_slots: { value: 4, unit: count, source_id: F01, verified: false }
+  false_alarm_speed: { value: 6, unit: m/s, source_id: F01, verified: false }
+  # Clutter degradation at severity 1.
+  clutter_pd_loss: { value: 0.4, unit: ratio, source_id: F01, verified: false }
+  clutter_noise_gain: { value: 0.5, unit: ratio, source_id: F01, verified: false }
+  clutter_false_alarm_gain: { value: 9, unit: ratio, source_id: F01, verified: false }
+confusion:
+  # Reported class when the micro-Doppler signature is resolved.
+  default:
+    labels: [rotary-small, fixed-wing-small, bird, unknown]
+    rows:
+      rotary-small: [0.86, 0.02, 0.04, 0.08]
+      fixed-wing-small: [0.03, 0.78, 0.09, 0.10]
+      bird: [0.03, 0.04, 0.85, 0.08]
+      clutter: [0.05, 0.05, 0.20, 0.70]
+    source_id: F01
+    verified: false
+  # Reported class when it is not: rotor and bird are easily confused on track kinematics alone.
+  unresolved:
+    labels: [rotary-small, fixed-wing-small, bird, unknown]
+    rows:
+      rotary-small: [0.44, 0.10, 0.16, 0.30]
+      fixed-wing-small: [0.10, 0.40, 0.20, 0.30]
+      bird: [0.14, 0.12, 0.44, 0.30]
+      clutter: [0.05, 0.05, 0.10, 0.80]
+    source_id: F01
+    verified: false
+  # The micro-Doppler label the signature processing reports when it resolves something.
+  micro_doppler:
+    labels: [rotor, wing-beat, none]
+    rows:
+      rotary-small: [0.90, 0.01, 0.09]
+      fixed-wing-small: [0.30, 0.05, 0.65]
+      bird: [0.02, 0.80, 0.18]
+      clutter: [0.04, 0.10, 0.86]
+    source_id: F01
+    verified: false
 notes:
-  en: Placeholder figures for contract tests only. Replace with cited values in wave 4a.
-  hi: केवल अनुबंध परीक्षणों के लिए अस्थायी मान। वेव 4a में उद्धृत मानों से बदलें।
+  en: Fictional radar built from open research figures and published specifications; parameters are calibrated from, not trained on, them. Cross-sections sit inside the published ranges but are not extracted from D14; see docs/SENSOR_MODELS.md. Weather is modelled.
+  hi: काल्पनिक रडार, खुले शोध आँकड़ों और प्रकाशित विनिर्देशों से बना; पैरामीटर उनसे अंशांकित हैं, उन पर प्रशिक्षित नहीं। क्रॉस-सेक्शन प्रकाशित सीमाओं के भीतर हैं पर D14 से निकाले नहीं गए; देखें docs/SENSOR_MODELS.md। मौसम मॉडलित है।

@@ -1,0 +1,65 @@
+# Generic thermal-infrared camera for the Johnson-criteria model in sim/sensors/eoir.py.
+# Honesty: a fictional camera; thermal is a rendering and detection model, not radiometric. The
+# 320 px, 24 deg, 5 px and 15 px figures are the docs/02-research.md section 2 values (D12,
+# Svanstrom et al.), which put a drone's detection at about 60 m and recognition at about 20 m.
+# Motor and battery heat-contrast figures are UNVERIFIED (Q-09): project-authored, verified: false.
+contract: sensor-profile.v1
+id: ir-generic-thermal
+version: 0.1.0
+title:
+  en: Generic thermal camera
+  hi: सामान्य थर्मल कैमरा
+modality: ir
+fictional: true
+parameters:
+  instrumented_range: { value: 3000, unit: m, source_id: F01, verified: false }
+  update_interval: { value: 0.2, unit: s, source_id: F01, verified: false }
+  min_elevation: { value: -10, unit: deg, source_id: F01, verified: false }
+  max_elevation: { value: 85, unit: deg, source_id: F01, verified: false }
+  slew_rate: { value: 40, unit: deg/s, source_id: F01, verified: false }
+  cue_hold: { value: 10, unit: s, source_id: F01, verified: false }
+  # 320 x 256 detector behind a 24 deg lens (the research-section camera); a narrow cue zooms to 6 deg.
+  fov_wide: { value: 24, unit: deg, source_id: D12, verified: true }
+  fov_narrow: { value: 6, unit: deg, source_id: F01, verified: false }
+  pixels_h: { value: 320, unit: px, source_id: D12, verified: true }
+  johnson_detect_px: { value: 5, unit: px, source_id: D12, verified: true }
+  johnson_recognise_px: { value: 15, unit: px, source_id: D12, verified: true }
+  johnson_slope: { value: 3, unit: ratio, source_id: F01, verified: false }
+  size_rotary_small: { value: 0.39, unit: m, source_id: D12, verified: false }
+  size_bird: { value: 0.79, unit: m, source_id: D12, verified: false }
+  size_fixed_wing_small: { value: 1.2, unit: m, source_id: F01, verified: false }
+  size_default: { value: 0.5, unit: m, source_id: F01, verified: false }
+  # Thermal contrast against the background: UNVERIFIED (Q-09). Warm motors and batteries make a
+  # multirotor the reference (1.0); a small electric fixed-wing is cooler.
+  contrast_rotary_small: { value: 1.0, unit: ratio, source_id: F01, verified: false }
+  contrast_bird: { value: 1.0, unit: ratio, source_id: F01, verified: false }
+  contrast_fixed_wing_small: { value: 0.8, unit: ratio, source_id: F01, verified: false }
+  contrast_default: { value: 0.8, unit: ratio, source_id: F01, verified: false }
+  # Thermal does not depend on light, and long-wave infrared passes haze better than visible light.
+  low_light_floor: { value: 1.0, unit: ratio, source_id: F01, verified: false }
+  extinction_scale: { value: 0.6, unit: ratio, source_id: F01, verified: false }
+  sigma_pixels: { value: 1.0, unit: px, source_id: F01, verified: false }
+  haze_pd_loss: { value: 0.2, unit: ratio, source_id: F01, verified: false }
+  haze_noise_gain: { value: 0.3, unit: ratio, source_id: F01, verified: false }
+  glare_pd_loss: { value: 0.1, unit: ratio, source_id: F01, verified: false }
+  glare_noise_gain: { value: 0.2, unit: ratio, source_id: F01, verified: false }
+confusion:
+  default:
+    labels: [rotary-small, fixed-wing-small, bird, unknown]
+    rows:
+      rotary-small: [0.85, 0.03, 0.06, 0.06]
+      fixed-wing-small: [0.05, 0.82, 0.07, 0.06]
+      bird: [0.06, 0.08, 0.80, 0.06]
+    source_id: F01
+    verified: false
+  distant:
+    labels: [rotary-small, fixed-wing-small, bird, unknown]
+    rows:
+      rotary-small: [0.35, 0.12, 0.20, 0.33]
+      fixed-wing-small: [0.12, 0.35, 0.20, 0.33]
+      bird: [0.20, 0.14, 0.33, 0.33]
+    source_id: F01
+    verified: false
+notes:
+  en: Fictional thermal camera built from open research figures; parameters are calibrated from, not trained on, them. Thermal is a rendering model, not radiometric; contrast figures are unverified (Q-09). Weather is modelled.
+  hi: काल्पनिक थर्मल कैमरा, खुले शोध आँकड़ों से बना; पैरामीटर उनसे अंशांकित हैं, उन पर प्रशिक्षित नहीं। थर्मल एक रेंडरिंग मॉडल है, रेडियोमेट्रिक नहीं; कॉन्ट्रास्ट आँकड़े असत्यापित हैं (Q-09)। मौसम मॉडलित है।

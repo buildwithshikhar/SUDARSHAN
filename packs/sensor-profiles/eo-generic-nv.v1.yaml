@@ -1,0 +1,59 @@
+# Generic night-vision camera: the same Johnson-criteria model as eo-generic-day in a mode that keeps
+# most of its performance after dark (sim/sensors/eoir.py). Fictional. The 5 px / 15 px thresholds
+# are the docs/02-research.md section 2 figures (D12); the rest is project-authored (F01). Weather is
+# modelled.
+contract: sensor-profile.v1
+id: eo-generic-nv
+version: 0.1.0
+title:
+  en: Generic night-vision camera
+  hi: सामान्य नाइट-विज़न कैमरा
+modality: eo
+fictional: true
+parameters:
+  instrumented_range: { value: 2500, unit: m, source_id: F01, verified: false }
+  update_interval: { value: 0.2, unit: s, source_id: F01, verified: false }
+  min_elevation: { value: -10, unit: deg, source_id: F01, verified: false }
+  max_elevation: { value: 85, unit: deg, source_id: F01, verified: false }
+  slew_rate: { value: 40, unit: deg/s, source_id: F01, verified: false }
+  cue_hold: { value: 10, unit: s, source_id: F01, verified: false }
+  fov_wide: { value: 20, unit: deg, source_id: F01, verified: false }
+  fov_narrow: { value: 3, unit: deg, source_id: F01, verified: false }
+  pixels_h: { value: 1280, unit: px, source_id: F01, verified: false }
+  johnson_detect_px: { value: 5, unit: px, source_id: D12, verified: true }
+  johnson_recognise_px: { value: 15, unit: px, source_id: D12, verified: true }
+  johnson_slope: { value: 3, unit: ratio, source_id: F01, verified: false }
+  size_rotary_small: { value: 0.39, unit: m, source_id: D12, verified: false }
+  size_bird: { value: 0.79, unit: m, source_id: D12, verified: false }
+  size_fixed_wing_small: { value: 1.2, unit: m, source_id: F01, verified: false }
+  size_default: { value: 0.5, unit: m, source_id: F01, verified: false }
+  contrast_default: { value: 0.75, unit: ratio, source_id: F01, verified: false }
+  # Image intensification keeps 70 % of daylight performance in the dark.
+  low_light_floor: { value: 0.7, unit: ratio, source_id: F01, verified: false }
+  extinction_scale: { value: 0.9, unit: ratio, source_id: F01, verified: false }
+  sigma_pixels: { value: 1.1, unit: px, source_id: F01, verified: false }
+  haze_pd_loss: { value: 0.5, unit: ratio, source_id: F01, verified: false }
+  haze_noise_gain: { value: 0.6, unit: ratio, source_id: F01, verified: false }
+  # Bright light blooms an intensified image.
+  glare_pd_loss: { value: 0.8, unit: ratio, source_id: F01, verified: false }
+  glare_noise_gain: { value: 1.2, unit: ratio, source_id: F01, verified: false }
+confusion:
+  default:
+    labels: [rotary-small, fixed-wing-small, bird, unknown]
+    rows:
+      rotary-small: [0.82, 0.03, 0.06, 0.09]
+      fixed-wing-small: [0.05, 0.80, 0.07, 0.08]
+      bird: [0.06, 0.08, 0.78, 0.08]
+    source_id: F01
+    verified: false
+  distant:
+    labels: [rotary-small, fixed-wing-small, bird, unknown]
+    rows:
+      rotary-small: [0.32, 0.12, 0.20, 0.36]
+      fixed-wing-small: [0.12, 0.32, 0.20, 0.36]
+      bird: [0.20, 0.14, 0.30, 0.36]
+    source_id: F01
+    verified: false
+notes:
+  en: Fictional night-vision camera built from open research figures; parameters are calibrated from, not trained on, them. Weather is modelled; see docs/SENSOR_MODELS.md.
+  hi: काल्पनिक नाइट-विज़न कैमरा, खुले शोध आँकड़ों से बना; पैरामीटर उनसे अंशांकित हैं, उन पर प्रशिक्षित नहीं। मौसम मॉडलित है; देखें docs/SENSOR_MODELS.md।

@@ -102,16 +102,15 @@ class Connection:
     def __init__(self, ws: WebSocket, user_id: str) -> None:
         self.ws = ws
         self.user_id = user_id
-        self.dropped = 0
         self._queue: asyncio.Queue[bytes | int] = asyncio.Queue()
         self.writer: asyncio.Task[None] = asyncio.create_task(self._write())
 
-    def send(self, data: bytes, *, droppable: bool = False) -> bool:
-        if droppable and self._queue.qsize() >= MAX_QUEUED_FRAMES:
-            self.dropped += 1
-            return False
+    def congested(self) -> bool:
+        """True when this client is too far behind to be sent another frame."""
+        return self._queue.qsize() >= MAX_QUEUED_FRAMES
+
+    def send(self, data: bytes) -> None:
         self._queue.put_nowait(data)
-        return True
 
     def close(self, code: int = 1000) -> None:
         """Close after everything already queued has been sent."""
@@ -326,7 +325,7 @@ class LiveSession:
                 if self._anchor is None:
                     self._anchor = (now, self.world.tick)
                 base, first = self._anchor
-                due = base + (self.world.tick - first) * DT
+                due = base + (self.world.tick - first) * DT / manager.speed
                 if due > now:
                     await self._wait(due - now)
                     if manager.clock() < due:  # woken early: look at the new state first
@@ -360,19 +359,19 @@ class LiveSession:
         batch, self.pending = self.pending, []
         self.actions.extend(batch)
         world.step(batch)
-        if self.conn is not None:
-            data = wire.pack(wire.frame(world, self.status, self._new_records()))
-            if not self.conn.send(data, droppable=True):
-                self.manager.frames_dropped += 1
-        else:  # pragma: no cover - the loop only ticks with a client
-            self._sent = len(world.log)
+        conn = self.conn
+        if conn is not None and conn.congested():
+            # A slow client skips frames; its events stay unsent and join the next frame.
+            self.manager.frames_dropped += 1
+        elif conn is not None:
+            records = self._new_records()
+            conn.send(wire.pack(wire.frame(world, self.status, records)))
+            self._sent += len(records)
         self.manager.cost_ms.append((perf_counter() - started) * 1000.0)
 
     def _new_records(self) -> Any:
         assert self.world is not None
-        records = self.world.log.records[self._sent :]
-        self._sent += len(records)
-        return records
+        return self.world.log.records[self._sent :]
 
     # ------------------------------------------------------------------ ending
 
@@ -396,6 +395,7 @@ class LiveSession:
         conn = self.conn
         if conn is not None:
             conn.send(wire.pack(wire.frame(world, status, self._new_records())))
+            self._sent = len(world.log)
         verified = False
         try:
             verified = await asyncio.to_thread(self.manager.store, self.info.id, status, record)
@@ -444,6 +444,9 @@ class SessionManager:
         self.max_sessions = max_sessions
         self.act_rate = act_rate
         self.clock = clock
+        #: Ticks per wall second, in units of 20 Hz. Always 1.0 in service; tests run faster, which
+        #: is safe because simulation time never depends on wall time.
+        self.speed = 1.0
         self.sessions: dict[str, LiveSession] = {}
         self.jitter_ms: deque[float] = deque(maxlen=_SAMPLES)
         self.cost_ms: deque[float] = deque(maxlen=_SAMPLES)

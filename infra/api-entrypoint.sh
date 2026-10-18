@@ -7,4 +7,4 @@ set -eu
 python -m app.cli check
 python -m app.cli migrate
 python -m app.cli create-admin --if-configured
-exec uvicorn app.main:get_app --factory --host 0.0.0.0 --port 8000 --proxy-headers --forwarded-allow-ips '*'
+exec uvicorn app.main:get_app --factory --host 0.0.0.0 --port 8000 --ws-max-size 65536 --proxy-headers --forwarded-allow-ips '*'

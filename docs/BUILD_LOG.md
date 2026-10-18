@@ -506,6 +506,8 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 **Done**
 - 7d48c6f build(api): `sim/` and `packs/` ship in the API image; `make prod-check` runs `sim-check` inside it (Q-19 closed)
 - c80fffa feat(sim): operator actions on tracks, ROE engine, trainee allow-list, Harrier Field scenario, live protocol contracts, `docs/LIVE_SESSION.md`, ADR-020
+- Step 1, subagent A (worktree, Sonnet), merged: live session manager, MessagePack wire format, REST and WebSocket endpoints, `training_sessions` table (migration 0003), nginx WebSocket upgrade, load harness (`tests/load/run_load.py`); 13 commits 56a954e..310a2bc
+- build(api): uvicorn `--ws-max-size 65536` so an oversized client frame is refused early
 
 **Decisions** (ADR-020)
 - Operators act on tracks, never drone IDs; the real drone is logged as `target` for scoring and stripped for trainees.

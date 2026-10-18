@@ -55,10 +55,10 @@ False alarms. Each update takes `false_alarm_slots` slots of 8 uniforms each, al
 | `snr_ref_range` | m | 1000 | F01 | no |
 | `detection_threshold` | dB | 13 | F01 | no |
 | `pd_slope` | dB | 2.5 | F01 | no |
-| `rcs_rotary_small` | dBsm | -16 | D14 | no |
-| `rcs_fixed_wing_small` | dBsm | -10 | D14 | no |
-| `rcs_bird` | dBsm | -22 | D14 | no |
-| `rcs_default` | dBsm | -16 | D14 | no |
+| `rcs_rotary_small` | dBsm | -16 | F01 | no |
+| `rcs_fixed_wing_small` | dBsm | -10 | F01 | no |
+| `rcs_bird` | dBsm | -22 | F01 | no |
+| `rcs_default` | dBsm | -16 | F01 | no |
 | `aspect_swing_rotary_small` / `_fixed_wing_small` / `_bird` / `_default` | dB | 4 / 4 / 3 / 4 | F01 | no |
 | `clutter_elevation` | deg | 3 | F01 | no |
 | `clutter_floor_loss` | dB | 3 | F01 | no |
@@ -78,7 +78,7 @@ False alarms. Each update takes `false_alarm_slots` slots of 8 uniforms each, al
 | `false_alarm_speed` | m/s | 6 | F01 | no |
 | `clutter_pd_loss` / `clutter_noise_gain` / `clutter_false_alarm_gain` | ratio | 0.4 / 0.5 / 9 | F01 | no |
 
-The RCS values sit inside the ranges in [02-research.md](02-research.md) section 2 (small multirotor about -20 to -8 dBsm, birds about -30 to -19 dBsm) and are attributed to D14, the register's drone-versus-bird radar reference set. They were **not** extracted from the D14 files, so they stay `verified: false`. With the shipped aspect swings, a multirotor spans -20 to -12 dBsm and a bird -25 to -19 dBsm, so RCS alone cannot separate them. At neutral aspect, no weather and no clutter, `P(d)` is 0.5 at about 2.5 km for a small rotary contact, 1.8 km for a bird and 3.6 km for a small fixed-wing contact.
+The RCS values sit inside the ranges in [02-research.md](02-research.md) section 2 (small multirotor about -20 to -8 dBsm, birds about -30 to -19 dBsm) and are project-authored (F01): the published ranges (Ezuma et al. 2019, Seidaliyeva 2023) have no row in the data register yet (Q-20), and the values were not extracted from the KTH/SAAB set (D14). They stay `verified: false`. With the shipped aspect swings, a multirotor spans -20 to -12 dBsm and a bird -25 to -19 dBsm, so RCS alone cannot separate them. At neutral aspect, no weather and no clutter, `P(d)` is 0.5 at about 2.5 km for a small rotary contact, 1.8 km for a bird and 3.6 km for a small fixed-wing contact.
 
 ### Confusion matrices
 

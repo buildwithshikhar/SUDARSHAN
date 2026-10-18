@@ -1,8 +1,8 @@
 # Generic short-range surveillance radar for the detection model in services/api/sim/sensors/radar.py.
 # Honesty: this is a fictional radar. System figures (power budget, clutter, noise, false alarms) are
 # project-authored (F01). The cross-section values sit inside the published small-multirotor and
-# bird ranges quoted in docs/02-research.md section 2 and are attributed to the D14 reference set,
-# but they were NOT extracted from the D14 files, so they stay verified: false (docs/DATA_REGISTER.md).
+# bird ranges quoted in docs/02-research.md section 2 (Ezuma et al. 2019, Seidaliyeva 2023), which
+# have no row in docs/DATA_REGISTER.md yet (Q-20), so they are F01 and verified: false.
 contract: sensor-profile.v1
 id: radar-generic-s
 version: 0.2.0
@@ -24,10 +24,10 @@ parameters:
   detection_threshold: { value: 13, unit: dB, source_id: F01, verified: false }
   pd_slope: { value: 2.5, unit: dB, source_id: F01, verified: false }
   # Radar cross-section by class (literature range: small multirotor -20 to -8 dBsm, birds -30 to -19 dBsm).
-  rcs_rotary_small: { value: -16, unit: dBsm, source_id: D14, verified: false }
-  rcs_fixed_wing_small: { value: -10, unit: dBsm, source_id: D14, verified: false }
-  rcs_bird: { value: -22, unit: dBsm, source_id: D14, verified: false }
-  rcs_default: { value: -16, unit: dBsm, source_id: D14, verified: false }
+  rcs_rotary_small: { value: -16, unit: dBsm, source_id: F01, verified: false }
+  rcs_fixed_wing_small: { value: -10, unit: dBsm, source_id: F01, verified: false }
+  rcs_bird: { value: -22, unit: dBsm, source_id: F01, verified: false }
+  rcs_default: { value: -16, unit: dBsm, source_id: F01, verified: false }
   # Aspect: effective RCS swings by +/- this many dB between nose/tail and broadside.
   aspect_swing_rotary_small: { value: 4, unit: dB, source_id: F01, verified: false }
   aspect_swing_fixed_wing_small: { value: 4, unit: dB, source_id: F01, verified: false }
@@ -98,5 +98,5 @@ confusion:
     source_id: F01
     verified: false
 notes:
-  en: Fictional radar built from open research figures and published specifications; parameters are calibrated from, not trained on, them. Cross-sections sit inside the published ranges but are not extracted from D14; see docs/SENSOR_MODELS.md. Weather is modelled.
-  hi: काल्पनिक रडार, खुले शोध आँकड़ों और प्रकाशित विनिर्देशों से बना; पैरामीटर उनसे अंशांकित हैं, उन पर प्रशिक्षित नहीं। क्रॉस-सेक्शन प्रकाशित सीमाओं के भीतर हैं पर D14 से निकाले नहीं गए; देखें docs/SENSOR_MODELS.md। मौसम मॉडलित है।
+  en: Fictional radar built from open research figures and published specifications; parameters are calibrated from, not trained on, them. Cross-sections sit inside published ranges that have no data-register row yet (Q-20); see docs/SENSOR_MODELS.md. Weather is modelled.
+  hi: काल्पनिक रडार, खुले शोध आँकड़ों और प्रकाशित विनिर्देशों से बना; पैरामीटर उनसे अंशांकित हैं, उन पर प्रशिक्षित नहीं। क्रॉस-सेक्शन प्रकाशित सीमाओं के भीतर हैं जिनकी डेटा रजिस्टर में अभी कोई पंक्ति नहीं है (Q-20); देखें docs/SENSOR_MODELS.md। मौसम मॉडलित है।

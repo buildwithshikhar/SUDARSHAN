@@ -25,9 +25,9 @@ REPO = Path(__file__).resolve().parents[3]
 REGISTER = REPO / "docs" / "DATA_REGISTER.md"
 PROFILE_DIR = REPO / "packs" / "sensor-profiles"
 RADAR = "radar-generic-s.v1.yaml"
-EO_DAY = "eo-generic-day.yaml"
-EO_NV = "eo-generic-nv.yaml"
-THERMAL = "ir-generic-thermal.yaml"
+EO_DAY = "eo-generic-day.v1.yaml"
+EO_NV = "eo-generic-nv.v1.yaml"
+THERMAL = "ir-generic-thermal.v1.yaml"
 CLASSES = ("rotary-small", "fixed-wing-small", "bird")
 
 

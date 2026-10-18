@@ -390,6 +390,20 @@ def test_false_alarms_come_from_the_model_hook_and_stop_in_an_outage() -> None:
     assert s.detect(world, 202, world.rng) == []
 
 
+def test_an_outage_takes_the_same_draws_so_the_stream_never_shifts() -> None:
+    world, truth = scene()
+
+    def stream_after(outage: bool) -> list[float]:
+        s = make(NoisyAlarms, truth)
+        if outage:
+            s.inject(Degradation("toy-1", "outage", 0))
+        rng = RngStreams(7)
+        s.detect(world, 200, rng)
+        return [rng.uniform("sensors") for _ in range(3)]
+
+    assert stream_after(True) == stream_after(False)
+
+
 # ---------------------------------------------------------------------------- degradations
 
 
@@ -512,6 +526,14 @@ def test_a_narrow_cue_tightens_the_field_and_improves_precision_deterministicall
     assert sig(narrow.sigma_range_m) < sig(wide.sigma_range_m)
     again = measure(CueRequest("toy-1", 0.0, kind="narrow"))
     assert again == narrow  # same seed, same cue, same report
+
+
+def test_a_narrow_cue_zooms_at_once_before_the_next_tick() -> None:
+    _, truth = scene()
+    s = make(ToySensor, truth)
+    assert s.pointing.fov_deg == 60
+    assert s.cue(CueRequest("toy-1", 0, kind="narrow"), 200).accepted
+    assert s.pointing.fov_deg == 10
 
 
 def test_narrowing_sets_the_requested_field_within_the_sensor_limits() -> None:
@@ -749,6 +771,10 @@ def test_models_register_once_per_modality(monkeypatch: pytest.MonkeyPatch) -> N
     assert register_model(Spare) is Spare and suite.MODELS["spare"] is Spare
     with pytest.raises(ValueError, match="already registered"):
         register_model(Spare)
+
+
+def test_importing_the_package_registers_the_four_modality_models() -> None:
+    assert {"radar", "eo", "ir", "rf", "acoustic"} <= set(MODELS)
 
 
 def test_the_default_profile_directory_holds_the_shipped_profiles() -> None:

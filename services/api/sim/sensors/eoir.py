@@ -49,7 +49,8 @@ class EoIrSensor(Sensor):
     def fov_deg(self) -> float:
         """Current full field of view: the cue's zoom, else the wide field."""
         fov = self.pointing.fov_deg
-        return self.params.value("fov_wide", "deg") if fov is None else fov
+        assert fov is not None  # a cue-capable sensor always has a field (fov_wide is required)
+        return fov
 
     def ifov_rad(self, fov_deg: float | None = None) -> float:
         """Instantaneous field of view: one pixel's angle."""

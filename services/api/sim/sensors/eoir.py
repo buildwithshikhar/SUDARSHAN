@@ -26,6 +26,7 @@ _SIGMA_SCALE = (0.5, 3.0)
 class EoIrSensor(Sensor):
     modalities = ("eo", "ir")
     supports_cue = True
+    needs_line_of_sight = True
     required_params = (
         "pixels_h",
         "johnson_detect_px",

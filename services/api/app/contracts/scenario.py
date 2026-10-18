@@ -13,9 +13,21 @@ from .common import Contract, Heading, PackRef, Seed, SemVer, Slug, Text, Vec3, 
 TICK_HZ: Literal[20] = 20
 
 
-class Terrain(Contract):
+class FlatTerrain(Contract):
     kind: Literal["flat"]
     elevation_m: FiniteFloat = 0.0
+
+
+class PackTerrain(Contract):
+    """A baked terrain pack (`packs/terrain/<id>/`, docs/TERRAIN_PACKS.md). Positions in the
+    scenario are metres above the pack datum, in the pack's local frame."""
+
+    kind: Literal["pack"]
+    id: Slug
+    version: SemVer
+
+
+Terrain = Annotated[FlatTerrain | PackTerrain, Field(discriminator="kind")]
 
 
 class Weather(Contract):

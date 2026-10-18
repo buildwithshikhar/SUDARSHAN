@@ -61,8 +61,12 @@ export type TickHz = 20
 export type Version1 = string
 export type HalfExtentM = number
 export type StartTimeOfDayH = number
+export type Terrain = FlatTerrain | PackTerrain
 export type ElevationM = number
 export type Kind = 'flat'
+export type Id6 = string
+export type Kind1 = 'pack'
+export type Version2 = string
 export type CloudCoverPct = number
 export type Condition = 'clear' | 'haze' | 'rain' | 'fog' | 'dust'
 export type GustSigmaMps = number
@@ -70,7 +74,7 @@ export type TemperatureC = number
 export type VisibilityM = number
 export type WindFromDeg = number
 export type WindSpeedMps = number
-export type Id6 = string
+export type Id7 = string
 export type RadiusM1 = number
 export type Role = 'inner' | 'outer' | 'restricted'
 /**
@@ -178,9 +182,18 @@ export interface World {
   terrain: Terrain
   weather: Weather
 }
-export interface Terrain {
+export interface FlatTerrain {
   elevation_m?: ElevationM
   kind: Kind
+}
+/**
+ * A baked terrain pack (`packs/terrain/<id>/`, docs/TERRAIN_PACKS.md). Positions in the
+ * scenario are metres above the pack datum, in the pack's local frame.
+ */
+export interface PackTerrain {
+  id: Id6
+  kind: Kind1
+  version: Version2
 }
 /**
  * Modelled weather at session start. Wind blows from `wind_from_deg` (0 = north).
@@ -199,7 +212,7 @@ export interface Weather {
  */
 export interface Zone {
   center: Vec3
-  id: Id6
+  id: Id7
   label: Text
   radius_m: RadiusM1
   role: Role

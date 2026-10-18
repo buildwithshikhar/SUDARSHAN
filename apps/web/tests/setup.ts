@@ -15,6 +15,18 @@ if (!HTMLDialogElement.prototype.showModal) {
   }
 }
 
+// jsdom has no layout observers and no canvas; the live views check for both and stand down.
+if (!('ResizeObserver' in globalThis)) {
+  class ResizeObserverStub {
+    observe(): void {}
+    unobserve(): void {}
+    disconnect(): void {}
+  }
+  Object.defineProperty(globalThis, 'ResizeObserver', { value: ResizeObserverStub })
+}
+HTMLCanvasElement.prototype.getContext = (() =>
+  null) as unknown as typeof HTMLCanvasElement.prototype.getContext
+
 afterEach(() => {
   cleanup()
   setCsrfToken(null)

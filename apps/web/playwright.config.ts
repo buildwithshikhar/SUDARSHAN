@@ -2,6 +2,8 @@ import { defineConfig, devices } from '@playwright/test'
 
 export default defineConfig({
   testDir: './e2e',
+  // The mock-session specs have their own config (playwright.mock.config.ts) and server.
+  testIgnore: '**/mock/**',
   // The signed-in tests share three seeded accounts and their saved preferences, so they run in order.
   fullyParallel: false,
   workers: 1,

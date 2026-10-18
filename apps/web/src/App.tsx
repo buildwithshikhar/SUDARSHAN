@@ -11,13 +11,15 @@ import {
 } from 'react-router-dom'
 import { PublicFrame } from './layout/PublicFrame'
 import { Shell } from './layout/Shell'
-import { AuthProvider, useAuth } from './lib/auth'
+import { AuthProvider, useAuth, type Role } from './lib/auth'
 import { VersionProvider, useVersion } from './lib/version'
 import { findModule } from './nav/modules'
 import { About } from './screens/About'
 import { DevComponents } from './screens/DevComponents'
 import { ModulePlaceholder, NoAccess, NotFound, Offline } from './screens/Messages'
+import { LiveSessionPage } from './screens/LiveSession'
 import { Profile } from './screens/Profile'
+import { SessionLobby } from './screens/SessionLobby'
 import { SignIn } from './screens/SignIn'
 import { Status } from './screens/Status'
 import { LoadingState } from './ui/States'
@@ -53,6 +55,31 @@ function RequireAuth() {
   )
 }
 
+/** Signed-in routes that bring their own full-screen frame (the live workspace). */
+function RequireAuthBare() {
+  const { t } = useTranslation()
+  const { state } = useAuth()
+  const location = useLocation()
+  if (state.status === 'loading') {
+    return (
+      <PublicFrame>
+        <LoadingState label={t('app.loading')} />
+      </PublicFrame>
+    )
+  }
+  if (state.status === 'anonymous') {
+    return <Navigate to="/sign-in" replace state={{ from: location.pathname }} />
+  }
+  return <Outlet />
+}
+
+/** Screens only some roles may open; admins, for one, cannot play a session. */
+function RoleGate({ roles, children }: { roles: Role[]; children: ReactNode }) {
+  const { state } = useAuth()
+  if (state.status !== 'authenticated') return null
+  return roles.includes(state.user.role) ? <>{children}</> : <Navigate to="/no-access" replace />
+}
+
 /** /:role/:module: each role may open only its own modules; others get No access. */
 function RoleModule() {
   const { role, module } = useParams()
@@ -65,6 +92,7 @@ function RoleModule() {
   }
   const found = module ? findModule(own, module) : null
   if (!found) return <NotFound />
+  if (found.module.home) return <Navigate to={found.module.home} replace />
   return (
     <ModulePlaceholder slug={found.module.slug} groupId={found.group.id} wave={found.module.wave} />
   )
@@ -133,7 +161,25 @@ export function AppRoutes() {
           </Frame>
         }
       />
+      <Route element={<RequireAuthBare />}>
+        <Route
+          path="/train/session/:id"
+          element={
+            <RoleGate roles={['trainee', 'instructor']}>
+              <LiveSessionPage />
+            </RoleGate>
+          }
+        />
+      </Route>
       <Route element={<RequireAuth />}>
+        <Route
+          path="/train/lobby"
+          element={
+            <RoleGate roles={['trainee', 'instructor']}>
+              <SessionLobby />
+            </RoleGate>
+          }
+        />
         <Route path="/status" element={<Status />} />
         <Route path="/account/:module" element={<AccountModule />} />
         <Route path="/:role/:module" element={<RoleModule />} />

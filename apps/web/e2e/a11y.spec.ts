@@ -23,7 +23,7 @@ const publicPages = [
 ]
 
 const roleModule: Record<Role, string> = {
-  trainee: '/trainee/drills',
+  trainee: '/trainee/today',
   instructor: '/instructor/cohorts',
   admin: '/admin/backup',
 }

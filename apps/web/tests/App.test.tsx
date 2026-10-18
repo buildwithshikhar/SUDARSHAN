@@ -150,9 +150,9 @@ describe('shell by role', () => {
 
   it('shows an honest empty state naming the delivering wave', async () => {
     signedIn('trainee')
-    renderApp('/trainee/drills')
-    expect(await screen.findByText('Arrives in wave 5')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Drills', level: 1 })).toBeInTheDocument()
+    renderApp('/trainee/today')
+    expect(await screen.findByText('Arrives in wave 11a')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Today', level: 1 })).toBeInTheDocument()
   })
 
   it.each([
@@ -241,11 +241,11 @@ describe('sign in and out', () => {
       'GET /api/v1/auth/me': unauth,
       'POST /api/v1/auth/login': { body: session(makeUser('trainee')) },
     })
-    renderApp('/trainee/drills')
+    renderApp('/trainee/today')
     await userEvent.type(await screen.findByLabelText('Email address'), 'trainee@unit.example')
     await userEvent.type(screen.getByLabelText('Password'), 'correct-horse-battery')
     await userEvent.click(screen.getByRole('button', { name: 'Sign in' }))
-    expect(await screen.findByText('Arrives in wave 5')).toBeInTheDocument()
+    expect(await screen.findByText('Arrives in wave 11a')).toBeInTheDocument()
   })
 })
 

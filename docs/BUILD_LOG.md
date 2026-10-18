@@ -5,7 +5,7 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 ## Current position
 
 - **Phase:** wave 5 complete (live-session vertical slice); every acceptance criterion has a passing test or measurement except the post-deploy check (map under the wave 5 entry). CI for the wave 3, 4a, 4b and 5 commits is **pending owner confirmation** (CI cannot be read from this machine), so wave 3 stays In progress and waves 4a, 4b and 5 are recorded as Done with CI pending.
-- **Current wave:** 6 · Scoring + debrief → [waves/wave-06-scoring-debrief.md](waves/wave-06-scoring-debrief.md) (not started)
+- **Current wave:** 6 · Scoring + debrief → [waves/wave-06-scoring-debrief.md](waves/wave-06-scoring-debrief.md) (in progress; see the wave 6 entry)
 - **Next step:** start wave 6 at the entry point under the wave 5 entry. Owner still to confirm CI for the wave 3, 4a, 4b and 5 commits, redeploy, run the wave 5 post-deploy check, and record the smoke date for the live link.
 - **Main is:** green locally (lint, typecheck, unit, e2e, visual, `make prod-check`); CI result for the latest commits is owner-confirmed only (see the wave entries).
 - **Deployed build:** live at https://sudarshan.centralindia.cloudapp.azure.com, running commit b722313 (wave 2 build; owner-reported, 2026-10-18).
@@ -30,7 +30,7 @@ Status values: Not started · In progress · Blocked · Done. A wave is Done onl
 | 4a | [Sensor models](waves/wave-04a-sensor-models.md) | 3 | Opus | Keep live build green | Cut | Done (CI pending) |
 | 4b | [Tracking, fusion + AI assist](waves/wave-04b-tracking-ai-assist.md) | 4a | Opus | Keep live build green | Cut | Done (CI pending) |
 | 5 | [Live-session vertical slice](waves/wave-05-live-session-slice.md) | 2, 4b | Sonnet | Redeploy: playable slice | Cut | Done (CI pending) |
-| 6 | [Scoring + debrief](waves/wave-06-scoring-debrief.md) | 5 | Sonnet | Redeploy | Cut | Not started |
+| 6 | [Scoring + debrief](waves/wave-06-scoring-debrief.md) | 5 | Sonnet | Redeploy | Cut | In progress |
 | 7 | [3D realism + terrain packs](waves/wave-07-3d-realism-terrain.md) | 5 | Sonnet (Opus if gate fails) | Keep live build green | Cut | Not started |
 | 8 | [Threat breadth](waves/wave-08-threat-breadth.md) | 4a, 7 | Sonnet | Keep live build green | Cut | Not started |
 | 9a | [Scenario engine](waves/wave-09a-scenario-engine.md) | 6, 8 | Opus | Redeploy: generated scenarios | Cut | Not started |
@@ -566,3 +566,19 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 **Next wave entry point**
 - Wave 6 (scoring and debrief): read docs/waves/wave-06-scoring-debrief.md. First step: STEP 1, the evaluator in `services/api/app/scoring/`, walking each threat's Detect, Classify, Assess, Respond tree over the stored event log and ground truth. Its inputs already exist: `roe.verdict` and `action.*` (with `target`) for the operator's calls, `threat.spawn`, `ledger.*` and `assist.assess` for truth, `Threat.disposition` for what each contact really was, and `GET /api/v1/sessions/{id}/log` for the stored log. Replace the session ended screen's "Scoring and debrief are not part of this build" note with the debrief.
+
+### Wave 6 · Scoring + debrief
+
+- Status: In progress
+- Started from commit: e881ca0
+- Goal: explainable decision-tree scoring for every threat and a debrief screen that says why.
+
+**Done**
+- 9bf2ad5 feat(api): evaluator `app/scoring/`, `score-result.v1`, pack `scoring` section, `ledger.first_report`, report truth, migration 0004, `GET /sessions/{id}/score`, `docs/SCORING.md`
+
+**Decisions**
+- The rule pack gained an optional `scoring` section and `thresholds.respond_within_s` with defaults, written out in the baseline pack, which stays at 1.0.0: no session has been stored against it in the field (wave 5 is not deployed), and bumping it would churn about twenty existing assertions. From the first pilot session a pack content change bumps its version.
+- New truth events and fields instead of re-simulating at scoring time: `ledger.first_report`, `target` on cue and verdict events, `truth` on a filed report. They are scoring-only and stripped for a trainee (`sim.audience`).
+- A clutter or civil contact the operator never acted on is left out of the mean (`worked: false`): leaving it alone is correct. A hostile contact never worked scores 0.
+- The report is graded separately and combined by the pack's `weights.report`; the score is stored when the session ends.
+

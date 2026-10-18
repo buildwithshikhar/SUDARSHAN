@@ -194,6 +194,7 @@ class Sensor(ABC):
             sigma_range_m=s_r,
             sigma_azimuth_deg=s_az,
             sigma_elevation_deg=s_el,
+            sigma_radial_mps=s_v,
             reported_class=reported_class,
             features=features or {},
         )

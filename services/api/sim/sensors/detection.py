@@ -62,6 +62,7 @@ class Detection:
     sigma_range_m: float | None = None
     sigma_azimuth_deg: float | None = None
     sigma_elevation_deg: float | None = None
+    sigma_radial_mps: float | None = None
     reported_class: str | None = None
     #: Modality-specific cues (for example a micro-Doppler class, a hop-pattern flag).
     features: dict[str, FeatureValue] = field(default_factory=dict)
@@ -96,6 +97,7 @@ class Detection:
             "sigma_range_m": _r(self.sigma_range_m),
             "sigma_azimuth_deg": _r(self.sigma_azimuth_deg),
             "sigma_elevation_deg": _r(self.sigma_elevation_deg),
+            "sigma_radial_mps": _r(self.sigma_radial_mps),
             "reported_class": self.reported_class,
             "features": {
                 k: _r(v) if isinstance(v, float) else v for k, v in sorted(self.features.items())

@@ -1,0 +1,72 @@
+{
+  "format": "terrain-pack.v1",
+  "id": "heron-ridge",
+  "version": "1.0.0",
+  "name": "Heron Ridge",
+  "kind": "rural",
+  "label": "reference data \u00b7 generic area",
+  "frame": {
+    "half_extent_m": 2000,
+    "datum_m": 661.2
+  },
+  "heightmap": {
+    "file": "heights.i16",
+    "size": 129,
+    "cell_m": 31.25,
+    "scale_m": 0.1,
+    "min_m": -34.5,
+    "max_m": 106.7
+  },
+  "buildings": {
+    "file": "buildings.json",
+    "count": 41,
+    "height_source": {
+      "tag": 0,
+      "levels": 0,
+      "default": 41
+    }
+  },
+  "vegetation": {
+    "file": "vegetation.json",
+    "count": 704
+  },
+  "meshes": {
+    "terrain": "terrain.glb",
+    "buildings": "buildings.glb"
+  },
+  "attribution": "ATTRIBUTION.md",
+  "sources": [
+    {
+      "register_id": "G01",
+      "name": "NASA SRTM GL1 v003",
+      "licence": "public domain (citation requested)"
+    },
+    {
+      "register_id": "G02",
+      "name": "OpenStreetMap",
+      "licence": "ODbL 1.0",
+      "notice": "\u00a9 OpenStreetMap contributors"
+    }
+  ],
+  "bake": {
+    "tool": "terrain-bake",
+    "version": "1.0.0",
+    "config": "areas.json#heron-ridge",
+    "reproducible": true,
+    "dropped_buildings": {
+      "invalid_footprint": 0,
+      "outside_square": 0,
+      "sensitive_feature": 0,
+      "over_building_cap": 0
+    },
+    "dropped_sensitive_areas": 0
+  },
+  "files": {
+    "heights.i16": "8145c97fc5b1b52d3a704d22304b953750581685afeea61e3aacfaffe103b36d",
+    "buildings.json": "138925b13803d9feee76f8cb51c609d1cc0f000384d986bcd371dffc8280fb20",
+    "vegetation.json": "5fb4e944a96f928339779d133612495896c0f6a5c356828a6f1023de901a9309",
+    "terrain.glb": "82c744afbd45315cbaa91f69e1254ece6809f28e8f3597d4695261e7f457c3f4",
+    "buildings.glb": "4daeedb34458eb78b5da63d65bc660c89d40df95d4924d2c58bdbb0bc6eb6672",
+    "ATTRIBUTION.md": "c79feb62732de094925714ffc2ca17571160fd67d90bd31048449094a15c82ac"
+  }
+}

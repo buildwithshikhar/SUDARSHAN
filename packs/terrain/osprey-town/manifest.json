@@ -1,0 +1,72 @@
+{
+  "format": "terrain-pack.v1",
+  "id": "osprey-town",
+  "version": "1.0.0",
+  "name": "Osprey Town",
+  "kind": "urban",
+  "label": "reference data \u00b7 generic area",
+  "frame": {
+    "half_extent_m": 1500,
+    "datum_m": 689.0
+  },
+  "heightmap": {
+    "file": "heights.i16",
+    "size": 97,
+    "cell_m": 31.25,
+    "scale_m": 0.1,
+    "min_m": -41.1,
+    "max_m": 81.1
+  },
+  "buildings": {
+    "file": "buildings.json",
+    "count": 1125,
+    "height_source": {
+      "tag": 0,
+      "levels": 14,
+      "default": 1111
+    }
+  },
+  "vegetation": {
+    "file": "vegetation.json",
+    "count": 45
+  },
+  "meshes": {
+    "terrain": "terrain.glb",
+    "buildings": "buildings.glb"
+  },
+  "attribution": "ATTRIBUTION.md",
+  "sources": [
+    {
+      "register_id": "G01",
+      "name": "NASA SRTM GL1 v003",
+      "licence": "public domain (citation requested)"
+    },
+    {
+      "register_id": "G02",
+      "name": "OpenStreetMap",
+      "licence": "ODbL 1.0",
+      "notice": "\u00a9 OpenStreetMap contributors"
+    }
+  ],
+  "bake": {
+    "tool": "terrain-bake",
+    "version": "1.0.0",
+    "config": "areas.json#osprey-town",
+    "reproducible": true,
+    "dropped_buildings": {
+      "invalid_footprint": 0,
+      "outside_square": 201,
+      "sensitive_feature": 0,
+      "over_building_cap": 0
+    },
+    "dropped_sensitive_areas": 1
+  },
+  "files": {
+    "heights.i16": "af6d66f716afea1acf7f434e91a8a223378ed9bc6e867cbb2e4bf832a9570f24",
+    "buildings.json": "62553fcb34a344795969eb7a480f501eddbb7314820ece660a46c4f2b5ef3961",
+    "vegetation.json": "bf44a11bba328cc04f0829b6927f539b4f6c2551689fd6bc992d75f3e690ec14",
+    "terrain.glb": "5660edf1912fa8d029f40eb97319677b668621e2367b246b18854be870822923",
+    "buildings.glb": "b10de856830c7ea3176b537c69d665543228f4d04915e4cd6d3039f377007b5f",
+    "ATTRIBUTION.md": "946696e8512e53de48d94bee330cf4abf2e23b5716c9465475ef33d4e073c240"
+  }
+}

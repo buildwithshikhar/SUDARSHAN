@@ -2,7 +2,7 @@ import enum
 import uuid
 from datetime import UTC, datetime
 
-from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, String
+from sqlalchemy import BigInteger, Boolean, DateTime, Enum, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db import Base
@@ -41,3 +41,29 @@ class SessionRecord(Base):
     csrf_token: Mapped[str] = mapped_column(String(64))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now)
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class TrainingSession(Base):
+    """One live training session: who played which scenario, how it ended, and the stored record.
+
+    `record` is the `session-record.v1` JSON of the whole session (inputs and event chain), written
+    when the session ends; `event_head`, `event_count` and `final_state_hash` are kept beside it so
+    the chain can be checked against values outside the JSON (docs/LIVE_SESSION.md).
+    """
+
+    __tablename__ = "training_sessions"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    scenario_id: Mapped[str] = mapped_column(String(64))
+    scenario_version: Mapped[str] = mapped_column(String(32))
+    seed: Mapped[int] = mapped_column(BigInteger)
+    status: Mapped[str] = mapped_column(String(16), default="lobby")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now)
+    started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    ended_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    ticks: Mapped[int] = mapped_column(Integer, default=0)
+    final_state_hash: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    event_head: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    event_count: Mapped[int] = mapped_column(Integer, default=0)
+    record: Mapped[str | None] = mapped_column(Text, nullable=True)

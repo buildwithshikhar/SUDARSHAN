@@ -4,9 +4,9 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 
 ## Current position
 
-- **Phase:** wave 4a complete (sensor models), all four steps done; every acceptance criterion has a passing test. CI for the wave 3 and wave 4a commits is **pending owner confirmation** (CI cannot be read from this machine), so wave 3 stays In progress and wave 4a is recorded as Done with CI pending.
-- **Current wave:** 4b · Tracking, fusion + AI assist → [waves/wave-04b-tracking-ai-assist.md](waves/wave-04b-tracking-ai-assist.md) (not started)
-- **Next step:** start wave 4b at the entry point under the wave 4a entry. Owner still to confirm CI for the wave 3 and 4a commits, and to record the smoke date for the live link.
+- **Phase:** wave 4b complete (tracking, fusion and AI assist); every acceptance criterion has a passing test (map under the wave 4b entry). CI for the wave 3, 4a and 4b commits is **pending owner confirmation** (CI cannot be read from this machine), so wave 3 stays In progress and waves 4a and 4b are recorded as Done with CI pending.
+- **Current wave:** 5 · Live-session vertical slice → [waves/wave-05-live-session-slice.md](waves/wave-05-live-session-slice.md) (not started)
+- **Next step:** start wave 5 at the entry point under the wave 4b entry. Owner still to confirm CI for the wave 3, 4a and 4b commits, and to record the smoke date for the live link.
 - **Main is:** green locally (lint, typecheck, unit, e2e, visual, `make prod-check`); CI result for the latest commits is owner-confirmed only (see the wave entries).
 - **Deployed build:** live at https://sudarshan.centralindia.cloudapp.azure.com, running commit b722313 (wave 2 build; owner-reported, 2026-10-18).
 
@@ -28,7 +28,7 @@ Status values: Not started · In progress · Blocked · Done. A wave is Done onl
 | 2 | [Design system + app shell](waves/wave-02-design-system-shell.md) | 1 | Sonnet | **PRIORITY MILESTONE: first live link** | Cut | In progress |
 | 3 | [Contracts + deterministic sim core](waves/wave-03-contracts-sim-core.md) | 1 | Opus | Keep live build green | Cut | In progress |
 | 4a | [Sensor models](waves/wave-04a-sensor-models.md) | 3 | Opus | Keep live build green | Cut | Done (CI pending) |
-| 4b | [Tracking, fusion + AI assist](waves/wave-04b-tracking-ai-assist.md) | 4a | Opus | Keep live build green | Cut | Not started |
+| 4b | [Tracking, fusion + AI assist](waves/wave-04b-tracking-ai-assist.md) | 4a | Opus | Keep live build green | Cut | Done (CI pending) |
 | 5 | [Live-session vertical slice](waves/wave-05-live-session-slice.md) | 2, 4b | Sonnet | Redeploy: playable slice | Cut | Not started |
 | 6 | [Scoring + debrief](waves/wave-06-scoring-debrief.md) | 5 | Sonnet | Redeploy | Cut | Not started |
 | 7 | [3D realism + terrain packs](waves/wave-07-3d-realism-terrain.md) | 5 | Sonnet (Opus if gate fails) | Keep live build green | Cut | Not started |
@@ -433,5 +433,63 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 **Next wave entry point (superseded: steps 2 and 3 are done)**
 - Historical: STEP 2 and STEP 3 could run as two subagents in separate worktrees (radar and EO/IR; RF and acoustic). Each adds `sim/sensors/<modality>.py` with a class registered by `register_model`, a profile in `packs/sensor-profiles/`, and tests. Read docs/SIM_CORE.md "Sensor framework" first; use `tests/sensor_toy.py` as the pattern for a minimal model. Cited values come from docs/02-research.md section 2 and docs/DATA_REGISTER.md; anything secondary or UNVERIFIED carries `verified: false`, and a parameter source not in the register goes to docs/OPEN_QUESTIONS.md instead of a made-up ID. Steps 2 and 3 should not both edit `sim/sensors/__init__.py` in conflicting ways: add the import of the model module there in the merge, not in the branch.
 
-**Next wave entry point (current)**
+**Next wave entry point (superseded: wave 4b is done)**
 - Wave 4b (tracking, fusion and AI assist): read docs/waves/wave-04b-tracking-ai-assist.md and start with the tracker's input contract: `Detection.trainee_view()` from `SensorSuite.detect`, wiring the suite into `World` per SIM_CORE ("the suite is not yet part of `World.state()`"). Before any sensor figure is shown to a trainee, resolve Q-20 (register rows for the sensor sources).
+
+### Wave 4b · Tracking, fusion + AI assist
+
+- Status: Done, CI pending. All four steps are merged; every acceptance criterion has a passing test (table below). Outstanding: the owner's confirmation of the CI run for the last wave 4b commit (gitleaks and the Linux `docker build` run only in CI).
+- Started from commit: b06c25e
+- Goal: a tracker that fuses the four sensors, fails in the ways real trackers fail (swaps, splits, merges), supports sensor cueing, and a seeded simulated AI assist.
+- Done by: main session (Opus-grade design, run on Sonnet 5.5) for the tracker, the picture and the world wiring; two Sonnet subagents in separate worktrees for the error policy, ledger, commands and cueing (A) and the AI assist (B); both merged by the main session.
+
+**Done**
+- f76447a feat(sim): `Detection.trainee_view()` carries `data_status`; the sensor template stamps it from the profile (Q-20 labelling)
+- 890834b feat(sim): tracker: `Measurement.from_view` (tracker input contract), six-state Kalman filter, gated nearest-neighbour association by components, lifecycle, triangulation, ambiguity-policy hook; `Detection.sigma_radial_mps`
+- 038e171 fix(sim): snapshot copies of track state; duplicate tracks by a statistical test; tracker core tests
+- 124bb1d feat(api): `track-relabel|merge|split|drop` and `sensor-cue` in `action-record.v1` (schemas and web types regenerated)
+- Step 3, subagent B (worktree, Sonnet), merged at c996910: 793c0d2 AI assist, e005eb7 its tests, 44ca92d docs fragment
+- Step 2, subagent A (worktree, Sonnet), merged at 6488afd: ed41bcf error policy, 70634d5 truth ledger, 30096f1 commands, e385a86 cue-to-track, fddc651 / 1a697c6 / 850de09 / e07bcac tests, 5868ed0 docs fragment
+- 66afc49 feat(sim): initiation-exclusion zone; bearing-only spawns wait for a partner; package exports; documented swap re-derived on the final tracker (seed 1014, tick 648)
+- a1b536b feat(sim): `Picture` and its `World`/`replay` hooks; wiring tests
+- 5e2373d, 115ac33 test(sim): tracker edge cases, documentation parity, triangulation limits; 538c812 docs: SENSOR_MODELS "Tracking", SIM_CORE, ADR-019, Q-20 update, Q-22, traceability, changelog
+
+**Acceptance map**
+| Criterion | Proof |
+|---|---|
+| Tracker: initiation, association under clutter, coasting through a short outage | `test_tracker_core.py::test_a_range_report_starts_a_tentative_track...`, `::test_association_under_clutter_keeps_the_real_track_on_the_real_target`, `::test_a_track_coasts_through_a_short_outage_and_resumes_with_the_same_id` |
+| Seeded crossing gives a swap at a documented tick; a relabel restores the true identity in the log | Rig path: `test_tracking_ambiguity.py::test_the_documented_swap_is_found_at_the_same_tick_every_time` (seed 1014, ledger tick 648; policy swap at 624), `test_tracking_commands.py::test_exchanging_the_labels_of_the_documented_swap_restores_the_picture`. World path through the action log: `test_tracking_wiring.py::test_the_seeded_crossing_swaps_at_the_documented_tick` (seed 195, tick 624) and `::test_a_relabel_logged_as_an_action_restores_the_true_identity_in_the_log` (`ledger.restored` at tick 640) |
+| Errors deterministic for a seed, never for well-separated targets | `test_tracking_ambiguity.py::test_the_swap_is_the_same_in_two_processes_with_different_hash_salts`, `::test_targets_that_stay_apart_never_err_whatever_the_seed` (300 seeds, zero swap, split or merge); `test_tracker_core.py::test_a_lone_target_never_gets_a_second_track_from_a_gate_edge_outlier` |
+| AI assist empirical hit and false-alarm rates within a stated tolerance | `test_tracking_assist.py` (40,000 trials per rate, tolerance 5 standard errors; hit 0.9005 vs 0.90, false alarm 0.0804 vs 0.08) |
+| SENSOR_MODELS.md tracking section | `docs/SENSOR_MODELS.md` "Tracking"; `test_tracking_docs.py` checks every tracker, error-model and assist parameter is documented with its default |
+| No sensor figure shown unlabelled (Q-20) | `test_sensor_provenance.py`; `test_tracking_wiring.py::test_everything_a_trainee_is_shown_is_labelled_reference_data`, `::test_trainee_events_and_frames_carry_no_ground_truth` |
+| Every feature has tests; none skipped or weakened | coverage 99.5% (every `sim/tracking/` module 100% in the full run); no existing test edited except the pins in subagent A's own new files, re-derived and explained under Decisions |
+| Production images build; production-mode stack passes `make smoke` | `make prod-check`: PASS, 2026-10-18 (api 68 MiB idle, four containers 204 MiB) |
+| CI green | lint, typecheck, unit pass locally; gitleaks and Linux `docker build` run in CI only: **pending owner confirmation** |
+| Deployed build still works | no API image or web change (`sim/` is not in the image, Q-19; web gained only regenerated types); commit to deploy optional; `make smoke URL=<live url>` after a redeploy: **pending owner** |
+
+**Decisions** (full reasoning in [ADR-019](DECISIONS.md))
+- The tracker sees only `Detection.trainee_view()`; ground truth reaches the ledger by a report reference number and never flows back.
+- Errors are cut from one `tracking` draw per report and can occur only in an ambiguous component (two tracks or two reports inside gates), so they are impossible for separated targets.
+- Q-20 is handled by labelling, not by waiting for register rows: every trainee-visible detection, track and assist view carries `data_status: "reference"` while any profile value is `verified: false`. The rows themselves are still open (Q-20), as is the unverified tracker, error and assist parameter set (new Q-22).
+- Found by testing: `Track.to_state` returned live lists (snapshots mutated); duplicate folding by a fixed 20 m let crossing targets fold, so it is now a statistical test on position and velocity; about 1 % of seeds split a lone drone on gate-edge noise, so an initiation-exclusion zone (2.5 times the gate around a live track) was added. Subagent A's pinned numbers (documented swap seed 47 tick 648, merge tick 467, "only seed 4 splits") were derived on the earlier tracker; they were re-derived on the final one (seed 1014, tick 648; merge tick 131; no split in 300 seeds), not loosened.
+- The picture attaches to `World` optionally with a `picture` key in the state only when present, so no golden file changed. The AI assist uses keyed SHA-256 draws instead of a new RNG stream for the same reason.
+- Swaps are rare at default maxima (4 of 300 seeds on the documented crossing; 1 under the nominal policy). A scenario raises `swap_max` for more; a persistent swap is mostly undone by the filter's velocity memory (documented).
+
+**Tests**
+- api: 2,007 passed, coverage 99.5% (every `sim/` module 100%; the two `tracker.py` branches missed in the full run were covered afterwards by `test_tracker_edges.py`) · web unit: 83 passed (contract drift check included) · e2e and visual: not run (no web change beyond regenerated types)
+- New: `test_sensor_provenance.py` (10), `test_tracker_core.py` (48), `test_tracker_edges.py` (10), `test_tracking_ambiguity.py` (26), `test_tracking_ledger.py` (32), `test_tracking_commands.py` (40), `test_tracking_cueing.py` (16), `test_tracking_assist.py` (65), `test_tracking_wiring.py` (17), `test_tracking_docs.py` (6), `test_contract_track_actions.py` (9).
+
+**Deploy check**
+- Production images built: yes · `make prod-check` (production mode, HTTPS through Caddy, runs `smoke.sh`): pass, 2026-10-18.
+- Commit to deploy: not needed (no user-facing change; the API image does not contain `sim/`). Latest verified code commit: the last wave 4b commit on `main`.
+
+**Open issues**
+- CI result for the wave 3, 4a and 4b commits: owner to confirm.
+- Smoke date for the live link: owner to record under **Deployed build**.
+- Q-19: the API image does not ship `sim/` or `packs/`; wave 5 must fix it first (`Picture` and the profiles are now what the live session imports).
+- Q-20 (register rows for sensor sources) and Q-22 (tracker, error and assist parameters are F01): figures stay labelled reference data.
+- `replay` must be told whether a session had a picture (`picture=True`); wave 5 should record that in the session record when it creates one (a `session-record.v1` addition, or a convention that every live session has one).
+
+**Next wave entry point**
+- Wave 5 (live-session slice): read docs/waves/wave-05-live-session-slice.md. First step: close Q-19 (copy `services/api/sim` and `packs/` into `infra/Dockerfile.api`, extend `make prod-check` to import `sim` and build a `Picture` for the example scenario), then the WebSocket protocol. Send a trainee only `picture.TRAINEE_EVENT_TYPES` and `Picture.trainee_frame()`; add the "no ground truth reaches a trainee socket" test against them.

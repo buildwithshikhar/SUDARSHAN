@@ -131,8 +131,10 @@ class Sensor(ABC):
             p = detmath.clamp(self.p_detect(obs) * fx.pd_factor, 0.0, 1.0)
             if draws.detect < p:
                 found.append(self.measure(obs))
+        # Called during an outage too, so its draws are taken and the stream never shifts.
+        alarms = self.false_alarms(world, t, rng, env, fx)
         if not fx.outage:
-            found.extend(self.false_alarms(world, t, rng, env, fx))
+            found.extend(alarms)
         return found
 
     def in_coverage(self, g: Geometry, fx: Effects) -> bool:
@@ -245,6 +247,7 @@ class Sensor(ABC):
             fov = detmath.clamp(requested, fov_narrow, fov_wide)
         self._target = Pointing(detmath.wrap360(request.bearing_deg), request.elevation_deg, fov)
         self._cue_until = t + self._hold_ticks
+        self._advance(t)  # a zoom takes effect at once; the slew starts with the next tick
         return CueResult(True, None, self._target)
 
     def _advance(self, t: int) -> None:

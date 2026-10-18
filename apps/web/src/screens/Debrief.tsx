@@ -439,7 +439,7 @@ function ContactSection({ threat, lang }: { threat: ThreatScore; lang: Lang }) {
       render: (r) => r.points,
       mono: true,
       align: 'right',
-      className: 'w-36 align-top py-1',
+      className: 'w-40 whitespace-nowrap align-top py-1',
     },
     {
       key: 'mark',
@@ -721,7 +721,7 @@ function NotScored({ threats, lang }: { threats: ThreatScore[]; lang: Lang }) {
       key: 'state',
       header: t('debrief.notScored.state'),
       render: (r) => <Badge>{r.state}</Badge>,
-      className: 'w-40 align-top py-1',
+      className: 'w-44 whitespace-nowrap align-top py-1',
     },
     {
       key: 'reason',

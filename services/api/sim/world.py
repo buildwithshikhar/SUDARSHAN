@@ -4,6 +4,7 @@ One call to `World.step` advances one tick, always in this order:
 
 1. apply the actions recorded for this tick, in log order;
 2. spawn threats whose spawn tick has come, in scenario order;
+2b. if the world has a picture: sensors report, the tracker updates, the ledger and assist run;
 3. advance the wind gust (the `weather` RNG stream);
 4. move every active drone, in scenario order, then retire drones that left the play area;
 5. increment the tick counter.
@@ -15,13 +16,13 @@ on dictionary order that was not fixed by the scenario.
 import math
 from collections.abc import Sequence
 from dataclasses import asdict, dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any, get_args
 
 from pydantic import ValidationError
 
 from app.contracts import TICK_HZ, ActionRecord, EventRecord
 from app.contracts.common import PackRef
-from app.contracts.events import Payload
+from app.contracts.events import Payload, TrackAction
 from app.contracts.scenario import ScenarioSpec, Weather
 
 from . import detmath
@@ -32,7 +33,11 @@ from .eventlog import EventLog
 from .kinematics import Envelope, position, step
 from .rng import RngStreams
 
+if TYPE_CHECKING:
+    from .tracking.picture import Picture
+
 SNAPSHOT_FORMAT = "sim-snapshot.v1"
+TRACK_ACTIONS: tuple[str, ...] = get_args(TrackAction)
 TRAINEE_ACTIONS = ("designate", "classify", "assess", "engage", "hold", "report")
 IDENTITIES = ("hostile", "suspect", "unknown", "neutral", "friend")
 
@@ -67,9 +72,21 @@ class ActionError(ValueError):
 
 
 class World:
-    def __init__(self, spec: ScenarioSpec, seed: int, *, _log: EventLog | None = None) -> None:
+    def __init__(
+        self,
+        spec: ScenarioSpec,
+        seed: int,
+        *,
+        picture: "Picture | None" = None,
+        _log: EventLog | None = None,
+    ) -> None:
         self.spec = spec
         self.seed = seed
+        #: The sensors, tracker, ground-truth ledger and AI assist of this session (wave 4b), or
+        #: `None` for a bare world. When present, its state is part of `state()` and its hash.
+        self.picture = picture
+        if picture is not None and picture.seed != seed:
+            raise ValueError("the picture was built for a different seed")
         self.tick = 0
         self.rng = RngStreams(seed)
         self.weather = WeatherState.of(spec.world.weather)
@@ -111,6 +128,8 @@ class World:
                     "threat.spawn",
                     {"id": drone.id, "class_id": self.spec.threats[i].class_id, **position(drone)},
                 )
+        if self.picture is not None:
+            self.picture.update(self)
         self._advance_gust()
         wind = self.wind()
         half = self.spec.world.half_extent_m
@@ -143,12 +162,20 @@ class World:
     def _emit(self, kind: str, payload: Payload, actor: str = "sim") -> EventRecord:
         return self.log.append(self.tick, kind, actor, payload)
 
+    def emit(self, kind: str, payload: Payload, actor: str = "sim") -> EventRecord:
+        """Append an event at the current tick; for subsystems attached to the world."""
+        return self._emit(kind, payload, actor)
+
     # ------------------------------------------------------------------ actions
 
     def _apply(self, action: ActionRecord) -> None:
         try:
             if action.action == "set-weather":
                 self._set_weather(action)
+            elif action.action in TRACK_ACTIONS:
+                if self.picture is None:
+                    raise ActionError("this session has no sensor picture")
+                self.picture.apply(self, action)
             else:
                 self._trainee_action(action)
         except ActionError as error:
@@ -200,7 +227,7 @@ class World:
 
     def state(self) -> dict[str, Any]:
         """Everything that determines the future, as plain JSON values."""
-        return {
+        state: dict[str, Any] = {
             "format": SNAPSHOT_FORMAT,
             "scenario": {"id": self.spec.id, "version": self.spec.version},
             "seed": self.seed,
@@ -211,6 +238,10 @@ class World:
             "event_count": len(self.log),
             "event_head": self.log.head,
         }
+        if self.picture is not None:
+            # Only present when a picture is attached, so a bare world hashes as it always did.
+            state["picture"] = self.picture.state()
+        return state
 
     def state_hash(self) -> str:
         return sha256_hex(self.state())
@@ -220,7 +251,9 @@ class World:
         return self.state() | {"events": [r.model_dump(mode="json") for r in self.log.records]}
 
     @classmethod
-    def restore(cls, spec: ScenarioSpec, snapshot: dict[str, Any]) -> "World":
+    def restore(
+        cls, spec: ScenarioSpec, snapshot: dict[str, Any], *, picture: "Picture | None" = None
+    ) -> "World":
         if snapshot.get("format") != SNAPSHOT_FORMAT:
             raise ValueError(f"not a {SNAPSHOT_FORMAT} snapshot")
         ref = PackRef.model_validate(snapshot["scenario"])
@@ -231,11 +264,19 @@ class World:
         log = EventLog.from_records(snapshot["events"], TICK_HZ)
         if log.head != snapshot["event_head"] or len(log) != snapshot["event_count"]:
             raise ValueError("snapshot events do not match its recorded head")
-        world = cls(spec, int(snapshot["seed"]), _log=log)
+        if ("picture" in snapshot) != (picture is not None):
+            raise ValueError(
+                "the snapshot has a sensor picture but none was given"
+                if "picture" in snapshot
+                else "a sensor picture was given but the snapshot has none"
+            )
+        world = cls(spec, int(snapshot["seed"]), picture=picture, _log=log)
         world.tick = int(snapshot["tick"])
         world.weather = WeatherState(**snapshot["weather"])
         world.rng.restore(snapshot["rng"])
         world.drones = [Drone.from_state(d) for d in snapshot["drones"]]
         if [d.id for d in world.drones] != [t.id for t in spec.threats]:
             raise ValueError("snapshot drones do not match the scenario threats")
+        if picture is not None:
+            picture.restore(snapshot["picture"])
         return world

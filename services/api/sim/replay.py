@@ -12,6 +12,7 @@ from itertools import groupby
 from app.contracts import ActionRecord, ScenarioSpec, SessionRecord
 from app.contracts.common import PackRef
 
+from .tracking.picture import Picture
 from .world import ActionError, World
 
 
@@ -39,9 +40,17 @@ def finish(world: World) -> str:
 
 
 def run(
-    spec: ScenarioSpec, seed: int, actions: Sequence[ActionRecord], ticks: int
+    spec: ScenarioSpec,
+    seed: int,
+    actions: Sequence[ActionRecord],
+    ticks: int,
+    *,
+    picture: bool = False,
 ) -> tuple[World, SessionRecord]:
-    world = advance(World(spec, seed), ticks, actions)
+    """Run a session; `picture=True` attaches the sensors, tracker, ledger and assist (wave 4b)."""
+    world = advance(
+        World(spec, seed, picture=Picture.build(spec, seed) if picture else None), ticks, actions
+    )
     final = finish(world)
     record = SessionRecord(
         contract="session-record.v1",
@@ -63,10 +72,11 @@ class ReplayResult:
     final_state_hash: str
 
 
-def replay(spec: ScenarioSpec, record: SessionRecord) -> ReplayResult:
+def replay(spec: ScenarioSpec, record: SessionRecord, *, picture: bool = False) -> ReplayResult:
+    """Re-run a record; `picture=True` if it was recorded with one (the record does not say)."""
     if (record.scenario.id, record.scenario.version) != (spec.id, spec.version):
         raise ValueError("the session record is for a different scenario or version")
-    _, again = run(spec, record.seed, record.actions, record.ticks)
+    _, again = run(spec, record.seed, record.actions, record.ticks, picture=picture)
     diverged = next(
         (i for i, (a, b) in enumerate(zip(record.events, again.events, strict=False)) if a != b),
         None,

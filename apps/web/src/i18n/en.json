@@ -58,6 +58,10 @@
       "health": "Health",
       "settings": "Settings",
       "backup": "Backup"
+    },
+    "screen": {
+      "session-lobby": "Session lobby",
+      "live-session": "Live session"
     }
   },
   "page": {
@@ -151,5 +155,435 @@
   "module": {
     "arrives": "Arrives in wave {{wave}}",
     "body": "This module is not built yet. It will appear here when that wave is delivered."
+  },
+  "live": {
+    "class": {
+      "rotary-small": "Small rotary",
+      "fixed-wing-small": "Small fixed-wing",
+      "bird": "Bird",
+      "unknown": "Unknown"
+    },
+    "identity": {
+      "hostile": "Hostile",
+      "suspect": "Suspect",
+      "unknown": "Unknown",
+      "neutral": "Neutral",
+      "friend": "Friend"
+    },
+    "zone": {
+      "inner": "Inner zone",
+      "outer": "Outer zone",
+      "restricted": "Restricted zone",
+      "none": "Outside the zones"
+    },
+    "weather": {
+      "clear": "Clear",
+      "haze": "Haze",
+      "rain": "Rain",
+      "fog": "Fog",
+      "dust": "Dust"
+    },
+    "modality": {
+      "radar": "Radar",
+      "eo": "EO",
+      "ir": "IR",
+      "rf": "RF",
+      "acoustic": "Acoustic"
+    },
+    "units": {
+      "mps": "m/s"
+    },
+    "conn": {
+      "connecting": "Connecting",
+      "open": "Connected",
+      "reconnecting": "Reconnecting",
+      "closed": "Closed"
+    },
+    "status": {
+      "lobby": "Ready",
+      "running": "Running",
+      "ended": "Ended",
+      "abandoned": "Abandoned"
+    },
+    "state": {
+      "connecting": "Connecting to the session",
+      "reconnecting": "Connection lost. Reconnecting, attempt {{attempt}}."
+    },
+    "banner": {
+      "reconnecting": "Connection lost. Reconnecting, attempt {{attempt}}. The picture is frozen and inputs are held until the link returns.",
+      "closed": "The connection closed (code {{code}}). Inputs are not sent."
+    },
+    "fail": {
+      "retry": "Reload",
+      "notSignedIn": {
+        "title": "Not signed in",
+        "body": "Your sign-in has ended. Sign in again, then reopen the session."
+      },
+      "forbidden": {
+        "title": "Session not available to you",
+        "body": "This session belongs to another account, or your role cannot play sessions."
+      },
+      "notFound": {
+        "title": "Session not found",
+        "body": "There is no session with this address. Create one from the Session lobby."
+      },
+      "superseded": {
+        "title": "Opened in another window",
+        "body": "The same account opened this session elsewhere. Only the newest window stays connected."
+      },
+      "full": {
+        "title": "Server is full",
+        "body": "The server is running its maximum number of live sessions. Try again shortly."
+      },
+      "tooLarge": {
+        "title": "Message too large",
+        "body": "The server refused a message as too large and closed the link (code {{code}})."
+      },
+      "closed": {
+        "title": "Connection closed",
+        "body": "The link to the session closed (code {{code}}) before it opened."
+      }
+    },
+    "top": {
+      "utc": "UTC",
+      "scenario": "Scenario",
+      "light": "Light",
+      "weather": "Weather",
+      "vis": "vis",
+      "rules": "ROE pack",
+      "fictional": "Fictional scenario · open-source parameters",
+      "helpLabel": "Keyboard shortcuts",
+      "leave": "Leave",
+      "end": "End session"
+    },
+    "workspace": {
+      "title": "Live session workspace"
+    },
+    "ready": {
+      "begin": "Begin session",
+      "facts": "Duration {{duration}} · ROE pack {{rules}}"
+    },
+    "end": {
+      "title": "End the session?",
+      "body": "The session ends now and its event log is stored and verified. You cannot resume it.",
+      "confirm": "End session"
+    },
+    "eo": {
+      "title": "EO view · {{sensor}}",
+      "titlePlain": "EO view",
+      "mode": "Mode",
+      "modeTv": "Day TV",
+      "cue": "Cue onto track",
+      "slew": "Slew only",
+      "brg": "BRG",
+      "el": "EL",
+      "fov": "FOV",
+      "zoom": "ZOOM",
+      "range": "RNG n/a",
+      "health": {
+        "ok": "OK",
+        "cued": "CUED",
+        "outage": "OUTAGE",
+        "unknown": "NO DATA"
+      },
+      "summary": "EO sensor {{sensor}}: bearing {{bearing}} degrees, elevation {{elevation}} degrees, field of view {{fov}} degrees, status {{health}}.",
+      "noSensor": "No EO sensor in this scenario",
+      "noSensorBody": "The briefing lists no electro-optical sensor, so there is no camera view.",
+      "noWebgl": "EO view unavailable (WebGL)",
+      "noWebglBody": "This browser cannot create a WebGL context. The radar, track table and decision panel still work; the EO picture is not drawn."
+    },
+    "ppi": {
+      "title": "Radar PPI",
+      "scale": "{{range}} km · sweep {{period}} s",
+      "aria": "Radar plan position indicator, range {{range}} kilometres. Tracks are listed in the track table."
+    },
+    "sensors": {
+      "title": "Sensors",
+      "ok": "OK",
+      "cued": "Cued",
+      "outage": "Outage"
+    },
+    "legend": {
+      "title": "Identity symbols",
+      "note": "A track is unknown until you assess it. Dashed outline: tentative. Bar: coasting."
+    },
+    "table": {
+      "title": "Track table",
+      "caption": "Tracks held by the tracker",
+      "track": "Track",
+      "status": "Status",
+      "class": "Class estimate",
+      "assist": "Assist (simulated AI)",
+      "brgRng": "Brg / range",
+      "speed": "m/s",
+      "heading": "Hdg",
+      "sensors": "Sensors",
+      "ref": "REF",
+      "refTitle": "Reference data",
+      "mergeMark": "MERGE",
+      "legend": "Reference data: parameters not yet verified; figures are not measurements.",
+      "count": "{{count}} tracks",
+      "empty": "No contacts. Sensors are scanning.",
+      "emptyBody": "Tracks appear here once the radar has confirmed a contact."
+    },
+    "track": {
+      "status": {
+        "tentative": "Tentative",
+        "confirmed": "Confirmed",
+        "coasting": "Coasting"
+      }
+    },
+    "assist": {
+      "flag": {
+        "threat": "Threat",
+        "no-threat": "No threat"
+      },
+      "source": "Source: {{source}} (not a real detector)"
+    },
+    "detail": {
+      "title": "Selected track",
+      "none": "No track selected",
+      "noneBody": "Press Tab to select the first track, or click one in the track table.",
+      "track": "Track",
+      "fromSite": "From site",
+      "alt": "alt",
+      "motion": "Motion",
+      "estimate": "Class estimate",
+      "sensors": "seen by",
+      "yours": "Your call",
+      "notSet": "not set",
+      "assist": "Assist",
+      "rfLink": "RF link",
+      "noRf": "No RF link",
+      "hopping": "hopping {{rate}} Hz",
+      "fixed": "fixed frequency",
+      "data": "Data",
+      "reference": "Reference data",
+      "verified": "Verified parameters"
+    },
+    "decision": {
+      "title": "Decision panel",
+      "steps": "Decision steps",
+      "step": {
+        "classify": "Classify",
+        "assess": "Assess",
+        "respond": "Respond"
+      },
+      "key": {
+        "classify": "C",
+        "assess": "A",
+        "respond": "R"
+      },
+      "noTrack": "No track selected",
+      "noTrackBody": "Press Tab to select a track, then C to classify, A to assess, R to respond.",
+      "ready": "{{track}} selected",
+      "readyBody": "C classify · A assess · R respond · H hold fire · U cue EO onto the track.",
+      "hint": "1–9 choose · Enter commit · Esc cancel · ? shortcuts",
+      "commit": "Commit",
+      "cancel": "Cancel",
+      "dropTitle": "Drop track",
+      "dropConfirm": "Drop track {{track}}? The tracker may start a new one on the next plot.",
+      "dropYes": "Drop track"
+    },
+    "respond": {
+      "engage": "Respond with {{effector}}",
+      "report": "Report up the chain",
+      "hold": "Hold fire"
+    },
+    "preview": {
+      "permittedBy": "Permitted by",
+      "authority": "authority: {{authority}}",
+      "met": "met",
+      "unmet": "not met",
+      "indicative": "Indicative, from what you have set. The server checks the rule pack when you commit.",
+      "noRule": "No rule in the pack permits {{action}}.",
+      "packOf": "Pack {{pack}}.",
+      "holdDefault": "Hold fire is the default action. No rule is needed and it is always allowed."
+    },
+    "pending": {
+      "sent": "{{action}}: sent",
+      "queued": "{{action}}: queued for the next tick",
+      "refused": "{{action}}: refused ({{message}})"
+    },
+    "verdict": {
+      "title": "Rules verdict",
+      "none": "No response issued",
+      "noneBody": "A response is checked against {{pack}} when you commit it. The rule and its version appear here.",
+      "dismiss": "Dismiss",
+      "rule": "Rule:",
+      "pack": "Pack {{pack}}",
+      "unmetCaption": "Conditions not met",
+      "field": "Condition",
+      "required": "Required",
+      "actual": "Actual"
+    },
+    "roe": {
+      "permitted": "PERMITTED",
+      "blocked": "BLOCKED",
+      "notSet": "not set",
+      "atLeast": "at least {{value}}",
+      "field": {
+        "identity": "Identity",
+        "classification": "Classification",
+        "zone": "Zone",
+        "confidence": "Confidence"
+      },
+      "action": {
+        "designate": "Designate",
+        "classify": "Classify",
+        "assess": "Assess",
+        "engage": "Respond",
+        "hold": "Hold fire",
+        "report": "Report",
+        "track-relabel": "Relabel",
+        "track-merge": "Merge",
+        "track-split": "Split",
+        "track-drop": "Drop",
+        "sensor-cue": "Cue sensor"
+      },
+      "authority": {
+        "operator": "operator",
+        "commander": "commander"
+      },
+      "reason": {
+        "permitted": "Permitted by the rule above.",
+        "default-hold": "Hold fire is the default action; no rule is needed.",
+        "no-rule": "No rule in this pack permits {{action}}.",
+        "conditions": "The closest rule applies only when these conditions hold, and they do not.",
+        "effector": "The closest rule does not list {{effector}}. Allowed: {{allowed}}.",
+        "authority": "The closest rule needs {{authority}} authority. This session has none.",
+        "unknown": "Blocked (code {{code}})."
+      }
+    },
+    "event": {
+      "sessionStart": "Session started.",
+      "sessionEnd": "Session ended.",
+      "trackInit": "Track {{track}} started.",
+      "trackConfirm": "Track {{track}} confirmed.",
+      "trackCoast": "Track {{track}} is coasting: no recent update.",
+      "trackResume": "Track {{track}} updated again.",
+      "trackDrop": "Track {{track}} dropped ({{reason}}).",
+      "dropReason": {
+        "operator": "by you",
+        "unconfirmed": "never confirmed",
+        "merged": "folded into another track"
+      },
+      "trackRelabel": "Track {{track}} relabelled '{{label}}' (was '{{previous}}').",
+      "trackRelabelSwap": "Track {{track}} relabelled '{{label}}'; track {{other}} now carries '{{previous}}'.",
+      "trackMerge": "Tracks merged: {{absorbed}} folded into {{survivor}}.",
+      "trackSplit": "Track {{source}} split; new track {{created}}.",
+      "cueAccepted": "Cue accepted: {{sensor}} onto {{track}}, bearing {{bearing}}°, field {{fov}}°.",
+      "cueRefused": "Cue refused: {{sensor}} onto {{track}}. {{reason}}",
+      "rejected": "Refused: {{action}}. {{reason}}",
+      "verdictPermitted": "{{action}} on {{track}}: permitted. {{rule}}",
+      "verdictBlocked": "{{action}} on {{track}}: blocked. {{rule}}",
+      "noRule": "no rule",
+      "classified": "You classified {{track}} as {{value}}.",
+      "assessed": "You assessed {{track}} as {{value}}.",
+      "engaged": "Response issued on {{track}} with {{effector}}.",
+      "held": "Hold fire on {{track}}.",
+      "reported": "{{track}} reported.",
+      "designated": "{{track}} designated.",
+      "requested": "Request accepted: {{action}}."
+    },
+    "log": {
+      "title": "Event log",
+      "empty": "No events yet.",
+      "tone": {
+        "ok": "Done",
+        "refused": "Refused",
+        "blocked": "Blocked",
+        "info": "Note"
+      }
+    },
+    "keys": {
+      "title": "Keyboard shortcuts",
+      "key": "Key",
+      "does": "Action",
+      "close": "Close",
+      "cycle": "Select the next or previous track. At either end the key moves focus on, so you never get stuck.",
+      "classify": "Open the Classify step",
+      "assess": "Open the Assess step",
+      "respond": "Open the Respond step",
+      "choose": "Choose an option in the open step",
+      "commit": "Commit the chosen option",
+      "cancel": "Cancel the step; with nothing open, return to the workspace",
+      "hold": "Hold fire on the selected track",
+      "cue": "Cue the EO sensor onto the selected track",
+      "relabel": "Relabel the selected track",
+      "merge": "Mark the selected track, then press again on a second track to merge",
+      "split": "Split the selected track",
+      "drop": "Drop the selected track (asks to confirm)",
+      "dismiss": "Dismiss the rules verdict",
+      "help": "Show these shortcuts",
+      "note": "Space is not used in this build. Every action is also available with the mouse."
+    },
+    "relabel": {
+      "title": "Relabel track {{track}}",
+      "label": "New label",
+      "hint": "1 to 24 characters.",
+      "exchange": "Take the label from another track if it is in use (they swap)",
+      "apply": "Relabel"
+    },
+    "ended": {
+      "title": "Session ended",
+      "back": "Back to the Session lobby",
+      "record": "Session record",
+      "loading": "Reading the stored event log",
+      "error": "The event log could not be read",
+      "errorBody": "The server did not return the stored log. Check the connection and try again.",
+      "ticks": "Ticks",
+      "duration": "Duration",
+      "events": "Events logged",
+      "head": "Chain head",
+      "stateHash": "Final state hash",
+      "verification": "Event log",
+      "verified": "Event log verified",
+      "failed": "Event log failed verification at sequence {{seq}}",
+      "note": "Scoring and debrief are not part of this build."
+    },
+    "lobby": {
+      "title": "Session lobby",
+      "reference": "Reference scenarios",
+      "scenarios": "Scenarios",
+      "scenario": "Scenario",
+      "briefing": "Briefing",
+      "briefingLater": "The full briefing (site, sensors, filed flights) is shown when the session opens.",
+      "duration": "Duration",
+      "light": "Start light",
+      "weather": "Weather",
+      "rules": "Rule pack",
+      "rulesLater": "Named when the session opens",
+      "version": "Scenario",
+      "seed": "seed",
+      "site": "Site zones",
+      "sensors": "Sensors",
+      "flights": "Filed flights",
+      "noFlights": "None filed",
+      "kit": "Role and kit check",
+      "loading": "Loading scenarios",
+      "error": "Scenarios could not be loaded",
+      "unreachable": "The server is unreachable",
+      "errorBody": "Check the connection and that the service is running, then retry.",
+      "empty": "No scenarios available",
+      "emptyBody": "The server lists no playable scenario. Ask your administrator to load a scenario pack.",
+      "create": "Create session",
+      "creating": "Creating session",
+      "createNote": "You open the session next and begin it from the workspace.",
+      "createFailed": "The session could not be created: {{detail}}",
+      "createForbidden": "Your account cannot create sessions. Administrators cannot play.",
+      "createUnreachable": "The server is unreachable. Check the connection and try again."
+    },
+    "kit": {
+      "role": "Role",
+      "webgl": "WebGL (EO view)",
+      "available": "Available",
+      "missing": "Not available; the EO view will not draw",
+      "display": "Display",
+      "meets": "meets 1366 × 768",
+      "below": "below 1366 × 768",
+      "keyboard": "Controls",
+      "keyboardValue": "Keyboard first; mouse works"
+    }
   }
 }

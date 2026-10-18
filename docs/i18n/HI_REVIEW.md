@@ -55,6 +55,8 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `nav.module.health` | Health | प्रणाली स्वास्थ्य |  |
 | `nav.module.settings` | Settings | सेटिंग |  |
 | `nav.module.backup` | Backup | बैकअप |  |
+| `nav.screen.session-lobby` | Session lobby | सत्र लॉबी |  |
+| `nav.screen.live-session` | Live session | लाइव सत्र |  |
 | `page.wave` | Wave {{wave}} | चरण {{wave}} |  |
 | `page.crumbStatus` | Status | स्थिति |  |
 | `signIn.title` | Sign in | साइन इन |  |
@@ -129,5 +131,325 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `offline.retry` | Retry | पुनः प्रयास करें |  |
 | `module.arrives` | Arrives in wave {{wave}} | चरण {{wave}} में उपलब्ध होगा |  |
 | `module.body` | This module is not built yet. It will appear here when that wave is delivered. | यह मॉड्यूल अभी बना नहीं है। वह चरण पूरा होने पर यह यहाँ दिखाई देगा। |  |
+| `live.class.rotary-small` | Small rotary | छोटा रोटरी |  |
+| `live.class.fixed-wing-small` | Small fixed-wing | छोटा फिक्स्ड-विंग |  |
+| `live.class.bird` | Bird | पक्षी |  |
+| `live.class.unknown` | Unknown | अज्ञात |  |
+| `live.identity.hostile` | Hostile | शत्रु |  |
+| `live.identity.suspect` | Suspect | संदिग्ध |  |
+| `live.identity.unknown` | Unknown | अज्ञात |  |
+| `live.identity.neutral` | Neutral | तटस्थ |  |
+| `live.identity.friend` | Friend | मित्र |  |
+| `live.zone.inner` | Inner zone | आंतरिक क्षेत्र |  |
+| `live.zone.outer` | Outer zone | बाहरी क्षेत्र |  |
+| `live.zone.restricted` | Restricted zone | प्रतिबंधित क्षेत्र |  |
+| `live.zone.none` | Outside the zones | क्षेत्रों से बाहर |  |
+| `live.weather.clear` | Clear | साफ़ |  |
+| `live.weather.haze` | Haze | धुंध |  |
+| `live.weather.rain` | Rain | वर्षा |  |
+| `live.weather.fog` | Fog | कोहरा |  |
+| `live.weather.dust` | Dust | धूल |  |
+| `live.modality.radar` | Radar | रडार |  |
+| `live.modality.eo` | EO | EO |  |
+| `live.modality.ir` | IR | IR |  |
+| `live.modality.rf` | RF | RF |  |
+| `live.modality.acoustic` | Acoustic | ध्वनिक |  |
+| `live.units.mps` | m/s | मी/से |  |
+| `live.conn.connecting` | Connecting | जुड़ रहा है |  |
+| `live.conn.open` | Connected | जुड़ा हुआ |  |
+| `live.conn.reconnecting` | Reconnecting | पुनः जुड़ रहा है |  |
+| `live.conn.closed` | Closed | बंद |  |
+| `live.status.lobby` | Ready | तैयार |  |
+| `live.status.running` | Running | चालू |  |
+| `live.status.ended` | Ended | समाप्त |  |
+| `live.status.abandoned` | Abandoned | छोड़ा गया |  |
+| `live.state.connecting` | Connecting to the session | सत्र से जुड़ रहा है |  |
+| `live.state.reconnecting` | Connection lost. Reconnecting, attempt {{attempt}}. | कनेक्शन टूट गया। पुनः जुड़ रहा है, प्रयास {{attempt}}। |  |
+| `live.banner.reconnecting` | Connection lost. Reconnecting, attempt {{attempt}}. The picture is frozen and inputs are held until the link returns. | कनेक्शन टूट गया। पुनः जुड़ रहा है, प्रयास {{attempt}}। लिंक लौटने तक चित्र स्थिर है और इनपुट रोके गए हैं। |  |
+| `live.banner.closed` | The connection closed (code {{code}}). Inputs are not sent. | कनेक्शन बंद हो गया (कोड {{code}})। इनपुट नहीं भेजे जा रहे। |  |
+| `live.fail.retry` | Reload | फिर से लोड करें |  |
+| `live.fail.notSignedIn.title` | Not signed in | साइन इन नहीं है |  |
+| `live.fail.notSignedIn.body` | Your sign-in has ended. Sign in again, then reopen the session. | आपका साइन-इन समाप्त हो गया है। फिर से साइन इन करें और सत्र दोबारा खोलें। |  |
+| `live.fail.forbidden.title` | Session not available to you | यह सत्र आपके लिए उपलब्ध नहीं है |  |
+| `live.fail.forbidden.body` | This session belongs to another account, or your role cannot play sessions. | यह सत्र किसी अन्य खाते का है, या आपकी भूमिका सत्र नहीं खेल सकती। |  |
+| `live.fail.notFound.title` | Session not found | सत्र नहीं मिला |  |
+| `live.fail.notFound.body` | There is no session with this address. Create one from the Session lobby. | इस पते पर कोई सत्र नहीं है। सत्र लॉबी से नया सत्र बनाएँ। |  |
+| `live.fail.superseded.title` | Opened in another window | दूसरी विंडो में खोला गया |  |
+| `live.fail.superseded.body` | The same account opened this session elsewhere. Only the newest window stays connected. | इसी खाते ने यह सत्र कहीं और खोला है। केवल नवीनतम विंडो जुड़ी रहती है। |  |
+| `live.fail.full.title` | Server is full | सर्वर भरा हुआ है |  |
+| `live.fail.full.body` | The server is running its maximum number of live sessions. Try again shortly. | सर्वर अधिकतम लाइव सत्र चला रहा है। कुछ देर बाद पुनः प्रयास करें। |  |
+| `live.fail.tooLarge.title` | Message too large | संदेश बहुत बड़ा है |  |
+| `live.fail.tooLarge.body` | The server refused a message as too large and closed the link (code {{code}}). | सर्वर ने एक संदेश को बहुत बड़ा मानकर अस्वीकार किया और लिंक बंद कर दिया (कोड {{code}})। |  |
+| `live.fail.closed.title` | Connection closed | कनेक्शन बंद हुआ |  |
+| `live.fail.closed.body` | The link to the session closed (code {{code}}) before it opened. | सत्र का लिंक खुलने से पहले ही बंद हो गया (कोड {{code}})। |  |
+| `live.top.utc` | UTC | UTC |  |
+| `live.top.scenario` | Scenario | परिदृश्य |  |
+| `live.top.light` | Light | प्रकाश |  |
+| `live.top.weather` | Weather | मौसम |  |
+| `live.top.vis` | vis | दृश्यता |  |
+| `live.top.rules` | ROE pack | ROE पैक |  |
+| `live.top.fictional` | Fictional scenario · open-source parameters | काल्पनिक परिदृश्य · ओपन-सोर्स पैरामीटर |  |
+| `live.top.helpLabel` | Keyboard shortcuts | कीबोर्ड शॉर्टकट |  |
+| `live.top.leave` | Leave | छोड़ें |  |
+| `live.top.end` | End session | सत्र समाप्त करें |  |
+| `live.workspace.title` | Live session workspace | लाइव सत्र कार्यक्षेत्र |  |
+| `live.ready.begin` | Begin session | सत्र आरंभ करें |  |
+| `live.ready.facts` | Duration {{duration}} · ROE pack {{rules}} | अवधि {{duration}} · ROE पैक {{rules}} |  |
+| `live.end.title` | End the session? | सत्र समाप्त करें? |  |
+| `live.end.body` | The session ends now and its event log is stored and verified. You cannot resume it. | सत्र अभी समाप्त होगा और उसका इवेंट लॉग सहेजकर सत्यापित किया जाएगा। इसे दोबारा शुरू नहीं किया जा सकता। |  |
+| `live.end.confirm` | End session | सत्र समाप्त करें |  |
+| `live.eo.title` | EO view · {{sensor}} | EO दृश्य · {{sensor}} |  |
+| `live.eo.titlePlain` | EO view | EO दृश्य |  |
+| `live.eo.mode` | Mode | मोड |  |
+| `live.eo.modeTv` | Day TV | दिन TV |  |
+| `live.eo.cue` | Cue onto track | ट्रैक पर क्यू करें |  |
+| `live.eo.slew` | Slew only | केवल घुमाएँ |  |
+| `live.eo.brg` | BRG | दिशा |  |
+| `live.eo.el` | EL | उन्नयन |  |
+| `live.eo.fov` | FOV | दृश्य-क्षेत्र |  |
+| `live.eo.zoom` | ZOOM | ज़ूम |  |
+| `live.eo.range` | RNG n/a | दूरी उपलब्ध नहीं |  |
+| `live.eo.health.ok` | OK | ठीक |  |
+| `live.eo.health.cued` | CUED | क्यू पर |  |
+| `live.eo.health.outage` | OUTAGE | बंद |  |
+| `live.eo.health.unknown` | NO DATA | डेटा नहीं |  |
+| `live.eo.summary` | EO sensor {{sensor}}: bearing {{bearing}} degrees, elevation {{elevation}} degrees, field of view {{fov}} degrees, status {{health}}. | EO सेंसर {{sensor}}: दिशा {{bearing}} अंश, उन्नयन {{elevation}} अंश, दृश्य-क्षेत्र {{fov}} अंश, स्थिति {{health}}। |  |
+| `live.eo.noSensor` | No EO sensor in this scenario | इस परिदृश्य में कोई EO सेंसर नहीं है |  |
+| `live.eo.noSensorBody` | The briefing lists no electro-optical sensor, so there is no camera view. | ब्रीफ़िंग में कोई विद्युत-प्रकाशीय सेंसर नहीं है, इसलिए कैमरा दृश्य नहीं है। |  |
+| `live.eo.noWebgl` | EO view unavailable (WebGL) | EO दृश्य उपलब्ध नहीं (WebGL) |  |
+| `live.eo.noWebglBody` | This browser cannot create a WebGL context. The radar, track table and decision panel still work; the EO picture is not drawn. | यह ब्राउज़र WebGL संदर्भ नहीं बना सकता। रडार, ट्रैक तालिका और निर्णय पैनल काम करते हैं; EO चित्र नहीं बनाया जाएगा। |  |
+| `live.ppi.title` | Radar PPI | रडार PPI |  |
+| `live.ppi.scale` | {{range}} km · sweep {{period}} s | {{range}} किमी · स्वीप {{period}} से |  |
+| `live.ppi.aria` | Radar plan position indicator, range {{range}} kilometres. Tracks are listed in the track table. | रडार प्लान पोज़िशन इंडिकेटर, परास {{range}} किलोमीटर। ट्रैक, ट्रैक तालिका में सूचीबद्ध हैं। |  |
+| `live.sensors.title` | Sensors | सेंसर |  |
+| `live.sensors.ok` | OK | ठीक |  |
+| `live.sensors.cued` | Cued | क्यू पर |  |
+| `live.sensors.outage` | Outage | बंद |  |
+| `live.legend.title` | Identity symbols | पहचान प्रतीक |  |
+| `live.legend.note` | A track is unknown until you assess it. Dashed outline: tentative. Bar: coasting. | आकलन करने तक ट्रैक अज्ञात रहता है। बिंदीदार रेखा: अस्थायी। पट्टी: कोस्टिंग। |  |
+| `live.table.title` | Track table | ट्रैक तालिका |  |
+| `live.table.caption` | Tracks held by the tracker | ट्रैकर द्वारा रखे गए ट्रैक |  |
+| `live.table.track` | Track | ट्रैक |  |
+| `live.table.status` | Status | स्थिति |  |
+| `live.table.class` | Class estimate | वर्ग अनुमान |  |
+| `live.table.assist` | Assist (simulated AI) | सहायक (सिम्युलेटेड AI) |  |
+| `live.table.brgRng` | Brg / range | दिशा / दूरी |  |
+| `live.table.speed` | m/s | मी/से |  |
+| `live.table.heading` | Hdg | शीर्ष |  |
+| `live.table.sensors` | Sensors | सेंसर |  |
+| `live.table.ref` | REF | संदर्भ |  |
+| `live.table.refTitle` | Reference data | संदर्भ डेटा |  |
+| `live.table.mergeMark` | MERGE | विलय |  |
+| `live.table.legend` | Reference data: parameters not yet verified; figures are not measurements. | संदर्भ डेटा: अभी सत्यापित न किए गए पैरामीटर; आँकड़े माप नहीं हैं। |  |
+| `live.table.count` | {{count}} tracks | {{count}} ट्रैक |  |
+| `live.table.empty` | No contacts. Sensors are scanning. | कोई संपर्क नहीं। सेंसर स्कैन कर रहे हैं। |  |
+| `live.table.emptyBody` | Tracks appear here once the radar has confirmed a contact. | रडार द्वारा संपर्क की पुष्टि होते ही ट्रैक यहाँ दिखेंगे। |  |
+| `live.track.status.tentative` | Tentative | अस्थायी |  |
+| `live.track.status.confirmed` | Confirmed | पुष्ट |  |
+| `live.track.status.coasting` | Coasting | कोस्टिंग |  |
+| `live.assist.flag.threat` | Threat | ख़तरा |  |
+| `live.assist.flag.no-threat` | No threat | ख़तरा नहीं |  |
+| `live.assist.source` | Source: {{source}} (not a real detector) | स्रोत: {{source}} (वास्तविक डिटेक्टर नहीं) |  |
+| `live.detail.title` | Selected track | चयनित ट्रैक |  |
+| `live.detail.none` | No track selected | कोई ट्रैक चयनित नहीं |  |
+| `live.detail.noneBody` | Press Tab to select the first track, or click one in the track table. | पहला ट्रैक चुनने के लिए Tab दबाएँ, या ट्रैक तालिका में किसी पर क्लिक करें। |  |
+| `live.detail.track` | Track | ट्रैक |  |
+| `live.detail.fromSite` | From site | स्थल से |  |
+| `live.detail.alt` | alt | ऊँचाई |  |
+| `live.detail.motion` | Motion | गति |  |
+| `live.detail.estimate` | Class estimate | वर्ग अनुमान |  |
+| `live.detail.sensors` | seen by | देखा गया |  |
+| `live.detail.yours` | Your call | आपका निर्णय |  |
+| `live.detail.notSet` | not set | तय नहीं |  |
+| `live.detail.assist` | Assist | सहायक |  |
+| `live.detail.rfLink` | RF link | RF लिंक |  |
+| `live.detail.noRf` | No RF link | कोई RF लिंक नहीं |  |
+| `live.detail.hopping` | hopping {{rate}} Hz | हॉपिंग {{rate}} हर्ट्ज़ |  |
+| `live.detail.fixed` | fixed frequency | स्थिर आवृत्ति |  |
+| `live.detail.data` | Data | डेटा |  |
+| `live.detail.reference` | Reference data | संदर्भ डेटा |  |
+| `live.detail.verified` | Verified parameters | सत्यापित पैरामीटर |  |
+| `live.decision.title` | Decision panel | निर्णय पैनल |  |
+| `live.decision.steps` | Decision steps | निर्णय के चरण |  |
+| `live.decision.step.classify` | Classify | वर्गीकृत करें |  |
+| `live.decision.step.assess` | Assess | आकलन करें |  |
+| `live.decision.step.respond` | Respond | कार्रवाई करें |  |
+| `live.decision.key.classify` | C | C |  |
+| `live.decision.key.assess` | A | A |  |
+| `live.decision.key.respond` | R | R |  |
+| `live.decision.noTrack` | No track selected | कोई ट्रैक चयनित नहीं |  |
+| `live.decision.noTrackBody` | Press Tab to select a track, then C to classify, A to assess, R to respond. | ट्रैक चुनने के लिए Tab दबाएँ; फिर C वर्गीकरण, A आकलन, R कार्रवाई। |  |
+| `live.decision.ready` | {{track}} selected | {{track}} चयनित |  |
+| `live.decision.readyBody` | C classify · A assess · R respond · H hold fire · U cue EO onto the track. | C वर्गीकरण · A आकलन · R कार्रवाई · H फ़ायर रोकें · U EO को ट्रैक पर क्यू करें। |  |
+| `live.decision.hint` | 1–9 choose · Enter commit · Esc cancel · ? shortcuts | 1–9 चुनें · Enter पुष्टि · Esc रद्द · ? शॉर्टकट |  |
+| `live.decision.commit` | Commit | पुष्टि करें |  |
+| `live.decision.cancel` | Cancel | रद्द करें |  |
+| `live.decision.dropTitle` | Drop track | ट्रैक हटाएँ |  |
+| `live.decision.dropConfirm` | Drop track {{track}}? The tracker may start a new one on the next plot. | ट्रैक {{track}} हटाएँ? अगले प्लॉट पर ट्रैकर नया ट्रैक शुरू कर सकता है। |  |
+| `live.decision.dropYes` | Drop track | ट्रैक हटाएँ |  |
+| `live.respond.engage` | Respond with {{effector}} | {{effector}} से कार्रवाई |  |
+| `live.respond.report` | Report up the chain | ऊपर रिपोर्ट करें |  |
+| `live.respond.hold` | Hold fire | फ़ायर रोकें |  |
+| `live.preview.permittedBy` | Permitted by | अनुमति देने वाला नियम: |  |
+| `live.preview.authority` | authority: {{authority}} | अधिकार: {{authority}} |  |
+| `live.preview.met` | met | पूरी |  |
+| `live.preview.unmet` | not met | पूरी नहीं |  |
+| `live.preview.indicative` | Indicative, from what you have set. The server checks the rule pack when you commit. | आपके तय किए गए विवरण के आधार पर संकेतक। पुष्टि करने पर सर्वर नियम-पैक जाँचता है। |  |
+| `live.preview.noRule` | No rule in the pack permits {{action}}. | पैक का कोई नियम {{action}} की अनुमति नहीं देता। |  |
+| `live.preview.packOf` | Pack {{pack}}. | पैक {{pack}}। |  |
+| `live.preview.holdDefault` | Hold fire is the default action. No rule is needed and it is always allowed. | फ़ायर रोकना डिफ़ॉल्ट कार्रवाई है। किसी नियम की ज़रूरत नहीं और यह हमेशा अनुमत है। |  |
+| `live.pending.sent` | {{action}}: sent | {{action}}: भेजा गया |  |
+| `live.pending.queued` | {{action}}: queued for the next tick | {{action}}: अगले टिक के लिए कतार में |  |
+| `live.pending.refused` | {{action}}: refused ({{message}}) | {{action}}: अस्वीकृत ({{message}}) |  |
+| `live.verdict.title` | Rules verdict | नियम निर्णय |  |
+| `live.verdict.none` | No response issued | कोई कार्रवाई जारी नहीं की गई |  |
+| `live.verdict.noneBody` | A response is checked against {{pack}} when you commit it. The rule and its version appear here. | पुष्टि करने पर कार्रवाई की जाँच {{pack}} के विरुद्ध होती है। नियम और उसका संस्करण यहाँ दिखेगा। |  |
+| `live.verdict.dismiss` | Dismiss | हटाएँ |  |
+| `live.verdict.rule` | Rule: | नियम: |  |
+| `live.verdict.pack` | Pack {{pack}} | पैक {{pack}} |  |
+| `live.verdict.unmetCaption` | Conditions not met | पूरी न हुई शर्तें |  |
+| `live.verdict.field` | Condition | शर्त |  |
+| `live.verdict.required` | Required | आवश्यक |  |
+| `live.verdict.actual` | Actual | वास्तविक |  |
+| `live.roe.permitted` | PERMITTED | अनुमत |  |
+| `live.roe.blocked` | BLOCKED | अवरुद्ध |  |
+| `live.roe.notSet` | not set | तय नहीं |  |
+| `live.roe.atLeast` | at least {{value}} | कम से कम {{value}} |  |
+| `live.roe.field.identity` | Identity | पहचान |  |
+| `live.roe.field.classification` | Classification | वर्गीकरण |  |
+| `live.roe.field.zone` | Zone | क्षेत्र |  |
+| `live.roe.field.confidence` | Confidence | विश्वास |  |
+| `live.roe.action.designate` | Designate | चिह्नित करें |  |
+| `live.roe.action.classify` | Classify | वर्गीकृत करें |  |
+| `live.roe.action.assess` | Assess | आकलन करें |  |
+| `live.roe.action.engage` | Respond | कार्रवाई |  |
+| `live.roe.action.hold` | Hold fire | फ़ायर रोकें |  |
+| `live.roe.action.report` | Report | रिपोर्ट |  |
+| `live.roe.action.track-relabel` | Relabel | नाम बदलें |  |
+| `live.roe.action.track-merge` | Merge | विलय |  |
+| `live.roe.action.track-split` | Split | विभाजन |  |
+| `live.roe.action.track-drop` | Drop | हटाएँ |  |
+| `live.roe.action.sensor-cue` | Cue sensor | सेंसर क्यू |  |
+| `live.roe.authority.operator` | operator | ऑपरेटर |  |
+| `live.roe.authority.commander` | commander | कमांडर |  |
+| `live.roe.reason.permitted` | Permitted by the rule above. | ऊपर दिए नियम से अनुमत। |  |
+| `live.roe.reason.default-hold` | Hold fire is the default action; no rule is needed. | फ़ायर रोकना डिफ़ॉल्ट कार्रवाई है; किसी नियम की ज़रूरत नहीं। |  |
+| `live.roe.reason.no-rule` | No rule in this pack permits {{action}}. | इस पैक का कोई नियम {{action}} की अनुमति नहीं देता। |  |
+| `live.roe.reason.conditions` | The closest rule applies only when these conditions hold, and they do not. | निकटतम नियम तभी लागू होता है जब ये शर्तें पूरी हों, और वे पूरी नहीं हैं। |  |
+| `live.roe.reason.effector` | The closest rule does not list {{effector}}. Allowed: {{allowed}}. | निकटतम नियम में {{effector}} सूचीबद्ध नहीं है। अनुमत: {{allowed}}। |  |
+| `live.roe.reason.authority` | The closest rule needs {{authority}} authority. This session has none. | निकटतम नियम के लिए {{authority}} का अधिकार चाहिए। इस सत्र में वह नहीं है। |  |
+| `live.roe.reason.unknown` | Blocked (code {{code}}). | अवरुद्ध (कोड {{code}})। |  |
+| `live.event.sessionStart` | Session started. | सत्र शुरू हुआ। |  |
+| `live.event.sessionEnd` | Session ended. | सत्र समाप्त हुआ। |  |
+| `live.event.trackInit` | Track {{track}} started. | ट्रैक {{track}} शुरू हुआ। |  |
+| `live.event.trackConfirm` | Track {{track}} confirmed. | ट्रैक {{track}} की पुष्टि हुई। |  |
+| `live.event.trackCoast` | Track {{track}} is coasting: no recent update. | ट्रैक {{track}} कोस्टिंग में है: हाल में कोई अपडेट नहीं। |  |
+| `live.event.trackResume` | Track {{track}} updated again. | ट्रैक {{track}} फिर अपडेट हुआ। |  |
+| `live.event.trackDrop` | Track {{track}} dropped ({{reason}}). | ट्रैक {{track}} हटाया गया ({{reason}})। |  |
+| `live.event.dropReason.operator` | by you | आपके द्वारा |  |
+| `live.event.dropReason.unconfirmed` | never confirmed | कभी पुष्ट नहीं हुआ |  |
+| `live.event.dropReason.merged` | folded into another track | दूसरे ट्रैक में मिलाया गया |  |
+| `live.event.trackRelabel` | Track {{track}} relabelled '{{label}}' (was '{{previous}}'). | ट्रैक {{track}} का नाम '{{label}}' किया गया (पहले '{{previous}}')। |  |
+| `live.event.trackRelabelSwap` | Track {{track}} relabelled '{{label}}'; track {{other}} now carries '{{previous}}'. | ट्रैक {{track}} का नाम '{{label}}' किया गया; ट्रैक {{other}} अब '{{previous}}' है। |  |
+| `live.event.trackMerge` | Tracks merged: {{absorbed}} folded into {{survivor}}. | ट्रैक मिलाए गए: {{absorbed}}, {{survivor}} में समाहित। |  |
+| `live.event.trackSplit` | Track {{source}} split; new track {{created}}. | ट्रैक {{source}} विभाजित; नया ट्रैक {{created}}। |  |
+| `live.event.cueAccepted` | Cue accepted: {{sensor}} onto {{track}}, bearing {{bearing}}°, field {{fov}}°. | क्यू स्वीकृत: {{sensor}}, {{track}} पर, दिशा {{bearing}}°, क्षेत्र {{fov}}°। |  |
+| `live.event.cueRefused` | Cue refused: {{sensor}} onto {{track}}. {{reason}} | क्यू अस्वीकृत: {{sensor}}, {{track}} पर। {{reason}} |  |
+| `live.event.rejected` | Refused: {{action}}. {{reason}} | अस्वीकृत: {{action}}। {{reason}} |  |
+| `live.event.verdictPermitted` | {{action}} on {{track}}: permitted. {{rule}} | {{track}} पर {{action}}: अनुमत। {{rule}} |  |
+| `live.event.verdictBlocked` | {{action}} on {{track}}: blocked. {{rule}} | {{track}} पर {{action}}: अवरुद्ध। {{rule}} |  |
+| `live.event.noRule` | no rule | कोई नियम नहीं |  |
+| `live.event.classified` | You classified {{track}} as {{value}}. | आपने {{track}} को {{value}} वर्गीकृत किया। |  |
+| `live.event.assessed` | You assessed {{track}} as {{value}}. | आपने {{track}} का आकलन {{value}} किया। |  |
+| `live.event.engaged` | Response issued on {{track}} with {{effector}}. | {{track}} पर {{effector}} से कार्रवाई जारी की गई। |  |
+| `live.event.held` | Hold fire on {{track}}. | {{track}} पर फ़ायर रोका गया। |  |
+| `live.event.reported` | {{track}} reported. | {{track}} की रिपोर्ट की गई। |  |
+| `live.event.designated` | {{track}} designated. | {{track}} चिह्नित किया गया। |  |
+| `live.event.requested` | Request accepted: {{action}}. | अनुरोध स्वीकृत: {{action}}। |  |
+| `live.log.title` | Event log | इवेंट लॉग |  |
+| `live.log.empty` | No events yet. | अभी कोई इवेंट नहीं। |  |
+| `live.log.tone.ok` | Done | हो गया |  |
+| `live.log.tone.refused` | Refused | अस्वीकृत |  |
+| `live.log.tone.blocked` | Blocked | अवरुद्ध |  |
+| `live.log.tone.info` | Note | सूचना |  |
+| `live.keys.title` | Keyboard shortcuts | कीबोर्ड शॉर्टकट |  |
+| `live.keys.key` | Key | कुंजी |  |
+| `live.keys.does` | Action | क्रिया |  |
+| `live.keys.close` | Close | बंद करें |  |
+| `live.keys.cycle` | Select the next or previous track. At either end the key moves focus on, so you never get stuck. | अगला या पिछला ट्रैक चुनें। किसी भी सिरे पर कुंजी फ़ोकस को आगे बढ़ा देती है, इसलिए आप अटकते नहीं। |  |
+| `live.keys.classify` | Open the Classify step | वर्गीकरण चरण खोलें |  |
+| `live.keys.assess` | Open the Assess step | आकलन चरण खोलें |  |
+| `live.keys.respond` | Open the Respond step | कार्रवाई चरण खोलें |  |
+| `live.keys.choose` | Choose an option in the open step | खुले चरण में विकल्प चुनें |  |
+| `live.keys.commit` | Commit the chosen option | चुने गए विकल्प की पुष्टि करें |  |
+| `live.keys.cancel` | Cancel the step; with nothing open, return to the workspace | चरण रद्द करें; कुछ खुला न हो तो कार्यक्षेत्र पर लौटें |  |
+| `live.keys.hold` | Hold fire on the selected track | चयनित ट्रैक पर फ़ायर रोकें |  |
+| `live.keys.cue` | Cue the EO sensor onto the selected track | EO सेंसर को चयनित ट्रैक पर क्यू करें |  |
+| `live.keys.relabel` | Relabel the selected track | चयनित ट्रैक का नाम बदलें |  |
+| `live.keys.merge` | Mark the selected track, then press again on a second track to merge | चयनित ट्रैक को चिह्नित करें, फिर दूसरे ट्रैक पर दोबारा दबाकर मिलाएँ |  |
+| `live.keys.split` | Split the selected track | चयनित ट्रैक को विभाजित करें |  |
+| `live.keys.drop` | Drop the selected track (asks to confirm) | चयनित ट्रैक हटाएँ (पुष्टि माँगता है) |  |
+| `live.keys.dismiss` | Dismiss the rules verdict | नियम निर्णय हटाएँ |  |
+| `live.keys.help` | Show these shortcuts | ये शॉर्टकट दिखाएँ |  |
+| `live.keys.note` | Space is not used in this build. Every action is also available with the mouse. | इस संस्करण में Space का उपयोग नहीं होता। हर क्रिया माउस से भी उपलब्ध है। |  |
+| `live.relabel.title` | Relabel track {{track}} | ट्रैक {{track}} का नाम बदलें |  |
+| `live.relabel.label` | New label | नया नाम |  |
+| `live.relabel.hint` | 1 to 24 characters. | 1 से 24 अक्षर। |  |
+| `live.relabel.exchange` | Take the label from another track if it is in use (they swap) | नाम किसी अन्य ट्रैक पर हो तो उससे ले लें (दोनों अदला-बदली) |  |
+| `live.relabel.apply` | Relabel | नाम बदलें |  |
+| `live.ended.title` | Session ended | सत्र समाप्त |  |
+| `live.ended.back` | Back to the Session lobby | सत्र लॉबी पर लौटें |  |
+| `live.ended.record` | Session record | सत्र रिकॉर्ड |  |
+| `live.ended.loading` | Reading the stored event log | सहेजा गया इवेंट लॉग पढ़ा जा रहा है |  |
+| `live.ended.error` | The event log could not be read | इवेंट लॉग नहीं पढ़ा जा सका |  |
+| `live.ended.errorBody` | The server did not return the stored log. Check the connection and try again. | सर्वर ने सहेजा हुआ लॉग नहीं लौटाया। कनेक्शन जाँचें और पुनः प्रयास करें। |  |
+| `live.ended.ticks` | Ticks | टिक |  |
+| `live.ended.duration` | Duration | अवधि |  |
+| `live.ended.events` | Events logged | दर्ज इवेंट |  |
+| `live.ended.head` | Chain head | श्रृंखला शीर्ष |  |
+| `live.ended.stateHash` | Final state hash | अंतिम स्थिति हैश |  |
+| `live.ended.verification` | Event log | इवेंट लॉग |  |
+| `live.ended.verified` | Event log verified | इवेंट लॉग सत्यापित |  |
+| `live.ended.failed` | Event log failed verification at sequence {{seq}} | इवेंट लॉग क्रम संख्या {{seq}} पर सत्यापन में विफल |  |
+| `live.ended.note` | Scoring and debrief are not part of this build. | स्कोरिंग और डीब्रीफ़ इस संस्करण का हिस्सा नहीं हैं। |  |
+| `live.lobby.title` | Session lobby | सत्र लॉबी |  |
+| `live.lobby.reference` | Reference scenarios | संदर्भ परिदृश्य |  |
+| `live.lobby.scenarios` | Scenarios | परिदृश्य |  |
+| `live.lobby.scenario` | Scenario | परिदृश्य |  |
+| `live.lobby.briefing` | Briefing | ब्रीफ़िंग |  |
+| `live.lobby.briefingLater` | The full briefing (site, sensors, filed flights) is shown when the session opens. | पूरी ब्रीफ़िंग (स्थल, सेंसर, दाखिल उड़ानें) सत्र खुलने पर दिखाई जाती है। |  |
+| `live.lobby.duration` | Duration | अवधि |  |
+| `live.lobby.light` | Start light | आरंभिक प्रकाश |  |
+| `live.lobby.weather` | Weather | मौसम |  |
+| `live.lobby.rules` | Rule pack | नियम पैक |  |
+| `live.lobby.rulesLater` | Named when the session opens | सत्र खुलने पर बताया जाता है |  |
+| `live.lobby.version` | Scenario | परिदृश्य |  |
+| `live.lobby.seed` | seed | सीड |  |
+| `live.lobby.site` | Site zones | स्थल क्षेत्र |  |
+| `live.lobby.sensors` | Sensors | सेंसर |  |
+| `live.lobby.flights` | Filed flights | दाखिल उड़ानें |  |
+| `live.lobby.noFlights` | None filed | कोई दाखिल नहीं |  |
+| `live.lobby.kit` | Role and kit check | भूमिका और किट जाँच |  |
+| `live.lobby.loading` | Loading scenarios | परिदृश्य लोड हो रहे हैं |  |
+| `live.lobby.error` | Scenarios could not be loaded | परिदृश्य लोड नहीं हो सके |  |
+| `live.lobby.unreachable` | The server is unreachable | सर्वर तक पहुँच नहीं हो रही |  |
+| `live.lobby.errorBody` | Check the connection and that the service is running, then retry. | कनेक्शन और सेवा के चालू होने की जाँच करें, फिर पुनः प्रयास करें। |  |
+| `live.lobby.empty` | No scenarios available | कोई परिदृश्य उपलब्ध नहीं |  |
+| `live.lobby.emptyBody` | The server lists no playable scenario. Ask your administrator to load a scenario pack. | सर्वर कोई खेलने योग्य परिदृश्य नहीं दिखाता। अपने प्रशासक से परिदृश्य पैक लोड करने को कहें। |  |
+| `live.lobby.create` | Create session | सत्र बनाएँ |  |
+| `live.lobby.creating` | Creating session | सत्र बनाया जा रहा है |  |
+| `live.lobby.createNote` | You open the session next and begin it from the workspace. | इसके बाद सत्र खुलता है और आप उसे कार्यक्षेत्र से आरंभ करते हैं। |  |
+| `live.lobby.createFailed` | The session could not be created: {{detail}} | सत्र नहीं बनाया जा सका: {{detail}} |  |
+| `live.lobby.createForbidden` | Your account cannot create sessions. Administrators cannot play. | आपका खाता सत्र नहीं बना सकता। प्रशासक सत्र नहीं खेल सकते। |  |
+| `live.lobby.createUnreachable` | The server is unreachable. Check the connection and try again. | सर्वर तक पहुँच नहीं हो रही। कनेक्शन जाँचें और पुनः प्रयास करें। |  |
+| `live.kit.role` | Role | भूमिका |  |
+| `live.kit.webgl` | WebGL (EO view) | WebGL (EO दृश्य) |  |
+| `live.kit.available` | Available | उपलब्ध |  |
+| `live.kit.missing` | Not available; the EO view will not draw | उपलब्ध नहीं; EO दृश्य नहीं बनेगा |  |
+| `live.kit.display` | Display | डिस्प्ले |  |
+| `live.kit.meets` | meets 1366 × 768 | 1366 × 768 के बराबर या अधिक |  |
+| `live.kit.below` | below 1366 × 768 | 1366 × 768 से कम |  |
+| `live.kit.keyboard` | Controls | नियंत्रण |  |
+| `live.kit.keyboardValue` | Keyboard first; mouse works | कीबोर्ड प्रमुख; माउस भी चलता है |  |
 
-123 strings.
+445 strings.

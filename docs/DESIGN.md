@@ -63,6 +63,20 @@ Colour is never the only cue: pair it with a shape and a text label. Text pairs 
 9. Tooltips that restate the label, toast spam, confetti.
 10. Marketing copy.
 
+## Workspace (wave 5)
+
+The live session workspace (`apps/web/src/screens/LiveSession.tsx`, panels and views in `apps/web/src/live/`) is a full-screen frame without the sidebar. It is a fixed 12-column grid: EO view in 7 columns on the left; radar PPI and track table in 5 on the right; a decision strip across the bottom. At 1366 × 768 the strip is 208 px, the PPI takes half the right column, and some figures drop out (weather and light in the top bar, heading and sensor columns in the track table, icon-only End and Leave) rather than wrapping.
+
+- **Top bar (32 px).** UTC and scenario time, light, weather, ROE pack id and version, link state with latency, and the permanent label. No preference switches here: language and theme are set before the session.
+- **EO view.** Three.js `WebGLRenderer`, drawn from EO and IR reports only, each held for 0.4 s. A report has bearing, elevation and apparent pixels, never a range, so the model is placed on a drawing sphere around the camera at the angular size `apparent_px × fov / 1920`, never at a distance. Below recognition the mesh is a generic point. The reticle, angular scale and zoom ladder are SVG; marks are drawn twice (dark underlay, light mark) so they read on both sky and ground. Zoom is the sensor's real field of view: it narrows only through a `sensor-cue` action.
+- **Radar PPI.** Canvas at device pixel ratio. The sweep turns once per 1.2 s radar period from the scenario clock; a plot is painted when the beam passes its bearing and fades with a 1.5 s time constant. Scope range is the outer zone plus a quarter in 500 m steps; rings are labelled in km.
+- **Track symbols.** One frame shape per assessed identity, drawn by us and not APP-6 or MIL-STD-2525: friend rectangle, neutral square, hostile diamond, suspect dashed diamond, unknown quatrefoil. A tentative track is dashed, a coasting one has a bar, a selected one has corner brackets. A track is unknown until the operator assesses it.
+- **Reference data.** Every track row carries a `REF` marker and the table footer says what it means. The same marker sits in the selected-track detail.
+- **Blocked response.** The verdict panel shows BLOCKED in words, with a stop icon and a heavy outline, the rule title in the interface language, the pack id and version, and a table of each unmet condition (condition, required, actual). It stays until dismissed (button or `X`) or replaced by the next response verdict; classify and assess verdicts do not replace it.
+- **Keyboard.** `C A R` open the steps, `1`–`9` choose, `Enter` commits, `Esc` cancels, `H` holds fire, `U` cues the EO sensor, `L M S D` relabel, merge, split and drop (drop asks first), `X` dismisses the verdict, `?` lists them. Space is unused. `Tab` and `Shift+Tab` step through the tracks only while no control has focus, and give `Tab` back to the browser at either end of the list so the keys never trap a keyboard user; an idle `Esc` returns focus to the workspace.
+- **Reduced motion.** The sweep is a measuring instrument, so it keeps turning. Under `prefers-reduced-motion` the decorative persistence wedge behind it is dropped and no state change is eased.
+- **Light theme.** The canvas views read the same tokens as the rest of the interface (`theme.ts`) and redraw when the theme changes.
+
 ## Review
 
 From wave 2 a Playwright visual-snapshot set covers the 12 key screens and is reviewed against this list every wave.

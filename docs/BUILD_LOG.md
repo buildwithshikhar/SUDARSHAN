@@ -4,9 +4,9 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 
 ## Current position
 
-- **Phase:** wave 4a in progress (sensor models), step 1 of 4 done. Wave 3 is complete locally and waits only for the owner to confirm CI; wave 4a started at the owner's instruction before that confirmation.
+- **Phase:** wave 4a in progress (sensor models), steps 1 to 3 of 4 done (framework, radar, EO/IR, RF, acoustic, `docs/SENSOR_MODELS.md`). Wave 3 is complete locally and waits only for the owner to confirm CI; wave 4a started at the owner's instruction before that confirmation.
 - **Current wave:** 4a · Sensor models → [waves/wave-04a-sensor-models.md](waves/wave-04a-sensor-models.md)
-- **Next step:** wave 4a STEP 2 (radar and EO/IR) and STEP 3 (RF and acoustic) per the wave 4a entry's **Next wave entry point**. Owner still to confirm CI for the wave 3 and 4a step 1 commits, and to record the smoke date for the live link.
+- **Next step:** wave 4a STEP 4 (acceptance pass: cross-model checks, `make smoke` in production mode, set the wave to Done once the owner confirms CI), then wave 4b. Owner still to confirm CI for the wave 3 and 4a commits, and to record the smoke date for the live link.
 - **Main is:** green locally (lint, typecheck, unit, `make prod-check`); CI result for the latest commits is owner-confirmed only (see the wave entries).
 - **Deployed build:** live at https://sudarshan.centralindia.cloudapp.azure.com, running commit b722313 (wave 2 build; owner-reported, 2026-10-18).
 
@@ -346,14 +346,13 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 **Open issues**
 - CI result for the wave 3 commits: owner to confirm (the CI jobs were all run locally and pass).
-- Sensor-profile example values are F01 placeholders; wave 4a replaces them with cited values.
 
 **Next wave entry point**
 - After CI is confirmed green, set wave 3 to Done, then start wave 4a (sensor models): read docs/waves/wave-04a-sensor-models.md and begin STEP 1, the sensor framework in `services/api/sim/sensors/` (Sensor interface, degradation hooks, cue input), reading profiles through `app.contracts.loader` and drawing noise from the `sensors` RNG stream.
 
 ### Wave 4a · Sensor models
 
-- Status: In progress. Step 1 (sensor framework) is merged and verified locally; steps 2 to 4 remain.
+- Status: In progress. Steps 1 to 3 (framework and the four models) are merged and verified locally; step 4 (acceptance pass) remains.
 - Started from commit: 5387056
 - Goal: physically-motivated radar, EO/IR, RF and acoustic detection models with degradations, every parameter sourced from the data register.
 - Gate note: the wave 4a prompt says to stop unless wave 3 is Done and main is green. Wave 3 is complete and green locally; the owner has not yet confirmed its CI run, and instructed this step to proceed. Set wave 3 to Done once CI is confirmed.
@@ -365,6 +364,14 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - edf5d23 docs: sensor framework in SIM_CORE, ADR-017, changelog, R10 proof and Q-19
 - 902651c test(sim): cover atan for arguments beyond one
 - 0d7c2c5 docs: record wave 2 live URL and start the wave 4a entry in the build log
+- 2473b73 docs: record that the wave 2 live URL runs commit b722313
+- Step 3, subagent B (worktree, Sonnet), merged at 573d9a8: 69a5b77 RF model, 1600458 acoustic model, 9f53b3b RF and acoustic profiles, fbd1c2e and ed6e9e2 their tests, 1ad9260 docs fragment
+- Step 2, subagent A (worktree, Sonnet), merged at 4b38899: 036ca4c radar model, 0310d92 EO/IR model, 25e88fd radar and EO/IR profiles, a1d0ff7 and 7aa56ab their tests, 0e11a57 docs, 1e5ea01 profile file names
+- aae206c test: one example per contract except sensor profiles; spare modality in the registry test
+- 4e0b8d0 fix(packs): radar cross-sections cited F01 (not D14), EO/IR profiles named `<id>.v1.yaml`
+- 5f7a3f0 fix(sim): false-alarm draws are taken during an outage; a zoom cue applies at once
+- d2d1a91 feat(sim): the four models register on `sim.sensors` import
+- docs commit after these: SENSOR_MODELS merged, Q-20, Q-21, ADR-018, SIM_CORE, changelog, traceability (R3, R10)
 
 **Decisions** (full reasoning in [ADR-017](DECISIONS.md))
 - Every candidate target takes a fixed 18 uniforms from the `sensors` stream whatever happens to it, so an outage, cue or probability change never shifts later noise.
@@ -387,7 +394,19 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - CI result for the wave 3 and wave 4a step 1 commits: owner to confirm (all CI jobs except gitleaks, `docker build` on Linux and the Linux-only e2e were run locally).
 - Smoke date for the live link: owner to record under **Deployed build** (the deployed commit, b722313, is recorded).
 - Q-19: the API image does not ship `sim/` or `packs/`; fix in wave 5.
-- The stub `radar-generic-s` profile is still F01 placeholders and lacks the parameters a radar model will need (`fov`, signature figures, confusion table); step 2 replaces it with cited values (version 0.2.0) and updates the Kestrel scenario reference.
+- Q-20: parameter sources with no register row (published RCS ranges, micro-Doppler frequencies, Johnson criteria, RF band plan and range table, acoustic ranges). The shipped profiles use F01 with `verified: false`; only the Johnson pixel thresholds and the thermal camera field and pixel count are `verified: true` (D12).
+- Q-21: the profiles cover `rotary-small`, `fixed-wing-small`, `bird` (and `autonomous-small` for RF); wave 8 must extend every table with its new classes.
+- Q-09 figures (thermal contrast, bird wing-beat band, RF and long-range acoustic ranges) remain UNVERIFIED and are labelled so in SENSOR_MODELS.md.
 
-**Next wave entry point**
-- STEP 2 and STEP 3 can run as two subagents in separate worktrees (radar and EO/IR; RF and acoustic). Each adds `sim/sensors/<modality>.py` with a class registered by `register_model`, a profile in `packs/sensor-profiles/`, and tests. Read docs/SIM_CORE.md "Sensor framework" first; use `tests/sensor_toy.py` as the pattern for a minimal model. Cited values come from docs/02-research.md section 2 and docs/DATA_REGISTER.md; anything secondary or UNVERIFIED carries `verified: false`, and a parameter source not in the register goes to docs/OPEN_QUESTIONS.md instead of a made-up ID. Steps 2 and 3 should not both edit `sim/sensors/__init__.py` in conflicting ways: add the import of the model module there in the merge, not in the branch.
+**Decisions in steps 2 and 3** (ADR-018)
+- Closed-form, monotonic P(d) per model; RF-silent classes return exactly 0; radar micro-Doppler reuses the detect draw divided by P, so no extra draws.
+- Radar RCS cited F01 (`verified: false`), not D14, because the values were not extracted from it (locked rule 1).
+- Framework fixes during integration: the false-alarm hook runs during an outage (reports discarded) so the stream never shifts; `cue` applies a zoom immediately.
+- `tests/test_contracts.py` still demands exactly one example per contract, except `sensor-profile.v1`, which now has one per model.
+- EO/IR is one model class for `eo` and `ir`; day, night-vision and thermal are three profiles.
+
+**Next wave entry point (superseded: steps 2 and 3 are done)**
+- Historical: STEP 2 and STEP 3 could run as two subagents in separate worktrees (radar and EO/IR; RF and acoustic). Each adds `sim/sensors/<modality>.py` with a class registered by `register_model`, a profile in `packs/sensor-profiles/`, and tests. Read docs/SIM_CORE.md "Sensor framework" first; use `tests/sensor_toy.py` as the pattern for a minimal model. Cited values come from docs/02-research.md section 2 and docs/DATA_REGISTER.md; anything secondary or UNVERIFIED carries `verified: false`, and a parameter source not in the register goes to docs/OPEN_QUESTIONS.md instead of a made-up ID. Steps 2 and 3 should not both edit `sim/sensors/__init__.py` in conflicting ways: add the import of the model module there in the merge, not in the branch.
+
+**Wave 4a, next entry point (current)**
+- STEP 4: read docs/SENSOR_MODELS.md against the acceptance list; add any cross-model test still missing (for example one scenario run through all four models in a suite, twice, with identical output); record test counts and the deploy check here; then wave 4b (tracking, fusion and AI assist), starting with the tracker's input contract: `Detection.trainee_view()` from `SensorSuite.detect`, wiring the suite into `World` per SIM_CORE ("the suite is not yet part of `World.state()`").

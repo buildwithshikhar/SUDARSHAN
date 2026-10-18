@@ -21,6 +21,8 @@ Planning is complete; the documents are indexed in [docs/README.md](docs/README.
 2. Defensive training only. Recognise / classify / respond. No instructions for building, arming or operating attack drones; no real-world targeting detail. ROE are a fictional, editable rule set.
 3. Claude Code stays inside the repo, touches no Docker objects outside it, pushes only main, never deploys, and never puts credentials in the repo or slides. Production mode blocks demo accounts; credentials come from first-admin env vars / CLI.
 
+4. No attribution. Never add "Co-Authored-By", "Generated with Claude Code" or any Claude/Anthropic attribution line to commit messages, PR text or code comments.
+
 What these mean in practice:
 - Threat behaviour is kinematics only: no guidance, terminal-attack or targeting logic. Effectors are generic fictional classes with fictional numbers. No real system names or performance figures.
 - Terrain is generic or fictionalised. No identifiable sensitive installations. Site and unit names are fictional.

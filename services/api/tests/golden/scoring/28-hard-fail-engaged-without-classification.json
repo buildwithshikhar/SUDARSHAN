@@ -1,0 +1,112 @@
+{
+  "description": "An engagement permitted with the track assessed hostile but never classified: no positive ID, so the contact scores 0.",
+  "steps": [
+    {"op": "first_report", "t": 30, "drone": "contact-quad", "sensor": "radar-1", "modality": "radar"},
+    {"op": "act", "t": 34, "action": "assess", "track": "T001", "target": "contact-quad", "payload": {"identity": "hostile"}},
+    {"op": "act", "t": 40, "action": "engage", "track": "T001", "target": "contact-quad", "payload": {"effector_class": "ec-a"}}
+  ],
+  "expect": {
+    "threats": {
+      "contact-quad": {
+        "worked": true,
+        "nodes": {
+          "detect": {
+            "score": 1.0,
+            "reason": "detect.band",
+            "params": {
+              "seconds": 4.0,
+              "standard": 12.0,
+              "first_action": "assess",
+              "track": "T001"
+            }
+          },
+          "classify": {
+            "score": 0.0,
+            "reason": "classify.missing",
+            "params": {}
+          },
+          "assess": {
+            "score": 1.0,
+            "reason": "assess.exact",
+            "params": {
+              "given": "hostile",
+              "actual": "hostile"
+            }
+          },
+          "respond": {
+            "score": 1.0,
+            "reason": "respond.engage",
+            "params": {
+              "seconds": 10.0,
+              "standard": 45.0,
+              "timing": 1.0,
+              "blocked_attempts": 0,
+              "effector": "ec-a"
+            }
+          }
+        },
+        "decision": 0.7059,
+        "report": {
+          "filed": false,
+          "reports_filed": 0,
+          "reason": "report.missing",
+          "params": {},
+          "quality": 0.0,
+          "timeliness": null,
+          "score": 0.0,
+          "fields": []
+        },
+        "hard_fail": true,
+        "findings": [
+          {
+            "reason": "finding.hard-fail.no-positive-id",
+            "params": {
+              "t": 40.0,
+              "track": "T001"
+            },
+            "cost": 0.6
+          }
+        ],
+        "score": 0.0
+      }
+    },
+    "not_presented": [
+      "contact-bird-1",
+      "contact-bird-2",
+      "contact-bird-3",
+      "contact-civil"
+    ],
+    "session": {
+      "score": 0.0,
+      "decision_score": 0.0,
+      "report_score": 0.0,
+      "findings": []
+    },
+    "sdt": {
+      "signal_trials": 1,
+      "noise_trials": 0,
+      "hits": 1,
+      "misses": 0,
+      "false_alarms": 0,
+      "correct_rejections": 0,
+      "hit_rate": 1.0,
+      "false_alarm_rate": null,
+      "corrected": false,
+      "hit_rate_used": 1.0,
+      "false_alarm_rate_used": null,
+      "d_prime": null,
+      "criterion": null
+    },
+    "lessons": [
+      {
+        "key": "lesson.hard-fail.no-positive-id",
+        "threat_id": "contact-quad",
+        "cost": 0.6,
+        "params": {
+          "t": 40.0,
+          "track": "T001"
+        }
+      }
+    ]
+  }
+}

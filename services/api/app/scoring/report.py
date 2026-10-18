@@ -143,7 +143,8 @@ def grade(
             params={"error_deg": round(error), "tolerance_deg": spec.heading_tolerance_deg},
         )
 
-    graded_weight = weights.what + weights.where + weights.count + weights.heading
+    # summed in the same order as the numerator, so four right fields make q exactly 1
+    graded_weight = sum(marks[f].weight for f in _FIELDS)
     q = sum(marks[f].score * marks[f].weight for f in _FIELDS) / graded_weight
     confidence = _number(payload, "confidence")
     if confidence is None:
@@ -154,7 +155,7 @@ def grade(
             field="calibration",
             score=score,
             weight=weights.calibration,
-            reason=f"report.calibration.{_calibration_outcome(score)}",
+            reason=f"report.calibration.{_calibration_outcome(round(score, 4))}",
             params={"stated": round(confidence, 3), "achieved": round(q, 3)},
         )
 

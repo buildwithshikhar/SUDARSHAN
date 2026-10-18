@@ -1,0 +1,110 @@
+{
+  "description": "Classify: calling the contact unknown earns 0 and has its own reason.",
+  "steps": [
+    {"op": "first_report", "t": 30, "drone": "contact-quad", "sensor": "radar-1", "modality": "radar"},
+    {"op": "act", "t": 40, "action": "classify", "track": "T001", "target": "contact-quad", "payload": {"class_id": "unknown"}}
+  ],
+  "expect": {
+    "threats": {
+      "contact-quad": {
+        "worked": true,
+        "nodes": {
+          "detect": {
+            "score": 1.0,
+            "reason": "detect.band",
+            "params": {
+              "seconds": 10.0,
+              "standard": 12.0,
+              "first_action": "classify",
+              "track": "T001"
+            }
+          },
+          "classify": {
+            "score": 0.0,
+            "reason": "classify.unknown",
+            "params": {
+              "actual": "rotary-small"
+            }
+          },
+          "assess": {
+            "score": 0.0,
+            "reason": "assess.missing",
+            "params": {}
+          },
+          "respond": {
+            "score": 0.0,
+            "reason": "respond.none",
+            "params": {
+              "blocked_attempts": 0
+            }
+          }
+        },
+        "decision": 0.2941,
+        "report": {
+          "filed": false,
+          "reports_filed": 0,
+          "reason": "report.missing",
+          "params": {},
+          "quality": 0.0,
+          "timeliness": null,
+          "score": 0.0,
+          "fields": []
+        },
+        "hard_fail": false,
+        "findings": [],
+        "score": 0.25
+      }
+    },
+    "not_presented": [
+      "contact-bird-1",
+      "contact-bird-2",
+      "contact-bird-3",
+      "contact-civil"
+    ],
+    "session": {
+      "score": 0.25,
+      "decision_score": 0.2941,
+      "report_score": 0.0,
+      "findings": []
+    },
+    "sdt": {
+      "signal_trials": 1,
+      "noise_trials": 0,
+      "hits": 0,
+      "misses": 1,
+      "false_alarms": 0,
+      "correct_rejections": 0,
+      "hit_rate": 0.0,
+      "false_alarm_rate": null,
+      "corrected": false,
+      "hit_rate_used": 0.0,
+      "false_alarm_rate_used": null,
+      "d_prime": null,
+      "criterion": null
+    },
+    "lessons": [
+      {
+        "key": "lesson.classify.unknown",
+        "threat_id": "contact-quad",
+        "cost": 0.25,
+        "params": {
+          "actual": "rotary-small"
+        }
+      },
+      {
+        "key": "lesson.respond.none",
+        "threat_id": "contact-quad",
+        "cost": 0.2,
+        "params": {
+          "blocked_attempts": 0
+        }
+      },
+      {
+        "key": "lesson.assess.missing",
+        "threat_id": "contact-quad",
+        "cost": 0.15,
+        "params": {}
+      }
+    ]
+  }
+}

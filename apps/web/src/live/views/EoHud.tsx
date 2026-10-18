@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLive } from '../context'
 import { wrap360 } from '../geometry'
+import { useEoLook } from './eoLook'
+import { reticleInk, type EoMode } from './eoMode'
 
 const FOV_STEPS = [40, 20, 10, 5, 2.5, 1.25]
 const FOV_TOP = 48
@@ -30,9 +32,11 @@ export function timeCode(timeS: number): string {
 const pad3 = (deg: number) => String(Math.round(wrap360(deg)) % 360).padStart(3, '0')
 
 /** SVG reticle and readouts over the EO picture: instrument furniture, not a decoration. */
-export function EoHud({ sensorId }: { sensorId: string }) {
+export function EoHud({ sensorId, mode = 'day' }: { sensorId: string; mode?: EoMode }) {
   const { t } = useTranslation()
   const frame = useLive((s) => s.frame)
+  const look = useEoLook()
+  const ink = reticleInk(mode)
   const homeFov = useLive((s) => s.homeFov[sensorId])
   const box = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ w: 800, h: 450 })
@@ -85,18 +89,27 @@ export function EoHud({ sensorId }: { sensorId: string }) {
   // Marks are drawn twice, a wide dark pass under a thin light one, so they read on sky and on ground.
   const halo = (draw: (stroke: string, width: number) => React.ReactNode) => (
     <>
-      <g opacity="0.7">{draw('var(--bg)', 3.5)}</g>
-      <g>{draw('var(--text)', 1)}</g>
+      <g opacity="0.7">{draw(ink.halo, 3.5)}</g>
+      <g>{draw(ink.stroke, 1)}</g>
     </>
   )
   const label = {
-    fill: 'var(--text)',
+    fill: ink.label,
     fontSize: 10,
-    stroke: 'var(--bg)',
+    stroke: ink.halo,
     strokeWidth: 3,
     paintOrder: 'stroke',
   } as const
   const first = ticks[0] ?? 0
+  const modeText = mode === 'day' ? t('live.eo.modeTv').toUpperCase() : t(`live.eo.modeHud.${mode}`)
+  // Gain readout: thermal shows how hard the picture is stretched and that it is a model.
+  const measured = look.mode === mode
+  const gainText =
+    mode === 'night-vision'
+      ? `${t('live.eo.gain')} ${measured ? `×${look.tubeGain.toFixed(1)}` : '—'}`
+      : mode === 'day'
+        ? null
+        : `${t('live.eo.agc')} ${measured ? `${look.gainPct}%` : '—'}  ${t('live.eo.model')}`
 
   return (
     <div ref={box} className="pointer-events-none absolute inset-0">
@@ -191,15 +204,12 @@ export function EoHud({ sensorId }: { sensorId: string }) {
               `${t('live.eo.fov')} ${fov === null ? '—' : fov.toFixed(1)}°  ${t('live.eo.zoom')} ${zoom === null ? '—' : `×${zoom.toFixed(1)}`}`,
               'end',
             )}
-            {chip(
-              22,
-              h - 24,
-              `${frame ? timeCode(frame.time_s) : '—'}  ${t('live.eo.modeTv').toUpperCase()}`,
-            )}
+            {chip(22, h - 24, `${frame ? timeCode(frame.time_s) : '—'}  ${modeText}`)}
+            {gainText !== null && chip(22, 54, gainText)}
             {chip(
               w - 22,
               h - 24,
-              `${sensorId}  ${t(`live.eo.health.${health}`)}  ${t('live.eo.range')}`,
+              `${sensorId}  ${t(`live.eo.health.${health}`)}  ${t('live.eo.range')}${sensor.data_status === 'reference' ? `  ${t('live.table.ref')}` : ''}`,
               'end',
             )}
           </>
@@ -213,7 +223,11 @@ export function EoHud({ sensorId }: { sensorId: string }) {
               elevation: sensor.elevation_deg.toFixed(1),
               fov: fov === null ? '—' : fov.toFixed(1),
               health: t(`live.eo.health.${health}`),
-            })
+            }) +
+            (mode === 'day'
+              ? ''
+              : ` ${t(`live.eo.modeHelp.${mode.startsWith('thermal') ? 'thermal' : mode}`)}`) +
+            (sensor.data_status === 'reference' ? ` ${t('live.eo.refNote')}` : '')
           : ''}
       </p>
     </div>

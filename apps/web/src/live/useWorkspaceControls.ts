@@ -49,7 +49,10 @@ export function useWorkspaceControls(
       const welcome = state.welcome
       if (!welcome) return false
       const track = state.selected
-      const eo = state.frame?.sensors.find((s) => s.modality === 'eo' && s.supports_cue)?.id ?? null
+      const eo =
+        state.frame?.sensors.find(
+          (s) => (s.modality === 'eo' || s.modality === 'ir') && s.supports_cue,
+        )?.id ?? null
       switch (intent.kind) {
         case 'help':
           helpRef.current()

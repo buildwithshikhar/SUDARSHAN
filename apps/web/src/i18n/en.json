@@ -291,7 +291,40 @@
       "noSensor": "No EO sensor in this scenario",
       "noSensorBody": "The briefing lists no electro-optical sensor, so there is no camera view.",
       "noWebgl": "EO view unavailable (WebGL)",
-      "noWebglBody": "This browser cannot create a WebGL context. The radar, track table and decision panel still work; the EO picture is not drawn."
+      "noWebglBody": "This browser cannot create a WebGL context. The radar, track table and decision panel still work; the EO picture is not drawn.",
+      "modeName": {
+        "day": "Day TV",
+        "night-vision": "Night vision",
+        "thermal-white-hot": "White-hot",
+        "thermal-black-hot": "Black-hot"
+      },
+      "modeHud": {
+        "night-vision": "NV",
+        "thermal-white-hot": "IR WHT",
+        "thermal-black-hot": "IR BLK"
+      },
+      "modeHelpLabel": "About this picture",
+      "modeHelp": {
+        "thermal": "Thermal is a rendering model, not radiometric: surfaces get an apparent temperature from the time of day, then the picture is stretched by automatic gain. There are no real temperature readings.",
+        "night-vision": "Night vision is a rendering model: the scene is amplified, tinted green and given grain. It is not a measured image intensifier response."
+      },
+      "agc": "AGC",
+      "gain": "GAIN",
+      "model": "MODEL",
+      "refNote": "Sensor figures are reference data.",
+      "terrain": {
+        "loading": "Loading terrain",
+        "label": "Terrain: {{name}} · reference data",
+        "error": "Terrain unavailable",
+        "errorBody": "The terrain pack could not be loaded, so the view shows flat ground. The session is not affected."
+      },
+      "quality": {
+        "label": "Graphics",
+        "auto": "Auto",
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      }
     },
     "ppi": {
       "title": "Radar PPI",

@@ -9,6 +9,7 @@ import { fmtElapsed, useLang } from '../live/format'
 import { CLOSE } from '../live/protocol'
 import { LiveSession } from '../live/session'
 import { DecisionPanel } from '../live/panels/DecisionPanel'
+import { EoModeControl, QualityControl } from '../live/panels/EoControls'
 import { EndDialog, RelabelDialog, ShortcutsDialog } from '../live/panels/Dialogs'
 import { EventLog } from '../live/panels/EventLog'
 import { ReportDialog } from '../live/panels/ReportDialog'
@@ -18,12 +19,12 @@ import { TrackDetail } from '../live/panels/TrackDetail'
 import { TrackTable } from '../live/panels/TrackTable'
 import { VerdictPanel } from '../live/panels/VerdictPanel'
 import { STAGE_ID, useWorkspaceControls } from '../live/useWorkspaceControls'
+import { availableModes, pickEoSensor, resolveMode, type EoMode } from '../live/views/eoMode'
 import { PpiView, ppiRangeMax } from '../live/views/PpiView'
 import { localised } from '../live/restApi'
 import { Button } from '../ui/Button'
 import { InlineAlert } from '../ui/InlineAlert'
 import { Panel } from '../ui/Panel'
-import { Segmented } from '../ui/Segmented'
 import { ErrorState, LoadingState } from '../ui/States'
 import { SessionEnded } from './SessionEnded'
 
@@ -151,6 +152,7 @@ function Workspace() {
   const classifications = useLive((s) => s.classifications)
   const [help, setHelp] = useState(false)
   const [confirmEnd, setConfirmEnd] = useState(false)
+  const [modePick, setModePick] = useState<EoMode | null>(null)
   const controls = useWorkspaceControls(session, {
     onHelp: () => setHelp(true),
     enabled: true,
@@ -158,8 +160,12 @@ function Workspace() {
 
   if (!welcome) return null
   const briefing = welcome.briefing
-  const eo = frame?.sensors.find((s) => s.modality === 'eo') ?? null
-  const eoId = eo?.id ?? briefing.sensors.find((s) => s.modality === 'eo')?.id ?? null
+  const eo = pickEoSensor(frame?.sensors ?? [])
+  const eoSite = pickEoSensor(briefing.sensors)
+  const eoId = eo?.id ?? eoSite?.id ?? null
+  // Only the picture modes the sensor's profile supports are offered.
+  const modes = availableModes(briefing.sensors.find((x) => x.id === eoId))
+  const eoMode = resolveMode(modePick, modes)
   const track = frame?.tracks.find((x) => x.id === selected)
   const reconnecting =
     connection.state === 'reconnecting' || (connection.state === 'closed' && status !== 'ended')
@@ -195,12 +201,8 @@ function Workspace() {
           flush
           actions={
             <div className="flex items-center gap-2">
-              <Segmented
-                label={t('live.eo.mode')}
-                value="tv"
-                options={[{ value: 'tv', label: t('live.eo.modeTv') }]}
-                onChange={() => undefined}
-              />
+              <QualityControl />
+              <EoModeControl modes={modes} mode={eoMode} onChange={setModePick} />
               <Button
                 disabled={!track || !eo?.supports_cue || status !== 'running'}
                 onClick={() => controls.run({ kind: 'cue' })}
@@ -220,7 +222,7 @@ function Workspace() {
           }
         >
           <Suspense fallback={<LoadingState label={t('live.eo.loading')} />}>
-            <EoView sensorId={eoId} />
+            <EoView sensorId={eoId} mode={eoMode} />
           </Suspense>
           {status === 'lobby' && <ReadyCard />}
         </Panel>

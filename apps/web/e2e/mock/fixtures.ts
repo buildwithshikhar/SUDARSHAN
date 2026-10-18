@@ -1,4 +1,6 @@
 import AxeBuilder from '@axe-core/playwright'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { expect, type Page } from '@playwright/test'
 
 import { MOCK_SCORE, MOCK_SCORE_EMPTY } from '../../src/live/mockScore'
@@ -147,13 +149,56 @@ export async function installScore(page: Page, reply: ScoreReply = 'populated') 
   return { release }
 }
 
+export type TerrainReply = 'ok' | 'missing' | 'slow'
+
+const FIXTURE_TERRAIN = resolve(import.meta.dirname, '../../tests/fixtures/terrain')
+
+/**
+ * Serves `GET /api/v1/terrain/{id}/{file}` from the checked-in fixture pack. 'missing' answers
+ * 404 for every file (the pack failed); 'slow' holds the manifest until `release()` so the
+ * loading state can be seen.
+ */
+export async function installTerrain(page: Page, reply: TerrainReply = 'ok') {
+  let release: () => void = () => undefined
+  const gate = new Promise<void>((done) => (release = done))
+  await page.route('**/api/v1/terrain/**', async (route) => {
+    if (reply === 'missing') return route.fulfill(json({ detail: 'terrain pack not found' }, 404))
+    const match = /\/api\/v1\/terrain\/([^/]+)\/([^/?]+)/.exec(route.request().url())
+    if (!match) return route.fulfill(json({ detail: 'not found' }, 404))
+    if (reply === 'slow' && match[2] === 'manifest.json') await gate
+    try {
+      const body = readFileSync(resolve(FIXTURE_TERRAIN, match[1] ?? '', match[2] ?? ''))
+      return route.fulfill({ status: 200, body })
+    } catch {
+      return route.fulfill(json({ detail: 'terrain file not found' }, 404))
+    }
+  })
+  return { release }
+}
+
+/** The workspace URL with scripted-session variants: camera, terrain, rain and hour. */
+export const variantUrl = (variant: {
+  eo?: 'day' | 'nv' | 'thermal'
+  terrain?: string
+  rain?: boolean
+  hour?: number
+  speed?: number
+}) => {
+  const q = new URLSearchParams({ mock: '1', speed: String(variant.speed ?? 4) })
+  if (variant.eo) q.set('eo', variant.eo)
+  if (variant.terrain) q.set('terrain', variant.terrain)
+  if (variant.rain) q.set('rain', '1')
+  if (variant.hour !== undefined) q.set('hour', String(variant.hour))
+  return `/train/session/mock-session?${q.toString()}`
+}
+
 export const debriefUrl = '/train/session/mock-session/debrief'
 
 export const sessionUrl = (speed = 4) => `/train/session/mock-session?mock=1&speed=${speed}`
 
 /** Open the workspace, begin the session with the keyboard and wait for the first contacts. */
-export async function beginSession(page: Page, contacts = 4) {
-  await page.goto(sessionUrl())
+export async function beginSession(page: Page, contacts = 4, url = sessionUrl()) {
+  await page.goto(url)
   const begin = page.getByRole('button', { name: /Begin session|सत्र आरंभ करें/ })
   await expect(begin).toBeFocused()
   await page.keyboard.press('Enter')

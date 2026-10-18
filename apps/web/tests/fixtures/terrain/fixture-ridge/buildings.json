@@ -1,0 +1,77 @@
+{
+ "format": "terrain-buildings.v1",
+ "buildings": [
+  {
+   "id": "f001",
+   "footprint": [
+    [
+     60,
+     40
+    ],
+    [
+     100,
+     40
+    ],
+    [
+     100,
+     64
+    ],
+    [
+     60,
+     64
+    ]
+   ],
+   "base_m": -3.2,
+   "height_m": 7.5,
+   "height_source": "tag"
+  },
+  {
+   "id": "f002",
+   "footprint": [
+    [
+     -150,
+     -90
+    ],
+    [
+     -118,
+     -90
+    ],
+    [
+     -118,
+     -70
+    ],
+    [
+     -150,
+     -70
+    ]
+   ],
+   "base_m": -2.6,
+   "height_m": 4.2,
+   "height_source": "tag"
+  },
+  {
+   "id": "f003",
+   "footprint": [
+    [
+     150,
+     -160
+    ],
+    [
+     190,
+     -160
+    ],
+    [
+     190,
+     -118
+    ],
+    [
+     150,
+     -118
+    ]
+   ],
+   "base_m": -2.4,
+   "height_m": 12,
+   "height_source": "tag"
+  }
+ ]
+}

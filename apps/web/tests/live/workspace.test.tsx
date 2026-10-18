@@ -66,15 +66,27 @@ const two = (extra: Partial<Frame> = {}) =>
   })
 
 /** Open the workspace and bring it to a running session with two tracks. */
-async function running(extra: Partial<Frame> = {}, language = 'en') {
+async function running(extra: Partial<Frame> = {}, language = 'en', eoCamera?: 'thermal' | 'nv') {
   signedIn('trainee', {}, language)
   renderApp('/train/session/abc')
   await waitFor(() =>
     expect((holder.current as FakeTransport | null)?.handlers ?? null).not.toBeNull(),
   )
   connection({ state: 'open' })
-  await push(welcome())
-  await push(two({ status: 'running', ...extra }))
+  const w = welcome()
+  const f = two({ status: 'running', ...extra })
+  if (eoCamera) {
+    // the same EO sensor, as a thermal camera ('ir') or a night-vision one
+    const site = w.briefing.sensors.find((s) => s.id === 'eo-1')
+    if (site) {
+      site.profile = eoCamera === 'thermal' ? 'ir-generic-thermal' : 'eo-generic-nv'
+      if (eoCamera === 'thermal') site.modality = 'ir'
+    }
+    const live = f.sensors.find((s) => s.id === 'eo-1')
+    if (live && eoCamera === 'thermal') live.modality = 'ir'
+  }
+  await push(w)
+  await push(f)
   await screen.findAllByRole('table')
   return userEvent.setup()
 }
@@ -128,7 +140,7 @@ describe('opening a session', () => {
     expect(screen.getByRole('table', { name: 'Tracks held by the tracker' })).toBeInTheDocument()
   })
 
-  it('offers no night-vision or thermal mode in this build', async () => {
+  it('offers only the day picture for a day camera, with no night-vision or thermal wording', async () => {
     await running()
     const mode = screen.getByRole('group', { name: 'Mode' })
     expect(
@@ -137,6 +149,40 @@ describe('opening a session', () => {
         .map((b) => b.textContent),
     ).toEqual(['Day TV'])
     expect(screen.queryByText(/thermal|night/i)).not.toBeInTheDocument()
+  })
+
+  it('offers both thermal polarities for a thermal camera, and switches with the keyboard', async () => {
+    const user = await running({}, 'en', 'thermal')
+    const mode = screen.getByRole('group', { name: 'Mode' })
+    const buttons = within(mode).getAllByRole('button')
+    expect(buttons.map((b) => b.textContent)).toEqual(['White-hot', 'Black-hot'])
+    expect(buttons[0]).toHaveAttribute('aria-pressed', 'true')
+    buttons[1]?.focus()
+    await user.keyboard('{Enter}')
+    expect(buttons[1]).toHaveAttribute('aria-pressed', 'true')
+    expect(buttons[0]).toHaveAttribute('aria-pressed', 'false')
+    // no day or night-vision picture is offered for a thermal sensor
+    expect(within(mode).queryByRole('button', { name: /Day TV|Night vision/ })).toBeNull()
+    expect(screen.getByRole('button', { name: 'About this picture' })).toBeInTheDocument()
+  })
+
+  it('offers the night-vision picture alone for a night-vision camera', async () => {
+    await running({}, 'en', 'nv')
+    const mode = screen.getByRole('group', { name: 'Mode' })
+    expect(
+      within(mode)
+        .getAllByRole('button')
+        .map((b) => b.textContent),
+    ).toEqual(['Night vision'])
+  })
+
+  it('has the graphics control next to the mode, starting on Auto', async () => {
+    await running()
+    const graphics = screen.getByRole('group', { name: 'Graphics' })
+    expect(within(graphics).getByRole('button', { name: 'Auto' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
   })
 })
 

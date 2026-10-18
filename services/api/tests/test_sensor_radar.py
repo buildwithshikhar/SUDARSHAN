@@ -234,7 +234,10 @@ def reports(
 def test_micro_doppler_separates_rotor_from_bird_where_rcs_overlaps() -> None:
     s = radar()
     rotary, bird = reports(s, "rotary-small"), reports(s, "bird")
-    count = lambda ds, label: sum(d.features["micro_doppler"] == label for d in ds)  # noqa: E731
+
+    def count(ds: list[Detection], label: str) -> int:
+        return sum(d.features["micro_doppler"] == label for d in ds)
+
     assert count(rotary, "rotor") > 0.8 * len(rotary) and count(rotary, "wing-beat") < 0.05 * 200
     assert count(bird, "wing-beat") > 0.7 * len(bird) and count(bird, "rotor") < 0.05 * 200
     rotor_hz = [

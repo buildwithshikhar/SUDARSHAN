@@ -11,7 +11,14 @@ from typing import Any
 
 from app.contracts import ScenarioSpec
 from app.contracts.common import Vec3
-from sim.tracking import AmbiguityPolicy, Association, TrackEvent, UpdateResult
+from sim.tracking import (
+    AmbiguityPolicy,
+    Association,
+    Track,
+    Tracker,
+    TrackEvent,
+    UpdateResult,
+)
 from sim.tracking.ambiguity import ErrorPolicy
 from sim.tracking.associate import Component, Pair, components
 from sim.tracking.ledger import LedgerEvent, TruthLedger
@@ -157,3 +164,33 @@ class Feed:
             self.step({track: [cause]}, [TrackEvent("init", track, self.tick, {"track": track})])
         self.run(3, {t: [c] for t, c in drones.items()})
         self.step({}, [confirm(t) for t in drones])
+
+
+def bare_track(track_id: str, status: str = "confirmed", **fields: Any) -> Track:
+    """A track at rest 1500 m north of the origin, for tests that need no filter run."""
+    p = [[0.0] * 6 for _ in range(6)]
+    for i in range(3):
+        p[i][i], p[i + 3][i + 3] = 400.0, 9.0
+    track = Track(
+        id=track_id,
+        label=track_id,
+        status=status,  # type: ignore[arg-type]
+        born=0,
+        last_update=0,
+        last_predict=0,
+        hit_ticks=3,
+        x=[0.0, 1500.0, 150.0, 0.0, 0.0, 0.0],
+        p=p,
+    )
+    for key, value in fields.items():
+        setattr(track, key, value)
+    return track
+
+
+def bare_tracker(**statuses: str) -> Tracker:
+    """A tracker with a radar at `RADAR` and one bare track per keyword (id=status)."""
+    tracker = Tracker({"radar-1": RADAR})
+    for track_id, status in statuses.items():
+        tracker.allocate_id()  # so that ids T001, T002, ... are taken, as if the tracker made them
+        tracker.insert(bare_track(track_id, status))
+    return tracker

@@ -90,6 +90,18 @@ Geometry (`Geometry.between`) gives compass azimuth, elevation, slant and ground
 - **Events.** `track.init|confirm|coast|resume|drop`, `track.relabel|merge|split`, `sensor.cue` carry no ground truth (`picture.TRAINEE_EVENT_TYPES`). `ledger.swap|split|merge|restored` and `assist.assess` name true drones and are for the instructor and scoring (`TRUTH_EVENT_TYPES`). The model, the error model and the assist are in [SENSOR_MODELS.md](SENSOR_MODELS.md), "Tracking".
 - **Tracker input.** `Measurement.from_view(Detection.trainee_view())` only; it refuses `truth_id`. Ground truth reaches the ledger through the report's reference number, kept inside the picture.
 
+## Operator actions and rules of engagement
+
+Wave 5. A trainee works with tracks, so an operator action names a track (`payload.track`), never a drone. `World` handles it in `_operator_action` (`sim/world.py`):
+
+1. The track must be live and the payload may carry only the keys of that action (`classify` takes `class_id`, one of `OPERATOR_CLASSES`; `assess` takes `identity`; `engage` takes `effector_class`, an ID in the rule pack). Anything else is logged as `action.rejected`.
+2. With a rule engine attached (`World(..., roe=load_rule_engine(spec))`, which needs a picture), `sim/roe.py` evaluates the action for the track's context: the operator's own earlier assessment (identity, class), the role of the smallest scenario zone that contains the track, and the track's class support as confidence. The result is logged first as `roe.verdict` (action, track, context, `permitted`, `code`, rule ID and title, pack ID and version, detail).
+3. Only a permitted action takes effect: it updates `World.operator[track]`, sets the real drone's `assigned_*` fields when the ledger can name it, and is logged as `action.<name>` with `target`, the real drone behind the track or `None` for a false alarm. A blocked response is logged as the verdict alone.
+
+The verdict is a pure function of the rule pack and that context (`RuleEngine.evaluate`). Rules only permit. If a rule permits the action, every condition holds, the session has its authority and (for `engage`) it lists the effector class, the verdict cites it. Otherwise it cites the closest rule (fewest gaps, an effector mismatch counting double because the effector is the operator's own choice) and says what is missing: `conditions` (with `detail.unmet`: field, required, actual), `effector`, or `authority` (a commander rule is not available to a single operator). `no-rule` means the pack has no rule that permits the action at all. `hold` is always permitted (`default-hold` when no rule matches). Operator state joins the hashed state only when a rule engine is attached, so earlier golden files are untouched; entries for vanished tracks are dropped on the next action. `session-record.v1` has a `roe` flag, and `replay` rebuilds the engine from the scenario's rule pack when it is set.
+
+`sim/audience.py` is the allow-list of events a trainee may receive (tracker lifecycle, the operator's own accepted actions and rejections, `roe.verdict`, session start and end), with `target` removed. See [LIVE_SESSION.md](LIVE_SESSION.md).
+
 ## Golden files
 
 `services/api/tests/golden/*.txt` pin the event list, 10-second state samples and final state hash for a fixed set of cases (`tests/sim_cases.py`: the Kestrel scenario with three seeds and action logs, up to 12,000 ticks). A behaviour change prints a unified diff of the changed lines. To accept an intended change:
@@ -116,5 +128,9 @@ git diff tests/golden/   # read it, then commit with the reason
 | Association errors, truth ledger, track commands, cue-to-track | `tests/test_tracking_ambiguity.py`, `test_tracking_ledger.py`, `test_tracking_commands.py`, `test_tracking_cueing.py` |
 | Simulated AI assist rates and reproducibility | `tests/test_tracking_assist.py` |
 | Picture in the world: determinism, replay, snapshot, actions, who sees what | `tests/test_tracking_wiring.py`, `test_contract_track_actions.py` |
+| ROE verdicts, closest-rule explanations, authority and effector gaps | `tests/test_roe.py` |
+| Operator actions on tracks: verdict then effect, `target` logged, rejections, hashing, snapshot and replay | `tests/test_world_operator.py` |
+| What a trainee may see of the log and of each frame | `tests/test_audience.py` |
+| The Harrier Field scenario and an oracle defender run | `tests/test_harrier_scenario.py` |
 | Reference-data labels on trainee-visible figures (Q-20) | `tests/test_sensor_provenance.py` |
 | Sensor models: P(d) never rises with range, weather and time of day move it as documented, RF-silent targets are never detected by RF, micro-Doppler separates rotor from bird, a cue narrows the EO/IR field and improves precision, shipped profiles load against the register and list their unverified values | `tests/test_sensor_radar.py`, `test_sensor_eoir.py`, `test_sensor_rf.py`, `test_sensor_acoustic.py` |

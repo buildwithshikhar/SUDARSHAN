@@ -13,7 +13,7 @@ services:
       - ..:/repo
       - ci-venv:/opt/venv
       - ci-uv-cache:/opt/uv-cache
-    entrypoint: ["sh", "-c", "pip install -q uv && uv sync -q --frozen && exec \"$$@\"", "--"]
+    entrypoint: ["sh", "-c", "(command -v ps >/dev/null || (apt-get update -qq && apt-get install -y -qq procps >/dev/null)) && pip install -q uv && uv sync -q --frozen && exec \"$$@\"", "--"]
 
 volumes:
   ci-venv:

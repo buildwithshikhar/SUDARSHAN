@@ -66,11 +66,13 @@ export function lighting(hours: number, cloudCoverPct = 0): Lighting {
   const day = clamp(sunHeight, 0, 1)
   const cloud = clamp(cloudCoverPct / 100, 0, 1)
   const direct = 1 - 0.65 * cloud
+  // The sky keeps glowing for a while after sunset, and the ground with it.
+  const twilight = clamp(1 - Math.abs(sunHeight + 0.04) / 0.26, 0, 1)
   return {
     sunIntensity: (0.05 + 3.1 * Math.pow(day, 0.8)) * direct,
     sunWarmth: 1 - clamp(sunHeight * 2.2, 0, 1),
-    ambientIntensity: 0.16 + 0.95 * day + 0.25 * cloud * day,
-    moonIntensity: 0.26 * clamp(moonHeight * 1.6, 0, 1) * (1 - 0.7 * cloud),
-    exposure: 1.0 + 0.55 * clamp(1 - sunHeight * 3, 0, 1),
+    ambientIntensity: 0.3 + 0.7 * day + 0.5 * twilight * (1 - day) + 0.25 * cloud * day,
+    moonIntensity: 0.85 * clamp(moonHeight * 1.6, 0, 1) * (1 - 0.7 * cloud),
+    exposure: 1.0 + 0.7 * clamp(1 - sunHeight * 3, 0, 1),
   }
 }

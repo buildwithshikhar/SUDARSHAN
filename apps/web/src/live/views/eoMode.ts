@@ -154,7 +154,7 @@ export function easeRange(current: GainRange, target: GainRange, k: number): Gai
 
 /** Night-vision tube gain for a mean scene luminance: lifts a dark scene, eases off a bright one. */
 export function nvGain(meanLuma: number): number {
-  return clamp(0.3 / Math.max(meanLuma, 0.004), 0.6, 60)
+  return clamp(0.22 / Math.max(meanLuma, 0.004), 0.6, 16)
 }
 
 /** The gain readout shown in the HUD, 0..100 %: how hard the picture is being stretched. */

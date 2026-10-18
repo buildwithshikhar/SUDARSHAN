@@ -172,7 +172,7 @@ describe('automatic gain', () => {
   it('lifts a dark scene for night vision and eases off a bright one', () => {
     expect(nvGain(0.01)).toBeGreaterThan(nvGain(0.1))
     expect(nvGain(0.5)).toBeCloseTo(0.6, 5)
-    expect(nvGain(0)).toBeLessThanOrEqual(60)
+    expect(nvGain(0)).toBeLessThanOrEqual(16)
   })
 })
 
@@ -224,7 +224,8 @@ describe('sun and moon', () => {
     expect(day.sunIntensity).toBeGreaterThan(night.sunIntensity * 10)
     expect(day.moonIntensity).toBe(0)
     expect(night.moonIntensity).toBeGreaterThan(0)
-    expect(night.moonIntensity).toBeLessThan(0.3)
+    // the moon is a dim fraction of the daytime sun
+    expect(night.moonIntensity).toBeLessThan(day.sunIntensity / 3)
     expect(night.exposure).toBeGreaterThan(day.exposure)
     expect(lighting(12, 100).sunIntensity).toBeLessThan(day.sunIntensity)
     expect(lighting(17.5).sunWarmth).toBeGreaterThan(lighting(12).sunWarmth)

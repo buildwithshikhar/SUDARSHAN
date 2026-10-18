@@ -392,7 +392,7 @@ The tracker takes one uniform per report from the `tracking` stream and hands th
 | split | at least one report left unpaired by `N` | `N` is applied, and the unpaired report with the best fit starts a new tentative track | `split_max * (1 - exp(-clutter_gain * n))`, `n` = unpaired reports |
 | merge | `N` has at least two pairs | the dearest nominal pair (ties: larger track id) is dropped: that track gets no report this tick | `merge_max * exp(-c_d / k)`, `c_d` = cost of the dropped pair |
 
-Costs are summed in sorted order and the exponential is `sim.detmath.exp`, so a draw gives the same resolution on every platform. The policy holds no state. `ErrorModel` refuses probabilities outside [0, 1], a non-positive scale, and maxima that sum to more than 1.
+Costs are summed in sorted order and the exponential is `sim.detmath.exp`, so a draw gives the same resolution on every platform. The policy holds no state. `ErrorModel` refuses probabilities outside [0, 1], a non-positive scale, a negative `difficulty`, and maxima that sum to more than 1.
 
 | Parameter | Unit | Value | Source | Verified |
 |---|---|---|---|---|
@@ -401,10 +401,11 @@ Costs are summed in sorted order and the exponential is `sim.detmath.exp`, so a 
 | `split_max` | probability | 0.15 | F01 | no |
 | `merge_max` | probability | 0.15 | F01 | no |
 | `clutter_gain` | per extra plot | 0.5 | F01 | no |
+| `difficulty` | multiplier | 1.0 | F01 | no |
 
-All five are project-authored fictional values (F01, `verified: false`); none is fitted to any real tracker.
+All six are project-authored fictional values (F01, `verified: false`); none is fitted to any real tracker.
 
-**What it produces.** A swap that lasts one update is mostly undone by the filter's own velocity memory, so persistent swaps are uncommon at these maxima. Measured on the crossing geometry in `tests/tracking_cases.py` (two rotary-small drones at 15 m/s passing 1500 m from a radar, 900 ticks, 300 seeds, no false alarms): 4 runs end with a swap recorded by the ledger under the default policy and 1 under the nominal policy (which swaps only through noise). The documented swap is seed 1014: the policy swaps the two tracks' reports at tick 624, and the ledger records the exchange at tick 648, when the last five reports of each track name the other drone. With the nominal policy that seed gives no swap. Two drones flying side by side 12 m apart are folded into one track by the tracker's own duplicate rule in 17 of 20 seeds with the nominal policy and 18 of 20 with the default one (700 ticks). Swaps are rare by design at the default maxima; a scenario that wants more raises `swap_max`. These figures are a property of this toy tracker, not a claim about real ones.
+**What it produces.** A swap that lasts one update is mostly undone by the filter's own velocity memory, so persistent swaps are uncommon at these maxima. Measured on the crossing geometry in `tests/tracking_cases.py` (two rotary-small drones at 15 m/s passing 1500 m from a radar, 900 ticks, 300 seeds, no false alarms): 4 runs end with a swap recorded by the ledger under the default policy and 1 under the nominal policy (which swaps only through noise). The documented swap is seed 1014: the policy swaps the two tracks' reports at tick 624, and the ledger records the exchange at tick 648, when the last five reports of each track name the other drone. With the nominal policy that seed gives no swap. Two drones flying side by side 12 m apart are folded into one track by the tracker's own duplicate rule in 17 of 20 seeds with the nominal policy and 18 of 20 with the default one (700 ticks). Swaps are rare by design at the default maxima; a scenario that wants more raises `swap_max`, or `difficulty`, which multiplies all three error probabilities (1.0 leaves the behaviour exactly as above; 0 removes every error; if the scaled probabilities of a component would sum to more than 1 they are shrunk in proportion, so the ratios between modes hold). These figures are a property of this toy tracker, not a claim about real ones.
 
 ### Truth ledger
 

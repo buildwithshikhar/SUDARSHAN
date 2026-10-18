@@ -43,6 +43,7 @@ def test_the_defaults_are_the_documented_ones_and_serialise() -> None:
         "split_max": 0.15,
         "merge_max": 0.15,
         "clutter_gain": 0.5,
+        "difficulty": 1.0,
     }
     assert ErrorPolicy().model == model
 

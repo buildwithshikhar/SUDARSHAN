@@ -39,7 +39,7 @@ is bit-identical on every platform. The policy holds no state: the same componen
 give the same resolution.
 """
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from typing import Any
 
 from .. import detmath
@@ -61,6 +61,8 @@ class ErrorModel:
     merge_max: float = 0.15
     #: How fast the split probability rises with each extra plot in the gate, per plot.
     clutter_gain: float = 0.5
+    #: Multiplier on all three error probabilities; 1.0 is the default behaviour, above 1 errs more.
+    difficulty: float = 1.0
 
     def __post_init__(self) -> None:
         for name in ("swap_max", "split_max", "merge_max"):
@@ -71,6 +73,8 @@ class ErrorModel:
             raise ValueError(f"swap_scale must be positive, got {self.swap_scale}")
         if self.clutter_gain < 0.0:
             raise ValueError(f"clutter_gain cannot be negative, got {self.clutter_gain}")
+        if not self.difficulty >= 0.0:
+            raise ValueError(f"difficulty cannot be negative, got {self.difficulty}")
         if self.swap_max + self.split_max + self.merge_max > 1.0:
             raise ValueError(
                 "the largest swap, split and merge probabilities must sum to 1 or less"
@@ -107,7 +111,20 @@ class ErrorPolicy:
             option = build(component)
             if option is not None and option.probability > 0.0:
                 out.append(option)
-        return out
+        return self._scaled(out)
+
+    def _scaled(self, options: list[Option]) -> list[Option]:
+        """Apply `difficulty`; if that pushes the total above 1, shrink all in proportion."""
+        factor = self.model.difficulty
+        if factor == 1.0:
+            return options
+        scaled = [replace(o, probability=o.probability * factor) for o in options]
+        total = 0.0
+        for option in scaled:
+            total += option.probability
+        if total > 1.0:
+            scaled = [replace(o, probability=o.probability / total) for o in scaled]
+        return [o for o in scaled if o.probability > 0.0]
 
     def resolve(self, component: Component, draw: float) -> Resolution:
         nominal = Resolution("nominal", tuple((p.track, p.index) for p in component.nominal))

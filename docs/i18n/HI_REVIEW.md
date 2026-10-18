@@ -367,6 +367,13 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.event.reported` | {{track}} reported. | {{track}} की रिपोर्ट की गई। |  |
 | `live.event.designated` | {{track}} designated. | {{track}} चिह्नित किया गया। |  |
 | `live.event.requested` | Request accepted: {{action}}. | अनुरोध स्वीकृत: {{action}}। |  |
+| `live.event.reportedWith` | {{track}} reported: {{detail}}. | {{track}} की रिपोर्ट: {{detail}}। |  |
+| `live.event.reportDetail.count` | count {{value}} | संख्या {{value}} |  |
+| `live.event.reportDetail.where` | bearing {{bearing}}, range {{range}} | दिशा {{bearing}}, दूरी {{range}} |  |
+| `live.event.reportDetail.bearing` | bearing {{value}} | दिशा {{value}} |  |
+| `live.event.reportDetail.range` | range {{value}} | दूरी {{value}} |  |
+| `live.event.reportDetail.heading` | heading {{value}} | शीर्ष {{value}} |  |
+| `live.event.reportDetail.confidence` | confidence {{value}} | विश्वास {{value}} |  |
 | `live.log.title` | Event log | इवेंट लॉग |  |
 | `live.log.empty` | No events yet. | अभी कोई इवेंट नहीं। |  |
 | `live.log.tone.ok` | Done | हो गया |  |
@@ -412,7 +419,9 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.ended.verification` | Event log | इवेंट लॉग |  |
 | `live.ended.verified` | Event log verified | इवेंट लॉग सत्यापित |  |
 | `live.ended.failed` | Event log failed verification at sequence {{seq}} | इवेंट लॉग क्रम संख्या {{seq}} पर सत्यापन में विफल |  |
-| `live.ended.note` | Scoring and debrief are not part of this build. | स्कोरिंग और डीब्रीफ़ इस संस्करण का हिस्सा नहीं हैं। |  |
+| `live.ended.debriefTitle` | Debrief | डीब्रीफ़ |  |
+| `live.ended.debriefBody` | Score, the path through each contact, the contact report grades and the first three lessons. | स्कोर, हर संपर्क का मार्ग, संपर्क रिपोर्ट का अंकन और पहली तीन सीख। |  |
+| `live.ended.debriefLink` | Open the debrief | डीब्रीफ़ खोलें |  |
 | `live.lobby.title` | Session lobby | सत्र लॉबी |  |
 | `live.lobby.reference` | Reference scenarios | संदर्भ परिदृश्य |  |
 | `live.lobby.scenarios` | Scenarios | परिदृश्य |  |
@@ -452,5 +461,225 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.kit.below` | below 1366 × 768 | 1366 × 768 से कम |  |
 | `live.kit.keyboard` | Controls | नियंत्रण |  |
 | `live.kit.keyboardValue` | Keyboard first; mouse works | कीबोर्ड प्रमुख; माउस भी चलता है |  |
+| `live.report.title` | Contact report: {{track}} | संपर्क रिपोर्ट: {{track}} |  |
+| `live.report.intro` | State what you see. Every field is optional, and a field left empty earns no marks. The report is graded in the debrief. | जो दिख रहा है वह बताएँ। हर क्षेत्र वैकल्पिक है, और खाली क्षेत्र पर अंक नहीं मिलते। रिपोर्ट का अंकन डीब्रीफ़ में होता है। |  |
+| `live.report.prefill` | Bearing, range and heading are filled from the selected track. Edit them to what you judge. | दिशा, दूरी और शीर्ष चयनित ट्रैक से भरे गए हैं। अपने आकलन के अनुसार बदलें। |  |
+| `live.report.what` | What | क्या |  |
+| `live.report.whatNone` | Not stated | नहीं बताया |  |
+| `live.report.whatHint` | Keys 1 to 4 choose a class, 0 clears. | कुंजी 1 से 4 वर्ग चुनती हैं, 0 मिटाती है। |  |
+| `live.report.where` | Where, from the site | कहाँ, स्थल से |  |
+| `live.report.bearing` | Bearing (°) | दिशा (°) |  |
+| `live.report.bearingHint` | 0 to under 360, from north | 0 से 360 से कम, उत्तर से |  |
+| `live.report.range` | Range (m) | दूरी (मी) |  |
+| `live.report.rangeHint` | 0 to 50,000 | 0 से 50,000 |  |
+| `live.report.count` | How many | कितने |  |
+| `live.report.countHint` | Whole number, 1 to 99 | पूर्ण संख्या, 1 से 99 |  |
+| `live.report.heading` | Heading (°) | शीर्ष (°) |  |
+| `live.report.headingHint` | 0 to under 360, direction of travel | 0 से 360 से कम, गति की दिशा |  |
+| `live.report.confidence` | Confidence (%) | विश्वास (%) |  |
+| `live.report.confidenceHint` | 0 to 100. Empty earns no calibration mark. | 0 से 100। खाली रखने पर अंशांकन अंक नहीं मिलता। |  |
+| `live.report.submit` | File report | रिपोर्ट दाखिल करें |  |
+| `live.report.skip` | Skip details | विवरण छोड़ें |  |
+| `live.report.skipHint` | Files a bare report with no fields. | बिना किसी क्षेत्र की सादी रिपोर्ट दाखिल करता है। |  |
+| `live.report.errorSummary` | The report has errors. Fix the marked fields. | रिपोर्ट में त्रुटियाँ हैं। चिह्नित क्षेत्र ठीक करें। |  |
+| `live.report.keys` | Enter files the report · Esc cancels | Enter रिपोर्ट दाखिल करता है · Esc रद्द करता है |  |
+| `live.report.error.bearing` | Enter a bearing from 0 to under 360. | 0 से 360 से कम की दिशा भरें। |  |
+| `live.report.error.range` | Enter a range from 0 to 50,000 m. | 0 से 50,000 मी की दूरी भरें। |  |
+| `live.report.error.pair` | Give both a bearing and a range, or leave both empty. | दिशा और दूरी दोनों भरें, या दोनों खाली छोड़ें। |  |
+| `live.report.error.count` | Enter a whole number from 1 to 99. | 1 से 99 की पूर्ण संख्या भरें। |  |
+| `live.report.error.heading` | Enter a heading from 0 to under 360. | 0 से 360 से कम का शीर्ष भरें। |  |
+| `live.report.error.confidence` | Enter a percentage from 0 to 100. | 0 से 100 का प्रतिशत भरें। |  |
+| `scoring.detect.band` | First action was {{first_action}} on {{track}}, {{seconds}} after the first sensor report, against a standard of {{standard}}. | पहली कार्रवाई {{track}} पर {{first_action}} थी, पहली सेंसर रिपोर्ट के {{seconds}} बाद, मानक {{standard}} के विरुद्ध। |  |
+| `scoring.detect.missed` | No action was taken on this contact. The standard is {{standard}} from the first sensor report. | इस संपर्क पर कोई कार्रवाई नहीं की गई। पहली सेंसर रिपोर्ट से मानक {{standard}} है। |  |
+| `scoring.classify.correct` | Classified correctly as {{class}} after {{seconds}} against a standard of {{standard}}. Timing credit {{timing}}. | {{class}} के रूप में सही वर्गीकरण, {{seconds}} बाद, मानक {{standard}} के विरुद्ध। समय अंक {{timing}}। |  |
+| `scoring.classify.wrong` | Classified as {{given}}. The contact was {{actual}}. | {{given}} वर्गीकृत किया। संपर्क {{actual}} था। |  |
+| `scoring.classify.unknown` | Left as unknown. The contact was {{actual}}. | अज्ञात छोड़ा। संपर्क {{actual}} था। |  |
+| `scoring.classify.missing` | No classification was made. | कोई वर्गीकरण नहीं किया गया। |  |
+| `scoring.assess.exact` | Assessed as {{given}}, which fits a {{actual}} contact. Full credit. | आकलन {{given}}, जो {{actual}} संपर्क से मेल खाता है। पूरे अंक। |  |
+| `scoring.assess.partial` | Assessed as {{given}} for a {{actual}} contact. Partial credit. | {{actual}} संपर्क का आकलन {{given}} किया। आंशिक अंक। |  |
+| `scoring.assess.wrong` | Assessed as {{given}} for a {{actual}} contact. No credit. | {{actual}} संपर्क का आकलन {{given}} किया। कोई अंक नहीं। |  |
+| `scoring.assess.missing` | No assessment was made. | कोई आकलन नहीं किया गया। |  |
+| `scoring.respond.engage` | Responded with {{effector}} after {{seconds}} against a standard of {{standard}}. Timing credit {{timing}}. | {{effector}} से कार्रवाई की, {{seconds}} बाद, मानक {{standard}} के विरुद्ध। समय अंक {{timing}}। |  |
+| `scoring.respond.engage-higher` | Responded with {{effector}}, above the first effector the rule lists, after {{seconds}} against a standard of {{standard}}. Credit reduced for the higher escalation. | {{effector}} से कार्रवाई की, जो नियम में सूचीबद्ध पहले प्रभावक से ऊपर है, {{seconds}} बाद, मानक {{standard}} के विरुद्ध। ऊँचे स्तर के कारण अंक घटे। |  |
+| `scoring.respond.report-only` | Reported up the chain after {{seconds}} against a standard of {{standard}}, with no engagement. Partial credit. | ऊपर रिपोर्ट की, {{seconds}} बाद, मानक {{standard}} के विरुद्ध; कार्रवाई नहीं की। आंशिक अंक। |  |
+| `scoring.respond.hold-only` | Held fire after {{seconds}} against a standard of {{standard}}, with no engagement or report. Low credit. | {{seconds}} बाद फ़ायर रोका, मानक {{standard}} के विरुद्ध; न कार्रवाई की न रिपोर्ट। कम अंक। |  |
+| `scoring.respond.none` | No response was made on this hostile contact. | इस शत्रु संपर्क पर कोई कार्रवाई नहीं की गई। |  |
+| `scoring.respond.hold-fire` | This contact was not hostile, so no engagement was required. | यह संपर्क शत्रु नहीं था, इसलिए कार्रवाई की ज़रूरत नहीं थी। |  |
+| `scoring.report.missing` | No contact report was filed on this hostile contact. | इस शत्रु संपर्क की कोई संपर्क रिपोर्ट दाखिल नहीं की गई। |  |
+| `scoring.report.filed` | Report filed {{seconds}} after the first sensor report, against a standard of {{standard}}. Timeliness credit {{timeliness}}. Weakest field: {{worst_field}}. | रिपोर्ट पहली सेंसर रिपोर्ट के {{seconds}} बाद दाखिल हुई, मानक {{standard}} के विरुद्ध। समयबद्धता अंक {{timeliness}}। सबसे कमज़ोर क्षेत्र: {{worst_field}}। |  |
+| `scoring.report.no-truth` | A report was filed, but the record holds no ground truth to grade it against. | रिपोर्ट दाखिल हुई, पर रिकॉर्ड में जाँचने के लिए वास्तविक स्थिति नहीं है। |  |
+| `scoring.report.what.ok` | Class reported as {{given}}. Correct. | वर्ग {{given}} रिपोर्ट किया। सही। |  |
+| `scoring.report.what.partial` | Class reported as {{given}}. The contact was {{actual}}. | वर्ग {{given}} रिपोर्ट किया। संपर्क {{actual}} था। |  |
+| `scoring.report.what.wrong` | Class reported as {{given}}. The contact was {{actual}}. | वर्ग {{given}} रिपोर्ट किया। संपर्क {{actual}} था। |  |
+| `scoring.report.what.missing` | No class was reported. | कोई वर्ग रिपोर्ट नहीं किया गया। |  |
+| `scoring.report.where.ok` | Position {{error_m}} from the real position, within the tolerance of {{tolerance_m}}. | स्थिति वास्तविक स्थिति से {{error_m}} दूर, सहनसीमा {{tolerance_m}} के भीतर। |  |
+| `scoring.report.where.partial` | Position {{error_m}} from the real position, outside the tolerance of {{tolerance_m}}. | स्थिति वास्तविक स्थिति से {{error_m}} दूर, सहनसीमा {{tolerance_m}} से बाहर। |  |
+| `scoring.report.where.wrong` | Position {{error_m}} from the real position, too far to earn marks (tolerance {{tolerance_m}}). | स्थिति वास्तविक स्थिति से {{error_m}} दूर, अंक पाने के लिए बहुत दूर (सहनसीमा {{tolerance_m}})। |  |
+| `scoring.report.where.missing` | No bearing and range were reported. | दिशा और दूरी रिपोर्ट नहीं की गई। |  |
+| `scoring.report.count.ok` | Count reported as {{given}}. Correct. | संख्या {{given}} रिपोर्ट की। सही। |  |
+| `scoring.report.count.partial` | Count reported as {{given}}. The real count was {{actual}}, off by one. | संख्या {{given}} रिपोर्ट की। वास्तविक संख्या {{actual}} थी, एक का अंतर। |  |
+| `scoring.report.count.wrong` | Count reported as {{given}}. The real count was {{actual}}. | संख्या {{given}} रिपोर्ट की। वास्तविक संख्या {{actual}} थी। |  |
+| `scoring.report.count.missing` | No count was reported. | कोई संख्या रिपोर्ट नहीं की गई। |  |
+| `scoring.report.heading.ok` | Heading {{error_deg}} from the real course, within the tolerance of {{tolerance_deg}}. | शीर्ष वास्तविक पथ से {{error_deg}} अलग, सहनसीमा {{tolerance_deg}} के भीतर। |  |
+| `scoring.report.heading.partial` | Heading {{error_deg}} from the real course, outside the tolerance of {{tolerance_deg}}. | शीर्ष वास्तविक पथ से {{error_deg}} अलग, सहनसीमा {{tolerance_deg}} से बाहर। |  |
+| `scoring.report.heading.wrong` | Heading {{error_deg}} from the real course, too far to earn marks (tolerance {{tolerance_deg}}). | शीर्ष वास्तविक पथ से {{error_deg}} अलग, अंक पाने के लिए बहुत दूर (सहनसीमा {{tolerance_deg}})। |  |
+| `scoring.report.heading.missing` | No heading was reported. | कोई शीर्ष रिपोर्ट नहीं किया गया। |  |
+| `scoring.report.calibration.ok` | Stated confidence {{stated}}. The report was {{achieved}} right. Well calibrated. | बताया गया विश्वास {{stated}}। रिपोर्ट {{achieved}} सही थी। अंशांकन अच्छा। |  |
+| `scoring.report.calibration.partial` | Stated confidence {{stated}}. The report was {{achieved}} right. | बताया गया विश्वास {{stated}}। रिपोर्ट {{achieved}} सही थी। |  |
+| `scoring.report.calibration.wrong` | Stated confidence {{stated}}. The report was {{achieved}} right. Poorly calibrated. | बताया गया विश्वास {{stated}}। रिपोर्ट {{achieved}} सही थी। अंशांकन कमज़ोर। |  |
+| `scoring.report.calibration.missing` | No confidence was stated. | कोई विश्वास नहीं बताया गया। |  |
+| `scoring.finding.hard-fail.engaged-non-hostile` | Engaged track {{track}} at {{t}} on a contact that was {{actual}}. Engaging a contact that is not hostile fails the contact: score 0. | {{t}} पर ट्रैक {{track}} पर कार्रवाई की, जबकि संपर्क {{actual}} था। जो संपर्क शत्रु नहीं है उस पर कार्रवाई से संपर्क विफल होता है: अंक 0। |  |
+| `scoring.finding.hard-fail.no-positive-id` | Engaged track {{track}} at {{t}} without a positive ID (classified, and assessed hostile or suspect). The contact fails: score 0. | {{t}} पर ट्रैक {{track}} पर बिना पुष्ट पहचान के कार्रवाई की (वर्गीकृत, और आकलन शत्रु या संदिग्ध)। संपर्क विफल: अंक 0। |  |
+| `scoring.finding.track-error.swap` | Track labels were swapped at {{t}} (error {{error_id}}) and never restored. | {{t}} पर ट्रैक नाम आपस में बदले गए (त्रुटि {{error_id}}) और कभी ठीक नहीं किए गए। |  |
+| `scoring.finding.track-error.split` | A track was split at {{t}} (error {{error_id}}) and never restored. | {{t}} पर एक ट्रैक विभाजित हुआ (त्रुटि {{error_id}}) और कभी ठीक नहीं किया गया। |  |
+| `scoring.finding.track-error.merge` | Two tracks were merged at {{t}} (error {{error_id}}) and never restored. | {{t}} पर दो ट्रैक मिल गए (त्रुटि {{error_id}}) और कभी ठीक नहीं किए गए। |  |
+| `scoring.finding.blocked-attempt` | The rules blocked {{attempts}} of your responses on this contact. | नियमों ने इस संपर्क पर आपकी {{attempts}} कार्रवाइयाँ रोकीं। |  |
+| `scoring.finding.false-alarm` | Clutter classified as {{given}}. The contact was {{actual}}. | क्लटर को {{given}} वर्गीकृत किया। संपर्क {{actual}} था। |  |
+| `scoring.finding.false-engagement` | Engaged track {{track}} at {{t}}, which followed nothing real. | {{t}} पर ट्रैक {{track}} पर कार्रवाई की, जो किसी वास्तविक वस्तु का ट्रैक नहीं था। |  |
+| `scoring.finding.not-presented` | No sensor reported this contact during the session, so it was not scored. | सत्र में किसी सेंसर ने यह संपर्क रिपोर्ट नहीं किया, इसलिए इसे अंक नहीं दिए गए। |  |
+| `scoring.finding.not-worked` | A sensor reported this contact and no action was taken on it. Leaving it alone was correct, so it was not scored. | सेंसर ने यह संपर्क रिपोर्ट किया और उस पर कोई कार्रवाई नहीं हुई। उसे छोड़ना सही था, इसलिए अंक नहीं दिए गए। |  |
+| `scoring.lesson.detect.band` | {{threat}}: act sooner. Your first action came {{seconds}} after the first sensor report; the standard is {{standard}}. Designate or classify a track as soon as it appears. | {{threat}}: जल्दी कार्रवाई करें। आपकी पहली कार्रवाई पहली सेंसर रिपोर्ट के {{seconds}} बाद आई; मानक {{standard}} है। ट्रैक दिखते ही उसे चिह्नित या वर्गीकृत करें। |  |
+| `scoring.lesson.detect.missed` | {{threat}}: no action was taken. Designate and classify every contact within {{standard}} of its first sensor report. | {{threat}}: कोई कार्रवाई नहीं की गई। हर संपर्क को पहली सेंसर रिपोर्ट के {{standard}} के भीतर चिह्नित और वर्गीकृत करें। |  |
+| `scoring.lesson.classify.correct` | {{threat}}: classify sooner. The class was right but took {{seconds}} against a standard of {{standard}}. Cue the EO sensor onto the track to confirm the class earlier. | {{threat}}: जल्दी वर्गीकृत करें। वर्ग सही था पर मानक {{standard}} के विरुद्ध {{seconds}} लगे। वर्ग जल्दी पक्का करने के लिए EO सेंसर को ट्रैक पर क्यू करें। |  |
+| `scoring.lesson.classify.wrong` | {{threat}}: you called it {{given}} and it was {{actual}}. Cue the EO sensor and check size, rotors and wings before you commit. | {{threat}}: आपने इसे {{given}} कहा और यह {{actual}} था। पुष्टि से पहले EO सेंसर क्यू करें और आकार, रोटर और पंख जाँचें। |  |
+| `scoring.lesson.classify.unknown` | {{threat}}: you left the class as unknown and it was {{actual}}. Commit to the best-supported class once EO or IR has a view. | {{threat}}: आपने वर्ग अज्ञात छोड़ा और यह {{actual}} था। EO या IR के दृश्य के बाद सबसे समर्थित वर्ग तय करें। |  |
+| `scoring.lesson.classify.missing` | {{threat}}: no class was set. Classify every contact you work. | {{threat}}: कोई वर्ग तय नहीं हुआ। जिस संपर्क पर काम करें उसे वर्गीकृत करें। |  |
+| `scoring.lesson.assess.partial` | {{threat}}: assessing it as {{given}} earned partial credit for a {{actual}} contact. Weigh class, behaviour and zone before you settle on an identity. | {{threat}}: {{actual}} संपर्क का आकलन {{given}} करने पर आंशिक अंक मिले। पहचान तय करने से पहले वर्ग, व्यवहार और क्षेत्र तौलें। |  |
+| `scoring.lesson.assess.wrong` | {{threat}}: you assessed it as {{given}} and it was {{actual}}. Check the class and the filed flights before you set an identity. | {{threat}}: आपने आकलन {{given}} किया और यह {{actual}} था। पहचान तय करने से पहले वर्ग और दाखिल उड़ानें जाँचें। |  |
+| `scoring.lesson.assess.missing` | {{threat}}: no assessment was made. Assess every contact you work. | {{threat}}: कोई आकलन नहीं किया गया। जिस संपर्क पर काम करें उसका आकलन करें। |  |
+| `scoring.lesson.respond.engage-higher` | {{threat}}: you used {{effector}}, above the first effector the rule lists. Use the lowest escalation the rule permits. | {{threat}}: आपने {{effector}} प्रयोग किया, जो नियम में सूचीबद्ध पहले प्रभावक से ऊपर है। नियम जितना निचला स्तर अनुमत करे वही प्रयोग करें। |  |
+| `scoring.lesson.respond.report-only` | {{threat}}: you reported but did not engage. When a rule permits a response on a hostile contact, take it in time. | {{threat}}: आपने रिपोर्ट की पर कार्रवाई नहीं की। शत्रु संपर्क पर नियम कार्रवाई की अनुमति दे तो समय पर करें। |  |
+| `scoring.lesson.respond.hold-only` | {{threat}}: you only held fire on a hostile contact. Read the rule preview to find the response it permits, and apply it in time. | {{threat}}: शत्रु संपर्क पर आपने केवल फ़ायर रोका। नियम पूर्वावलोकन देखकर अनुमत कार्रवाई पहचानें और समय पर करें। |  |
+| `scoring.lesson.respond.none` | {{threat}}: no response was made on a hostile contact. Open Respond (R) on every hostile contact. | {{threat}}: शत्रु संपर्क पर कोई कार्रवाई नहीं हुई। हर शत्रु संपर्क पर कार्रवाई चरण (R) खोलें। |  |
+| `scoring.lesson.respond.engage` | {{threat}}: respond sooner. The response took {{seconds}} against a standard of {{standard}}, and blocked attempts cost marks. | {{threat}}: जल्दी कार्रवाई करें। कार्रवाई में मानक {{standard}} के विरुद्ध {{seconds}} लगे, और रोके गए प्रयास अंक घटाते हैं। |  |
+| `scoring.lesson.report.missing` | {{threat}}: no contact report was filed. File class, position, count, heading and confidence for every hostile contact. | {{threat}}: कोई संपर्क रिपोर्ट दाखिल नहीं हुई। हर शत्रु संपर्क के लिए वर्ग, स्थिति, संख्या, शीर्ष और विश्वास दाखिल करें। |  |
+| `scoring.lesson.report.filed` | {{threat}}: your weakest report field was {{worst_field}}. Check it against the track table before filing, and file within {{standard}} of the first sensor report. | {{threat}}: आपका सबसे कमज़ोर रिपोर्ट क्षेत्र {{worst_field}} था। दाखिल करने से पहले उसे ट्रैक तालिका से मिलाएँ, और पहली सेंसर रिपोर्ट के {{standard}} के भीतर दाखिल करें। |  |
+| `scoring.lesson.hard-fail.engaged-non-hostile` | {{threat}}: you engaged a contact that was {{actual}}. Never engage before the contact is identified as hostile. | {{threat}}: आपने {{actual}} संपर्क पर कार्रवाई की। संपर्क के शत्रु पहचाने जाने से पहले कभी कार्रवाई न करें। |  |
+| `scoring.lesson.hard-fail.no-positive-id` | {{threat}}: you engaged without a positive ID. Classify the track and assess it hostile or suspect before any engagement. | {{threat}}: आपने बिना पुष्ट पहचान के कार्रवाई की। किसी भी कार्रवाई से पहले ट्रैक वर्गीकृत करें और उसे शत्रु या संदिग्ध आँकें। |  |
+| `scoring.lesson.track-error` | {{threat}}: a track error at {{t}} was left uncorrected. After a swap, split or merge, check the labels and restore them. | {{threat}}: {{t}} की ट्रैक त्रुटि अनसुधारी रही। अदला-बदली, विभाजन या विलय के बाद नाम जाँचें और उन्हें पूर्ववत करें। |  |
+| `scoring.lesson.blocked-attempt` | {{threat}}: the rules blocked {{attempts}} of your responses. Read the rule preview before you commit a response. | {{threat}}: नियमों ने आपकी {{attempts}} कार्रवाइयाँ रोकीं। कार्रवाई की पुष्टि से पहले नियम पूर्वावलोकन पढ़ें। |  |
+| `scoring.lesson.false-engagement` | Track {{track}} followed nothing real and was engaged at {{t}}. Confirm a track on a second sensor before you engage it. | ट्रैक {{track}} किसी वास्तविक वस्तु का नहीं था और {{t}} पर उस पर कार्रवाई हुई। कार्रवाई से पहले ट्रैक की पुष्टि दूसरे सेंसर पर करें। |  |
+| `scoring.extra.changes` | Class calls changed before the final one: {{changes}}. | अंतिम से पहले वर्ग-निर्णय बदले: {{changes}}। |  |
+| `scoring.extra.blocked` | Responses blocked by the rules on this contact: {{blocked_attempts}}. | इस संपर्क पर नियमों द्वारा रोकी गई कार्रवाइयाँ: {{blocked_attempts}}। |  |
+| `scoring.disposition.hostile` | hostile | शत्रु |  |
+| `scoring.disposition.civil-permitted` | civil traffic | नागरिक यातायात |  |
+| `scoring.disposition.clutter` | clutter | क्लटर |  |
+| `scoring.dispositionLabel.hostile` | Hostile | शत्रु |  |
+| `scoring.dispositionLabel.civil-permitted` | Civil traffic | नागरिक यातायात |  |
+| `scoring.dispositionLabel.clutter` | Clutter | क्लटर |  |
+| `scoring.reportField.what` | What | क्या |  |
+| `scoring.reportField.where` | Where | कहाँ |  |
+| `scoring.reportField.count` | How many | कितने |  |
+| `scoring.reportField.heading` | Heading | शीर्ष |  |
+| `scoring.reportField.calibration` | Confidence | विश्वास |  |
+| `scoring.node.detect` | Detect | खोज |  |
+| `scoring.node.classify` | Classify | वर्गीकरण |  |
+| `scoring.node.assess` | Assess | आकलन |  |
+| `scoring.node.respond` | Respond | कार्रवाई |  |
+| `scoring.node.report` | Report | रिपोर्ट |  |
+| `debrief.title` | Debrief | डीब्रीफ़ |  |
+| `debrief.loading` | Reading the scored record | अंकित रिकॉर्ड पढ़ा जा रहा है |  |
+| `debrief.back` | Back to the Session lobby | सत्र लॉबी पर लौटें |  |
+| `debrief.toRecord` | Session record | सत्र रिकॉर्ड |  |
+| `debrief.retry` | Try again | पुनः प्रयास करें |  |
+| `debrief.error.title` | The scored record could not be read | अंकित रिकॉर्ड नहीं पढ़ा जा सका |  |
+| `debrief.error.body` | The server did not return the score. Check the connection and try again. | सर्वर ने स्कोर नहीं लौटाया। कनेक्शन जाँचें और पुनः प्रयास करें। |  |
+| `debrief.network.title` | The server could not be reached | सर्वर तक पहुँच नहीं हो सकी |  |
+| `debrief.network.body` | The score is stored on the server. Check the connection and try again. | स्कोर सर्वर पर सहेजा जाता है। कनेक्शन जाँचें और पुनः प्रयास करें। |  |
+| `debrief.notEnded.title` | The session has not ended | सत्र समाप्त नहीं हुआ है |  |
+| `debrief.notEnded.body` | The debrief opens when the session ends. Ground truth is not shown before then. | सत्र समाप्त होने पर डीब्रीफ़ खुलता है। उससे पहले वास्तविक स्थिति नहीं दिखाई जाती। |  |
+| `debrief.notFound.title` | No scored record for this session | इस सत्र का कोई अंकित रिकॉर्ड नहीं |  |
+| `debrief.notFound.body` | This session does not exist, it belongs to another account, or it was abandoned and never scored. | यह सत्र मौजूद नहीं है, किसी अन्य खाते का है, या छोड़ दिया गया था और कभी अंकित नहीं हुआ। |  |
+| `debrief.reference` | Reference scoring: timing standards and weights are fictional and editable. The score measures what was done against this scenario's rules. It is not validated as a measure of operator skill. | संदर्भ अंकन: समय मानक और भार काल्पनिक हैं और बदले जा सकते हैं। स्कोर यह मापता है कि इस परिदृश्य के नियमों के विरुद्ध क्या किया गया। इसे ऑपरेटर कौशल के माप के रूप में प्रमाणित नहीं किया गया है। |  |
+| `debrief.truthNote` | Ground truth is shown on this screen because the session has ended. | सत्र समाप्त हो चुका है, इसलिए इस स्क्रीन पर वास्तविक स्थिति दिखाई गई है। |  |
+| `debrief.record.title` | Record | रिकॉर्ड |  |
+| `debrief.record.scenario` | Scenario | परिदृश्य |  |
+| `debrief.record.scenarioVersion` | Scenario version | परिदृश्य संस्करण |  |
+| `debrief.record.seed` | Seed | सीड |  |
+| `debrief.record.rulePack` | Rule pack | नियम पैक |  |
+| `debrief.record.duration` | Duration | अवधि |  |
+| `debrief.record.ticks` | Ticks | टिक |  |
+| `debrief.record.head` | Event chain head | इवेंट श्रृंखला शीर्ष |  |
+| `debrief.summary.title` | Score summary | स्कोर सारांश |  |
+| `debrief.summary.caption` | Session score and decision score | सत्र स्कोर और निर्णय स्कोर |  |
+| `debrief.summary.measure` | Measure | माप |  |
+| `debrief.summary.value` | Value | मान |  |
+| `debrief.summary.session` | Session score | सत्र स्कोर |  |
+| `debrief.summary.decision` | Decision score | निर्णय स्कोर |  |
+| `debrief.summary.report` | Report score | रिपोर्ट स्कोर |  |
+| `debrief.summary.none` | None: no contact was scored | कोई नहीं: किसी संपर्क को अंक नहीं मिले |  |
+| `debrief.summary.sdtTitle` | Signal detection | संकेत पहचान |  |
+| `debrief.summary.sdtCaption` | Signal-detection counts and rates | संकेत-पहचान की गिनतियाँ और दरें |  |
+| `debrief.summary.dPrime` | d′ | d′ |  |
+| `debrief.summary.criterion` | Criterion c | मानदंड c |  |
+| `debrief.summary.hitRate` | Hit rate | सही पहचान दर |  |
+| `debrief.summary.faRate` | False-alarm rate | झूठे अलार्म की दर |  |
+| `debrief.summary.hits` | Hits | सही पहचान |  |
+| `debrief.summary.misses` | Misses | चूक |  |
+| `debrief.summary.falseAlarms` | False alarms | झूठे अलार्म |  |
+| `debrief.summary.correctRejections` | Correct rejections | सही अस्वीकृति |  |
+| `debrief.summary.signalTrials` | Signal trials | संकेत परीक्षण |  |
+| `debrief.summary.noiseTrials` | Noise trials | शोर परीक्षण |  |
+| `debrief.summary.used` | used {{value}} | प्रयुक्त {{value}} |  |
+| `debrief.summary.undefined` | d′ needs at least one signal trial and one noise trial. | d′ के लिए कम से कम एक संकेत परीक्षण और एक शोर परीक्षण चाहिए। |  |
+| `debrief.summary.corrected` | Log-linear correction applied: a rate of exactly 0 or 1 makes d′ unbounded, so both rates were replaced by (count + 0.5) / (trials + 1). Hit rate used {{hit}}, false-alarm rate used {{fa}}. | लॉग-रैखिक सुधार लागू: 0 या 1 की सटीक दर से d′ असीमित हो जाता है, इसलिए दोनों दरें (गिनती + 0.5) / (परीक्षण + 1) से बदली गईं। प्रयुक्त सही पहचान दर {{hit}}, झूठे अलार्म की दर {{fa}}। |  |
+| `debrief.summary.criterionNote` | The form of c is the standard one and has not been checked against a primary source. | c का रूप मानक है और उसे किसी प्राथमिक स्रोत से नहीं मिलाया गया है। |  |
+| `debrief.lessons.title` | First three lessons | पहली तीन सीख |  |
+| `debrief.lessons.caption` | The three costliest mistakes | तीन सबसे महँगी चूकें |  |
+| `debrief.lessons.empty` | No marks were lost on a scored contact, so there are no lessons. | किसी अंकित संपर्क पर अंक नहीं कटे, इसलिए कोई सीख नहीं है। |  |
+| `debrief.lessons.cost` | Marks lost | कटे अंक |  |
+| `debrief.lessons.points` | {{points}} pts | {{points}} अंक |  |
+| `debrief.contacts.title` | Contacts | संपर्क |  |
+| `debrief.contacts.heading` | Contact {{label}}: {{class}}, {{disposition}} | संपर्क {{label}}: {{class}}, {{disposition}} |  |
+| `debrief.contacts.score` | Contact score | संपर्क स्कोर |  |
+| `debrief.contacts.decision` | Decision | निर्णय |  |
+| `debrief.contacts.hardFail` | Hard fail | कठोर विफलता |  |
+| `debrief.contacts.firstReport` | First sensor report at {{time}} | पहली सेंसर रिपोर्ट {{time}} पर |  |
+| `debrief.contacts.pathCaption` | Path through the nodes for contact {{label}} | संपर्क {{label}} के चरणों का मार्ग |  |
+| `debrief.contacts.node` | Node | चरण |  |
+| `debrief.contacts.weight` | Weight | भार |  |
+| `debrief.contacts.points` | Points | अंक |  |
+| `debrief.contacts.mark` | Mark | प्राप्तांक |  |
+| `debrief.contacts.reason` | What happened | क्या हुआ |  |
+| `debrief.contacts.findings` | Findings | निष्कर्ष |  |
+| `debrief.contacts.findingCost` | Cost {{points}} pts | लागत {{points}} अंक |  |
+| `debrief.contacts.reportRow` | Graded separately below | नीचे अलग से अंकित |  |
+| `debrief.contacts.ofWeight` | {{points}} of {{weight}} | {{weight}} में से {{points}} |  |
+| `debrief.hardFail.title` | Hard fail: rules of engagement breached | कठोर विफलता: कार्रवाई के नियमों का उल्लंघन |  |
+| `debrief.hardFail.score` | Contact score 0. The nodes below show the path that was taken. | संपर्क स्कोर 0। नीचे के चरण अपनाया गया मार्ग दिखाते हैं। |  |
+| `debrief.report.title` | Contact report | संपर्क रिपोर्ट |  |
+| `debrief.report.caption` | Report grade for contact {{label}} | संपर्क {{label}} की रिपोर्ट का अंकन |  |
+| `debrief.report.field` | Field | क्षेत्र |  |
+| `debrief.report.reported` | Reported against real | रिपोर्ट बनाम वास्तविक |  |
+| `debrief.report.tolerance` | Tolerance | सहनसीमा |  |
+| `debrief.report.weight` | Weight | भार |  |
+| `debrief.report.mark` | Mark | प्राप्तांक |  |
+| `debrief.report.reason` | What happened | क्या हुआ |  |
+| `debrief.report.none` | No contact report was filed. | कोई संपर्क रिपोर्ट दाखिल नहीं हुई। |  |
+| `debrief.report.filed` | {{count}} reports filed. The last one is graded. | {{count}} रिपोर्ट दाखिल हुईं। अंतिम रिपोर्ट अंकित होती है। |  |
+| `debrief.report.quality` | Quality | गुणवत्ता |  |
+| `debrief.report.timeliness` | Timeliness | समयबद्धता |  |
+| `debrief.report.score` | Report score | रिपोर्ट स्कोर |  |
+| `debrief.report.off` | {{value}} off | {{value}} का अंतर |  |
+| `debrief.report.exact` | Exact | सटीक |  |
+| `debrief.report.stated` | {{stated}} stated, {{achieved}} right | बताया {{stated}}, सही {{achieved}} |  |
+| `debrief.report.notStated` | not stated | नहीं बताया |  |
+| `debrief.notScored.title` | Not scored | अंकित नहीं |  |
+| `debrief.notScored.caption` | Contacts that were not scored | जिन संपर्कों को अंक नहीं मिले |  |
+| `debrief.notScored.contact` | Contact | संपर्क |  |
+| `debrief.notScored.why` | Why | कारण |  |
+| `debrief.notScored.state` | State | स्थिति |  |
+| `debrief.notScored.notPresented` | Not presented | प्रस्तुत नहीं हुआ |  |
+| `debrief.notScored.notWorked` | Not worked | काम नहीं किया गया |  |
+| `debrief.sessionFindings.title` | Session findings | सत्र निष्कर्ष |  |
+| `debrief.kind.hard-fail` | Hard fail | कठोर विफलता |  |
+| `debrief.kind.track-error` | Track error | ट्रैक त्रुटि |  |
+| `debrief.kind.blocked-attempt` | Blocked response | रोकी गई कार्रवाई |  |
+| `debrief.kind.false-alarm` | False alarm | झूठा अलार्म |  |
+| `debrief.kind.false-engagement` | False engagement | गलत कार्रवाई |  |
+| `debrief.kind.not-presented` | Not presented | प्रस्तुत नहीं हुआ |  |
+| `debrief.kind.not-worked` | Not worked | काम नहीं किया गया |  |
+| `debrief.empty.title` | No contact was presented | कोई संपर्क प्रस्तुत नहीं हुआ |  |
+| `debrief.empty.body` | No sensor reported any scenario contact before the session ended, so there is nothing to score. | सत्र समाप्त होने तक किसी सेंसर ने कोई परिदृश्य संपर्क रिपोर्ट नहीं किया, इसलिए अंक देने को कुछ नहीं है। |  |
 
-446 strings.
+675 strings.

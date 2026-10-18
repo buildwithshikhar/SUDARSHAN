@@ -179,7 +179,7 @@ describe('session ended view', () => {
     },
   }
 
-  it('shows ticks, duration, events and that the event log verified, with no score', async () => {
+  it('shows ticks, duration, events and that the event log verified, with a link to the debrief', async () => {
     await running()
     await push(ended)
     expect(
@@ -189,7 +189,10 @@ describe('session ended view', () => {
     expect(screen.getByText('1280')).toBeInTheDocument()
     expect(screen.getByText('01:04.0')).toBeInTheDocument()
     expect(screen.getByText('112')).toBeInTheDocument()
-    expect(screen.getByText('Scoring and debrief are not part of this build.')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Open the debrief' })).toHaveAttribute(
+      'href',
+      '/train/session/abc/debrief',
+    )
     expect(screen.queryByText(/score:/i)).not.toBeInTheDocument()
   })
 

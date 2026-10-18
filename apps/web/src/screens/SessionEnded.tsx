@@ -1,7 +1,7 @@
 import { CheckmarkFilled, ErrorFilled } from '@carbon/icons-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { PageHeader } from '../layout/PageHeader'
 import { fmtElapsed } from '../live/format'
 import type { EndSummary } from '../live/protocol'
@@ -16,9 +16,10 @@ type Load =
 
 const short = (hash: string) => (hash.length > 20 ? `${hash.slice(0, 12)}…${hash.slice(-8)}` : hash)
 
-/** After the session: what happened in numbers, and whether the stored event log verifies. No scoring. */
+/** After the session: what happened in numbers, whether the stored event log verifies, and the way into the debrief. */
 export function SessionEnded({ id, summary }: { id: string; summary: EndSummary | null }) {
   const { t } = useTranslation()
+  const { search } = useLocation()
   const [load, setLoad] = useState<Load>({ state: 'loading' })
   const [attempt, setAttempt] = useState(0)
   const retry = useCallback(() => {
@@ -120,7 +121,24 @@ export function SessionEnded({ id, summary }: { id: string; summary: EndSummary 
             </dl>
           )}
         </Panel>
-        <p className="m-0 text-sm text-ink-2">{t('live.ended.note')}</p>
+        <section
+          aria-labelledby="debrief-link-h"
+          className="flex items-center justify-between gap-4 border border-line bg-surface-1 px-3 py-3"
+        >
+          <div>
+            <h2 id="debrief-link-h" className="m-0 text-sm font-semibold">
+              {t('live.ended.debriefTitle')}
+            </h2>
+            <p className="m-0 mt-1 text-sm text-ink-2">{t('live.ended.debriefBody')}</p>
+          </div>
+          <Link
+            to={`/train/session/${encodeURIComponent(id)}/debrief${search}`}
+            className="inline-flex h-7 shrink-0 items-center border border-accent px-3 text-sm font-medium no-underline hover:bg-surface-2"
+            data-testid="open-debrief"
+          >
+            {t('live.ended.debriefLink')}
+          </Link>
+        </section>
       </div>
     </>
   )

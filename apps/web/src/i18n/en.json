@@ -485,7 +485,16 @@
       "held": "Hold fire on {{track}}.",
       "reported": "{{track}} reported.",
       "designated": "{{track}} designated.",
-      "requested": "Request accepted: {{action}}."
+      "requested": "Request accepted: {{action}}.",
+      "reportedWith": "{{track}} reported: {{detail}}.",
+      "reportDetail": {
+        "count": "count {{value}}",
+        "where": "bearing {{bearing}}, range {{range}}",
+        "bearing": "bearing {{value}}",
+        "range": "range {{value}}",
+        "heading": "heading {{value}}",
+        "confidence": "confidence {{value}}"
+      }
     },
     "log": {
       "title": "Event log",
@@ -541,7 +550,9 @@
       "verification": "Event log",
       "verified": "Event log verified",
       "failed": "Event log failed verification at sequence {{seq}}",
-      "note": "Scoring and debrief are not part of this build."
+      "debriefTitle": "Debrief",
+      "debriefBody": "Score, the path through each contact, the contact report grades and the first three lessons.",
+      "debriefLink": "Open the debrief"
     },
     "lobby": {
       "title": "Session lobby",
@@ -585,6 +596,312 @@
       "below": "below 1366 × 768",
       "keyboard": "Controls",
       "keyboardValue": "Keyboard first; mouse works"
+    },
+    "report": {
+      "title": "Contact report: {{track}}",
+      "intro": "State what you see. Every field is optional, and a field left empty earns no marks. The report is graded in the debrief.",
+      "prefill": "Bearing, range and heading are filled from the selected track. Edit them to what you judge.",
+      "what": "What",
+      "whatNone": "Not stated",
+      "whatHint": "Keys 1 to 4 choose a class, 0 clears.",
+      "where": "Where, from the site",
+      "bearing": "Bearing (°)",
+      "bearingHint": "0 to under 360, from north",
+      "range": "Range (m)",
+      "rangeHint": "0 to 50,000",
+      "count": "How many",
+      "countHint": "Whole number, 1 to 99",
+      "heading": "Heading (°)",
+      "headingHint": "0 to under 360, direction of travel",
+      "confidence": "Confidence (%)",
+      "confidenceHint": "0 to 100. Empty earns no calibration mark.",
+      "submit": "File report",
+      "skip": "Skip details",
+      "skipHint": "Files a bare report with no fields.",
+      "errorSummary": "The report has errors. Fix the marked fields.",
+      "keys": "Enter files the report · Esc cancels",
+      "error": {
+        "bearing": "Enter a bearing from 0 to under 360.",
+        "range": "Enter a range from 0 to 50,000 m.",
+        "pair": "Give both a bearing and a range, or leave both empty.",
+        "count": "Enter a whole number from 1 to 99.",
+        "heading": "Enter a heading from 0 to under 360.",
+        "confidence": "Enter a percentage from 0 to 100."
+      }
+    }
+  },
+  "scoring": {
+    "detect": {
+      "band": "First action was {{first_action}} on {{track}}, {{seconds}} after the first sensor report, against a standard of {{standard}}.",
+      "missed": "No action was taken on this contact. The standard is {{standard}} from the first sensor report."
+    },
+    "classify": {
+      "correct": "Classified correctly as {{class}} after {{seconds}} against a standard of {{standard}}. Timing credit {{timing}}.",
+      "wrong": "Classified as {{given}}. The contact was {{actual}}.",
+      "unknown": "Left as unknown. The contact was {{actual}}.",
+      "missing": "No classification was made."
+    },
+    "assess": {
+      "exact": "Assessed as {{given}}, which fits a {{actual}} contact. Full credit.",
+      "partial": "Assessed as {{given}} for a {{actual}} contact. Partial credit.",
+      "wrong": "Assessed as {{given}} for a {{actual}} contact. No credit.",
+      "missing": "No assessment was made."
+    },
+    "respond": {
+      "engage": "Responded with {{effector}} after {{seconds}} against a standard of {{standard}}. Timing credit {{timing}}.",
+      "engage-higher": "Responded with {{effector}}, above the first effector the rule lists, after {{seconds}} against a standard of {{standard}}. Credit reduced for the higher escalation.",
+      "report-only": "Reported up the chain after {{seconds}} against a standard of {{standard}}, with no engagement. Partial credit.",
+      "hold-only": "Held fire after {{seconds}} against a standard of {{standard}}, with no engagement or report. Low credit.",
+      "none": "No response was made on this hostile contact.",
+      "hold-fire": "This contact was not hostile, so no engagement was required."
+    },
+    "report": {
+      "missing": "No contact report was filed on this hostile contact.",
+      "filed": "Report filed {{seconds}} after the first sensor report, against a standard of {{standard}}. Timeliness credit {{timeliness}}. Weakest field: {{worst_field}}.",
+      "no-truth": "A report was filed, but the record holds no ground truth to grade it against.",
+      "what": {
+        "ok": "Class reported as {{given}}. Correct.",
+        "partial": "Class reported as {{given}}. The contact was {{actual}}.",
+        "wrong": "Class reported as {{given}}. The contact was {{actual}}.",
+        "missing": "No class was reported."
+      },
+      "where": {
+        "ok": "Position {{error_m}} from the real position, within the tolerance of {{tolerance_m}}.",
+        "partial": "Position {{error_m}} from the real position, outside the tolerance of {{tolerance_m}}.",
+        "wrong": "Position {{error_m}} from the real position, too far to earn marks (tolerance {{tolerance_m}}).",
+        "missing": "No bearing and range were reported."
+      },
+      "count": {
+        "ok": "Count reported as {{given}}. Correct.",
+        "partial": "Count reported as {{given}}. The real count was {{actual}}, off by one.",
+        "wrong": "Count reported as {{given}}. The real count was {{actual}}.",
+        "missing": "No count was reported."
+      },
+      "heading": {
+        "ok": "Heading {{error_deg}} from the real course, within the tolerance of {{tolerance_deg}}.",
+        "partial": "Heading {{error_deg}} from the real course, outside the tolerance of {{tolerance_deg}}.",
+        "wrong": "Heading {{error_deg}} from the real course, too far to earn marks (tolerance {{tolerance_deg}}).",
+        "missing": "No heading was reported."
+      },
+      "calibration": {
+        "ok": "Stated confidence {{stated}}. The report was {{achieved}} right. Well calibrated.",
+        "partial": "Stated confidence {{stated}}. The report was {{achieved}} right.",
+        "wrong": "Stated confidence {{stated}}. The report was {{achieved}} right. Poorly calibrated.",
+        "missing": "No confidence was stated."
+      }
+    },
+    "finding": {
+      "hard-fail": {
+        "engaged-non-hostile": "Engaged track {{track}} at {{t}} on a contact that was {{actual}}. Engaging a contact that is not hostile fails the contact: score 0.",
+        "no-positive-id": "Engaged track {{track}} at {{t}} without a positive ID (classified, and assessed hostile or suspect). The contact fails: score 0."
+      },
+      "track-error": {
+        "swap": "Track labels were swapped at {{t}} (error {{error_id}}) and never restored.",
+        "split": "A track was split at {{t}} (error {{error_id}}) and never restored.",
+        "merge": "Two tracks were merged at {{t}} (error {{error_id}}) and never restored."
+      },
+      "blocked-attempt": "The rules blocked {{attempts}} of your responses on this contact.",
+      "false-alarm": "Clutter classified as {{given}}. The contact was {{actual}}.",
+      "false-engagement": "Engaged track {{track}} at {{t}}, which followed nothing real.",
+      "not-presented": "No sensor reported this contact during the session, so it was not scored.",
+      "not-worked": "A sensor reported this contact and no action was taken on it. Leaving it alone was correct, so it was not scored."
+    },
+    "lesson": {
+      "detect": {
+        "band": "{{threat}}: act sooner. Your first action came {{seconds}} after the first sensor report; the standard is {{standard}}. Designate or classify a track as soon as it appears.",
+        "missed": "{{threat}}: no action was taken. Designate and classify every contact within {{standard}} of its first sensor report."
+      },
+      "classify": {
+        "correct": "{{threat}}: classify sooner. The class was right but took {{seconds}} against a standard of {{standard}}. Cue the EO sensor onto the track to confirm the class earlier.",
+        "wrong": "{{threat}}: you called it {{given}} and it was {{actual}}. Cue the EO sensor and check size, rotors and wings before you commit.",
+        "unknown": "{{threat}}: you left the class as unknown and it was {{actual}}. Commit to the best-supported class once EO or IR has a view.",
+        "missing": "{{threat}}: no class was set. Classify every contact you work."
+      },
+      "assess": {
+        "partial": "{{threat}}: assessing it as {{given}} earned partial credit for a {{actual}} contact. Weigh class, behaviour and zone before you settle on an identity.",
+        "wrong": "{{threat}}: you assessed it as {{given}} and it was {{actual}}. Check the class and the filed flights before you set an identity.",
+        "missing": "{{threat}}: no assessment was made. Assess every contact you work."
+      },
+      "respond": {
+        "engage-higher": "{{threat}}: you used {{effector}}, above the first effector the rule lists. Use the lowest escalation the rule permits.",
+        "report-only": "{{threat}}: you reported but did not engage. When a rule permits a response on a hostile contact, take it in time.",
+        "hold-only": "{{threat}}: you only held fire on a hostile contact. Read the rule preview to find the response it permits, and apply it in time.",
+        "none": "{{threat}}: no response was made on a hostile contact. Open Respond (R) on every hostile contact.",
+        "engage": "{{threat}}: respond sooner. The response took {{seconds}} against a standard of {{standard}}, and blocked attempts cost marks."
+      },
+      "report": {
+        "missing": "{{threat}}: no contact report was filed. File class, position, count, heading and confidence for every hostile contact.",
+        "filed": "{{threat}}: your weakest report field was {{worst_field}}. Check it against the track table before filing, and file within {{standard}} of the first sensor report."
+      },
+      "hard-fail": {
+        "engaged-non-hostile": "{{threat}}: you engaged a contact that was {{actual}}. Never engage before the contact is identified as hostile.",
+        "no-positive-id": "{{threat}}: you engaged without a positive ID. Classify the track and assess it hostile or suspect before any engagement."
+      },
+      "track-error": "{{threat}}: a track error at {{t}} was left uncorrected. After a swap, split or merge, check the labels and restore them.",
+      "blocked-attempt": "{{threat}}: the rules blocked {{attempts}} of your responses. Read the rule preview before you commit a response.",
+      "false-engagement": "Track {{track}} followed nothing real and was engaged at {{t}}. Confirm a track on a second sensor before you engage it."
+    },
+    "extra": {
+      "changes": "Class calls changed before the final one: {{changes}}.",
+      "blocked": "Responses blocked by the rules on this contact: {{blocked_attempts}}."
+    },
+    "disposition": {
+      "hostile": "hostile",
+      "civil-permitted": "civil traffic",
+      "clutter": "clutter"
+    },
+    "dispositionLabel": {
+      "hostile": "Hostile",
+      "civil-permitted": "Civil traffic",
+      "clutter": "Clutter"
+    },
+    "reportField": {
+      "what": "What",
+      "where": "Where",
+      "count": "How many",
+      "heading": "Heading",
+      "calibration": "Confidence"
+    },
+    "node": {
+      "detect": "Detect",
+      "classify": "Classify",
+      "assess": "Assess",
+      "respond": "Respond",
+      "report": "Report"
+    }
+  },
+  "debrief": {
+    "title": "Debrief",
+    "loading": "Reading the scored record",
+    "back": "Back to the Session lobby",
+    "toRecord": "Session record",
+    "retry": "Try again",
+    "error": {
+      "title": "The scored record could not be read",
+      "body": "The server did not return the score. Check the connection and try again."
+    },
+    "network": {
+      "title": "The server could not be reached",
+      "body": "The score is stored on the server. Check the connection and try again."
+    },
+    "notEnded": {
+      "title": "The session has not ended",
+      "body": "The debrief opens when the session ends. Ground truth is not shown before then."
+    },
+    "notFound": {
+      "title": "No scored record for this session",
+      "body": "This session does not exist, it belongs to another account, or it was abandoned and never scored."
+    },
+    "reference": "Reference scoring: timing standards and weights are fictional and editable. The score measures what was done against this scenario's rules. It is not validated as a measure of operator skill.",
+    "truthNote": "Ground truth is shown on this screen because the session has ended.",
+    "record": {
+      "title": "Record",
+      "scenario": "Scenario",
+      "scenarioVersion": "Scenario version",
+      "seed": "Seed",
+      "rulePack": "Rule pack",
+      "duration": "Duration",
+      "ticks": "Ticks",
+      "head": "Event chain head"
+    },
+    "summary": {
+      "title": "Score summary",
+      "caption": "Session score and decision score",
+      "measure": "Measure",
+      "value": "Value",
+      "session": "Session score",
+      "decision": "Decision score",
+      "report": "Report score",
+      "none": "None: no contact was scored",
+      "sdtTitle": "Signal detection",
+      "sdtCaption": "Signal-detection counts and rates",
+      "dPrime": "d′",
+      "criterion": "Criterion c",
+      "hitRate": "Hit rate",
+      "faRate": "False-alarm rate",
+      "hits": "Hits",
+      "misses": "Misses",
+      "falseAlarms": "False alarms",
+      "correctRejections": "Correct rejections",
+      "signalTrials": "Signal trials",
+      "noiseTrials": "Noise trials",
+      "used": "used {{value}}",
+      "undefined": "d′ needs at least one signal trial and one noise trial.",
+      "corrected": "Log-linear correction applied: a rate of exactly 0 or 1 makes d′ unbounded, so both rates were replaced by (count + 0.5) / (trials + 1). Hit rate used {{hit}}, false-alarm rate used {{fa}}.",
+      "criterionNote": "The form of c is the standard one and has not been checked against a primary source."
+    },
+    "lessons": {
+      "title": "First three lessons",
+      "caption": "The three costliest mistakes",
+      "empty": "No marks were lost on a scored contact, so there are no lessons.",
+      "cost": "Marks lost",
+      "points": "{{points}} pts"
+    },
+    "contacts": {
+      "title": "Contacts",
+      "heading": "Contact {{label}}: {{class}}, {{disposition}}",
+      "score": "Contact score",
+      "decision": "Decision",
+      "hardFail": "Hard fail",
+      "firstReport": "First sensor report at {{time}}",
+      "pathCaption": "Path through the nodes for contact {{label}}",
+      "node": "Node",
+      "weight": "Weight",
+      "points": "Points",
+      "mark": "Mark",
+      "reason": "What happened",
+      "findings": "Findings",
+      "findingCost": "Cost {{points}} pts",
+      "reportRow": "Graded separately below",
+      "ofWeight": "{{points}} of {{weight}}"
+    },
+    "hardFail": {
+      "title": "Hard fail: rules of engagement breached",
+      "score": "Contact score 0. The nodes below show the path that was taken."
+    },
+    "report": {
+      "title": "Contact report",
+      "caption": "Report grade for contact {{label}}",
+      "field": "Field",
+      "reported": "Reported against real",
+      "tolerance": "Tolerance",
+      "weight": "Weight",
+      "mark": "Mark",
+      "reason": "What happened",
+      "none": "No contact report was filed.",
+      "filed": "{{count}} reports filed. The last one is graded.",
+      "quality": "Quality",
+      "timeliness": "Timeliness",
+      "score": "Report score",
+      "off": "{{value}} off",
+      "exact": "Exact",
+      "stated": "{{stated}} stated, {{achieved}} right",
+      "notStated": "not stated"
+    },
+    "notScored": {
+      "title": "Not scored",
+      "caption": "Contacts that were not scored",
+      "contact": "Contact",
+      "why": "Why",
+      "state": "State",
+      "notPresented": "Not presented",
+      "notWorked": "Not worked"
+    },
+    "sessionFindings": {
+      "title": "Session findings"
+    },
+    "kind": {
+      "hard-fail": "Hard fail",
+      "track-error": "Track error",
+      "blocked-attempt": "Blocked response",
+      "false-alarm": "False alarm",
+      "false-engagement": "False engagement",
+      "not-presented": "Not presented",
+      "not-worked": "Not worked"
+    },
+    "empty": {
+      "title": "No contact was presented",
+      "body": "No sensor reported any scenario contact before the session ended, so there is nothing to score."
     }
   }
 }

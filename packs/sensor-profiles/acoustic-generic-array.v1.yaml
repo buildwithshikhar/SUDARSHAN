@@ -1,0 +1,71 @@
+# Generic acoustic microphone array for the acoustic model (services/api/sim/sensors/acoustic.py).
+# Fictional figures, calibrated from the cited open datasets in structure only: DroneAudioDataset
+# (D10) for the rotor signature, DREGON (D11) for blade-pass versus motor speed, and the Svanstrom
+# multi-sensor set (D12) for drone, bird and fixed-wing confusers. Nothing is marked verified; the
+# bird wing-beat band against the drone fundamental is UNVERIFIED (Q-09).
+contract: sensor-profile.v1
+id: acoustic-generic-array
+version: 1.0.0
+title:
+  en: Generic acoustic microphone array
+  hi: सामान्य ध्वनिक माइक्रोफ़ोन ऐरे
+modality: acoustic
+fictional: true
+parameters:
+  # Coverage and update. The hard range limit follows the 50 to 300 m of the secondary literature.
+  instrumented_range: { value: 300, unit: m, source_id: F01, verified: false }
+  update_interval: { value: 0.5, unit: s, source_id: F01, verified: false }
+  # Noise (decibels in the processed band)
+  background_noise: { value: 38, unit: dB, source_id: F01, verified: false }
+  wind_noise_base: { value: 20, unit: dB, source_id: F01, verified: false }
+  wind_noise_slope: { value: 2.5, unit: dB/mps, source_id: F01, verified: false }
+  rain_noise: { value: 44, unit: dB, source_id: F01, verified: false }
+  absorption: { value: 5, unit: dB/km, source_id: F01, verified: false }
+  array_gain: { value: 12, unit: dB, source_id: F01, verified: false }
+  # Detection and features
+  detection_snr: { value: 6, unit: dB, source_id: F01, verified: false }
+  transition_width: { value: 2.5, unit: dB, source_id: F01, verified: false }
+  harmonic_step: { value: 3, unit: dB, source_id: F01, verified: false }
+  tonal_min_harmonics: { value: 2, unit: count, source_id: F01, verified: false }
+  # Measurement noise: a coarse bearing, no range
+  sigma_azimuth: { value: 12, unit: deg, source_id: F01, verified: false }
+  sigma_elevation: { value: 20, unit: deg, source_id: F01, verified: false }
+  sigma_blade_pass: { value: 4, unit: Hz, source_id: D10, verified: false }
+  sigma_snr: { value: 1.5, unit: dB, source_id: F01, verified: false }
+  # Wind-noise degradation: extra noise-floor penalty at severity 1
+  wind_noise_penalty: { value: 12, unit: dB, source_id: F01, verified: false }
+  # Per-class sources. Blade-pass = blades x rpm / 60. A bird is one "blade" at its wing-beat rate.
+  source_level_rotary_small: { value: 78, unit: dB, source_id: F01, verified: false }
+  source_level_fixed_wing_small: { value: 72, unit: dB, source_id: F01, verified: false }
+  source_level_bird: { value: 52, unit: dB, source_id: F01, verified: false }
+  source_level_autonomous_small: { value: 76, unit: dB, source_id: F01, verified: false }
+  source_level_default: { value: 76, unit: dB, source_id: F01, verified: false }
+  blades_rotary_small: { value: 2, unit: count, source_id: D11, verified: false }
+  blades_fixed_wing_small: { value: 2, unit: count, source_id: F01, verified: false }
+  blades_bird: { value: 1, unit: count, source_id: F01, verified: false }
+  blades_autonomous_small: { value: 2, unit: count, source_id: D11, verified: false }
+  blades_default: { value: 2, unit: count, source_id: F01, verified: false }
+  rpm_rotary_small: { value: 6000, unit: rpm, source_id: D11, verified: false }
+  rpm_fixed_wing_small: { value: 3000, unit: rpm, source_id: F01, verified: false }
+  rpm_bird: { value: 720, unit: rpm, source_id: F01, verified: false }
+  rpm_autonomous_small: { value: 5400, unit: rpm, source_id: D11, verified: false }
+  rpm_default: { value: 5400, unit: rpm, source_id: F01, verified: false }
+  harmonics_rotary_small: { value: 6, unit: count, source_id: D10, verified: false }
+  harmonics_fixed_wing_small: { value: 3, unit: count, source_id: F01, verified: false }
+  harmonics_bird: { value: 1, unit: count, source_id: F01, verified: false }
+  harmonics_autonomous_small: { value: 6, unit: count, source_id: D10, verified: false }
+  harmonics_default: { value: 4, unit: count, source_id: F01, verified: false }
+confusion:
+  # Rows: the true source. Labels are the class IDs plus "unknown" (rotor vs fixed-wing vs bird).
+  default:
+    labels: [rotary-small, fixed-wing-small, bird, unknown]
+    rows:
+      rotary-small: [0.82, 0.05, 0.03, 0.10]
+      fixed-wing-small: [0.12, 0.62, 0.10, 0.16]
+      bird: [0.04, 0.14, 0.58, 0.24]
+      autonomous-small: [0.80, 0.05, 0.03, 0.12]
+    source_id: D12
+    verified: false
+notes:
+  en: Calibrated from open audio datasets (D10, D11, D12) in structure only; values are fictional, not trained on and not operational. The bird wing-beat band is unverified.
+  hi: संरचना के लिए खुले ऑडियो डेटासेट (D10, D11, D12) से कैलिब्रेट; मान काल्पनिक हैं, प्रशिक्षण पर आधारित या संचालनात्मक नहीं। पक्षी के पंख-फड़फड़ाने की बैंड अप्रमाणित है।

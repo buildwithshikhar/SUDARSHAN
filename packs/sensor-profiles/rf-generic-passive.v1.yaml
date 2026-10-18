@@ -1,0 +1,74 @@
+# Generic passive RF detector for the RF model (services/api/sim/sensors/rf.py).
+# Fictional figures, calibrated from the cited open datasets in structure only: DroneRF (D08) for
+# the 2.4 GHz drone link, CardRF (D09) for the Wi-Fi and Bluetooth confusers. No value here is a
+# measurement of a real receiver or a real drone; nothing is marked verified.
+# Band index: 1 = 2.4 GHz, 2 = 5.8 GHz, 3 = 900 MHz, 4 = 433 MHz, 5 = 1.2-1.3 GHz (secondary plan).
+contract: sensor-profile.v1
+id: rf-generic-passive
+version: 1.0.0
+title:
+  en: Generic passive RF detector
+  hi: सामान्य निष्क्रिय आरएफ संसूचक
+modality: rf
+fictional: true
+parameters:
+  # Coverage and update
+  instrumented_range: { value: 3000, unit: m, source_id: F01, verified: false }
+  update_interval: { value: 1.0, unit: s, source_id: F01, verified: false }
+  # Link budget
+  rx_gain: { value: 3, unit: dB, source_id: F01, verified: false }
+  noise_floor: { value: -95, unit: dBm, source_id: F01, verified: false }
+  required_snr: { value: 10, unit: dB, source_id: F01, verified: false }
+  transition_width: { value: 3, unit: dB, source_id: F01, verified: false }
+  rain_attenuation: { value: 0.03, unit: dB/km, source_id: F01, verified: false }
+  # Measurement noise: a passive wide-beam receiver gives coarse bearing and no range
+  sigma_azimuth: { value: 9, unit: deg, source_id: F01, verified: false }
+  sigma_elevation: { value: 18, unit: deg, source_id: F01, verified: false }
+  sigma_rssi: { value: 2.5, unit: dB, source_id: F01, verified: false }
+  sigma_hop_rate: { value: 0.08, unit: ratio, source_id: F01, verified: false }
+  # Interference degradation
+  interference_noise_rise: { value: 15, unit: dB, source_id: F01, verified: false }
+  interference_false_alarm_gain: { value: 12, unit: ratio, source_id: F01, verified: false }
+  # Wi-Fi and Bluetooth confusers
+  false_alarm_slots: { value: 2, unit: count, source_id: D09, verified: false }
+  false_alarm_probability: { value: 0.015, unit: ratio, source_id: D09, verified: false }
+  confuser_hop_rate: { value: 800, unit: Hz, source_id: D09, verified: false }
+  confuser_margin_span: { value: 14, unit: dB, source_id: D09, verified: false }
+  confuser_elevation_max: { value: 25, unit: deg, source_id: F01, verified: false }
+  # Per-class emitters. emits = 0 is an RF-silent class (autonomous, pre-programmed, fibre-optic).
+  emits_rotary_small: { value: 1, unit: flag, source_id: D08, verified: false }
+  emits_fixed_wing_small: { value: 1, unit: flag, source_id: F01, verified: false }
+  emits_bird: { value: 0, unit: flag, source_id: F01, verified: false }
+  emits_autonomous_small: { value: 0, unit: flag, source_id: F01, verified: false }
+  emits_default: { value: 1, unit: flag, source_id: F01, verified: false }
+  emitter_power_rotary_small: { value: 20, unit: dBm, source_id: F01, verified: false }
+  emitter_power_fixed_wing_small: { value: 20, unit: dBm, source_id: F01, verified: false }
+  emitter_power_bird: { value: 0, unit: dBm, source_id: F01, verified: false }
+  emitter_power_autonomous_small: { value: 0, unit: dBm, source_id: F01, verified: false }
+  emitter_power_default: { value: 20, unit: dBm, source_id: F01, verified: false }
+  band_rotary_small: { value: 1, unit: index, source_id: D08, verified: false }
+  band_fixed_wing_small: { value: 3, unit: index, source_id: F01, verified: false }
+  band_bird: { value: 1, unit: index, source_id: F01, verified: false }
+  band_autonomous_small: { value: 1, unit: index, source_id: F01, verified: false }
+  band_default: { value: 1, unit: index, source_id: F01, verified: false }
+  hop_rate_rotary_small: { value: 80, unit: Hz, source_id: F01, verified: false }
+  hop_rate_fixed_wing_small: { value: 0, unit: Hz, source_id: F01, verified: false }
+  hop_rate_bird: { value: 0, unit: Hz, source_id: F01, verified: false }
+  hop_rate_autonomous_small: { value: 0, unit: Hz, source_id: F01, verified: false }
+  hop_rate_default: { value: 0, unit: Hz, source_id: F01, verified: false }
+confusion:
+  # Rows: the true emitter. The bird and autonomous rows are never sampled (neither emits) but
+  # scenarios may contain those classes. The wifi-bluetooth row labels the false alarms.
+  default:
+    labels: [rotary-small, fixed-wing-small, wifi-bluetooth, unknown]
+    rows:
+      rotary-small: [0.80, 0.03, 0.09, 0.08]
+      fixed-wing-small: [0.06, 0.72, 0.10, 0.12]
+      bird: [0.00, 0.00, 0.00, 1.00]
+      autonomous-small: [0.00, 0.00, 0.00, 1.00]
+      wifi-bluetooth: [0.10, 0.04, 0.72, 0.14]
+    source_id: D09
+    verified: false
+notes:
+  en: Calibrated from open RF datasets (D08, D09) in structure only; values are fictional, not trained on and not operational. Band plan and ranges come from secondary sources.
+  hi: संरचना के लिए खुले आरएफ डेटासेट (D08, D09) से कैलिब्रेट; मान काल्पनिक हैं, प्रशिक्षण पर आधारित या संचालनात्मक नहीं। बैंड योजना और दूरियाँ द्वितीयक स्रोतों से हैं।

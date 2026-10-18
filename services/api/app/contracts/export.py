@@ -10,8 +10,9 @@ from pathlib import Path
 from typing import Any
 
 from . import SCHEMAS
+from .paths import packs_root
 
-SCHEMA_DIR = Path(__file__).resolve().parents[4] / "packs" / "schemas"
+SCHEMA_DIR = packs_root() / "schemas"
 DIALECT = "https://json-schema.org/draft/2020-12/schema"
 
 

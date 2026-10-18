@@ -9,6 +9,7 @@ from collections.abc import Collection, Mapping, Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+from app.contracts.paths import packs_root
 from app.contracts.scenario import ScenarioSpec
 
 from .base import Sensor
@@ -35,8 +36,8 @@ def register_model(cls: type[Sensor]) -> type[Sensor]:
 
 
 def default_profile_dir() -> Path:
-    """packs/sensor-profiles in a source checkout (the production image does not ship packs yet)."""
-    return Path(__file__).resolve().parents[4] / "packs" / "sensor-profiles"
+    """`sensor-profiles/` under the packs root (a source checkout or the production image)."""
+    return packs_root() / "sensor-profiles"
 
 
 class SensorSuite:

@@ -45,6 +45,18 @@ def check() -> None:
     typer.echo(f"start-up checks passed ({settings.app_env})")
 
 
+@cli.command("sim-check")
+def sim_check() -> None:
+    """Load an example scenario and run a few ticks with a sensor picture (image check, Q-19)."""
+    from app.simcheck import run_sim_check
+
+    try:
+        typer.echo(run_sim_check())
+    except Exception as error:  # noqa: BLE001 - any failure means the image is not usable
+        typer.echo(f"error: sim-check failed: {error!r}", err=True)
+        raise typer.Exit(code=4) from error
+
+
 @cli.command()
 def migrate() -> None:
     """Apply database migrations."""

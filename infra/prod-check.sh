@@ -46,6 +46,9 @@ say "admin bootstrap is idempotent; demo seeding is refused"
 compose exec -T api python -m app.cli create-admin | grep -q "exists: $admin_email"
 if compose exec -T api python -m app.cli seed-demo >/dev/null 2>&1; then die "seed-demo ran in production"; fi
 
+say "the API image carries the sim core and the packs (Q-19)"
+compose exec -T api python -m app.cli sim-check | grep -q '^sim ok: ' || die "sim-check failed in the API image"
+
 say "sign-in, cookie flags and CSRF"
 mkdir -p .deploy
 jar=.deploy/cookiejar

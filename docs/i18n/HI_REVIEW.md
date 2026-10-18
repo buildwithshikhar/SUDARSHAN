@@ -705,5 +705,55 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `debrief.kind.not-worked` | Not worked | काम नहीं किया गया |  |
 | `debrief.empty.title` | No contact was presented | कोई संपर्क प्रस्तुत नहीं हुआ |  |
 | `debrief.empty.body` | No sensor reported any scenario contact before the session ended, so there is nothing to score. | सत्र समाप्त होने तक किसी सेंसर ने कोई परिदृश्य संपर्क रिपोर्ट नहीं किया, इसलिए अंक देने को कुछ नहीं है। |  |
+| `bench.title` | Render benchmark | रेंडर बेंचमार्क |  |
+| `bench.run` | Run benchmark | बेंचमार्क चलाएँ |  |
+| `bench.runAgain` | Run again | फिर चलाएँ |  |
+| `bench.cancel` | Cancel | रद्द करें |  |
+| `bench.download` | Download JSON | JSON डाउनलोड करें |  |
+| `bench.idle` | Not started. | शुरू नहीं हुआ। |  |
+| `bench.loading` | Loading the terrain pack… | भू-भाग पैक लोड हो रहा है… |  |
+| `bench.running` | Measuring {{phase}} (phase {{index}} of {{total}}) | {{phase}} मापा जा रहा है (चरण {{index}} / {{total}}) |  |
+| `bench.done` | Finished. Download the JSON and record it in docs/PERFORMANCE.md. | पूरा हुआ। JSON डाउनलोड करके docs/PERFORMANCE.md में दर्ज करें। |  |
+| `bench.scene` | Reference scene | संदर्भ दृश्य |  |
+| `bench.canvas` | Benchmark scene preview, drawn at 1920 by 1080 pixels | बेंचमार्क दृश्य का पूर्वावलोकन, 1920 × 1080 पिक्सेल पर बना |  |
+| `bench.emptyTitle` | No result yet | अभी कोई परिणाम नहीं |  |
+| `bench.emptyBody` | Runs the reference scene (rural terrain pack, 24-drone placeholder swarm, 30 birds, thermal pass) at 1920 × 1080 for each graphics tier and for Auto, about two minutes in all. Keep this tab in front and close other applications. | संदर्भ दृश्य (ग्रामीण भू-भाग पैक, 24 ड्रोन का नमूना झुंड, 30 पक्षी, थर्मल पास) हर ग्राफ़िक्स स्तर और ऑटो के लिए 1920 × 1080 पर चलाता है, कुल लगभग दो मिनट। इस टैब को सामने रखें और अन्य एप्लिकेशन बंद करें। |  |
+| `bench.noWebgl` | WebGL is not available in this browser, so the benchmark cannot run. | इस ब्राउज़र में WebGL उपलब्ध नहीं है, इसलिए बेंचमार्क नहीं चल सकता। |  |
+| `bench.gate` | Gate | मानक |  |
+| `bench.gateBody` | Passes if the High tier holds a median of 45 fps or more with the 5th percentile at 30 fps or more, or if Auto holds a median and a 5th percentile of 30 fps or more. Figures are for this machine only. | पास तब, जब उच्च स्तर पर माध्यिका 45 fps या अधिक और 5वाँ पर्सेंटाइल 30 fps या अधिक रहे, या ऑटो पर माध्यिका और 5वाँ पर्सेंटाइल दोनों 30 fps या अधिक रहें। आँकड़े केवल इसी मशीन के हैं। |  |
+| `bench.fixedHigh` | High tier, thermal: median ≥ 45 fps and 5th percentile ≥ 30 fps | उच्च स्तर, थर्मल: माध्यिका ≥ 45 fps और 5वाँ पर्सेंटाइल ≥ 30 fps |  |
+| `bench.autoHolds` | Auto tier: median and 5th percentile ≥ 30 fps | ऑटो स्तर: माध्यिका और 5वाँ पर्सेंटाइल ≥ 30 fps |  |
+| `bench.met` | Met | पूरा |  |
+| `bench.notMet` | Not met | पूरा नहीं |  |
+| `bench.verdict.pass` | Gate met | मानक पूरा |  |
+| `bench.verdict.fail` | Gate not met | मानक पूरा नहीं |  |
+| `bench.verdict.unknown` | Incomplete | अधूरा |  |
+| `bench.results` | Frame rate by phase | चरण के अनुसार फ़्रेम दर |  |
+| `bench.col.phase` | Phase | चरण |  |
+| `bench.col.mode` | Picture | चित्र |  |
+| `bench.col.tier` | Tier at end | अंत में स्तर |  |
+| `bench.col.median` | Median fps | माध्यिका fps |  |
+| `bench.col.p5` | 5th pct fps | 5वाँ पर्सेंटाइल fps |  |
+| `bench.col.p99` | 99th pct ms | 99वाँ पर्सेंटाइल ms |  |
+| `bench.col.frames` | Frames | फ़्रेम |  |
+| `bench.phase.high` | High tier | उच्च स्तर |  |
+| `bench.phase.medium` | Medium tier | मध्यम स्तर |  |
+| `bench.phase.low` | Low tier | निम्न स्तर |  |
+| `bench.phase.auto` | Auto tier | ऑटो स्तर |  |
+| `bench.phase.high-day` | High tier, daylight | उच्च स्तर, दिन का प्रकाश |  |
+| `bench.mode.day` | Daylight | दिन का प्रकाश |  |
+| `bench.mode.night-vision` | Night vision | रात्रि दृष्टि |  |
+| `bench.mode.thermal-white-hot` | Thermal, white-hot | थर्मल, सफ़ेद-गर्म |  |
+| `bench.mode.thermal-black-hot` | Thermal, black-hot | थर्मल, काला-गर्म |  |
+| `bench.tier.high` | High | उच्च |  |
+| `bench.tier.medium` | Medium | मध्यम |  |
+| `bench.tier.low` | Low | निम्न |  |
+| `bench.device` | This machine | यह मशीन |  |
+| `bench.gpu` | Graphics | ग्राफ़िक्स |  |
+| `bench.cpuCores` | Logical processors | लॉजिकल प्रोसेसर |  |
+| `bench.memory` | Memory reported | रिपोर्ट की गई मेमोरी |  |
+| `bench.display` | Display | डिस्प्ले |  |
+| `bench.unknown` | not reported | रिपोर्ट नहीं हुआ |  |
+| `bench.notes` | Thermal is a rendering model, not radiometric. The swarm and birds are placeholder markers. Frame times are display-refresh intervals, so a 60 Hz screen caps results at 60 fps. | थर्मल एक रेंडरिंग मॉडल है, रेडियोमेट्रिक नहीं। झुंड और पक्षी नमूना चिह्न हैं। फ़्रेम समय डिस्प्ले-रिफ़्रेश अंतराल हैं, इसलिए 60 Hz स्क्रीन परिणामों को 60 fps पर सीमित करती है। |  |
 
-699 strings.
+749 strings.

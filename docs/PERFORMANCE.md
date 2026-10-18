@@ -26,3 +26,16 @@ Repeat: `cd services/api && uv run python -m tests.load.run_load --clients 12 --
 ## Web bundle (wave 5)
 
 The main bundle is 129 kB gzipped. The EO view (Three.js) is a separate lazy chunk of 545 kB, 138 kB gzipped, loaded only when a session opens. Production builds contain no mock transport (`tests/live/prodBuild.test.ts`).
+
+## 3D scene benchmark (wave 7)
+
+**Status: harness built, not yet run on the floor laptop.** No frame-rate figure is claimed. The gate (docs/04-engine.md): at 1920 × 1080, at least 45 fps median and at least 30 fps 5th percentile, or an auto tier that holds 30 fps; first load at most 8 s from the local server; JS at most 1.5 MB gzipped excluding assets.
+
+The harness is the `/bench` route (demo mode only; sign in, then open `/bench`). It loads the rural pack "Heron Ridge" from the API, draws the reference scene through the production EO scene code (41 buildings, a 24-drone placeholder swarm and 30 birds drawn as EO markers, terrain, trees, sky, fog) at exactly 1920 × 1080 with the pixel ratio fixed at 1, and measures five phases of 15 to 20 s each after a warm-up: High, Medium and Low tiers with the thermal pass on, the Auto controller, and High in daylight. It shows the percentiles and the verdict and saves a JSON file (`bench-result.v1`) with the device facts (GPU renderer string, cores, reported memory, display) and the scene counts. Frame times are animation-frame intervals, so a 60 Hz display caps results at 60 fps.
+
+To record a result: close other applications, open the deployed or local demo build in Chrome on the floor laptop, run `/bench`, download the JSON and paste its `phases` and `device` blocks here with the date and the commit (`build.gitSha`). If the gate is not met, stop and say so (the fix continues on Opus, wave file 7).
+
+Measured on the build laptop (Apple silicon, Python 3.12, numpy): the line-of-sight query costs about 0.04 to 0.08 ms per segment over the shipped packs (500 random segments each). Only a detection that already passed its probability draw is tested, so the worst case for 24 contacts and two line-of-sight sensors is about 48 queries, roughly 2 to 4 ms, per sensor update.
+
+**Web bundle (wave 7).** JavaScript is 143.8 kB gzipped for the first load and 319.4 kB gzipped in total including the lazy 3D scene chunk (`npm run bundle:check`, enforced in CI at 1.5 MB). Headless Chromium on software rendering (SwiftShader) picks the Low tier in Auto; that is a property of the CI renderer and says nothing about a real GPU.
+

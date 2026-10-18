@@ -15,6 +15,7 @@ import { AuthProvider, useAuth, type Role } from './lib/auth'
 import { VersionProvider, useVersion } from './lib/version'
 import { findModule } from './nav/modules'
 import { About } from './screens/About'
+import { Bench } from './screens/Bench'
 import { Debrief } from './screens/Debrief'
 import { DevComponents } from './screens/DevComponents'
 import { ModulePlaceholder, NoAccess, NotFound, Offline } from './screens/Messages'
@@ -194,6 +195,9 @@ export function AppRoutes() {
         <Route path="/:role/:module" element={<RoleModule />} />
         {version.state.status === 'ready' && version.state.info.env === 'demo' && (
           <Route path="/dev/components" element={<DevComponents />} />
+        )}
+        {version.state.status === 'ready' && version.state.info.env === 'demo' && (
+          <Route path="/bench" element={<Bench />} />
         )}
       </Route>
       <Route

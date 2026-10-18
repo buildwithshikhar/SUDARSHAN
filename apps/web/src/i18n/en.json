@@ -937,5 +937,67 @@
       "title": "No contact was presented",
       "body": "No sensor reported any scenario contact before the session ended, so there is nothing to score."
     }
+  },
+  "bench": {
+    "title": "Render benchmark",
+    "run": "Run benchmark",
+    "runAgain": "Run again",
+    "cancel": "Cancel",
+    "download": "Download JSON",
+    "idle": "Not started.",
+    "loading": "Loading the terrain pack…",
+    "running": "Measuring {{phase}} (phase {{index}} of {{total}})",
+    "done": "Finished. Download the JSON and record it in docs/PERFORMANCE.md.",
+    "scene": "Reference scene",
+    "canvas": "Benchmark scene preview, drawn at 1920 by 1080 pixels",
+    "emptyTitle": "No result yet",
+    "emptyBody": "Runs the reference scene (rural terrain pack, 24-drone placeholder swarm, 30 birds, thermal pass) at 1920 × 1080 for each graphics tier and for Auto, about two minutes in all. Keep this tab in front and close other applications.",
+    "noWebgl": "WebGL is not available in this browser, so the benchmark cannot run.",
+    "gate": "Gate",
+    "gateBody": "Passes if the High tier holds a median of 45 fps or more with the 5th percentile at 30 fps or more, or if Auto holds a median and a 5th percentile of 30 fps or more. Figures are for this machine only.",
+    "fixedHigh": "High tier, thermal: median ≥ 45 fps and 5th percentile ≥ 30 fps",
+    "autoHolds": "Auto tier: median and 5th percentile ≥ 30 fps",
+    "met": "Met",
+    "notMet": "Not met",
+    "verdict": {
+      "pass": "Gate met",
+      "fail": "Gate not met",
+      "unknown": "Incomplete"
+    },
+    "results": "Frame rate by phase",
+    "col": {
+      "phase": "Phase",
+      "mode": "Picture",
+      "tier": "Tier at end",
+      "median": "Median fps",
+      "p5": "5th pct fps",
+      "p99": "99th pct ms",
+      "frames": "Frames"
+    },
+    "phase": {
+      "high": "High tier",
+      "medium": "Medium tier",
+      "low": "Low tier",
+      "auto": "Auto tier",
+      "high-day": "High tier, daylight"
+    },
+    "mode": {
+      "day": "Daylight",
+      "night-vision": "Night vision",
+      "thermal-white-hot": "Thermal, white-hot",
+      "thermal-black-hot": "Thermal, black-hot"
+    },
+    "tier": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "device": "This machine",
+    "gpu": "Graphics",
+    "cpuCores": "Logical processors",
+    "memory": "Memory reported",
+    "display": "Display",
+    "unknown": "not reported",
+    "notes": "Thermal is a rendering model, not radiometric. The swarm and birds are placeholder markers. Frame times are display-refresh intervals, so a 60 Hz screen caps results at 60 fps."
   }
 }

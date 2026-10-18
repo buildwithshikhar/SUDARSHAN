@@ -86,6 +86,8 @@ const MAP_BOOST = 3.6
 
 export interface EoSceneOptions {
   tier: Tier
+  /** Fix the renderer pixel ratio (the /bench route measures at exactly 1080p). */
+  fixedPixelRatio?: number
   /** Called a few times a second in thermal and night-vision modes with the gain readout. */
   onLook?: (look: LookReadout) => void
 }
@@ -876,7 +878,9 @@ export class EoScene {
 
   private applyQuality(): void {
     const s = this.settings
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, s.pixelRatioCap))
+    this.renderer.setPixelRatio(
+      this.options.fixedPixelRatio ?? Math.min(window.devicePixelRatio || 1, s.pixelRatioCap),
+    )
     this.renderer.setSize(this.width, this.height, false)
     if (this.trees) {
       this.trees.count = Math.floor(this.trees.instanceMatrix.count * s.treeFraction)

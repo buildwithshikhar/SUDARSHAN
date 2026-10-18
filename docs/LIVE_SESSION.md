@@ -6,7 +6,7 @@ How a trainee plays a scenario in the browser (wave 5). The simulation runs on t
 
 | Audience | Gets |
 |---|---|
-| Trainee socket | `welcome` (briefing, rules, vocabularies), `frame` (reports, tracks, assist views, sensor status, trainee events), `ack`, `status`, `pong`, `ended`, `error` |
+| Trainee socket | `welcome` (briefing with its `terrain` descriptor, rules, vocabularies), `frame` (reports, tracks, assist views, sensor status, trainee events), `ack`, `status`, `pong`, `ended`, `error` |
 | Stored log, trainee | The same events, through `sim.audience.trainee_event` (see below) |
 | Stored log, instructor and admin | The full chain, including `threat.*`, `ledger.*` and `assist.assess` |
 

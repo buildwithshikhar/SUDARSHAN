@@ -16,7 +16,8 @@ Sensor models are calibrated from open research datasets and published specifica
 | Waves 3, 4a, 4b · Contracts, deterministic sim core, sensor models, tracking and AI assist | Waves 3, 4a and 4b built, CI confirmation pending |
 | Wave 5 · Live-session vertical slice | Built locally, CI confirmation and redeploy pending |
 | Wave 6 · Scoring and contact reports | Built locally, CI confirmation and redeploy pending |
-| Waves 7–8 · 3D realism and terrain, threat breadth | Not started |
+| Wave 7 · 3D realism and terrain packs | Built locally; floor-laptop benchmark, CI confirmation and redeploy pending |
+| Wave 8 · Threat breadth | Not started |
 | Waves 9a–9c · Scenario engine, site builder, sensor placement trainer | Not started |
 | Waves 10a–10b · Class management and rule packs, live monitor and director mode | Not started |
 | Waves 11a–11b · Adaptive learning and adversary, recognition academy | Not started |

@@ -1,5 +1,6 @@
 /** One line of text per trainee event, in the current language, for the event log and outcomes. */
 import type { TFunction } from 'i18next'
+import { fmtBearing, fmtPercent, fmtRange } from './format'
 import type { TraineeEvent } from './protocol'
 import { pick, type Lang } from './roe'
 
@@ -15,6 +16,25 @@ export interface EventLine {
 const s = (value: unknown): string => (typeof value === 'string' ? value : '')
 const n = (value: unknown, digits = 1): string =>
   typeof value === 'number' && Number.isFinite(value) ? value.toFixed(digits) : '—'
+
+/** The fields of a filed contact report as one phrase, or null for a bare report. */
+function reportDetail(p: Record<string, unknown>, t: TFunction): string | null {
+  const part = (key: string, value: string) => t(`live.event.reportDetail.${key}`, { value })
+  const parts: string[] = []
+  if (typeof p.class_id === 'string')
+    parts.push(t(`live.class.${p.class_id}`, { defaultValue: p.class_id }))
+  if (typeof p.count === 'number') parts.push(part('count', String(p.count)))
+  if (typeof p.bearing_deg === 'number' && typeof p.range_m === 'number')
+    parts.push(
+      t('live.event.reportDetail.where', {
+        bearing: fmtBearing(p.bearing_deg),
+        range: fmtRange(p.range_m),
+      }),
+    )
+  if (typeof p.heading_deg === 'number') parts.push(part('heading', fmtBearing(p.heading_deg)))
+  if (typeof p.confidence === 'number') parts.push(part('confidence', fmtPercent(p.confidence)))
+  return parts.length > 0 ? parts.join(', ') : null
+}
 
 export function describeEvent(event: TraineeEvent, t: TFunction, lang: Lang): EventLine {
   const p = event.payload
@@ -97,8 +117,12 @@ export function describeEvent(event: TraineeEvent, t: TFunction, lang: Lang): Ev
       return line('ok', 'engaged', { track: s(p.track), effector: s(p.effector_class) })
     case 'action.hold':
       return line('ok', 'held', { track: s(p.track) })
-    case 'action.report':
-      return line('ok', 'reported', { track: s(p.track) })
+    case 'action.report': {
+      const detail = reportDetail(p, t)
+      return detail
+        ? line('ok', 'reportedWith', { track: s(p.track), detail })
+        : line('ok', 'reported', { track: s(p.track) })
+    }
     case 'action.designate':
       return line('ok', 'designated', { track: s(p.track) })
     default:

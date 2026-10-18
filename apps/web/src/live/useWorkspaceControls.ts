@@ -10,6 +10,9 @@ export interface WorkspaceControls {
   /** A track whose label the operator is editing, or null. */
   relabelFor: string | null
   setRelabelFor: (track: string | null) => void
+  /** A track whose contact report the operator is filling in, or null. */
+  reportFor: string | null
+  setReportFor: (track: string | null) => void
   run: (intent: Intent) => void
   /** Choose an option by index (mouse), as the digit keys do. */
   choose: (index: number) => void
@@ -36,6 +39,7 @@ export function useWorkspaceControls(
 ): WorkspaceControls {
   const [decision, setDecision] = useState<DecisionState>(initialDecision)
   const [relabelFor, setRelabelFor] = useState<string | null>(null)
+  const [reportFor, setReportFor] = useState<string | null>(null)
   const decisionRef = useLatest(decision)
   const helpRef = useLatest(options.onHelp)
 
@@ -94,6 +98,11 @@ export function useWorkspaceControls(
           const result = decide(decisionRef.current, intent, { welcome, track }, eo)
           const moved = result.state !== decisionRef.current
           setDecision(result.state)
+          // "Report up the chain" opens the report form; the form sends the command.
+          if (result.command?.action === 'report') {
+            setReportFor(String(result.command.payload.track))
+            return true
+          }
           if (result.command) session.act(result.command.action, result.command.payload)
           return moved || result.command !== null
         }
@@ -128,5 +137,13 @@ export function useWorkspaceControls(
     return () => window.removeEventListener('keydown', onKey)
   }, [options.enabled, run, decisionRef])
 
-  return { decision, relabelFor, setRelabelFor, run: (i) => void run(i), choose }
+  return {
+    decision,
+    relabelFor,
+    setRelabelFor,
+    reportFor,
+    setReportFor,
+    run: (i) => void run(i),
+    choose,
+  }
 }

@@ -11,6 +11,7 @@ import { LiveSession } from '../live/session'
 import { DecisionPanel } from '../live/panels/DecisionPanel'
 import { EndDialog, RelabelDialog, ShortcutsDialog } from '../live/panels/Dialogs'
 import { EventLog } from '../live/panels/EventLog'
+import { ReportDialog } from '../live/panels/ReportDialog'
 import { SensorStatus } from '../live/panels/SensorStatus'
 import { TopBar } from '../live/panels/TopBar'
 import { TrackDetail } from '../live/panels/TrackDetail'
@@ -147,6 +148,7 @@ function Workspace() {
   const status = useLive((s) => s.status)
   const selected = useLive((s) => s.selected)
   const frame = useLive((s) => s.frame)
+  const classifications = useLive((s) => s.classifications)
   const [help, setHelp] = useState(false)
   const [confirmEnd, setConfirmEnd] = useState(false)
   const controls = useWorkspaceControls(session, {
@@ -298,6 +300,21 @@ function Workspace() {
         onConfirm={() => {
           setConfirmEnd(false)
           session.end()
+        }}
+      />
+      <ReportDialog
+        track={frame?.tracks.find((x) => x.id === controls.reportFor) ?? null}
+        briefing={briefing}
+        classes={welcome.operator_classes}
+        classification={controls.reportFor ? (classifications[controls.reportFor] ?? null) : null}
+        onClose={() => controls.setReportFor(null)}
+        onSubmit={(payload) => {
+          session.act('report', payload)
+          controls.setReportFor(null)
+        }}
+        onSkip={(trackId) => {
+          session.act('report', { track: trackId })
+          controls.setReportFor(null)
         }}
       />
       <RelabelDialog

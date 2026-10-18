@@ -6,10 +6,12 @@ interface Props {
   onClose: () => void
   children: ReactNode
   actions?: ReactNode
+  /** Tailwind width class; 480 px by default. */
+  width?: string
 }
 
 /** Modal dialog on the native <dialog> element: focus is trapped and Escape closes it. */
-export function Dialog({ open, title, onClose, children, actions }: Props) {
+export function Dialog({ open, title, onClose, children, actions, width = 'w-[480px]' }: Props) {
   const ref = useRef<HTMLDialogElement>(null)
   const titleId = useId()
 
@@ -25,7 +27,7 @@ export function Dialog({ open, title, onClose, children, actions }: Props) {
       ref={ref}
       aria-labelledby={titleId}
       onClose={onClose}
-      className="m-auto w-[480px] max-w-[calc(100vw-32px)] border border-line bg-surface-1 p-0 text-ink backdrop:bg-black/60"
+      className={`m-auto ${width} max-w-[calc(100vw-32px)] border border-line bg-surface-1 p-0 text-ink backdrop:bg-black/60`}
     >
       <h2 id={titleId} className="m-0 border-b border-line px-4 py-3 text-md font-semibold">
         {title}

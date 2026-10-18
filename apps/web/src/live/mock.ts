@@ -203,6 +203,31 @@ export const MOCK_WELCOME: Welcome = {
   },
 }
 
+/** Why a contact report is refused, by the simulation's own ranges; null when it is well formed. */
+export function reportProblem(payload: Record<string, unknown>): string | null {
+  const check = (key: string, lo: number, hi: number, upperOpen: boolean, whole = false) => {
+    if (!(key in payload)) return null
+    const v = payload[key]
+    if (typeof v !== 'number' || !Number.isFinite(v)) return `${key} must be a number`
+    if (whole && !Number.isInteger(v)) return `${key} must be a whole number`
+    if (v < lo || (upperOpen ? v >= hi : v > hi))
+      return `${key} must be from ${lo} to ${upperOpen ? 'under ' : ''}${hi}`
+    return null
+  }
+  if (
+    'class_id' in payload &&
+    !(MOCK_WELCOME.operator_classes as string[]).includes(String(payload.class_id))
+  )
+    return 'class_id must be one of the operator classes'
+  return (
+    check('count', 1, 99, false, true) ??
+    check('bearing_deg', 0, 360, true) ??
+    check('range_m', 0, 50_000, false) ??
+    check('heading_deg', 0, 360, true) ??
+    check('confidence', 0, 1, false)
+  )
+}
+
 // ---------------------------------------------------------------------- the world
 
 interface Entity {
@@ -923,6 +948,10 @@ export class MockWorld {
         )
       if (action === 'engage' && typeof payload.effector_class !== 'string')
         return this.reject(action, 'engage needs an effector_class', payload)
+      if (action === 'report') {
+        const problem = reportProblem(payload)
+        if (problem) return this.reject(action, problem, payload)
+      }
       const view = this.trackView(track, t)
       const ctx: RoeContext = {
         identity: this.assessed[track.id] ?? null,

@@ -4,6 +4,7 @@ import re
 from dataclasses import fields
 
 import pytest
+
 from sim.tracking import AssistConfig, ErrorModel, TrackerConfig
 
 from .sim_cases import REPO

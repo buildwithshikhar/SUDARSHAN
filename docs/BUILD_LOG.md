@@ -4,10 +4,10 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 
 ## Current position
 
-- **Phase:** wave 4a in progress (sensor models), steps 1 to 3 of 4 done (framework, radar, EO/IR, RF, acoustic, `docs/SENSOR_MODELS.md`). Wave 3 is complete locally and waits only for the owner to confirm CI; wave 4a started at the owner's instruction before that confirmation.
-- **Current wave:** 4a · Sensor models → [waves/wave-04a-sensor-models.md](waves/wave-04a-sensor-models.md)
-- **Next step:** wave 4a STEP 4 (acceptance pass: cross-model checks, `make smoke` in production mode, set the wave to Done once the owner confirms CI), then wave 4b. Owner still to confirm CI for the wave 3 and 4a commits, and to record the smoke date for the live link.
-- **Main is:** green locally (lint, typecheck, unit, `make prod-check`); CI result for the latest commits is owner-confirmed only (see the wave entries).
+- **Phase:** wave 4a complete (sensor models), all four steps done; every acceptance criterion has a passing test. CI for the wave 3 and wave 4a commits is **pending owner confirmation** (CI cannot be read from this machine), so wave 3 stays In progress and wave 4a is recorded as Done with CI pending.
+- **Current wave:** 4b · Tracking, fusion + AI assist → [waves/wave-04b-tracking-ai-assist.md](waves/wave-04b-tracking-ai-assist.md) (not started)
+- **Next step:** start wave 4b at the entry point under the wave 4a entry. Owner still to confirm CI for the wave 3 and 4a commits, and to record the smoke date for the live link.
+- **Main is:** green locally (lint, typecheck, unit, e2e, visual, `make prod-check`); CI result for the latest commits is owner-confirmed only (see the wave entries).
 - **Deployed build:** live at https://sudarshan.centralindia.cloudapp.azure.com, running commit b722313 (wave 2 build; owner-reported, 2026-10-18).
 
 ## Planning updates
@@ -27,7 +27,7 @@ Status values: Not started · In progress · Blocked · Done. A wave is Done onl
 | 1 | [Repo bootstrap](waves/wave-01-repo-bootstrap.md) | — | Sonnet | Deploy-ready (prod images, smoke test) | Cut | Done |
 | 2 | [Design system + app shell](waves/wave-02-design-system-shell.md) | 1 | Sonnet | **PRIORITY MILESTONE: first live link** | Cut | In progress |
 | 3 | [Contracts + deterministic sim core](waves/wave-03-contracts-sim-core.md) | 1 | Opus | Keep live build green | Cut | In progress |
-| 4a | [Sensor models](waves/wave-04a-sensor-models.md) | 3 | Opus | Keep live build green | Cut | In progress |
+| 4a | [Sensor models](waves/wave-04a-sensor-models.md) | 3 | Opus | Keep live build green | Cut | Done (CI pending) |
 | 4b | [Tracking, fusion + AI assist](waves/wave-04b-tracking-ai-assist.md) | 4a | Opus | Keep live build green | Cut | Not started |
 | 5 | [Live-session vertical slice](waves/wave-05-live-session-slice.md) | 2, 4b | Sonnet | Redeploy: playable slice | Cut | Not started |
 | 6 | [Scoring + debrief](waves/wave-06-scoring-debrief.md) | 5 | Sonnet | Redeploy | Cut | Not started |
@@ -352,7 +352,7 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 ### Wave 4a · Sensor models
 
-- Status: In progress. Steps 1 to 3 (framework and the four models) are merged and verified locally; step 4 (acceptance pass) remains.
+- Status: Done, CI pending. All four steps are merged; every acceptance criterion has a passing test (table under **Acceptance map**). The one thing outstanding is the owner's confirmation of the CI run for the last wave 4a commit (gitleaks and the Linux `docker build` run only in CI).
 - Started from commit: 5387056
 - Goal: physically-motivated radar, EO/IR, RF and acoustic detection models with degradations, every parameter sourced from the data register.
 - Gate note: the wave 4a prompt says to stop unless wave 3 is Done and main is green. Wave 3 is complete and green locally; the owner has not yet confirmed its CI run, and instructed this step to proceed. Set wave 3 to Done once CI is confirmed.
@@ -372,6 +372,29 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - 5f7a3f0 fix(sim): false-alarm draws are taken during an outage; a zoom cue applies at once
 - d2d1a91 feat(sim): the four models register on `sim.sensors` import
 - docs commit after these: SENSOR_MODELS merged, Q-20, Q-21, ADR-018, SIM_CORE, changelog, traceability (R3, R10)
+- 0bfb462 test(sim): run all four models together on the Kestrel scenario, twice, identically
+- 4c81a23 test(sim): pin the wave 4a acceptance criteria across all six shipped sensor profiles (step 4: `test_sensor_acceptance.py`, 439 tests)
+- docs commit after these: step 4 acceptance map, wave marked Done with CI pending
+
+**Acceptance map** (step 4; `tests/test_sensor_acceptance.py` is the cross-model file, the others are the per-model files)
+| Criterion | Proof |
+|---|---|
+| P(d) non-increasing in range, every sensor | `test_sensor_acceptance.py::test_pd_never_rises_with_range_for_every_sensor` (6 profiles × 4 classes × 3 light levels × 5 conditions); per model: `test_pd_never_rises_with_range` in the radar, EO/IR, RF and acoustic files |
+| Weather and time of day shift P(d) as specified | `test_sensor_acceptance.py::test_no_weather_improves_on_clear_air_and_most_sensors_feel_some`, `::test_every_sensor_loses_something_to_at_least_one_modelled_condition`, `::test_night_never_helps_and_light_independent_sensors_do_not_care`; per model: `test_worse_visibility_never_helps`, `test_night_collapses_day_eo_helps_nv_partly_and_does_not_touch_thermal`, `test_rain_and_low_visibility_lower_pd_and_clear_air_is_best`, `test_weather_and_time_of_day_shift_pd_only_as_documented`, `test_wind_lowers_pd_and_raises_the_noise_monotonically` |
+| Confusion matrices row-normalised | `test_sensor_acceptance.py::test_every_confusion_row_of_every_profile_sums_to_one` (tolerance 1e-9); contract refusal in `test_sensor_profile.py::test_malformed_confusion_tables_are_refused` |
+| RF-silent targets never detected by RF | `test_sensor_rf.py::test_a_silent_class_has_zero_pd_at_every_range_and_under_every_condition`, `::test_a_silent_class_is_never_detected_even_when_every_roll_is_lucky`, `::test_a_silent_class_stays_unseen_with_a_receiver_that_hears_everything` |
+| Deterministic for a seed | `test_sensor_models_together.py::test_a_scenario_run_through_all_models_repeats_exactly`; per model, `..._is_deterministic_for_a_seed_and_differs_between_seeds` and `..._identical_in_two_processes_with_different_hash_salts` |
+| Cue narrows EO/IR field and improves precision, deterministically | `test_sensor_eoir.py::test_a_narrow_cue_narrows_the_field_and_improves_precision_and_range_deterministically` |
+| Loader rejects parameters without a source, flags `verified: false` | `test_sensor_profile.py::test_a_parameter_without_complete_provenance_is_refused`, `::test_unverified_values_are_listed`; `test_sensor_acceptance.py::test_every_parameter_and_table_of_every_profile_cites_a_register_row`, `::test_only_values_with_a_stated_source_figure_are_marked_verified` |
+| SENSOR_MODELS.md: equations, parameters with register IDs, honesty note | `test_sensor_acceptance.py::test_each_model_section_gives_equations_parameters_and_an_honesty_note`, `::test_every_profile_parameter_is_named_in_its_section`, `::test_every_register_id_a_profile_uses_appears_in_its_section`, `::test_every_register_id_the_document_cites_is_a_register_row`, `::test_the_thermal_honesty_note_says_it_is_not_radiometric` |
+| Every feature has tests; none skipped or weakened | coverage 99.19% (every `sim/` module 100%); no existing test edited in step 4 (one new file) |
+| Production images build; production-mode stack passes `make smoke` | `make prod-check` (runs `smoke.sh` against the production-mode stack): PASS, 2026-10-18 |
+| CI green (lint, typecheck, unit, e2e, gitleaks, docker build); no secrets in git | lint, typecheck, unit, e2e, visual pass locally; gitleaks and Linux `docker build` run in CI only: **pending owner confirmation** |
+| Deployed build still works | no API image or web change in wave 4a; commit to deploy is optional; `make smoke URL=<live url>` after the owner redeploys: **pending owner** |
+
+**Step 4 result**
+- Added `tests/test_sensor_acceptance.py` (439 tests, 1 new file) after finding the per-model files covered every criterion but not across all six profiles at once or the document against the profiles. No product code needed a fix: the new tests passed on the models as written. Two of my first assertions were wrong (an RF rain margin that ignored the documented "few thousandths", and an unlike-optics camera ranking already covered by the same-optics test) and were corrected in the tests, not in the models.
+- Final run: `make lint typecheck test` pass (api 1,728 passed, coverage 99.19%; web unit 83 passed); `make e2e` 45 passed; `make visual` 3 passed (5 snapshots); `make prod-check` PASS (api 83 MiB, four containers 222 MiB).
 
 **Decisions** (full reasoning in [ADR-017](DECISIONS.md))
 - Every candidate target takes a fixed 18 uniforms from the `sensors` stream whatever happens to it, so an outage, cue or probability change never shifts later noise.
@@ -410,5 +433,5 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 **Next wave entry point (superseded: steps 2 and 3 are done)**
 - Historical: STEP 2 and STEP 3 could run as two subagents in separate worktrees (radar and EO/IR; RF and acoustic). Each adds `sim/sensors/<modality>.py` with a class registered by `register_model`, a profile in `packs/sensor-profiles/`, and tests. Read docs/SIM_CORE.md "Sensor framework" first; use `tests/sensor_toy.py` as the pattern for a minimal model. Cited values come from docs/02-research.md section 2 and docs/DATA_REGISTER.md; anything secondary or UNVERIFIED carries `verified: false`, and a parameter source not in the register goes to docs/OPEN_QUESTIONS.md instead of a made-up ID. Steps 2 and 3 should not both edit `sim/sensors/__init__.py` in conflicting ways: add the import of the model module there in the merge, not in the branch.
 
-**Wave 4a, next entry point (current)**
-- STEP 4: read docs/SENSOR_MODELS.md against the acceptance list; add any cross-model test still missing (for example one scenario run through all four models in a suite, twice, with identical output); record test counts and the deploy check here; then wave 4b (tracking, fusion and AI assist), starting with the tracker's input contract: `Detection.trainee_view()` from `SensorSuite.detect`, wiring the suite into `World` per SIM_CORE ("the suite is not yet part of `World.state()`").
+**Next wave entry point (current)**
+- Wave 4b (tracking, fusion and AI assist): read docs/waves/wave-04b-tracking-ai-assist.md and start with the tracker's input contract: `Detection.trainee_view()` from `SensorSuite.detect`, wiring the suite into `World` per SIM_CORE ("the suite is not yet part of `World.state()`"). Before any sensor figure is shown to a trainee, resolve Q-20 (register rows for the sensor sources).

@@ -6,6 +6,7 @@ All notable changes are recorded here. The format follows [Keep a Changelog](htt
 
 ### Added
 
+- Wave 4a (step 4): acceptance pass; a cross-model test file pins P(d) monotonicity, weather and light effects, confusion normalisation, provenance and the SENSOR_MODELS.md contents across all six shipped profiles. Wave 4a complete locally; CI confirmation pending. No user-facing change.
 - Wave 4a (steps 2 and 3): radar (RCS, aspect, micro-Doppler, clutter and rain), EO/IR (Johnson criteria, day, night-vision and thermal, haze and glare, cueing), RF (link budget, band plan, hopping, RF-silent targets, Wi-Fi and Bluetooth confusers, interference) and acoustic (blade-pass harmonics, spreading and absorption, wind noise) models, five cited fictional sensor profiles, and `docs/SENSOR_MODELS.md`. No user-facing change yet.
 - Wave 4a (step 1): sensor framework in `sim/sensors/` (detect template, cueing, degradations, profile loader, confusion tables in `sensor-profile.v1`) and deterministic `atan2`, `exp`, `log` in the sim maths. No user-facing change yet. See `docs/SIM_CORE.md`.
 - Wave 3: versioned contracts (`scenario.v1`, `rulepack.v1`, `sensor-profile.v1`, event, action and session records) with exported JSON Schemas, generated TypeScript types and drift checks; one fictional example of each pack.

@@ -452,6 +452,7 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - Step 2, subagent A (worktree, Sonnet), merged at 6488afd: ed41bcf error policy, 70634d5 truth ledger, 30096f1 commands, e385a86 cue-to-track, fddc651 / 1a697c6 / 850de09 / e07bcac tests, 5868ed0 docs fragment
 - 66afc49 feat(sim): initiation-exclusion zone; bearing-only spawns wait for a partner; package exports; documented swap re-derived on the final tracker (seed 1014, tick 648)
 - a1b536b feat(sim): `Picture` and its `World`/`replay` hooks; wiring tests
+- Acceptance pass (2026-10-18): every criterion re-checked against a named, passing test (map below, no test missing); then `feat(sim)` session record `picture` flag and `feat(sim)` `ErrorModel.difficulty`
 - 5e2373d, 115ac33 test(sim): tracker edge cases, documentation parity, triangulation limits; 538c812 docs: SENSOR_MODELS "Tracking", SIM_CORE, ADR-019, Q-20 update, Q-22, traceability, changelog
 
 **Acceptance map**
@@ -474,10 +475,12 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - Q-20 is handled by labelling, not by waiting for register rows: every trainee-visible detection, track and assist view carries `data_status: "reference"` while any profile value is `verified: false`. The rows themselves are still open (Q-20), as is the unverified tracker, error and assist parameter set (new Q-22).
 - Found by testing: `Track.to_state` returned live lists (snapshots mutated); duplicate folding by a fixed 20 m let crossing targets fold, so it is now a statistical test on position and velocity; about 1 % of seeds split a lone drone on gate-edge noise, so an initiation-exclusion zone (2.5 times the gate around a live track) was added. Subagent A's pinned numbers (documented swap seed 47 tick 648, merge tick 467, "only seed 4 splits") were derived on the earlier tracker; they were re-derived on the final one (seed 1014, tick 648; merge tick 131; no split in 300 seeds), not loosened.
 - The picture attaches to `World` optionally with a `picture` key in the state only when present, so no golden file changed. The AI assist uses keyed SHA-256 draws instead of a new RNG stream for the same reason.
+- `ErrorModel.difficulty` (default 1.0, bit-identical to before) multiplies the three error probabilities; totals above 1 are shrunk in proportion. Documented in SENSOR_MODELS, F01, `verified: false`.
 - Swaps are rare at default maxima (4 of 300 seeds on the documented crossing; 1 under the nominal policy). A scenario raises `swap_max` for more; a persistent swap is mostly undone by the filter's velocity memory (documented).
 
 **Tests**
-- api: 2,007 passed, coverage 99.5% (every `sim/` module 100%; the two `tracker.py` branches missed in the full run were covered afterwards by `test_tracker_edges.py`) · web unit: 83 passed (contract drift check included) · e2e and visual: not run (no web change beyond regenerated types)
+- Acceptance pass, final run: `make lint typecheck test` pass (api 2,019 passed, coverage 99.51%; web unit 83 passed); `make e2e` 45 passed; `make visual` 3 passed. New: `test_tracking_difficulty.py` (13), replay-flag tests in `test_tracking_wiring.py`, `picture` in `test_contracts.py`. One existing test edited: the pinned default `ErrorModel.to_state()` in `test_tracking_ambiguity.py` now includes `difficulty: 1.0` (additive; no expectation loosened).
+- Before the pass: api 2,007 passed, coverage 99.5% (every `sim/` module 100%; the two `tracker.py` branches missed in the full run were covered afterwards by `test_tracker_edges.py`) · web unit: 83 passed (contract drift check included) · e2e and visual: not run (no web change beyond regenerated types)
 - New: `test_sensor_provenance.py` (10), `test_tracker_core.py` (48), `test_tracker_edges.py` (10), `test_tracking_ambiguity.py` (26), `test_tracking_ledger.py` (32), `test_tracking_commands.py` (40), `test_tracking_cueing.py` (16), `test_tracking_assist.py` (65), `test_tracking_wiring.py` (17), `test_tracking_docs.py` (6), `test_contract_track_actions.py` (9).
 
 **Deploy check**
@@ -489,7 +492,7 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - Smoke date for the live link: owner to record under **Deployed build**.
 - Q-19: the API image does not ship `sim/` or `packs/`; wave 5 must fix it first (`Picture` and the profiles are now what the live session imports).
 - Q-20 (register rows for sensor sources) and Q-22 (tracker, error and assist parameters are F01): figures stay labelled reference data.
-- `replay` must be told whether a session had a picture (`picture=True`); wave 5 should record that in the session record when it creates one (a `session-record.v1` addition, or a convention that every live session has one).
+- Closed in the acceptance pass: `session-record.v1` now has a `picture` flag (default false) set by `replay.run`, and `replay` reads it. Wave 5 creates live sessions with `picture=True`.
 
 **Next wave entry point**
 - Wave 5 (live-session slice): read docs/waves/wave-05-live-session-slice.md. First step: close Q-19 (copy `services/api/sim` and `packs/` into `infra/Dockerfile.api`, extend `make prod-check` to import `sim` and build a `Picture` for the example scenario), then the WebSocket protocol. Send a trainee only `picture.TRAINEE_EVENT_TYPES` and `Picture.trainee_frame()`; add the "no ground truth reaches a trainee socket" test against them.

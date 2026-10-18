@@ -1,0 +1,113 @@
+{
+  "description": "Classify: bird first, then rotary-small; the final class is right and its timing runs from the first call that committed to it (50 s, 20 s after the first report). One change recorded.",
+  "steps": [
+    {"op": "first_report", "t": 30, "drone": "contact-quad", "sensor": "radar-1", "modality": "radar"},
+    {"op": "act", "t": 40, "action": "classify", "track": "T001", "target": "contact-quad", "payload": {"class_id": "bird"}},
+    {"op": "act", "t": 50, "action": "classify", "track": "T001", "target": "contact-quad", "payload": {"class_id": "rotary-small"}}
+  ],
+  "expect": {
+    "threats": {
+      "contact-quad": {
+        "worked": true,
+        "nodes": {
+          "detect": {
+            "score": 1.0,
+            "reason": "detect.band",
+            "params": {
+              "seconds": 10.0,
+              "standard": 12.0,
+              "first_action": "classify",
+              "track": "T001"
+            }
+          },
+          "classify": {
+            "score": 1.0,
+            "reason": "classify.correct",
+            "params": {
+              "class": "rotary-small",
+              "seconds": 20.0,
+              "standard": 25.0,
+              "timing": 1.0,
+              "changes": 1
+            }
+          },
+          "assess": {
+            "score": 0.0,
+            "reason": "assess.missing",
+            "params": {}
+          },
+          "respond": {
+            "score": 0.0,
+            "reason": "respond.none",
+            "params": {
+              "blocked_attempts": 0
+            }
+          }
+        },
+        "decision": 0.5882,
+        "report": {
+          "filed": false,
+          "reports_filed": 0,
+          "reason": "report.missing",
+          "params": {},
+          "quality": 0.0,
+          "timeliness": null,
+          "score": 0.0,
+          "fields": []
+        },
+        "hard_fail": false,
+        "findings": [],
+        "score": 0.5
+      }
+    },
+    "not_presented": [
+      "contact-bird-1",
+      "contact-bird-2",
+      "contact-bird-3",
+      "contact-civil"
+    ],
+    "session": {
+      "score": 0.5,
+      "decision_score": 0.5882,
+      "report_score": 0.0,
+      "findings": []
+    },
+    "sdt": {
+      "signal_trials": 1,
+      "noise_trials": 0,
+      "hits": 0,
+      "misses": 1,
+      "false_alarms": 0,
+      "correct_rejections": 0,
+      "hit_rate": 0.0,
+      "false_alarm_rate": null,
+      "corrected": false,
+      "hit_rate_used": 0.0,
+      "false_alarm_rate_used": null,
+      "d_prime": null,
+      "criterion": null
+    },
+    "lessons": [
+      {
+        "key": "lesson.respond.none",
+        "threat_id": "contact-quad",
+        "cost": 0.2,
+        "params": {
+          "blocked_attempts": 0
+        }
+      },
+      {
+        "key": "lesson.assess.missing",
+        "threat_id": "contact-quad",
+        "cost": 0.15,
+        "params": {}
+      },
+      {
+        "key": "lesson.report.missing",
+        "threat_id": "contact-quad",
+        "cost": 0.15,
+        "params": {}
+      }
+    ]
+  }
+}

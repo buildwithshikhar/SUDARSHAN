@@ -33,11 +33,17 @@ A contact is a scenario threat that a sensor reported at least once (`presented`
 
 **Contact score.** A hostile contact also has a contact report (below), graded separately: score = decision x (1 − `weights.report`) + report score x `weights.report`. Any other contact has no report: score = decision.
 
-**ROE hard-fail gate.** An engagement that went ahead on a contact that was not hostile (neutral, friend, civil or clutter), or without a positive ID (the track classified, not `unknown`, and assessed hostile or suspect, as logged in the verdict's context), fails the contact: score 0, whatever the nodes earned. The nodes are still listed so the debrief can show the path. A response the rules blocked is not a breach.
+**ROE hard-fail gate.** An engagement that went ahead on a contact that was not hostile (neutral, friend, civil or clutter), or without a positive ID (the track classified, not `unknown`, and assessed hostile or suspect, as logged in the verdict's context), fails the contact: score 0, whatever the nodes earned. The nodes are still listed so the debrief can show the path. Its Respond node then earns 0 (`respond.breach`). A response the rules blocked is not a breach.
 
 **Track errors.** Each unfixed swap, split or merge that touched the contact (a `ledger.*` error with no `ledger.restored` for its `error_id`) subtracts `track_error_penalty` (0.15), capped at `track_error_cap` (0.30). One the operator fixed costs nothing.
 
 **Contacts left out.** A contact no sensor reported (`presented: false`) cannot be scored. A clutter or civil contact the operator never acted on (`worked: false`) is left out too: leaving it alone was the right call. A hostile contact that was presented and never worked scores 0.
+
+**Behaviours worth knowing.**
+- Classify and Detect time from the first call that named the final class or acted on the contact; a class changed and changed back is timed from the first call that named it.
+- Working a civil or clutter contact at all (any accepted action, or a blocked attempt to engage it) puts it in the score: its Respond node earns marks for holding fire, and its other nodes earn what the operator did. Leave it alone and it is not scored.
+- A blocked attempt costs `blocked_attempt_penalty` inside the Respond node. Its finding states the cost in contact-score units (the penalty times Respond's share of the weights); the lesson is the Respond lesson, so the same loss is never listed twice, except on a civil or clutter contact, where `lesson.blocked-attempt` is the lesson.
+- A report's `worst_field` is the field with the largest weighted shortfall; ties go to the first of what, where, count, heading, calibration.
 
 ## Session score
 
@@ -82,7 +88,7 @@ The evaluator returns keys and parameters only. The console renders them from th
 | Detect | `detect.band`, `detect.missed` |
 | Classify | `classify.correct`, `classify.wrong`, `classify.unknown`, `classify.missing` |
 | Assess | `assess.exact`, `assess.partial`, `assess.wrong`, `assess.missing` |
-| Respond | `respond.engage`, `respond.engage-higher`, `respond.report-only`, `respond.hold-only`, `respond.none`, `respond.hold-fire` |
+| Respond | `respond.engage`, `respond.engage-higher`, `respond.report-only`, `respond.hold-only`, `respond.none`, `respond.hold-fire`, `respond.breach` |
 | Report | `report.missing`, `report.filed`, `report.no-truth`, `report.<field>.<ok|partial|wrong|missing>` |
 | Findings | `finding.hard-fail.engaged-non-hostile`, `finding.hard-fail.no-positive-id`, `finding.track-error.<swap|split|merge>`, `finding.blocked-attempt`, `finding.false-alarm`, `finding.false-engagement`, `finding.not-presented`, `finding.not-worked` |
 | Lessons | `lesson.<node reason>` for the reasons that lose marks, `lesson.hard-fail.*`, `lesson.track-error`, `lesson.blocked-attempt`, `lesson.false-engagement` |

@@ -55,7 +55,8 @@ def test_each_drone_gets_one_first_report_event_when_a_sensor_first_reports_it()
 
 def test_the_first_report_state_survives_a_snapshot(quad: tuple[World, str]) -> None:
     world, _ = fresh(quad)
-    seen = set(world.picture._first_seen)  # type: ignore[union-attr]
+    assert world.picture is not None
+    seen = set(world.picture._first_seen)
     assert "contact-quad" in seen
     world.step()
     assert not [e for e in events(world, "ledger.first_report") if e["drone"] in seen][len(seen) :]
@@ -80,7 +81,7 @@ def test_a_filed_report_logs_what_it_is_graded_against(quad: tuple[World, str]) 
     assert truth["class_id"] == "rotary-small" and truth["disposition"] == "hostile"
     assert truth["count"] == 1
     assert (truth["x"], truth["y"]) == where
-    assert 0 <= float(truth["heading_deg"]) < 360  # type: ignore[arg-type]
+    assert 0 <= float(truth["heading_deg"]) < 360
     assert logged["class_id"] == "rotary-small" and logged["count"] == 1
 
 
@@ -106,7 +107,7 @@ def test_the_count_in_a_report_is_the_flock_around_the_contact() -> None:
     world.step([act(world, "report", track=track)])
     truth = events(world, "action.report")[-1]["truth"]
     assert isinstance(truth, dict) and truth["class_id"] == "bird"
-    assert 1 <= int(truth["count"]) <= 3  # type: ignore[arg-type]
+    assert 1 <= int(truth["count"]) <= 3
 
 
 @pytest.mark.parametrize(

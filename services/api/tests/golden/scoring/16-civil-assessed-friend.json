@@ -1,0 +1,95 @@
+{
+  "description": "Assess: friend for a permitted civil flight earns 0.5. Not positive, so no false alarm in the SDT block.",
+  "steps": [
+    {"op": "first_report", "t": 8, "drone": "contact-civil", "sensor": "radar-1", "modality": "radar"},
+    {"op": "act", "t": 13, "action": "assess", "track": "T002", "target": "contact-civil", "payload": {"identity": "friend"}}
+  ],
+  "expect": {
+    "threats": {
+      "contact-civil": {
+        "worked": true,
+        "nodes": {
+          "detect": {
+            "score": 1.0,
+            "reason": "detect.band",
+            "params": {
+              "seconds": 5.0,
+              "standard": 12.0,
+              "first_action": "assess",
+              "track": "T002"
+            }
+          },
+          "classify": {
+            "score": 0.0,
+            "reason": "classify.missing",
+            "params": {}
+          },
+          "assess": {
+            "score": 0.5,
+            "reason": "assess.partial",
+            "params": {
+              "given": "friend",
+              "actual": "civil-permitted"
+            }
+          },
+          "respond": {
+            "score": 1.0,
+            "reason": "respond.hold-fire",
+            "params": {
+              "blocked_attempts": 0
+            }
+          }
+        },
+        "decision": 0.6176,
+        "report": null,
+        "hard_fail": false,
+        "findings": [],
+        "score": 0.6176
+      }
+    },
+    "not_presented": [
+      "contact-bird-1",
+      "contact-bird-2",
+      "contact-bird-3",
+      "contact-quad"
+    ],
+    "session": {
+      "score": 0.6176,
+      "decision_score": 0.6176,
+      "report_score": null,
+      "findings": []
+    },
+    "sdt": {
+      "signal_trials": 0,
+      "noise_trials": 1,
+      "hits": 0,
+      "misses": 0,
+      "false_alarms": 0,
+      "correct_rejections": 1,
+      "hit_rate": null,
+      "false_alarm_rate": 0.0,
+      "corrected": false,
+      "hit_rate_used": null,
+      "false_alarm_rate_used": 0.0,
+      "d_prime": null,
+      "criterion": null
+    },
+    "lessons": [
+      {
+        "key": "lesson.classify.missing",
+        "threat_id": "contact-civil",
+        "cost": 0.2941,
+        "params": {}
+      },
+      {
+        "key": "lesson.assess.partial",
+        "threat_id": "contact-civil",
+        "cost": 0.0882,
+        "params": {
+          "given": "friend",
+          "actual": "civil-permitted"
+        }
+      }
+    ]
+  }
+}

@@ -34,18 +34,15 @@
             }
           },
           "respond": {
-            "score": 1.0,
-            "reason": "respond.engage",
+            "score": 0.0,
+            "reason": "respond.breach",
             "params": {
-              "seconds": 10.0,
-              "standard": 45.0,
-              "timing": 1.0,
-              "blocked_attempts": 0,
-              "effector": "ec-a"
+              "engagements": 1,
+              "blocked_attempts": 0
             }
           }
         },
-        "decision": 0.7059,
+        "decision": 0.4706,
         "report": {
           "filed": false,
           "reports_filed": 0,
@@ -64,7 +61,7 @@
               "t": 40.0,
               "track": "T001"
             },
-            "cost": 0.6
+            "cost": 0.4
           }
         ],
         "score": 0.0
@@ -101,7 +98,7 @@
       {
         "key": "lesson.hard-fail.no-positive-id",
         "threat_id": "contact-quad",
-        "cost": 0.6,
+        "cost": 0.4,
         "params": {
           "t": 40.0,
           "track": "T001"

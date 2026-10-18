@@ -389,7 +389,7 @@ def test_a_hard_fail_is_one_lesson_and_its_nodes_are_not() -> None:
     assert [x.key for x in result.lessons] == ["lesson.hard-fail.engaged-non-hostile"]
     (lesson,) = result.lessons
     assert lesson.params["track"] == "T002" and lesson.params["t"] == 20.0
-    assert lesson.cost > 0.5
+    assert lesson.cost == 0.2941  # what the contact would have scored without the breach
 
 
 def test_a_track_error_is_a_lesson_and_a_fixed_one_is_not() -> None:
@@ -411,8 +411,19 @@ def test_the_session_level_false_engagement_has_no_contact_and_no_label() -> Non
     assert fe.params == {"t": 90.0, "track": "T009"} and fe.cost == 0.15
 
 
-def test_a_blocked_attempt_is_a_lesson() -> None:
+def test_a_blocked_attempt_on_a_civil_contact_is_a_lesson() -> None:
+    steps = [
+        first_report(8, CIVIL),
+        act(12, "classify", "T002", CIVIL, class_id="rotary-small"),
+        act(14, "assess", "T002", CIVIL, identity="neutral"),
+        act(20, "engage", "T002", CIVIL, permitted=False, effector_class="ec-a"),
+    ]
+    lesson = next(x for x in score(steps).lessons if x.key == "lesson.blocked-attempt")
+    assert lesson.params["attempts"] == 1 and lesson.threat_id == CIVIL
+
+
+def test_a_blocked_attempt_on_a_hostile_contact_is_counted_once_in_the_respond_lesson() -> None:
     steps = [*STEM, act(50, "engage", "T001", QUAD, permitted=False, effector_class="ec-a")]
     steps += [act(60, "engage", "T001", QUAD, effector_class="ec-a")]
-    lesson = next(x for x in score(steps).lessons if x.key == "lesson.blocked-attempt")
-    assert lesson.params["attempts"] == 1 and lesson.threat_id == QUAD
+    keys = [x.key for x in score(steps).lessons]
+    assert "lesson.blocked-attempt" not in keys  # the loss is already in the Respond node

@@ -120,13 +120,27 @@ def blocked_attempts(threat: Threat, facts: LogFacts) -> list[Verdict]:
     return [v for v in facts.verdicts_on(threat.id, "engage") if not v.permitted]
 
 
-def respond(threat: Threat, facts: LogFacts, pack: RulePack, first_t: float) -> NodeResult:
+def respond(
+    threat: Threat, facts: LogFacts, pack: RulePack, first_t: float, *, breach: bool = False
+) -> NodeResult:
     """Respond: for a hostile contact the best response given, its effector and its timing; for any
-    other contact, holding fire. A blocked attempt costs marks either way."""
+    other contact, holding fire. A blocked attempt costs marks either way. An engagement that broke
+    the rules of engagement (`breach`, the hard-fail gate) earns nothing here."""
     weight = pack.weights.respond
     sc = pack.scoring
     attempts = len(blocked_attempts(threat, facts))
     penalty = attempts * sc.blocked_attempt_penalty
+    if breach:
+        return NodeResult(
+            node="respond",
+            score=0.0,
+            weight=weight,
+            reason="respond.breach",
+            params={
+                "engagements": len(executed_engagements(threat, facts)),
+                "blocked_attempts": attempts,
+            },
+        )
     if threat.disposition != "hostile":
         return NodeResult(
             node="respond",

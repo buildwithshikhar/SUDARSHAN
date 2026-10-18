@@ -55,7 +55,7 @@ def test_each_drone_gets_one_first_report_event_when_a_sensor_first_reports_it()
 
 def test_the_first_report_state_survives_a_snapshot(quad: tuple[World, str]) -> None:
     world, _ = fresh(quad)
-    seen = set(world.picture._first_seen)  # type: ignore[union-attr]
+    seen = set(world.picture._first_seen)
     assert "contact-quad" in seen
     world.step()
     assert not [e for e in events(world, "ledger.first_report") if e["drone"] in seen][len(seen) :]

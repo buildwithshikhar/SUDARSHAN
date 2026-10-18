@@ -91,11 +91,12 @@ def _score_threat(
             first_report_s=first_t,
             findings=[Finding(kind="not-worked", reason="finding.not-worked")],
         )
+    fail = _hard_fail(threat, facts)
     results = [
         nodes.detect(threat, facts, pack, first_t),
         nodes.classify(threat, facts, pack, first_t),
         nodes.assess(threat, facts, pack),
-        nodes.respond(threat, facts, pack, first_t),
+        nodes.respond(threat, facts, pack, first_t, breach=fail is not None),
     ]
     node_weight = sum(n.weight for n in results)
     decision = sum(n.score * n.weight for n in results) / node_weight
@@ -107,12 +108,15 @@ def _score_threat(
 
     attempts = len(nodes.blocked_attempts(threat, facts))
     if attempts:
+        # The cost is what the penalty takes off the contact's score: it comes off the Respond
+        # node, whose share of the contact score is its weight over the weights that count.
+        respond_share = pack.weights.respond / (1.0 if hostile else node_weight)
         findings.append(
             Finding(
                 kind="blocked-attempt",
                 reason="finding.blocked-attempt",
                 params={"attempts": attempts},
-                cost=min(1.0, attempts * pack.scoring.blocked_attempt_penalty),
+                cost=min(1.0, attempts * pack.scoring.blocked_attempt_penalty) * respond_share,
             )
         )
     classes = facts.calls_on(threat.id, "classify")

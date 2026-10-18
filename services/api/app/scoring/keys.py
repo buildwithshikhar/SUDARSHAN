@@ -22,6 +22,7 @@ NODE_REASONS = (
     "respond.hold-only",
     "respond.none",
     "respond.hold-fire",
+    "respond.breach",
 )
 
 REPORT_FIELDS = ("what", "where", "count", "heading", "calibration")

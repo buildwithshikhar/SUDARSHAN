@@ -41,14 +41,15 @@
             }
           },
           "respond": {
-            "score": 1.0,
-            "reason": "respond.hold-fire",
+            "score": 0.0,
+            "reason": "respond.breach",
             "params": {
+              "engagements": 1,
               "blocked_attempts": 0
             }
           }
         },
-        "decision": 0.8235,
+        "decision": 0.5882,
         "report": null,
         "hard_fail": true,
         "findings": [
@@ -59,7 +60,7 @@
               "track": "T002",
               "actual": "civil-permitted"
             },
-            "cost": 0.8235
+            "cost": 0.5882
           }
         ],
         "score": 0.0
@@ -96,7 +97,7 @@
       {
         "key": "lesson.hard-fail.engaged-non-hostile",
         "threat_id": "contact-civil",
-        "cost": 0.8235,
+        "cost": 0.5882,
         "params": {
           "t": 20.0,
           "track": "T002",

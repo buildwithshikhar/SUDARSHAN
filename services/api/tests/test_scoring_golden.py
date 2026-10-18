@@ -171,5 +171,5 @@ def test_a_hard_fail_findings_cost_is_rounded_to_four_places() -> None:
     )
     (civil,) = [t for t in result.threats if t.threat_id == CIVIL]
     cost = civil.findings[0].cost
-    assert cost == round(cost, 4) == 0.8235
-    assert result.model_dump_json().count("0.8235294") == 0
+    assert cost == round(cost, 4) == 0.5882
+    assert result.model_dump_json().count("0.588235") == 0

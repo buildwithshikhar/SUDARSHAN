@@ -72,7 +72,7 @@
             "params": {
               "attempts": 2
             },
-            "cost": 0.3
+            "cost": 0.06
           }
         ],
         "score": 0.79
@@ -106,14 +106,6 @@
       "criterion": null
     },
     "lessons": [
-      {
-        "key": "lesson.blocked-attempt",
-        "threat_id": "contact-quad",
-        "cost": 0.3,
-        "params": {
-          "attempts": 2
-        }
-      },
       {
         "key": "lesson.report.missing",
         "threat_id": "contact-quad",

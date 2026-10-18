@@ -66,7 +66,7 @@
             "params": {
               "attempts": 1
             },
-            "cost": 0.15
+            "cost": 0.03
           }
         ],
         "score": 0.52

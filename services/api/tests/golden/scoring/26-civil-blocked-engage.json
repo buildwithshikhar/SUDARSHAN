@@ -57,7 +57,7 @@
             "params": {
               "attempts": 1
             },
-            "cost": 0.15
+            "cost": 0.0353
           }
         ],
         "score": 0.9647
@@ -94,7 +94,7 @@
       {
         "key": "lesson.blocked-attempt",
         "threat_id": "contact-civil",
-        "cost": 0.15,
+        "cost": 0.0353,
         "params": {
           "attempts": 1
         }

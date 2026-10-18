@@ -52,5 +52,5 @@ def test_every_shipped_profile_builds_and_loads_against_the_register() -> None:
 def test_a_scenario_run_through_all_models_repeats_exactly() -> None:
     first = run()
     assert first == run()
-    assert {d["modality"] for d in first} >= {"radar", "ir"}
+    assert {d["modality"] for d in first} >= {"radar", "rf"}
     assert first != run(seed=12)

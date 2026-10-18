@@ -9,6 +9,7 @@ from .events import GENESIS_HASH, ActionRecord, EventRecord, SessionRecord
 from .live import LiveClientMessage, LiveServerMessage
 from .rulepack import RulePack
 from .scenario import TICK_HZ, ScenarioSpec
+from .score import SessionScore
 from .sensor_profile import SensorProfile
 
 #: Exported JSON Schemas, by file stem in packs/schemas/.
@@ -21,6 +22,7 @@ SCHEMAS: dict[str, type[BaseModel]] = {
     "session-record.v1": SessionRecord,
     "live-client.v1": LiveClientMessage,
     "live-server.v1": LiveServerMessage,
+    "score-result.v1": SessionScore,
 }
 
 #: Pack contracts, keyed by the value of their `contract` field.
@@ -43,4 +45,5 @@ __all__ = [
     "ScenarioSpec",
     "SensorProfile",
     "SessionRecord",
+    "SessionScore",
 ]

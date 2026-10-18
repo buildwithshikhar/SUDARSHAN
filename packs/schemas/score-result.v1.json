@@ -1,0 +1,664 @@
+{
+  "$defs": {
+    "FieldMark": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "enum": [
+            "what",
+            "where",
+            "count",
+            "heading",
+            "calibration"
+          ],
+          "title": "Field",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "default": {},
+          "title": "Params",
+          "type": "object"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "score": {
+          "ge": 0,
+          "le": 1,
+          "title": "Score",
+          "type": "number"
+        },
+        "weight": {
+          "ge": 0,
+          "le": 1,
+          "title": "Weight",
+          "type": "number"
+        }
+      },
+      "required": [
+        "field",
+        "score",
+        "weight",
+        "reason"
+      ],
+      "title": "FieldMark",
+      "type": "object"
+    },
+    "Finding": {
+      "additionalProperties": false,
+      "description": "Something that cost marks or deserves a plain statement: a hard fail, an unfixed track\nerror, a blocked response, a false alarm.",
+      "properties": {
+        "cost": {
+          "default": 0.0,
+          "ge": 0,
+          "le": 1,
+          "title": "Cost",
+          "type": "number"
+        },
+        "kind": {
+          "enum": [
+            "hard-fail",
+            "track-error",
+            "blocked-attempt",
+            "false-alarm",
+            "false-engagement",
+            "not-presented",
+            "not-worked"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "default": {},
+          "title": "Params",
+          "type": "object"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "reason"
+      ],
+      "title": "Finding",
+      "type": "object"
+    },
+    "JsonValue": {},
+    "Lesson": {
+      "additionalProperties": false,
+      "description": "One of the first lessons: where the most marks were lost.",
+      "properties": {
+        "cost": {
+          "ge": 0,
+          "le": 1,
+          "title": "Cost",
+          "type": "number"
+        },
+        "key": {
+          "title": "Key",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "default": {},
+          "title": "Params",
+          "type": "object"
+        },
+        "threat_id": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Threat Id"
+        }
+      },
+      "required": [
+        "key",
+        "cost"
+      ],
+      "title": "Lesson",
+      "type": "object"
+    },
+    "NodeResult": {
+      "additionalProperties": false,
+      "properties": {
+        "node": {
+          "enum": [
+            "detect",
+            "classify",
+            "assess",
+            "respond"
+          ],
+          "title": "Node",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "default": {},
+          "title": "Params",
+          "type": "object"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "score": {
+          "ge": 0,
+          "le": 1,
+          "title": "Score",
+          "type": "number"
+        },
+        "weight": {
+          "ge": 0,
+          "le": 1,
+          "title": "Weight",
+          "type": "number"
+        }
+      },
+      "required": [
+        "node",
+        "score",
+        "weight",
+        "reason"
+      ],
+      "title": "NodeResult",
+      "type": "object"
+    },
+    "PackRef": {
+      "additionalProperties": false,
+      "description": "Reference to another versioned pack by ID and exact version.",
+      "properties": {
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "version": {
+          "pattern": "^(0|[1-9][0-9]*)(\\.(0|[1-9][0-9]*)){2}$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version"
+      ],
+      "title": "PackRef",
+      "type": "object"
+    },
+    "ReportGrade": {
+      "additionalProperties": false,
+      "properties": {
+        "fields": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/FieldMark"
+          },
+          "title": "Fields",
+          "type": "array"
+        },
+        "filed": {
+          "title": "Filed",
+          "type": "boolean"
+        },
+        "params": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "default": {},
+          "title": "Params",
+          "type": "object"
+        },
+        "quality": {
+          "default": 0.0,
+          "ge": 0,
+          "le": 1,
+          "title": "Quality",
+          "type": "number"
+        },
+        "reason": {
+          "default": "report.missing",
+          "title": "Reason",
+          "type": "string"
+        },
+        "reports_filed": {
+          "default": 0,
+          "title": "Reports Filed",
+          "type": "integer"
+        },
+        "score": {
+          "default": 0.0,
+          "ge": 0,
+          "le": 1,
+          "title": "Score",
+          "type": "number"
+        },
+        "timeliness": {
+          "anyOf": [
+            {
+              "ge": 0,
+              "le": 1,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Timeliness"
+        }
+      },
+      "required": [
+        "filed"
+      ],
+      "title": "ReportGrade",
+      "type": "object"
+    },
+    "Sdt": {
+      "additionalProperties": false,
+      "description": "Signal-detection metrics for the session's threat-or-not calls.",
+      "properties": {
+        "correct_rejections": {
+          "title": "Correct Rejections",
+          "type": "integer"
+        },
+        "corrected": {
+          "title": "Corrected",
+          "type": "boolean"
+        },
+        "criterion": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Criterion"
+        },
+        "d_prime": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "D Prime"
+        },
+        "false_alarm_rate": {
+          "anyOf": [
+            {
+              "ge": 0,
+              "le": 1,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "False Alarm Rate"
+        },
+        "false_alarm_rate_used": {
+          "anyOf": [
+            {
+              "ge": 0,
+              "le": 1,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "False Alarm Rate Used"
+        },
+        "false_alarms": {
+          "title": "False Alarms",
+          "type": "integer"
+        },
+        "hit_rate": {
+          "anyOf": [
+            {
+              "ge": 0,
+              "le": 1,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Hit Rate"
+        },
+        "hit_rate_used": {
+          "anyOf": [
+            {
+              "ge": 0,
+              "le": 1,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Hit Rate Used"
+        },
+        "hits": {
+          "title": "Hits",
+          "type": "integer"
+        },
+        "misses": {
+          "title": "Misses",
+          "type": "integer"
+        },
+        "noise_trials": {
+          "title": "Noise Trials",
+          "type": "integer"
+        },
+        "signal_trials": {
+          "title": "Signal Trials",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "signal_trials",
+        "noise_trials",
+        "hits",
+        "misses",
+        "false_alarms",
+        "correct_rejections",
+        "hit_rate",
+        "false_alarm_rate",
+        "corrected",
+        "hit_rate_used",
+        "false_alarm_rate_used",
+        "d_prime",
+        "criterion"
+      ],
+      "title": "Sdt",
+      "type": "object"
+    },
+    "Text": {
+      "additionalProperties": false,
+      "description": "User-facing text in both interface languages.",
+      "properties": {
+        "en": {
+          "maxLength": 400,
+          "minLength": 1,
+          "title": "En",
+          "type": "string"
+        },
+        "hi": {
+          "maxLength": 400,
+          "minLength": 1,
+          "title": "Hi",
+          "type": "string"
+        }
+      },
+      "required": [
+        "en",
+        "hi"
+      ],
+      "title": "Text",
+      "type": "object"
+    },
+    "ThreatScore": {
+      "additionalProperties": false,
+      "description": "The path of one scenario contact through Detect, Classify, Assess and Respond.",
+      "properties": {
+        "class_id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Class Id",
+          "type": "string"
+        },
+        "decision": {
+          "anyOf": [
+            {
+              "ge": 0,
+              "le": 1,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Decision"
+        },
+        "disposition": {
+          "enum": [
+            "hostile",
+            "civil-permitted",
+            "clutter"
+          ],
+          "title": "Disposition",
+          "type": "string"
+        },
+        "findings": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Finding"
+          },
+          "title": "Findings",
+          "type": "array"
+        },
+        "first_report_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "First Report S"
+        },
+        "hard_fail": {
+          "default": false,
+          "title": "Hard Fail",
+          "type": "boolean"
+        },
+        "label": {
+          "$ref": "#/$defs/Text"
+        },
+        "nodes": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/NodeResult"
+          },
+          "title": "Nodes",
+          "type": "array"
+        },
+        "presented": {
+          "title": "Presented",
+          "type": "boolean"
+        },
+        "report": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReportGrade"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "score": {
+          "anyOf": [
+            {
+              "ge": 0,
+              "le": 1,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Score"
+        },
+        "threat_id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Threat Id",
+          "type": "string"
+        },
+        "worked": {
+          "default": true,
+          "title": "Worked",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "threat_id",
+        "label",
+        "class_id",
+        "disposition",
+        "presented"
+      ],
+      "title": "ThreatScore",
+      "type": "object"
+    }
+  },
+  "$id": "score-result.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "contract": {
+      "const": "score-result.v1",
+      "title": "Contract",
+      "type": "string"
+    },
+    "decision_score": {
+      "anyOf": [
+        {
+          "ge": 0,
+          "le": 1,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Decision Score"
+    },
+    "duration_s": {
+      "title": "Duration S",
+      "type": "number"
+    },
+    "event_head": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Event Head",
+      "type": "string"
+    },
+    "findings": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Finding"
+      },
+      "title": "Findings",
+      "type": "array"
+    },
+    "lessons": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Lesson"
+      },
+      "title": "Lessons",
+      "type": "array"
+    },
+    "report_score": {
+      "anyOf": [
+        {
+          "ge": 0,
+          "le": 1,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Report Score"
+    },
+    "rule_pack": {
+      "$ref": "#/$defs/PackRef"
+    },
+    "scenario": {
+      "$ref": "#/$defs/PackRef"
+    },
+    "score": {
+      "anyOf": [
+        {
+          "ge": 0,
+          "le": 1,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Score"
+    },
+    "sdt": {
+      "$ref": "#/$defs/Sdt"
+    },
+    "seed": {
+      "maximum": 9223372036854775807,
+      "minimum": 0,
+      "title": "Seed",
+      "type": "integer"
+    },
+    "threats": {
+      "items": {
+        "$ref": "#/$defs/ThreatScore"
+      },
+      "title": "Threats",
+      "type": "array"
+    },
+    "ticks": {
+      "title": "Ticks",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "contract",
+    "scenario",
+    "rule_pack",
+    "seed",
+    "ticks",
+    "duration_s",
+    "event_head",
+    "threats",
+    "sdt",
+    "score",
+    "decision_score",
+    "report_score"
+  ],
+  "title": "SessionScore",
+  "type": "object"
+}

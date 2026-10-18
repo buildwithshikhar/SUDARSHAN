@@ -31,6 +31,7 @@ from app.contracts import TICK_HZ, ActionRecord, SessionRecord
 from app.contracts.common import PackRef
 from app.contracts.live import ACTION_KEYS, Act, LiveClientMessage
 from app.models import TrainingSession
+from app.scoring import score_session
 from sim import replay
 from sim.eventlog import verify
 from sim.tracking.picture import Picture
@@ -534,6 +535,7 @@ class SessionManager:
             row.event_head = head
             row.event_count = len(record.events)
             row.record = record.model_dump_json()
+            row.score = self._score_json(row, record) if status == "ended" else None
             db.commit()
         with self.session_factory() as db:
             row = db.get(TrainingSession, session_id)
@@ -547,6 +549,17 @@ class SessionManager:
                 verify(stored.events, row.event_head) is None
                 and stored.final_state_hash == row.final_state_hash
             )
+
+    def _score_json(self, row: TrainingSession, record: SessionRecord) -> str | None:
+        """Score an ended session. A failure to score never loses the session record."""
+        entry = self.catalog.get(row.scenario_id, row.scenario_version)
+        if entry is None:
+            return None
+        try:
+            return score_session(entry.spec, entry.engine.pack, record).model_dump_json()
+        except Exception:  # noqa: BLE001 - the record is stored either way; the score can be redone
+            log.exception("could not score session %s", row.id)
+            return None
 
     def abandon_stale(self) -> int:
         """At start-up: sessions left `running` by an earlier process can never resume."""

@@ -44,7 +44,9 @@ ACTION_KEYS: dict[str, tuple[str, ...]] = {
     "assess": ("track", "identity"),
     "engage": ("track", "effector_class"),
     "hold": ("track",),
-    "report": ("track",),
+    #: A structured contact report: what (class), where (bearing and range from the site), how
+    #: many, heading and the operator's confidence from 0 to 1. Every field but `track` is optional.
+    "report": ("track", "class_id", "count", "bearing_deg", "range_m", "heading_deg", "confidence"),
     "track-relabel": ("track", "label", "exchange"),
     "track-merge": ("tracks",),
     "track-split": ("track",),

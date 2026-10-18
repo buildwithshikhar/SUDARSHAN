@@ -144,6 +144,116 @@
       "title": "Quantity",
       "type": "object"
     },
+    "ReportGrading": {
+      "additionalProperties": false,
+      "description": "Tolerances and marks for the structured contact report (fictional, editable).",
+      "properties": {
+        "count_off_by_one_score": {
+          "default": 0.5,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Count Off By One Score",
+          "type": "number"
+        },
+        "count_radius_m": {
+          "default": 250.0,
+          "exclusiveMinimum": 0,
+          "maximum": 10000,
+          "title": "Count Radius M",
+          "type": "number"
+        },
+        "heading_tolerance_deg": {
+          "default": 20.0,
+          "exclusiveMinimum": 0,
+          "maximum": 90,
+          "title": "Heading Tolerance Deg",
+          "type": "number"
+        },
+        "heading_zero_factor": {
+          "default": 3.0,
+          "exclusiveMinimum": 1,
+          "maximum": 20,
+          "title": "Heading Zero Factor",
+          "type": "number"
+        },
+        "position_tolerance_m": {
+          "default": 150.0,
+          "exclusiveMinimum": 0,
+          "maximum": 10000,
+          "title": "Position Tolerance M",
+          "type": "number"
+        },
+        "position_zero_factor": {
+          "default": 3.0,
+          "exclusiveMinimum": 1,
+          "maximum": 20,
+          "title": "Position Zero Factor",
+          "type": "number"
+        },
+        "timeliness_weight": {
+          "default": 0.2,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Timeliness Weight",
+          "type": "number"
+        },
+        "weights": {
+          "$ref": "#/$defs/ReportWeights",
+          "default": {
+            "calibration": 0.15,
+            "count": 0.15,
+            "heading": 0.15,
+            "what": 0.3,
+            "where": 0.25
+          }
+        }
+      },
+      "title": "ReportGrading",
+      "type": "object"
+    },
+    "ReportWeights": {
+      "additionalProperties": false,
+      "description": "How the five report fields add up to the report-quality score (sum to 1).",
+      "properties": {
+        "calibration": {
+          "default": 0.15,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Calibration",
+          "type": "number"
+        },
+        "count": {
+          "default": 0.15,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Count",
+          "type": "number"
+        },
+        "heading": {
+          "default": 0.15,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Heading",
+          "type": "number"
+        },
+        "what": {
+          "default": 0.3,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "What",
+          "type": "number"
+        },
+        "where": {
+          "default": 0.25,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Where",
+          "type": "number"
+        }
+      },
+      "title": "ReportWeights",
+      "type": "object"
+    },
     "Rule": {
       "additionalProperties": false,
       "properties": {
@@ -204,6 +314,190 @@
       "title": "Rule",
       "type": "object"
     },
+    "Scoring": {
+      "additionalProperties": false,
+      "description": "How the decision tree turns what the operator did into marks. All fictional and editable.",
+      "properties": {
+        "assess_credit": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            "propertyNames": {
+              "enum": [
+                "hostile",
+                "suspect",
+                "unknown",
+                "neutral",
+                "friend"
+              ]
+            },
+            "type": "object"
+          },
+          "default": {
+            "civil-permitted": {
+              "friend": 0.5,
+              "hostile": 0.0,
+              "neutral": 1.0,
+              "suspect": 0.0,
+              "unknown": 0.25
+            },
+            "clutter": {
+              "friend": 0.25,
+              "hostile": 0.0,
+              "neutral": 1.0,
+              "suspect": 0.0,
+              "unknown": 0.25
+            },
+            "hostile": {
+              "friend": 0.0,
+              "hostile": 1.0,
+              "neutral": 0.0,
+              "suspect": 0.5,
+              "unknown": 0.1
+            }
+          },
+          "propertyNames": {
+            "enum": [
+              "hostile",
+              "civil-permitted",
+              "clutter"
+            ]
+          },
+          "title": "Assess Credit",
+          "type": "object"
+        },
+        "blocked_attempt_penalty": {
+          "default": 0.15,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Blocked Attempt Penalty",
+          "type": "number"
+        },
+        "classify_correct_share": {
+          "default": 0.7,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Classify Correct Share",
+          "type": "number"
+        },
+        "effector_higher_factor": {
+          "default": 0.7,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Effector Higher Factor",
+          "type": "number"
+        },
+        "false_engagement_cap": {
+          "default": 0.45,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "False Engagement Cap",
+          "type": "number"
+        },
+        "false_engagement_penalty": {
+          "default": 0.15,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "False Engagement Penalty",
+          "type": "number"
+        },
+        "report": {
+          "$ref": "#/$defs/ReportGrading",
+          "default": {
+            "count_off_by_one_score": 0.5,
+            "count_radius_m": 250.0,
+            "heading_tolerance_deg": 20.0,
+            "heading_zero_factor": 3.0,
+            "position_tolerance_m": 150.0,
+            "position_zero_factor": 3.0,
+            "timeliness_weight": 0.2,
+            "weights": {
+              "calibration": 0.15,
+              "count": 0.15,
+              "heading": 0.15,
+              "what": 0.3,
+              "where": 0.25
+            }
+          }
+        },
+        "respond_credit": {
+          "additionalProperties": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number"
+          },
+          "default": {
+            "engage": 1.0,
+            "hold": 0.25,
+            "none": 0.0,
+            "report": 0.6
+          },
+          "propertyNames": {
+            "enum": [
+              "engage",
+              "report",
+              "hold",
+              "none"
+            ]
+          },
+          "title": "Respond Credit",
+          "type": "object"
+        },
+        "respond_timing_share": {
+          "default": 0.3,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Respond Timing Share",
+          "type": "number"
+        },
+        "timing_bands": {
+          "default": [
+            {
+              "max_factor": 1.0,
+              "score": 1.0
+            },
+            {
+              "max_factor": 2.0,
+              "score": 0.75
+            },
+            {
+              "max_factor": 3.0,
+              "score": 0.5
+            },
+            {
+              "max_factor": 5.0,
+              "score": 0.25
+            }
+          ],
+          "items": {
+            "$ref": "#/$defs/TimingBand"
+          },
+          "maxItems": 8,
+          "minItems": 1,
+          "title": "Timing Bands",
+          "type": "array"
+        },
+        "track_error_cap": {
+          "default": 0.3,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Track Error Cap",
+          "type": "number"
+        },
+        "track_error_penalty": {
+          "default": 0.15,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Track Error Penalty",
+          "type": "number"
+        }
+      },
+      "title": "Scoring",
+      "type": "object"
+    },
     "Text": {
       "additionalProperties": false,
       "description": "User-facing text in both interface languages.",
@@ -230,7 +524,7 @@
     },
     "Thresholds": {
       "additionalProperties": false,
-      "description": "Fictional, editable timing standards in seconds (no public doctrinal source; Q-12).",
+      "description": "Fictional, editable timing standards in seconds (no public doctrinal source; Q-12).\n\nEach is measured from the first moment a sensor reported the contact.",
       "properties": {
         "classify_within_s": {
           "exclusiveMinimum": 0,
@@ -249,6 +543,13 @@
           "maximum": 600,
           "title": "Report Within S",
           "type": "number"
+        },
+        "respond_within_s": {
+          "default": 45.0,
+          "exclusiveMinimum": 0,
+          "maximum": 600,
+          "title": "Respond Within S",
+          "type": "number"
         }
       },
       "required": [
@@ -257,6 +558,30 @@
         "report_within_s"
       ],
       "title": "Thresholds",
+      "type": "object"
+    },
+    "TimingBand": {
+      "additionalProperties": false,
+      "description": "Credit for a response that took up to `max_factor` times the standard.",
+      "properties": {
+        "max_factor": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Max Factor",
+          "type": "number"
+        },
+        "score": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Score",
+          "type": "number"
+        }
+      },
+      "required": [
+        "max_factor",
+        "score"
+      ],
+      "title": "TimingBand",
       "type": "object"
     },
     "Weights": {
@@ -345,6 +670,82 @@
       "minItems": 1,
       "title": "Rules",
       "type": "array"
+    },
+    "scoring": {
+      "$ref": "#/$defs/Scoring",
+      "default": {
+        "assess_credit": {
+          "civil-permitted": {
+            "friend": 0.5,
+            "hostile": 0.0,
+            "neutral": 1.0,
+            "suspect": 0.0,
+            "unknown": 0.25
+          },
+          "clutter": {
+            "friend": 0.25,
+            "hostile": 0.0,
+            "neutral": 1.0,
+            "suspect": 0.0,
+            "unknown": 0.25
+          },
+          "hostile": {
+            "friend": 0.0,
+            "hostile": 1.0,
+            "neutral": 0.0,
+            "suspect": 0.5,
+            "unknown": 0.1
+          }
+        },
+        "blocked_attempt_penalty": 0.15,
+        "classify_correct_share": 0.7,
+        "effector_higher_factor": 0.7,
+        "false_engagement_cap": 0.45,
+        "false_engagement_penalty": 0.15,
+        "report": {
+          "count_off_by_one_score": 0.5,
+          "count_radius_m": 250.0,
+          "heading_tolerance_deg": 20.0,
+          "heading_zero_factor": 3.0,
+          "position_tolerance_m": 150.0,
+          "position_zero_factor": 3.0,
+          "timeliness_weight": 0.2,
+          "weights": {
+            "calibration": 0.15,
+            "count": 0.15,
+            "heading": 0.15,
+            "what": 0.3,
+            "where": 0.25
+          }
+        },
+        "respond_credit": {
+          "engage": 1.0,
+          "hold": 0.25,
+          "none": 0.0,
+          "report": 0.6
+        },
+        "respond_timing_share": 0.3,
+        "timing_bands": [
+          {
+            "max_factor": 1.0,
+            "score": 1.0
+          },
+          {
+            "max_factor": 2.0,
+            "score": 0.75
+          },
+          {
+            "max_factor": 3.0,
+            "score": 0.5
+          },
+          {
+            "max_factor": 5.0,
+            "score": 0.25
+          }
+        ],
+        "track_error_cap": 0.3,
+        "track_error_penalty": 0.15
+      }
     },
     "thresholds": {
       "$ref": "#/$defs/Thresholds"

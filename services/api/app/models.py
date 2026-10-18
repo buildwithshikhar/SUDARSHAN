@@ -67,3 +67,6 @@ class TrainingSession(Base):
     event_head: Mapped[str | None] = mapped_column(String(64), nullable=True)
     event_count: Mapped[int] = mapped_column(Integer, default=0)
     record: Mapped[str | None] = mapped_column(Text, nullable=True)
+    #: The `score-result.v1` JSON, written when a session ends (docs/SCORING.md); it records the
+    #: rule-pack and scenario versions it was computed with, so it stays as it was scored.
+    score: Mapped[str | None] = mapped_column(Text, nullable=True)

@@ -58,4 +58,39 @@ rules:
     effector_classes: [ec-a, ec-b]
 
 weights: { detect: 0.25, classify: 0.25, assess: 0.15, respond: 0.2, report: 0.15 }
-thresholds: { detect_within_s: 12, classify_within_s: 25, report_within_s: 40 }
+thresholds: { detect_within_s: 12, classify_within_s: 25, report_within_s: 40, respond_within_s: 45 }
+
+# How the decision tree and the contact report are marked. Every figure is fictional and editable
+# (no public doctrinal standard exists, Q-12); docs/SCORING.md explains each one.
+scoring:
+  # Credit by how long the operator took, as a multiple of the standard above. Faster than the first
+  # band earns no more, so rushing never pays; slower than the last band earns nothing.
+  timing_bands:
+    - { max_factor: 1.0, score: 1.0 }
+    - { max_factor: 2.0, score: 0.75 }
+    - { max_factor: 3.0, score: 0.5 }
+    - { max_factor: 5.0, score: 0.25 }
+  classify_correct_share: 0.7
+  # Credit for the operator's final assessment, by what the contact really was.
+  assess_credit:
+    hostile: { hostile: 1.0, suspect: 0.5, unknown: 0.1, neutral: 0.0, friend: 0.0 }
+    civil-permitted: { neutral: 1.0, friend: 0.5, unknown: 0.25, suspect: 0.0, hostile: 0.0 }
+    clutter: { neutral: 1.0, unknown: 0.25, friend: 0.25, suspect: 0.0, hostile: 0.0 }
+  # Credit for the best response given to a hostile contact.
+  respond_credit: { engage: 1.0, report: 0.6, hold: 0.25, none: 0.0 }
+  effector_higher_factor: 0.7
+  respond_timing_share: 0.3
+  blocked_attempt_penalty: 0.15
+  track_error_penalty: 0.15
+  track_error_cap: 0.30
+  false_engagement_penalty: 0.15
+  false_engagement_cap: 0.45
+  report:
+    position_tolerance_m: 150
+    position_zero_factor: 3
+    heading_tolerance_deg: 20
+    heading_zero_factor: 3
+    count_off_by_one_score: 0.5
+    count_radius_m: 250
+    weights: { what: 0.30, where: 0.25, count: 0.15, heading: 0.15, calibration: 0.15 }
+    timeliness_weight: 0.2

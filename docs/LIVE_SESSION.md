@@ -23,6 +23,7 @@ Everything derived from a sensor parameter that is still `verified: false` carri
 | `GET /sessions` | trainee, instructor | The caller's sessions, newest first |
 | `GET /sessions/{id}` | owner | One session |
 | `GET /sessions/{id}/log` | owner | The stored event log, verified on read: `{verified, first_bad_seq, event_count, head, final_state_hash, events}`. A trainee gets the trainee events; instructor and admin get all. `?deep=1` also replays the session from its inputs and reports `replay_matches` |
+| `GET /sessions/{id}/score` | owner | The scored debrief (`score-result.v1`) of an ended session; 409 before it ends. It names the real class of each contact, so it is only given after the end ([SCORING.md](SCORING.md)) |
 | `GET /sessions/stats` | admin | Live-session counts and tick jitter percentiles |
 
 A session row: `id`, `scenario_id`, `scenario_version`, `seed`, `status` (`lobby`, `running`, `ended`, `abandoned`), `created_at`, `started_at`, `ended_at`, `ticks`.
@@ -66,7 +67,7 @@ Operator actions and their payloads (anything else in a payload is refused with 
 | `assess` | `track`, `identity` (one of `identities`) | Records the operator's assessment: hostile, suspect, unknown, neutral, friend |
 | `engage` | `track`, `effector_class` (an ID from the rules) | A response, checked against the rule pack |
 | `hold` | `track` | Hold fire on the track; always allowed |
-| `report` | `track` | Report the track up the chain, checked against the rule pack |
+| `report` | `track`, and optionally `class_id`, `count` (1 to 99), `bearing_deg` (0 to under 360) and `range_m` (0 to 50,000) from the site, `heading_deg`, `confidence` (0 to 1) | File a contact report on the track, checked against the rule pack. Every field is optional, a field left out earns no marks, and each is graded in the debrief ([SCORING.md](SCORING.md)) |
 | `track-relabel` | `track`, `label`, `exchange?` | Rename a track; `exchange` takes a name another track wears |
 | `track-merge` | `tracks` (two IDs) | Fold two tracks into one |
 | `track-split` | `track` | Copy a track into two |
@@ -77,7 +78,7 @@ The server stamps each action with the next tick and the trainee's actor ID, so 
 
 ### Events a trainee sees
 
-`track.init|confirm|coast|resume|drop|relabel|merge|split`, `sensor.cue`, `action.<name>` (the operator's own accepted actions), `action.rejected` (the simulation refused: unknown track, bad value, sensor refused a cue), `roe.verdict`, `session.start`, `session.end`.
+`track.init|confirm|coast|resume|drop|relabel|merge|split`, `sensor.cue`, `action.<name>` (with `target` and `truth` removed) (the operator's own accepted actions), `action.rejected` (the simulation refused: unknown track, bad value, sensor refused a cue), `roe.verdict`, `session.start`, `session.end`.
 
 `roe.verdict` is logged before every operator action on a track:
 

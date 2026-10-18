@@ -234,6 +234,10 @@ BAD_PAYLOADS = [
     ("sensor-cue", {"sensor": "eo-1"}),
     ("designate", [1, 2]),
     ("designate", "T001"),
+    ("report", {"track": "T001", "count": "two"}),
+    ("report", {"track": "T001", "confidence": True}),
+    ("report", {"track": "T001", "speed": 3}),
+    ("hold", {"track": "T001", "count": 2}),
 ]
 
 

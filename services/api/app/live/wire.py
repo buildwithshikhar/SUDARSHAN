@@ -24,7 +24,13 @@ MAX_CLIENT_FRAME = 16 * 1024
 ACTIONS: tuple[str, ...] = get_args(OperatorAction)
 #: Keys a payload may omit; every other key of an action is required.
 OPTIONAL_KEYS = frozenset({"exchange", "narrow"})
+#: Every field of a contact report except the track is optional.
+REPORT_OPTIONAL_KEYS = frozenset(
+    {"class_id", "count", "bearing_deg", "range_m", "heading_deg", "confidence"}
+)
 _BOOLEAN_KEYS = frozenset({"exchange", "narrow"})
+#: Numeric fields of a contact report; their ranges are checked by the simulation.
+_NUMBER_KEYS = frozenset({"count", "bearing_deg", "range_m", "heading_deg", "confidence"})
 _TEXT_MAX = 64
 
 
@@ -58,13 +64,22 @@ def check_payload(action: str, payload: object) -> str | None:
     extra = sorted(str(k) for k in payload if k not in allowed)
     if extra:
         return f"{action} does not take {', '.join(extra)}"
-    missing = [k for k in allowed if k not in payload and k not in OPTIONAL_KEYS]
+    optional = OPTIONAL_KEYS | (REPORT_OPTIONAL_KEYS if action == "report" else frozenset())
+    missing = [k for k in allowed if k not in payload and k not in optional]
     if missing:
         return f"{action} needs {', '.join(missing)}"
     for key, value in payload.items():
         if key in _BOOLEAN_KEYS:
             if not isinstance(value, bool):
                 return f"{key} must be true or false"
+        elif key in _NUMBER_KEYS:
+            if (
+                isinstance(value, bool)
+                or not isinstance(value, int | float)
+                or value != value
+                or abs(value) == float("inf")
+            ):
+                return f"{key} must be a number"
         elif key == "tracks":
             if (
                 not isinstance(value, list)

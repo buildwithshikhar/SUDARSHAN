@@ -1,7 +1,8 @@
 """What each audience may see of the event log.
 
 A trainee's console gets only events that hold no ground truth, with the one field that does
-(`target`, the real drone behind a track an action was about) removed. The instructor and scoring
+(`target`, the real drone behind a track an action was about, and `truth`, what a contact report
+is graded against) removed. The instructor and scoring
 see everything. This module is the single place that decides: the live transport and the stored
 log endpoint both call `trainee_event`.
 """
@@ -33,7 +34,7 @@ TRAINEE_EVENTS = (
     TRAINEE_EVENT_TYPES | _ACTION_EVENTS | {"roe.verdict", "session.start", "session.end"}
 )
 #: Fields removed from a trainee's copy of an event payload.
-_TRUTH_FIELDS = frozenset({"target"})
+_TRUTH_FIELDS = frozenset({"target", "truth"})
 
 
 def trainee_event(record: EventRecord) -> dict[str, Any] | None:

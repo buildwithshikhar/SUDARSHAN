@@ -19,7 +19,7 @@ def test_0003_adds_and_removes_the_training_sessions_table(tmp_path: Path) -> No
     engine = create_engine(settings.database_url)
     assert "training_sessions" not in inspect(engine).get_table_names()
 
-    command.upgrade(config, "head")
+    command.upgrade(config, "0003")
     inspector = inspect(engine)
     columns = {c["name"]: c for c in inspector.get_columns("training_sessions")}
     assert set(columns) == {

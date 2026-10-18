@@ -14,7 +14,7 @@ on dictionary order that was not fixed by the scenario.
 """
 
 import math
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import asdict, dataclass
 from typing import TYPE_CHECKING, Any, get_args
 
@@ -41,6 +41,37 @@ SNAPSHOT_FORMAT = "sim-snapshot.v1"
 TRACK_ACTIONS: tuple[str, ...] = get_args(TrackAction)
 TRAINEE_ACTIONS = ("designate", "classify", "assess", "engage", "hold", "report")
 IDENTITIES = ("hostile", "suspect", "unknown", "neutral", "friend")
+#: Optional fields of a structured contact report (`report` on a track).
+REPORT_FIELDS = frozenset(
+    {"class_id", "count", "bearing_deg", "range_m", "heading_deg", "confidence"}
+)
+
+
+def _number(
+    payload: Mapping[str, Any], key: str, low: float, high: float, upper_open: bool
+) -> None:
+    value = payload.get(key)
+    if value is None:
+        return
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or value != value:
+        raise ActionError(f"report {key} must be a number")
+    if value < low or value > high or (upper_open and value >= high):
+        raise ActionError(f"report {key} must be from {low:g} to {high:g}")
+
+
+def _check_report(payload: Mapping[str, Any]) -> None:
+    """A report may carry any of its fields; each present one must be well formed."""
+    if payload.get("class_id") is not None and payload["class_id"] not in OPERATOR_CLASSES:
+        raise ActionError(f"report class_id must be one of {', '.join(OPERATOR_CLASSES)}")
+    count = payload.get("count")
+    if count is not None and (
+        isinstance(count, bool) or not isinstance(count, int) or not 1 <= count <= 99
+    ):
+        raise ActionError("report count must be a whole number from 1 to 99")
+    _number(payload, "bearing_deg", 0, 360, True)
+    _number(payload, "heading_deg", 0, 360, True)
+    _number(payload, "range_m", 0, 50_000, False)
+    _number(payload, "confidence", 0, 1, False)
 
 
 @dataclass(slots=True)
@@ -252,6 +283,7 @@ class World:
         known = {"track"} | ({"class_id"} if name == "classify" else set())
         known |= {"identity"} if name == "assess" else set()
         known |= {"effector_class"} if name == "engage" else set()
+        known |= REPORT_FIELDS if name == "report" else set()
         extra = sorted(set(payload) - known)
         if extra:
             raise ActionError(f"{name} does not take {', '.join(extra)}")
@@ -260,6 +292,8 @@ class World:
             raise ActionError(f"classify needs a class_id, one of {', '.join(OPERATOR_CLASSES)}")
         if name == "assess" and payload.get("identity") not in IDENTITIES:
             raise ActionError(f"assess needs an identity, one of {', '.join(IDENTITIES)}")
+        if name == "report":
+            _check_report(payload)
         effector = payload.get("effector_class")
         if name == "engage" and not isinstance(effector, str):
             raise ActionError("engage needs an effector_class")
@@ -281,6 +315,7 @@ class World:
                 {
                     "action": name,
                     "track": track_id,
+                    "target": picture.ledger.identity_of(track_id),
                     "effector_class": chosen,
                     "context": ctx.view(),
                     **verdict.payload(),
@@ -308,7 +343,36 @@ class World:
                 drone.assigned_class = str(payload["class_id"])
             elif name == "assess":
                 drone.assigned_identity = str(payload["identity"])
-        self._emit(f"action.{name}", {**payload, "target": target}, action.actor)
+        logged: dict[str, Any] = {**payload, "target": target}
+        if name == "report" and drone is not None:
+            logged["truth"] = self._report_truth(drone)
+        self._emit(f"action.{name}", logged, action.actor)
+
+    def _report_truth(self, drone: Drone) -> dict[str, Any]:
+        """What a contact report is graded against: the real class, disposition, position, ground
+        course and the number of same-class contacts around it. Ground truth: logged for scoring,
+        never sent to a trainee."""
+        index = next(i for i, d in enumerate(self.drones) if d.id == drone.id)
+        threat = self.spec.threats[index]
+        radius = self.roe.pack.scoring.report.count_radius_m if self.roe is not None else 250.0
+        wx, wy = self.wind()
+        vx, vy = drone.ux * drone.airspeed + wx, drone.uy * drone.airspeed + wy
+        course = detmath.wrap360(detmath.atan2(vx, vy) / detmath.DEG)
+        count = 0
+        for j, other in enumerate(self.drones):
+            if other.status != "active" or self.spec.threats[j].class_id != threat.class_id:
+                continue
+            if math.sqrt((other.x - drone.x) ** 2 + (other.y - drone.y) ** 2) <= radius:
+                count += 1
+        return {
+            "class_id": threat.class_id,
+            "disposition": threat.disposition,
+            "x": round(drone.x, 3),
+            "y": round(drone.y, 3),
+            "z": round(drone.z, 3),
+            "heading_deg": round(course, 3),
+            "count": count,
+        }
 
     # ------------------------------------------------------------------ state
 

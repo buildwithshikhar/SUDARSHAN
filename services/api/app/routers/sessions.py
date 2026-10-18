@@ -28,6 +28,7 @@ from app.live.manager import (
     SessionManager,
 )
 from app.models import Role, TrainingSession
+from app.scoring import score_session
 from sim import replay
 from sim.audience import trainee_event
 from sim.eventlog import verify
@@ -239,6 +240,30 @@ def session_log(
     if deep:
         out.update(_deep_replay(request, row, data if stored else None))
     return out
+
+
+@router.get("/sessions/{session_id}/score")
+def session_score(
+    session_id: str,
+    request: Request,
+    principal: Principal = Depends(require_csrf),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """The scored debrief of an ended session. It names the real class of each contact, so it is
+    given only once the session has ended. A score is stored when the session ends; an older ended
+    session is scored here from its stored record and kept."""
+    row = _owned(db, session_id, principal)
+    if row.status != "ended" or row.record is None:
+        raise HTTPException(status.HTTP_409_CONFLICT, "Only an ended session has a score")
+    if row.score is None:
+        entry = manager_of(request).catalog.get(row.scenario_id, row.scenario_version)
+        if entry is None:
+            raise HTTPException(status.HTTP_409_CONFLICT, "The scenario is no longer available")
+        record = SessionRecord.model_validate_json(row.record)
+        row.score = score_session(entry.spec, entry.engine.pack, record).model_dump_json()
+        db.commit()
+    scored: dict[str, Any] = json.loads(row.score)
+    return scored
 
 
 def _deep_replay(request: Request, row: TrainingSession, data: Any) -> dict[str, Any]:

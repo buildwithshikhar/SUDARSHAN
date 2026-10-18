@@ -54,7 +54,14 @@ TRAINEE_EVENT_TYPES = frozenset(
 )
 #: Events that carry ground truth: instructor, scoring and the after-action review only.
 TRUTH_EVENT_TYPES = frozenset(
-    {"ledger.swap", "ledger.split", "ledger.merge", "ledger.restored", "assist.assess"}
+    {
+        "ledger.swap",
+        "ledger.split",
+        "ledger.merge",
+        "ledger.restored",
+        "ledger.first_report",
+        "assist.assess",
+    }
 )
 
 #: How long (s) a report's ground-truth reference is kept, long enough for triangulation.
@@ -86,6 +93,8 @@ class Picture:
         #: This tick's reports as a trainee sees them.
         self._reports: list[dict[str, Any]] = []
         self._latest: dict[str, dict[str, Any]] = {}
+        #: Drones a sensor has reported at least once: the "first detectable moment" for scoring.
+        self._first_seen: set[str] = set()
 
     @classmethod
     def build(
@@ -114,7 +123,11 @@ class Picture:
         refs: list[int] = []
         measurements: list[Measurement] = []
         self._reports = []
+        firsts: list[tuple[str, str, str]] = []
         for detection in self.suite.detect(world):
+            if detection.truth_id is not None and detection.truth_id not in self._first_seen:
+                self._first_seen.add(detection.truth_id)
+                firsts.append((detection.truth_id, detection.sensor_id, detection.modality))
             view = detection.trainee_view()
             measurements.append(Measurement.from_view(view, self._ref))
             self._reports.append(view)
@@ -124,6 +137,10 @@ class Picture:
         result = self.tracker.update(tick, measurements, world.rng)
         self._recent.append((tick, refs))
         self._forget_old_truth(tick)
+        for drone, sensor, modality in firsts:
+            world.emit(
+                "ledger.first_report", {"drone": drone, "sensor": sensor, "modality": modality}
+            )
         for event in result.events:
             world.emit(f"track.{event.kind}", event.payload)
         self._emit_ledger(world, self.ledger.observe(tick, result, self._truth))
@@ -163,7 +180,8 @@ class Picture:
             cue = apply_cue(self.tracker, self.suite, world.tick, action.payload)
             if not cue.ok:
                 raise ActionError(cue.reason or "the sensor refused the cue")
-            world.emit("action.sensor_cue", dict(action.payload), action.actor)
+            target = self.ledger.identity_of(str(action.payload.get("track")))
+            world.emit("action.sensor_cue", {**action.payload, "target": target}, action.actor)
             world.emit("sensor.cue", cue.payload, action.actor)
             return
         outcome = apply_command(self.tracker, world.tick, name, action.payload)
@@ -198,6 +216,7 @@ class Picture:
             "ref": self._ref,
             "truth": {str(k): v for k, v in sorted(self._truth.items())},
             "recent": [[t, list(r)] for t, r in self._recent],
+            "first_seen": sorted(self._first_seen),
             "latest": {k: dict(v) for k, v in sorted(self._latest.items())},
         }
 
@@ -209,5 +228,6 @@ class Picture:
         self._ref = int(state["ref"])
         self._truth = {int(k): v for k, v in state["truth"].items()}
         self._recent = deque((int(t), [int(x) for x in r]) for t, r in state["recent"])
+        self._first_seen = set(state.get("first_seen", []))
         self._latest = {k: dict(v) for k, v in state["latest"].items()}
         self._reports = []

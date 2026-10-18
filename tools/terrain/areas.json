@@ -1,0 +1,27 @@
+{
+  "_note": "The only place a real coordinate appears. Shipped packs carry fictional names only.",
+  "areas": [
+    {
+      "id": "heron-ridge",
+      "name": "Heron Ridge",
+      "kind": "rural",
+      "half_extent_m": 2000,
+      "cell_m": 31.25,
+      "centre": { "lat": 17.7595, "lon": 74.0618 },
+      "seed": 20260701,
+      "texture_px": 1024,
+      "building_cap": 2500
+    },
+    {
+      "id": "osprey-town",
+      "name": "Osprey Town",
+      "kind": "urban",
+      "half_extent_m": 1500,
+      "cell_m": 31.25,
+      "centre": { "lat": 17.685, "lon": 74.017 },
+      "seed": 20260702,
+      "texture_px": 1024,
+      "building_cap": 2500
+    }
+  ]
+}

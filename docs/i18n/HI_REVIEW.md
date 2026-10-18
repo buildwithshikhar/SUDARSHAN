@@ -505,6 +505,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `scoring.respond.hold-only` | Held fire after {{seconds}} against a standard of {{standard}}, with no engagement or report. Low credit. | {{seconds}} बाद फ़ायर रोका, मानक {{standard}} के विरुद्ध; न कार्रवाई की न रिपोर्ट। कम अंक। |  |
 | `scoring.respond.none` | No response was made on this hostile contact. | इस शत्रु संपर्क पर कोई कार्रवाई नहीं की गई। |  |
 | `scoring.respond.hold-fire` | This contact was not hostile, so no engagement was required. | यह संपर्क शत्रु नहीं था, इसलिए कार्रवाई की ज़रूरत नहीं थी। |  |
+| `scoring.respond.breach` | Engagements made on this contact: {{engagements}}. An engagement that broke the rules of engagement earns nothing here. | इस संपर्क पर की गई कार्रवाइयाँ: {{engagements}}। कार्रवाई के नियम तोड़ने वाली कार्रवाई पर यहाँ कोई अंक नहीं मिलता। |  |
 | `scoring.report.missing` | No contact report was filed on this hostile contact. | इस शत्रु संपर्क की कोई संपर्क रिपोर्ट दाखिल नहीं की गई। |  |
 | `scoring.report.filed` | Report filed {{seconds}} after the first sensor report, against a standard of {{standard}}. Timeliness credit {{timeliness}}. Weakest field: {{worst_field}}. | रिपोर्ट पहली सेंसर रिपोर्ट के {{seconds}} बाद दाखिल हुई, मानक {{standard}} के विरुद्ध। समयबद्धता अंक {{timeliness}}। सबसे कमज़ोर क्षेत्र: {{worst_field}}। |  |
 | `scoring.report.no-truth` | A report was filed, but the record holds no ground truth to grade it against. | रिपोर्ट दाखिल हुई, पर रिकॉर्ड में जाँचने के लिए वास्तविक स्थिति नहीं है। |  |
@@ -682,4 +683,4 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `debrief.empty.title` | No contact was presented | कोई संपर्क प्रस्तुत नहीं हुआ |  |
 | `debrief.empty.body` | No sensor reported any scenario contact before the session ended, so there is nothing to score. | सत्र समाप्त होने तक किसी सेंसर ने कोई परिदृश्य संपर्क रिपोर्ट नहीं किया, इसलिए अंक देने को कुछ नहीं है। |  |
 
-675 strings.
+676 strings.

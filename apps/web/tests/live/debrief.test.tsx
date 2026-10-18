@@ -117,7 +117,7 @@ describe('debrief: populated', () => {
     expect(findings).toHaveLength(2)
     expect(findings[0]).toHaveTextContent('Blocked response')
     expect(findings[0]).toHaveTextContent('The rules blocked 1 of your responses on this contact.')
-    expect(findings[0]).toHaveTextContent('Cost 15.0 pts')
+    expect(findings[0]).toHaveTextContent('Cost 3.0 pts')
     expect(findings[1]).toHaveTextContent(
       'Track labels were swapped at 37.6 s (error swap-1) and never restored.',
     )
@@ -176,9 +176,11 @@ describe('debrief: populated', () => {
     expect(lessons[0]).toHaveTextContent(
       'survey: you engaged a contact that was civil traffic. Never engage before the contact is identified as hostile.',
     )
-    expect(lessons[0]).toHaveTextContent('Marks lost 75.0 pts')
-    expect(lessons[1]).toHaveTextContent('quad: the rules blocked 1 of your responses.')
-    expect(lessons[2]).toHaveTextContent('quad: a track error at 37.6 s was left uncorrected.')
+    expect(lessons[0]).toHaveTextContent('Marks lost 51.5 pts')
+    expect(lessons[1]).toHaveTextContent('quad: a track error at 37.6 s was left uncorrected.')
+    expect(lessons[2]).toHaveTextContent(
+      'quad: assessing it as Suspect earned partial credit for a hostile contact.',
+    )
   })
 
   it('keeps contacts that were not presented or not worked in a quiet Not scored group', async () => {

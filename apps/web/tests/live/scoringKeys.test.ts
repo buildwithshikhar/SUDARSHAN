@@ -45,6 +45,7 @@ const SAMPLE = {
   actual: 'rotary-small',
   effector: 'ec-a',
   blocked_attempts: 2,
+  engagements: 1,
   attempts: 2,
   t: 41.3,
   error_id: 'e-2',
@@ -73,8 +74,8 @@ describe('scoring explanations', () => {
   const keys = allKeys()
 
   it('reads the full key list from the evaluator', () => {
-    // 16 node reasons, 23 report reasons, 10 findings and 21 lessons
-    expect(keys.length).toBe(70)
+    // 17 node reasons, 23 report reasons, 10 findings and 21 lessons
+    expect(keys.length).toBe(71)
     expect(keys).toContain('report.calibration.partial')
     expect(keys).toContain('lesson.hard-fail.no-positive-id')
     expect(keys).toContain('finding.track-error.merge')

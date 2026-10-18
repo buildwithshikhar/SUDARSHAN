@@ -653,7 +653,8 @@
       "report-only": "Reported up the chain after {{seconds}} against a standard of {{standard}}, with no engagement. Partial credit.",
       "hold-only": "Held fire after {{seconds}} against a standard of {{standard}}, with no engagement or report. Low credit.",
       "none": "No response was made on this hostile contact.",
-      "hold-fire": "This contact was not hostile, so no engagement was required."
+      "hold-fire": "This contact was not hostile, so no engagement was required.",
+      "breach": "Engagements made on this contact: {{engagements}}. An engagement that broke the rules of engagement earns nothing here."
     },
     "report": {
       "missing": "No contact report was filed on this hostile contact.",

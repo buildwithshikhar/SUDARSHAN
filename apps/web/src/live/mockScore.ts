@@ -91,7 +91,7 @@ export const MOCK_SCORE: SessionScore = {
           kind: 'blocked-attempt',
           reason: 'finding.blocked-attempt',
           params: { attempts: 1 },
-          cost: 0.15,
+          cost: 0.03,
         },
         {
           kind: 'track-error',
@@ -156,7 +156,7 @@ export const MOCK_SCORE: SessionScore = {
       worked: true,
       first_report_s: 1.9,
       hard_fail: true,
-      decision: 0.75,
+      decision: 0.5147,
       score: 0,
       nodes: [
         {
@@ -183,9 +183,9 @@ export const MOCK_SCORE: SessionScore = {
         {
           node: 'respond',
           weight: 0.2,
-          score: 1,
-          reason: 'respond.hold-fire',
-          params: { blocked_attempts: 0 },
+          score: 0,
+          reason: 'respond.breach',
+          params: { engagements: 1, blocked_attempts: 0 },
         },
       ],
       findings: [
@@ -193,7 +193,7 @@ export const MOCK_SCORE: SessionScore = {
           kind: 'hard-fail',
           reason: 'finding.hard-fail.engaged-non-hostile',
           params: { t: 58.4, track: 'T021', actual: 'civil-permitted' },
-          cost: 0.75,
+          cost: 0.5147,
         },
       ],
       report: null,
@@ -223,7 +223,7 @@ export const MOCK_SCORE: SessionScore = {
     {
       key: 'lesson.hard-fail.engaged-non-hostile',
       threat_id: 'th-survey',
-      cost: 0.75,
+      cost: 0.5147,
       params: {
         threat: { en: 'survey', hi: 'सर्वे' },
         t: 58.4,
@@ -232,16 +232,16 @@ export const MOCK_SCORE: SessionScore = {
       },
     },
     {
-      key: 'lesson.blocked-attempt',
-      threat_id: 'th-quad',
-      cost: 0.15,
-      params: { threat: { en: 'quad', hi: 'क्वाड' }, attempts: 1 },
-    },
-    {
       key: 'lesson.track-error',
       threat_id: 'th-quad',
       cost: 0.15,
       params: { threat: { en: 'quad', hi: 'क्वाड' }, error_id: 'swap-1', t: 37.6 },
+    },
+    {
+      key: 'lesson.assess.partial',
+      threat_id: 'th-quad',
+      cost: 0.075,
+      params: { threat: { en: 'quad', hi: 'क्वाड' }, given: 'suspect', actual: 'hostile' },
     },
   ],
 }

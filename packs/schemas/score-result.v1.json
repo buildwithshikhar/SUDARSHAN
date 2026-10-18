@@ -605,11 +605,20 @@
       ],
       "title": "Report Score"
     },
+    "report_weight": {
+      "ge": 0,
+      "le": 1,
+      "title": "Report Weight",
+      "type": "number"
+    },
     "rule_pack": {
       "$ref": "#/$defs/PackRef"
     },
     "scenario": {
       "$ref": "#/$defs/PackRef"
+    },
+    "scenario_title": {
+      "$ref": "#/$defs/Text"
     },
     "score": {
       "anyOf": [
@@ -648,11 +657,13 @@
   "required": [
     "contract",
     "scenario",
+    "scenario_title",
     "rule_pack",
     "seed",
     "ticks",
     "duration_s",
     "event_head",
+    "report_weight",
     "threats",
     "sdt",
     "score",

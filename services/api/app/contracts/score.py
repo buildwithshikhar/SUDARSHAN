@@ -146,12 +146,15 @@ class Lesson(Contract):
 class SessionScore(Contract):
     contract: Literal["score-result.v1"]
     scenario: PackRef
+    scenario_title: Text
     rule_pack: PackRef
     seed: Seed
     ticks: int
     duration_s: FiniteFloat
     #: Chain head of the event log this score was computed from.
     event_head: Sha256Hex
+    #: The pack's weight for the contact report, which the contact rows do not carry.
+    report_weight: Mark
     threats: list[ThreatScore]
     sdt: Sdt
     #: Findings about the session rather than one contact (an engagement on a false track).

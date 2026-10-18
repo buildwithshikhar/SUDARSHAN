@@ -15,6 +15,8 @@ export const MOCK_SCORE_MARKER = 'scripted-score-marker-2b9d44'
 export const MOCK_SCORE: SessionScore = {
   contract: 'score-result.v1',
   scenario: { id: 'harrier-field-afternoon-watch', version: '0.3.1-mock' },
+  scenario_title: { en: 'Harrier Field: afternoon watch', hi: 'हैरियर फील्ड: दोपहर की निगरानी' },
+  report_weight: 0.15,
   rule_pack: { id: 'training-baseline', version: '1.0.0' },
   seed: 240117,
   ticks: 1280,

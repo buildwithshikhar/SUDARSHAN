@@ -14,7 +14,7 @@ import type {
 import { PageHeader } from '../layout/PageHeader'
 import { ApiError, NetworkError } from '../lib/api'
 import { fmtElapsed, useLang } from '../live/format'
-import { getScore, listScenarios, localised } from '../live/restApi'
+import { getScore, localised } from '../live/restApi'
 import type { Lang } from '../live/roe'
 import {
   className,
@@ -37,9 +37,7 @@ type Failure = 'notEnded' | 'notFound' | 'network' | 'error'
 type Load =
   | { state: 'loading' }
   | { state: 'failed'; failure: Failure }
-  | { state: 'ready'; score: SessionScore; title: ScenarioTitle | null }
-
-type ScenarioTitle = NonNullable<Parameters<typeof localised>[0]>
+  | { state: 'ready'; score: SessionScore }
 
 const failureOf = (error: unknown): Failure =>
   error instanceof NetworkError
@@ -65,13 +63,8 @@ export function Debrief() {
   useEffect(() => {
     const controller = new AbortController()
     getScore(id, controller.signal, search)
-      .then(async (score) => {
-        // The score names the scenario by ID only; the title comes from the scenario list, if it answers.
-        const title = await listScenarios(controller.signal)
-          .then((list) => list.find((s) => s.id === score.scenario.id)?.title ?? null)
-          .catch(() => null)
-        if (controller.signal.aborted) return
-        setLoad({ state: 'ready', score, title })
+      .then((score) => {
+        if (!controller.signal.aborted) setLoad({ state: 'ready', score })
       })
       .catch((error: unknown) => {
         if (!controller.signal.aborted) setLoad({ state: 'failed', failure: failureOf(error) })
@@ -119,24 +112,14 @@ export function Debrief() {
           )}
         </div>
       )}
-      {load.state === 'ready' && (
-        <DebriefBody sessionId={id} score={load.score} title={load.title} />
-      )}
+      {load.state === 'ready' && <DebriefBody sessionId={id} score={load.score} />}
     </>
   )
 }
 
 // ---------------------------------------------------------------------- body
 
-function DebriefBody({
-  sessionId,
-  score,
-  title,
-}: {
-  sessionId: string
-  score: SessionScore
-  title: ScenarioTitle | null
-}) {
+function DebriefBody({ sessionId, score }: { sessionId: string; score: SessionScore }) {
   const { t } = useTranslation()
   const lang = useLang()
   const scored = score.threats.filter((x) => x.presented && x.worked !== false)
@@ -157,7 +140,7 @@ function DebriefBody({
         <SummaryPanel score={score} />
         <div className="flex flex-col gap-4">
           <LessonsPanel score={score} lang={lang} />
-          <RecordPanel score={score} title={title ? localised(title, lang) : null} />
+          <RecordPanel score={score} title={localised(score.scenario_title, lang)} />
         </div>
       </div>
 
@@ -171,7 +154,12 @@ function DebriefBody({
             {t('debrief.contacts.title')}
           </h2>
           {scored.map((threat) => (
-            <ContactSection key={threat.threat_id} threat={threat} lang={lang} />
+            <ContactSection
+              key={threat.threat_id}
+              threat={threat}
+              reportWeight={score.report_weight}
+              lang={lang}
+            />
           ))}
         </section>
       )}
@@ -196,13 +184,13 @@ function Fact({ label, children }: { label: string; children: ReactNode }) {
   )
 }
 
-function RecordPanel({ score, title }: { score: SessionScore; title: string | null }) {
+function RecordPanel({ score, title }: { score: SessionScore; title: string }) {
   const { t } = useTranslation()
   return (
     <Panel title={t('debrief.record.title')} flush>
       <dl className="m-0">
         <Fact label={t('debrief.record.scenario')}>
-          <span className="font-sans font-semibold">{title ?? score.scenario.id}</span>
+          <span className="font-sans font-semibold">{title}</span>
         </Fact>
         <Fact label={t('debrief.record.scenarioVersion')}>
           {score.scenario.id} {score.scenario.version}
@@ -390,7 +378,7 @@ interface PathRow {
   reason: string
 }
 
-function pathRows(threat: ThreatScore, lang: Lang, t: TFunction): PathRow[] {
+function pathRows(threat: ThreatScore, reportWeight: number, lang: Lang, t: TFunction): PathRow[] {
   const rows: PathRow[] = (threat.nodes ?? []).map((n: NodeResult) => ({
     key: n.node,
     node: nodeLabel(n.node, lang),
@@ -404,7 +392,7 @@ function pathRows(threat: ThreatScore, lang: Lang, t: TFunction): PathRow[] {
     rows.push({
       key: 'report',
       node: nodeLabel('report', lang),
-      weight: '—',
+      weight: reportWeight.toFixed(2),
       points: t('debrief.contacts.reportRow'),
       mark: report.filed ? fmtScore(report.score) : fmtScore(0),
       reason: renderReason(report.reason ?? 'report.missing', report.params, lang),
@@ -413,7 +401,15 @@ function pathRows(threat: ThreatScore, lang: Lang, t: TFunction): PathRow[] {
   return rows
 }
 
-function ContactSection({ threat, lang }: { threat: ThreatScore; lang: Lang }) {
+function ContactSection({
+  threat,
+  reportWeight,
+  lang,
+}: {
+  threat: ThreatScore
+  reportWeight: number
+  lang: Lang
+}) {
   const { t } = useTranslation()
   const headingId = `contact-${threat.threat_id}`
   const hardFail = (threat.findings ?? []).find((f) => f.kind === 'hard-fail')
@@ -505,7 +501,7 @@ function ContactSection({ threat, lang }: { threat: ThreatScore; lang: Lang }) {
       <Table
         caption={t('debrief.contacts.pathCaption', { label: threat.label[lang] })}
         columns={columns}
-        rows={pathRows(threat, lang, t)}
+        rows={pathRows(threat, reportWeight, lang, t)}
         rowKey={(r) => r.key}
         dense
       />

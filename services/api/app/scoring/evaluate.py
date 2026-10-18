@@ -241,6 +241,8 @@ def score_events(
     return SessionScore(
         contract="score-result.v1",
         scenario={"id": spec.id, "version": spec.version},
+        scenario_title=spec.title,
+        report_weight=pack.weights.report,
         rule_pack={"id": pack.id, "version": pack.version},
         seed=seed,
         ticks=ticks,

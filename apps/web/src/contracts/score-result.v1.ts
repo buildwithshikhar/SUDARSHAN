@@ -21,8 +21,11 @@ export type Key = string
 export type ThreatId = string | null
 export type Lessons = Lesson[]
 export type ReportScore = number | null
+export type ReportWeight = number
 export type Id = string
 export type Version = string
+export type En = string
+export type Hi = string
 export type Score = number | null
 export type CorrectRejections = number
 export type Corrected = boolean
@@ -44,8 +47,6 @@ export type Disposition = 'hostile' | 'civil-permitted' | 'clutter'
 export type Findings1 = Finding[]
 export type FirstReportS = number | null
 export type HardFail = boolean
-export type En = string
-export type Hi = string
 export type Node = 'detect' | 'classify' | 'assess' | 'respond'
 export type Reason1 = string
 export type Score1 = number
@@ -77,8 +78,10 @@ export interface SessionScore {
   findings?: Findings
   lessons?: Lessons
   report_score: ReportScore
+  report_weight: ReportWeight
   rule_pack: PackRef
   scenario: PackRef
+  scenario_title: Text
   score: Score
   sdt: Sdt
   seed: Seed
@@ -118,6 +121,13 @@ export interface PackRef {
   version: Version
 }
 /**
+ * User-facing text in both interface languages.
+ */
+export interface Text {
+  en: En
+  hi: Hi
+}
+/**
  * Signal-detection metrics for the session's threat-or-not calls.
  */
 export interface Sdt {
@@ -152,13 +162,6 @@ export interface ThreatScore {
   score?: Score4
   threat_id: ThreatId1
   worked?: Worked
-}
-/**
- * User-facing text in both interface languages.
- */
-export interface Text {
-  en: En
-  hi: Hi
 }
 export interface NodeResult {
   node: Node

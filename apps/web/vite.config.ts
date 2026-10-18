@@ -21,7 +21,10 @@ const brandHtml = (): Plugin => ({
 
 const apiTarget = process.env.API_PROXY_TARGET ?? 'http://localhost:8000'
 const proxy = Object.fromEntries(
-  ['/api', '/healthz', '/readyz'].map((path) => [path, { target: apiTarget, changeOrigin: true }]),
+  ['/api', '/healthz', '/readyz'].map((path) => [
+    path,
+    { target: apiTarget, changeOrigin: true, ws: true },
+  ]),
 )
 
 export default defineConfig({

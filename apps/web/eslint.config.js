@@ -17,5 +17,8 @@ export default tseslint.config(
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
   },
-  { files: ['src/lib/**/*.{ts,tsx}'], rules: { 'react-refresh/only-export-components': 'off' } },
+  {
+    files: ['src/lib/**/*.{ts,tsx}', 'src/live/**/*.{ts,tsx}'],
+    rules: { 'react-refresh/only-export-components': 'off' },
+  },
 )

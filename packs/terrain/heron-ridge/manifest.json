@@ -7,15 +7,15 @@
   "label": "reference data \u00b7 generic area",
   "frame": {
     "half_extent_m": 2000,
-    "datum_m": 661.2
+    "datum_m": 626.7
   },
   "heightmap": {
     "file": "heights.i16",
     "size": 129,
     "cell_m": 31.25,
     "scale_m": 0.1,
-    "min_m": -34.5,
-    "max_m": 106.7
+    "min_m": 0.0,
+    "max_m": 141.2
   },
   "buildings": {
     "file": "buildings.json",
@@ -62,11 +62,11 @@
     "dropped_sensitive_areas": 0
   },
   "files": {
-    "heights.i16": "8145c97fc5b1b52d3a704d22304b953750581685afeea61e3aacfaffe103b36d",
-    "buildings.json": "138925b13803d9feee76f8cb51c609d1cc0f000384d986bcd371dffc8280fb20",
+    "heights.i16": "db4076dfe8e79b6e3db5d53dc8b37c4bd14ab8d37930a4f07f67455b38dac6e7",
+    "buildings.json": "95b06a03e57945c1c22ebdc7f92de3085c18da70e16ec407107f5181ba1e9a64",
     "vegetation.json": "5fb4e944a96f928339779d133612495896c0f6a5c356828a6f1023de901a9309",
-    "terrain.glb": "82c744afbd45315cbaa91f69e1254ece6809f28e8f3597d4695261e7f457c3f4",
-    "buildings.glb": "4daeedb34458eb78b5da63d65bc660c89d40df95d4924d2c58bdbb0bc6eb6672",
+    "terrain.glb": "88d706d690bff6cad92d1798c3019b3df0b2bf6bef34cda248fab6be851a734f",
+    "buildings.glb": "8d828a5bc55f087fb62bd156a2aa574b7d847264eb5310d43b52549c8a146429",
     "ATTRIBUTION.md": "c79feb62732de094925714ffc2ca17571160fd67d90bd31048449094a15c82ac"
   }
 }

@@ -58,7 +58,7 @@ def test_pack_contents_match_the_spec(
     # heights: int16 little-endian, row-major, relative to a datum rounded to 0.1 m
     q = np.frombuffer(files["heights.i16"], dtype="<i2").reshape(33, 33)
     assert len(files["heights.i16"]) == 33 * 33 * 2
-    assert q[16, 16] == 0  # the datum is the elevation at the centre
+    assert q.min() == 0 or 0 <= q.min() <= 1  # the datum is the lowest post, rounded down
     assert round(float(q.min()) * 0.1, 1) == m["heightmap"]["min_m"]
     assert round(float(q.max()) * 0.1, 1) == m["heightmap"]["max_m"]
     assert round(m["frame"]["datum_m"], 1) == m["frame"]["datum_m"]

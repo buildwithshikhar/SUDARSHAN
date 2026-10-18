@@ -7,7 +7,7 @@ Everything in a pack is generic or fictionalised. Site names are fictional, no r
 ## Frame
 
 - Local metric frame, metres: **x east, y north, z up**, origin at the pack centre. The pack covers the square `[-half_extent_m, +half_extent_m]` in x and y.
-- Scenario `z` is height above the pack **datum** (`datum_m`, an SRTM elevation in metres above mean sea level, chosen at the origin). The heightmap is stored relative to the datum, so terrain height at (x, y) is the interpolated heightmap value.
+- Scenario `z` is height above the pack **datum** (`datum_m`: the lowest SRTM post in the pack, rounded down to 0.1 m, in metres above mean sea level). Every terrain height is therefore ≥ 0 and a scenario's `z` is never negative. The heightmap is stored relative to the datum, so terrain height at (x, y) is the interpolated heightmap value.
 - Meshes (GLB) are written Y-up for three.js with the web client's mapping: `three = (x, z, -y)`.
 - The projection is local equirectangular about the pack centre. It is exact enough over a few kilometres and is not a survey.
 

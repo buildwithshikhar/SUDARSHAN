@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import struct
 from collections import Counter
 from dataclasses import dataclass, field
@@ -144,8 +145,9 @@ def build_files(area: Area, tile: SrtmTile, osm_path: Path) -> tuple[dict[str, b
     gx, gy = np.meshgrid(axis, axis)  # gy varies with row: row 0 = south
     lon_g, lat_g = proj.inverse(gx, gy)
     elev = tile.sample(lat_g, lon_g)
-    centre_elev = tile.sample(np.array([area.lat]), np.array([area.lon]))
-    datum = round(float(centre_elev[0]), 1)
+    # The datum is the lowest post in the pack, rounded down to 0.1 m, so every height is >= 0
+    # and a scenario's z (metres above the datum) is never negative.
+    datum = math.floor(float(np.min(elev)) * 10.0) / 10.0
     q = np.clip(np.rint((elev - datum) / HEIGHT_SCALE_M), -32768, 32767).astype("<i2")
     heights = q.astype(np.float64) * HEIGHT_SCALE_M
     hf = HeightField(heights, half, area.cell_m)

@@ -52,7 +52,8 @@ def event(**changes: Any) -> dict[str, Any]:
 
 def test_there_is_one_example_of_each_pack_contract() -> None:
     """One example per contract, except sensor profiles (wave 4a ships one per modality model)
-    and scenarios (wave 5 adds the playable Harrier Field scenario to the Kestrel example)."""
+    and scenarios (wave 5 adds the playable Harrier Field scenario to the Kestrel example; wave 7
+    adds Heron Ridge, the first on a terrain pack)."""
     contracts = sorted(raw(p)["contract"] for p in PACK_FILES)
     assert sorted(set(contracts)) == sorted(PACKS)
     for contract in PACKS:
@@ -60,6 +61,7 @@ def test_there_is_one_example_of_each_pack_contract() -> None:
             assert contracts.count(contract) == 1
     assert sorted(raw(p)["id"] for p in PACK_FILES if raw(p)["contract"] == "scenario.v1") == [
         "harrier-morning-watch",
+        "heron-ridge-low-approach",
         "kestrel-dawn-approach",
     ]
 

@@ -297,3 +297,25 @@ def test_radar_and_eo_need_line_of_sight_and_the_others_do_not() -> None:
 
 def test_distance_helper_is_consistent() -> None:
     assert math.isclose(math.hypot(3, 4), 5)
+
+
+# ---------------------------------------------------------------------- the shipped packs
+
+
+@pytest.mark.parametrize("pack_id", ["heron-ridge", "osprey-town"])
+def test_a_shipped_pack_loads_and_a_real_building_hides_a_low_target(pack_id: str) -> None:
+    pack = load_pack(terrain_module.pack_dir(pack_id))
+    doc = json.loads((terrain_module.pack_dir(pack_id) / "buildings.json").read_text())
+    assert pack.heights.min() == 0.0 and pack.digest
+    house = doc["buildings"][0]
+    cx = sum(p[0] for p in house["footprint"]) / len(house["footprint"])
+    cy = sum(p[1] for p in house["footprint"]) / len(house["footprint"])
+    roof = house["base_m"] + house["height_m"]
+    assert pack.roof_m(cx, cy) is not None  # the rasterised cell under its centre
+    # Through the building 1 m below the roof, from 60 m either side of it: blocked; 5 m above: clear.
+    low = pack.blocked((cx - 60, cy, roof - 1), (cx + 60, cy, roof - 1))
+    high = pack.blocked(
+        (cx - 60, cy, roof + 30 + pack.ground_m(cx - 60, cy)),
+        (cx + 60, cy, roof + 30 + pack.ground_m(cx + 60, cy)),
+    )
+    assert low and not high

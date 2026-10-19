@@ -1,0 +1,161 @@
+# Fictional scenario · open-source parameters
+contract: scenario.v1
+id: curriculum-07-blind-sector
+version: 1.0.0
+title:
+  en: 'Mill Street: blind sector'
+  hi: 'मिल स्ट्रीट: अंधा क्षेत्र'
+summary:
+  en: A clear day over a fictional mill quarter. One small rotary drone approaches from the north-west
+    just as the radar loses a sector of its sweep, and a radio interferer raises the false-alarm rate
+    on the passive sensor. The camera is the one instrument looking the right way.
+  hi: एक काल्पनिक मिल मोहल्ले पर साफ़ दिन। उत्तर-पश्चिम से एक छोटा रोटरी ड्रोन ठीक तब आता है जब रडार अपने
+    घेरे का एक खंड खो देता है, और रेडियो व्यवधान निष्क्रिय सेंसर की झूठी चेतावनियाँ बढ़ा देता है। सही
+    दिशा में देखने वाला उपकरण केवल कैमरा है।
+fictional: true
+tick_hz: 20
+default_seed: 260107
+duration_s: 300.0
+meta:
+  origin: scripted
+  playable: true
+  tags:
+    - day
+    - urban
+    - single
+    - degraded
+    - sector-outage
+    - interference
+  curriculum_order: 7
+  difficulty: 55
+world:
+  terrain:
+    kind: pack
+    id: osprey-town
+    version: 1.0.0
+  half_extent_m: 1500.0
+  start_time_of_day_h: 11.0
+  weather:
+    condition: clear
+    visibility_m: 8000.0
+    wind_speed_mps: 3.0
+    wind_from_deg: 260.0
+    gust_sigma_mps: 0.6
+    temperature_c: 27.0
+    cloud_cover_pct: 20.0
+rule_pack:
+  id: training-baseline
+  version: 1.0.0
+zones:
+  - id: inner
+    role: inner
+    label:
+      en: Inner zone
+      hi: आंतरिक क्षेत्र
+    center:
+      x: 0.0
+      y: 0.0
+      z: 41.1
+    radius_m: 450.0
+  - id: outer
+    role: outer
+    label:
+      en: Outer zone
+      hi: बाहरी क्षेत्र
+    center:
+      x: 0.0
+      y: 0.0
+      z: 41.1
+    radius_m: 1100.0
+assets:
+  - id: defended-site
+    label:
+      en: Mill Street substation
+      hi: मिल स्ट्रीट उपकेंद्र
+    position:
+      x: 0.0
+      y: 0.0
+      z: 41.1
+sensors:
+  - id: radar-1
+    profile:
+      id: radar-generic-s
+      version: 0.3.0
+    position:
+      x: 35.0
+      y: -70.0
+      z: 49.9
+    boresight_deg: 0.0
+  - id: eo-1
+    profile:
+      id: eo-generic-day
+      version: 0.2.0
+    position:
+      x: 45.0
+      y: -50.0
+      z: 48.3
+    boresight_deg: 300.0
+  - id: rf-1
+    profile:
+      id: rf-generic-passive
+      version: 1.1.0
+    position:
+      x: -40.0
+      y: 40.0
+      z: 47.9
+    boresight_deg: 0.0
+degradations:
+  - sensor: radar-1
+    kind: sector-outage
+    from_s: 30.0
+    to_s: 120.0
+    severity: 1.0
+    sector_from_deg: 270.0
+    sector_to_deg: 330.0
+  - sensor: rf-1
+    kind: interference
+    from_s: 20.0
+    to_s: 200.0
+    severity: 0.7
+threats:
+  - id: contact-a
+    class_id: rotary-small
+    disposition: hostile
+    label:
+      en: Contact A
+      hi: संपर्क A
+    spawn_s: 25.0
+    start:
+      x: -1169.1
+      y: 675.0
+      z: 130.0
+    start_heading_deg: 120.0
+    start_speed_mps: 10.0
+    limits:
+      max_speed_mps: 18.0
+      max_accel_mps2: 4.0
+      max_climb_mps: 5.0
+      max_descent_mps: 3.5
+      max_turn_rate_dps: 90.0
+      min_altitude_m: 5.0
+      max_altitude_m: 400.0
+    route:
+      - position:
+          x: -952.6
+          y: 550.0
+          z: 125.0
+        speed_mps: 14.0
+        hold_s: 0.0
+      - position:
+          x: -644.4
+          y: 273.5
+          z: 110.6
+        speed_mps: 12.0
+        hold_s: 0.0
+      - position:
+          x: -413.5
+          y: 150.5
+          z: 106.9
+        speed_mps: 10.0
+        hold_s: 0.0
+    on_route_end: loiter

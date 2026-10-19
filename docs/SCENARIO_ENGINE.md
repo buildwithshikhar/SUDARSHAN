@@ -89,17 +89,24 @@ All routes are waypoint lists inside the class envelope that end by loitering at
 
 | Code | Severity | Fires when |
 |---|---|---|
-| `timing.reaction-window` | error | a hostile threat reaches the inner zone less than the rule pack's `respond_within_s` after it first becomes detectable (or after it spawns, if it spawns in view) |
+| `timing.reaction-window` | error | a hostile threat reaches the inner zone less than the rule pack's `respond_within_s` after it first becomes detectable (or after it spawns, if it spawns in view); a route that never enters the inner zone is measured to the end of the scenario |
 | `coverage.none` | error | a hostile threat is never inside any sensor's coverage |
 | `coverage.late` | warning | the first coverage comes after half the scenario |
 | `roe.no-engage-rule` | error | no rule of the named pack can permit an engagement in any zone this scenario defines |
 | `roe.zone-missing` | warning | a rule names a zone role the scenario has no zone for |
-| `route.leaves-area`, `route.below-envelope`, `route.above-envelope`, `route.speed` | error | a waypoint is outside the play area or a class altitude or speed limit |
-| `route.unreachable` | error | the route cannot be flown before the scenario ends |
+| `roe.pack-missing` | error | the rule pack the scenario names (id and version) cannot be loaded |
+| `route.leaves-area` | error | a waypoint is outside the play area |
+| `route.below-envelope` | error | a waypoint is below the lowest altitude the threat's limits and its catalogue class allow |
+| `route.above-envelope` | error | a waypoint is above the highest altitude they allow |
+| `route.speed` | error | a waypoint asks for more than the top speed they allow |
+| `route.unreachable` | error | a hostile threat's route (not a loop) cannot be flown before the scenario ends |
 | `route.underground` | error | a waypoint is below the terrain pack's ground |
 | `catalogue.limits` | error | `Catalogue.check_scenario` reports a problem |
-| `group.link-range` | warning | a group's `link_range_m` does not cover its formation |
-| `sensor.profile` | error | a sensor profile is missing or not the version named |
+| `group.link-range` | warning | a group's `link_range_m` is less than the diameter of its members' start positions plus `spacing_m` |
+| `sensor.profile` | error | a sensor profile is missing, not the version named, or cannot be built |
+| `world.terrain-missing` | error | the terrain pack the scenario names cannot be loaded |
+
+The linter reads planning estimates (`routes.py`, `coverage.py`), not the simulation, and runs inside the generator as a hard constraint. A clean lint is not a promise: the oracle run decides solvability. Members of a group fly the group's route, so a scripted swarm gives each member a route that follows the formation's, for the planning view to be meaningful.
 
 **Seed sharing.** A short code carries the request, the seed and the generator version, for example `SD1-4F2K-...`; decoding it and generating again gives the identical spec (a code made by another generator version decodes but warns that the spec will differ).
 

@@ -1,0 +1,259 @@
+# Fictional scenario · open-source parameters
+contract: scenario.v1
+id: curriculum-11-fixed-wing-clutter
+version: 1.0.0
+title:
+  en: 'Cobbler''s Row: fixed wing and clutter'
+  hi: 'कॉब्लर्स रो: स्थिर-पंख और अव्यवस्था'
+summary:
+  en: A clear day over a fictional market quarter. A medium fixed-wing drone arrives from the east and
+    circles the district at around 100 m while a tethered kite and a drifting balloon sit in the same
+    sky. Fixed-wing drones look and sound different from quadcopters; the clutter must not be engaged.
+  hi: एक काल्पनिक बाज़ार मोहल्ले पर साफ़ दिन। एक मध्यम स्थिर-पंख ड्रोन पूर्व से आता है और लगभग 100 मीटर
+    की ऊँचाई पर इलाके का चक्कर लगाता है, जबकि एक डोर से बँधी पतंग और बहता गुब्बारा उसी आकाश में हैं। स्थिर-पंख
+    ड्रोन क्वाडकॉप्टर से अलग दिखते और सुनाई देते हैं; अव्यवस्था वाले संपर्कों पर कार्रवाई नहीं करनी है।
+fictional: true
+tick_hz: 20
+default_seed: 260111
+duration_s: 300.0
+meta:
+  origin: scripted
+  playable: true
+  tags:
+    - day
+    - urban
+    - fixed-wing
+    - kite
+    - balloon
+  curriculum_order: 11
+  difficulty: 65
+world:
+  terrain:
+    kind: pack
+    id: osprey-town
+    version: 1.0.0
+  half_extent_m: 1500.0
+  start_time_of_day_h: 13.0
+  weather:
+    condition: clear
+    visibility_m: 9000.0
+    wind_speed_mps: 3.0
+    wind_from_deg: 90.0
+    gust_sigma_mps: 0.5
+    temperature_c: 28.0
+    cloud_cover_pct: 30.0
+rule_pack:
+  id: training-baseline
+  version: 1.0.0
+zones:
+  - id: inner
+    role: inner
+    label:
+      en: Inner zone
+      hi: आंतरिक क्षेत्र
+    center:
+      x: 0.0
+      y: 0.0
+      z: 41.1
+    radius_m: 450.0
+  - id: outer
+    role: outer
+    label:
+      en: Outer zone
+      hi: बाहरी क्षेत्र
+    center:
+      x: 0.0
+      y: 0.0
+      z: 41.1
+    radius_m: 1100.0
+assets:
+  - id: defended-site
+    label:
+      en: Cobbler's Row water tower
+      hi: कॉब्लर्स रो जल मीनार
+    position:
+      x: 0.0
+      y: 0.0
+      z: 41.1
+sensors:
+  - id: radar-1
+    profile:
+      id: radar-generic-s
+      version: 0.3.0
+    position:
+      x: 35.0
+      y: -70.0
+      z: 49.9
+    boresight_deg: 0.0
+  - id: eo-1
+    profile:
+      id: eo-generic-day
+      version: 0.2.0
+    position:
+      x: 45.0
+      y: -50.0
+      z: 48.3
+    boresight_deg: 90.0
+  - id: rf-1
+    profile:
+      id: rf-generic-passive
+      version: 1.1.0
+    position:
+      x: -40.0
+      y: 40.0
+      z: 47.9
+    boresight_deg: 0.0
+threats:
+  - id: contact-fixed
+    class_id: fixed-wing-medium
+    disposition: hostile
+    label:
+      en: Contact A
+      hi: संपर्क A
+    spawn_s: 15.0
+    start:
+      x: 1400.0
+      y: 0.0
+      z: 116.4
+    start_heading_deg: 292.7
+    start_speed_mps: 30.0
+    limits:
+      max_speed_mps: 55.0
+      max_accel_mps2: 2.0
+      max_climb_mps: 5.0
+      max_descent_mps: 6.0
+      max_turn_rate_dps: 12.0
+      min_altitude_m: 100.0
+      max_altitude_m: 1000.0
+    route:
+      - position:
+          x: 984.8
+          y: 173.6
+          z: 132.4
+        speed_mps: 30.0
+        hold_s: 0.0
+      - position:
+          x: 562.9
+          y: 325.0
+          z: 129.1
+        speed_mps: 30.0
+        hold_s: 0.0
+      - position:
+          x: 627.9
+          y: -168.2
+          z: 133.6
+        speed_mps: 30.0
+        hold_s: 0.0
+      - position:
+          x: 325.0
+          y: -562.9
+          z: 140.1
+        speed_mps: 30.0
+        hold_s: 0.0
+      - position:
+          x: -168.2
+          y: -627.9
+          z: 151.1
+        speed_mps: 30.0
+        hold_s: 0.0
+      - position:
+          x: -562.9
+          y: -325.0
+          z: 159.4
+        speed_mps: 30.0
+        hold_s: 0.0
+      - position:
+          x: -627.9
+          y: 168.2
+          z: 153.5
+        speed_mps: 30.0
+        hold_s: 0.0
+      - position:
+          x: -325.0
+          y: 562.9
+          z: 134.7
+        speed_mps: 30.0
+        hold_s: 0.0
+      - position:
+          x: 168.2
+          y: 627.9
+          z: 135.8
+        speed_mps: 30.0
+        hold_s: 0.0
+      - position:
+          x: 562.9
+          y: 325.0
+          z: 129.1
+        speed_mps: 30.0
+        hold_s: 0.0
+    on_route_end: loop
+  - id: contact-kite
+    class_id: kite
+    disposition: clutter
+    label:
+      en: Contact kite
+      hi: संपर्क पतंग
+    spawn_s: 3.0
+    start:
+      x: -520.0
+      y: 480.0
+      z: 101.3
+    start_heading_deg: 0.0
+    start_speed_mps: 1.0
+    limits:
+      max_speed_mps: 12.0
+      max_accel_mps2: 2.0
+      max_climb_mps: 3.0
+      max_descent_mps: 3.0
+      max_turn_rate_dps: 60.0
+      min_altitude_m: 10.0
+      max_altitude_m: 150.0
+    route:
+      - position:
+          x: -520.0
+          y: 480.0
+          z: 101.3
+        speed_mps: 1.0
+        hold_s: 0.0
+    on_route_end: loiter
+    motion:
+      kind: tether
+      anchor:
+        x: -520.0
+        y: 480.0
+        z: 41.3
+      length_m: 100.0
+      sway_m: 20.0
+      sway_period_s: 9.0
+  - id: contact-balloon
+    class_id: balloon
+    disposition: clutter
+    label:
+      en: Contact balloon
+      hi: संपर्क गुब्बारा
+    spawn_s: 5.0
+    start:
+      x: 900.0
+      y: 450.0
+      z: 85.2
+    start_heading_deg: 0.0
+    start_speed_mps: 1.0
+    limits:
+      max_speed_mps: 6.0
+      max_accel_mps2: 0.5
+      max_climb_mps: 3.0
+      max_descent_mps: 3.0
+      max_turn_rate_dps: 30.0
+      min_altitude_m: 20.0
+      max_altitude_m: 1500.0
+    route:
+      - position:
+          x: 900.0
+          y: 450.0
+          z: 85.2
+        speed_mps: 1.0
+        hold_s: 0.0
+    on_route_end: loiter
+    motion:
+      kind: drift
+      climb_mps: 0.5

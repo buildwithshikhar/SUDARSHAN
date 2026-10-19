@@ -1,0 +1,298 @@
+# Fictional scenario · open-source parameters
+contract: scenario.v1
+id: curriculum-10-fast-mover
+version: 1.0.0
+title:
+  en: 'Reed Bank: fast mover'
+  hi: 'रीड बैंक: तेज़ संपर्क'
+summary:
+  en: 'First light over a fictional pumping works. A fast first-person-view class drone comes in low from
+    the east at roughly twice the speed of the earlier drones, while a flock of birds works the north-west
+    fields. There is little time: decide quickly and do not mistake the flock for a threat.'
+  hi: 'एक काल्पनिक पंपिंग वर्क्स पर भोर की पहली रोशनी। पहले के ड्रोनों से लगभग दुगुनी गति से एक तेज़ एफ़पीवी
+    श्रेणी का ड्रोन पूर्व से नीची उड़ान में आता है, जबकि उत्तर-पश्चिम के खेतों में पक्षियों का झुंड घूमता
+    है। समय कम है: जल्दी निर्णय लें और झुंड को ख़तरा न समझें।'
+fictional: true
+tick_hz: 20
+default_seed: 270110
+duration_s: 270.0
+meta:
+  origin: scripted
+  playable: true
+  tags:
+    - dawn
+    - rural
+    - fast-mover
+    - fpv
+    - birds
+  curriculum_order: 10
+  difficulty: 75
+world:
+  terrain:
+    kind: pack
+    id: heron-ridge
+    version: 1.0.0
+  half_extent_m: 2000.0
+  start_time_of_day_h: 6.0
+  weather:
+    condition: clear
+    visibility_m: 8000.0
+    wind_speed_mps: 2.5
+    wind_from_deg: 80.0
+    gust_sigma_mps: 0.5
+    temperature_c: 15.0
+    cloud_cover_pct: 25.0
+rule_pack:
+  id: training-baseline
+  version: 1.0.0
+zones:
+  - id: inner
+    role: inner
+    label:
+      en: Inner zone
+      hi: आंतरिक क्षेत्र
+    center:
+      x: 0.0
+      y: 0.0
+      z: 34.5
+    radius_m: 500.0
+  - id: outer
+    role: outer
+    label:
+      en: Outer zone
+      hi: बाहरी क्षेत्र
+    center:
+      x: 0.0
+      y: 0.0
+      z: 34.5
+    radius_m: 1500.0
+assets:
+  - id: defended-site
+    label:
+      en: Reed Bank pumping works
+      hi: रीड बैंक पंपिंग वर्क्स
+    position:
+      x: 0.0
+      y: 0.0
+      z: 34.5
+sensors:
+  - id: radar-1
+    profile:
+      id: radar-generic-s
+      version: 0.3.0
+    position:
+      x: -30.0
+      y: 20.0
+      z: 40.7
+    boresight_deg: 0.0
+  - id: eo-1
+    profile:
+      id: eo-generic-day
+      version: 0.2.0
+    position:
+      x: -25.0
+      y: 25.0
+      z: 40.8
+    boresight_deg: 100.0
+  - id: rf-1
+    profile:
+      id: rf-generic-passive
+      version: 1.1.0
+    position:
+      x: 40.0
+      y: -30.0
+      z: 39.0
+    boresight_deg: 0.0
+threats:
+  - id: contact-fpv
+    class_id: fpv-small
+    disposition: hostile
+    label:
+      en: Contact A
+      hi: संपर्क A
+    spawn_s: 110.0
+    start:
+      x: 1772.7
+      y: -312.6
+      z: 112.0
+    start_heading_deg: 275.3
+    start_speed_mps: 22.0
+    limits:
+      max_speed_mps: 35.0
+      max_accel_mps2: 12.0
+      max_climb_mps: 12.0
+      max_descent_mps: 12.0
+      max_turn_rate_dps: 180.0
+      min_altitude_m: 2.0
+      max_altitude_m: 300.0
+    route:
+      - position:
+          x: 1071.8
+          y: -247.4
+          z: 91.3
+        speed_mps: 24.0
+        hold_s: 0.0
+      - position:
+          x: 696.2
+          y: -73.2
+          z: 77.9
+        speed_mps: 26.0
+        hold_s: 0.0
+      - position:
+          x: 435.7
+          y: -61.2
+          z: 66.2
+        speed_mps: 22.0
+        hold_s: 0.0
+    on_route_end: loiter
+  - id: flock-01
+    class_id: bird
+    disposition: clutter
+    label:
+      en: Contact bird 1
+      hi: संपर्क पक्षी 1
+    spawn_s: 4.0
+    start:
+      x: -500.0
+      y: 866.0
+      z: 86.7
+    start_heading_deg: 0.0
+    start_speed_mps: 7.0
+    limits:
+      max_speed_mps: 18.0
+      max_accel_mps2: 6.0
+      max_climb_mps: 4.0
+      max_descent_mps: 5.0
+      max_turn_rate_dps: 120.0
+      min_altitude_m: 8.0
+      max_altitude_m: 180.0
+    route:
+      - position:
+          x: -500.0
+          y: 866.0
+          z: 86.7
+        speed_mps: 7.0
+        hold_s: 0.0
+    on_route_end: loiter
+  - id: flock-02
+    class_id: bird
+    disposition: clutter
+    label:
+      en: Contact bird 2
+      hi: संपर्क पक्षी 2
+    spawn_s: 4.2
+    start:
+      x: -560.0
+      y: 762.1
+      z: 83.9
+    start_heading_deg: 0.0
+    start_speed_mps: 7.0
+    limits:
+      max_speed_mps: 18.0
+      max_accel_mps2: 6.0
+      max_climb_mps: 4.0
+      max_descent_mps: 5.0
+      max_turn_rate_dps: 120.0
+      min_altitude_m: 8.0
+      max_altitude_m: 180.0
+    route:
+      - position:
+          x: -560.0
+          y: 762.1
+          z: 83.9
+        speed_mps: 7.0
+        hold_s: 0.0
+    on_route_end: loiter
+  - id: flock-03
+    class_id: bird
+    disposition: clutter
+    label:
+      en: Contact bird 3
+      hi: संपर्क पक्षी 3
+    spawn_s: 4.4
+    start:
+      x: -440.0
+      y: 762.1
+      z: 84.9
+    start_heading_deg: 0.0
+    start_speed_mps: 7.0
+    limits:
+      max_speed_mps: 18.0
+      max_accel_mps2: 6.0
+      max_climb_mps: 4.0
+      max_descent_mps: 5.0
+      max_turn_rate_dps: 120.0
+      min_altitude_m: 8.0
+      max_altitude_m: 180.0
+    route:
+      - position:
+          x: -440.0
+          y: 762.1
+          z: 84.9
+        speed_mps: 7.0
+        hold_s: 0.0
+    on_route_end: loiter
+  - id: flock-04
+    class_id: bird
+    disposition: clutter
+    label:
+      en: Contact bird 4
+      hi: संपर्क पक्षी 4
+    spawn_s: 4.6
+    start:
+      x: -500.0
+      y: 658.2
+      z: 82.8
+    start_heading_deg: 0.0
+    start_speed_mps: 7.0
+    limits:
+      max_speed_mps: 18.0
+      max_accel_mps2: 6.0
+      max_climb_mps: 4.0
+      max_descent_mps: 5.0
+      max_turn_rate_dps: 120.0
+      min_altitude_m: 8.0
+      max_altitude_m: 180.0
+    route:
+      - position:
+          x: -500.0
+          y: 658.2
+          z: 82.8
+        speed_mps: 7.0
+        hold_s: 0.0
+    on_route_end: loiter
+groups:
+  - id: flock-nw
+    kind: flock
+    members:
+      - flock-01
+      - flock-02
+      - flock-03
+      - flock-04
+    topology: leaderless
+    intent: loiter
+    route:
+      - position:
+          x: -500.0
+          y: 866.0
+          z: 86.7
+        speed_mps: 8.0
+        hold_s: 0.0
+    on_route_end: loiter
+    discipline: 0.7
+    spacing_m: 120.0
+    neighbour_radius_m: 360.0
+    link_range_m: 730.0
+    link_loss: 0.0
+    link_epoch_s: 1.0
+    leader_loss: elect
+    leader_loss_hold_s: 4.0
+    probe_standoff_m: 200.0
+    probe_cycles: 2
+    lane_spacing_m: 30.0
+    loiter_radius_m: 70.0
+    weights:
+      separation: 1.0
+      alignment: 1.5
+      cohesion: 0.6
+      goal: 1.0

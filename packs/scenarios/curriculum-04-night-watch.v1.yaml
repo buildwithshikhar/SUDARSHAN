@@ -1,0 +1,153 @@
+# Fictional scenario · open-source parameters
+contract: scenario.v1
+id: curriculum-04-night-watch
+version: 1.0.0
+title:
+  en: 'Quail Meadow: night watch'
+  hi: 'क्वेल मीडो: रात्रि निगरानी'
+summary:
+  en: A moonless night over a fictional pump house. One small rotary drone comes in from the north-west.
+    The day camera is useless; the night-vision camera, thermal imager, passive radio sensor and radar
+    are all you have.
+  hi: एक काल्पनिक पंप हाउस पर चाँदरहित रात। उत्तर-पश्चिम से एक छोटा रोटरी ड्रोन आता है। दिन का कैमरा बेकार
+    है; नाइट-विज़न कैमरा, थर्मल इमेजर, निष्क्रिय रेडियो सेंसर और रडार ही साधन हैं।
+fictional: true
+tick_hz: 20
+default_seed: 260104
+duration_s: 270.0
+meta:
+  origin: scripted
+  playable: true
+  tags:
+    - night
+    - rural
+    - single
+  curriculum_order: 4
+  difficulty: 35
+world:
+  terrain:
+    kind: pack
+    id: heron-ridge
+    version: 1.0.0
+  half_extent_m: 2000.0
+  start_time_of_day_h: 22.0
+  weather:
+    condition: clear
+    visibility_m: 8000.0
+    wind_speed_mps: 1.5
+    wind_from_deg: 290.0
+    gust_sigma_mps: 0.3
+    temperature_c: 14.0
+    cloud_cover_pct: 10.0
+rule_pack:
+  id: training-baseline
+  version: 1.0.0
+zones:
+  - id: inner
+    role: inner
+    label:
+      en: Inner zone
+      hi: आंतरिक क्षेत्र
+    center:
+      x: 0.0
+      y: 0.0
+      z: 34.5
+    radius_m: 500.0
+  - id: outer
+    role: outer
+    label:
+      en: Outer zone
+      hi: बाहरी क्षेत्र
+    center:
+      x: 0.0
+      y: 0.0
+      z: 34.5
+    radius_m: 1500.0
+assets:
+  - id: defended-site
+    label:
+      en: Quail Meadow pump house
+      hi: क्वेल मीडो पंप हाउस
+    position:
+      x: 0.0
+      y: 0.0
+      z: 34.5
+sensors:
+  - id: radar-1
+    profile:
+      id: radar-generic-s
+      version: 0.3.0
+    position:
+      x: -30.0
+      y: 20.0
+      z: 40.7
+    boresight_deg: 0.0
+  - id: nv-1
+    profile:
+      id: eo-generic-nv
+      version: 0.2.0
+    position:
+      x: -25.0
+      y: 25.0
+      z: 40.8
+    boresight_deg: 300.0
+  - id: ir-1
+    profile:
+      id: ir-generic-thermal
+      version: 0.2.0
+    position:
+      x: -20.0
+      y: 30.0
+      z: 40.9
+    boresight_deg: 300.0
+  - id: rf-1
+    profile:
+      id: rf-generic-passive
+      version: 1.1.0
+    position:
+      x: 40.0
+      y: -30.0
+      z: 39.0
+    boresight_deg: 0.0
+threats:
+  - id: contact-a
+    class_id: rotary-small
+    disposition: hostile
+    label:
+      en: Contact A
+      hi: संपर्क A
+    spawn_s: 20.0
+    start:
+      x: -1515.5
+      y: 875.0
+      z: 107.4
+    start_heading_deg: 120.0
+    start_speed_mps: 10.0
+    limits:
+      max_speed_mps: 18.0
+      max_accel_mps2: 4.0
+      max_climb_mps: 5.0
+      max_descent_mps: 3.5
+      max_turn_rate_dps: 90.0
+      min_altitude_m: 5.0
+      max_altitude_m: 400.0
+    route:
+      - position:
+          x: -952.6
+          y: 550.0
+          z: 93.6
+        speed_mps: 14.0
+        hold_s: 0.0
+      - position:
+          x: -644.4
+          y: 273.5
+          z: 79.5
+        speed_mps: 12.0
+        hold_s: 0.0
+      - position:
+          x: -404.1
+          y: 147.1
+          z: 66.1
+        speed_mps: 10.0
+        hold_s: 0.0
+    on_route_end: loiter

@@ -1,6 +1,6 @@
 # Scenario engine
 
-How scenarios are made, checked and shared: a seeded generator whose scenarios are **verified solvable by test run** and diverse against each trainee's history, a YAML scenario language with a validator and a linter, a scripted curriculum, and the instructor screens that use them. Code: `services/api/app/scenarios/` and the oracle's small hooks in `services/api/sim/`. Decision records: [ADR-008](DECISIONS.md#adr-008--scenarios-are-verified-solvable-by-test-run-not-provably-solvable), [ADR-024](DECISIONS.md#adr-024--pack-versions-are-locked-by-content-hash-and-recorded-with-every-session-and-score) (pack versions) and [ADR-025](DECISIONS.md#adr-025--the-oracle-defender-the-solved-criterion-and-where-scenarios-live).
+How scenarios are made, checked and shared: a seeded generator whose scenarios are **verified solvable by test run** and diverse against each trainee's history, a YAML scenario language with a validator and a linter, a scripted curriculum, and the instructor screens that use them. Code: `services/api/app/scenarios/` and the oracle's small hooks in `services/api/sim/`. Decision records: [ADR-008](DECISIONS.md), [ADR-024](DECISIONS.md#adr-024--pack-versions-are-locked-by-content-hash-and-recorded-with-every-session-and-score) (pack versions) and [ADR-025](DECISIONS.md#adr-025--the-oracle-defender-the-solved-criterion-and-where-scenarios-live).
 
 **Honesty note.** Every scenario is fictional. "Verified solvable by test run" means a headless oracle defender cleared it in the sim; it is a practical check of what the oracle exercises, not a proof, and says nothing about how hard a scenario is for a person. Difficulty axes are project-authored heuristics, not measured. Sensor, threat and tracker numbers are reference data (Q-20, Q-22) and stay labelled so. The generated threat routes are kinematics only (locked rule 2): no guidance, targeting or terminal behaviour, and no route comes closer than a stand-off to the defended place.
 
@@ -210,7 +210,7 @@ Pack scenarios (`packs/scenarios/*.json|yaml`) are read-only and shipped. Saved 
 | Diversity rejects a candidate closer than the threshold | `tests/test_diversity.py` |
 | Archive coverage, QD-score, mean pairwise distance, heat map | `tests/test_archive.py` |
 | Lint reports the offending line; a code round-trips to an identical spec | `tests/test_lint.py`, `tests/test_sharecode.py` |
-| Wording: no "provably" or "guaranteed" in any UI, doc or API string | `tests/test_scenario_wording.py` |
+| Wording: the two banned solvability words appear in no UI, doc or API string of the engine (ADR-008) | `tests/test_scenario_wording.py` |
 | Scripted curriculum is lint-clean and solved | `tests/test_curriculum.py` |
 | Endpoints, roles, storage, catalogue lookup | `tests/test_scenario_api.py` |
 | Screens: four states, keyboard, axe, EN and HI | `apps/web/e2e/mock/scenarios.spec.ts`, `apps/web/e2e/scenarios.spec.ts` |

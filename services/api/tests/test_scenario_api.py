@@ -323,7 +323,7 @@ def test_a_failed_generation_is_a_422_with_the_reasons(
     batch = client.post(
         "/api/v1/generator/batch", json={"request": LOW, "count": 2}, headers=csrf
     ).json()
-    assert batch["results"] == [] and [f["seed"] for f in batch["failures"]] == [3, 4]
+    assert batch["scenarios"] == [] and [f["seed"] for f in batch["failures"]] == [3, 4]
 
 
 def test_a_batch_varies_the_seed_and_keeps_each_different(author: Any) -> None:
@@ -331,8 +331,8 @@ def test_a_batch_varies_the_seed_and_keeps_each_different(author: Any) -> None:
     body = client.post(
         "/api/v1/generator/batch", json={"request": LOW, "count": 3, "save": True}, headers=csrf
     ).json()
-    assert [r["request"]["seed"] for r in body["results"]] == [3, 4, 5] and body["failures"] == []
-    assert len({r["id"] for r in body["results"]}) == 3 and all(r["saved"] for r in body["results"])
+    assert [r["request"]["seed"] for r in body["scenarios"]] == [3, 4, 5] and body["failures"] == []
+    assert len({r["id"] for r in body["scenarios"]}) == 3 and all(r["saved"] for r in body["scenarios"])
     assert (
         client.post(
             "/api/v1/generator/batch", json={"request": LOW, "count": 13}, headers=csrf

@@ -511,7 +511,7 @@ def generate_batch(
         if body.save:
             _keep(request, made, principal)
         results.append(_generated_body(made, body.save))
-    return {"results": results, "failures": failures}
+    return {"scenarios": results, "failures": failures}
 
 
 @router.get("/generator/archive")

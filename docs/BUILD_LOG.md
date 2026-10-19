@@ -22,6 +22,8 @@ CI on `main` is read with `gh run list --repo buildwithshikhar/SUDARSHAN --branc
 
 **Result:** run 39166665271 on 55b2b6b (the fixes, `make ci-api` and these notes): all six jobs green (api, web, e2e, docker, terrain, secrets). CI is green on `main` again after seven red runs.
 
+**Wave 8:** run 39207730379 on 16f690f (wave 8 complete): all six jobs green (api, web, e2e, docker, terrain, secrets), read with `gh`.
+
 **Cause of the red `api` job (run #38 and every run after it).** Not numerical: the scripted scenarios give identical state hashes (every 100th tick, 8,400 ticks, both packs) on macOS and on x86-64 Linux in this repo's compose project, so no detmath change or cross-platform golden test was needed. The cause was pacing. The tests run the live loop at 100x; the loop ran flat out and finished a whole 420 s scenario in seconds, while the test reader sat behind Starlette's in-process WebSocket, which buffers without limit (a real socket pushes back). On a slower reader (CI) the reader was thousands of frames behind, so the `ended` message was past the 4,000 messages the helper reads, or the working actions arrived after the session had ended. It passed on the build laptop only because the reader there kept up. Reproduced on x86-64 Linux with `make ci-api` (2 CPUs); the same files then passed 8 of 8 runs at 1 and 2 CPUs.
 
 **Fix.** (1) `app/live/manager.py`: above real time (`speed > 1`, test-only) the loop waits for a client that falls behind instead of skipping frames; at 1x it still skips, as before. (2) `tests/live_support.py`: the test socket has flow control (a 50-frame window) so the queue the loop watches can fill. (3) `tests/test_live_pacing.py` proves a slow reader sees every tick and nothing is dropped. No test was skipped, loosened or given a bigger limit; the 4,000 limit stands. `make ci-api` runs the API tests on x86-64 Linux inside the compose project (`infra/docker-compose.ci.yml`).
@@ -649,7 +651,7 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 ### Wave 7 · 3D realism + terrain packs
 
-- Status: In progress. Everything the build can prove has a passing test (map below). Outstanding: the owner's floor-laptop run of `/bench` (the gate), CI confirmation, the redeploy and the post-deploy check.
+- Status: In progress. Everything the build can prove has a passing test (map below), and CI is green on 16f690f. Outstanding: the owner's floor-laptop run of `/bench` (the gate), CI confirmation, the redeploy and the post-deploy check.
 - Started from commit: 4dd9610
 - Goal: a convincing offline 3D scene on real-shaped generic terrain that meets the benchmark gate on the floor laptop.
 - Done by: main session (flaky tests, format, line of sight, contract, endpoint, scenario, bench, CI, docs) and two Sonnet subagents in separate worktrees (A: bake pipeline and packs; B: scene look, loader, quality tiers). B hit a session rate limit once and was resumed from its saved work.

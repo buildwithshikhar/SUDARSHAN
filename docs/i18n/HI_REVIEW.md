@@ -252,7 +252,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.consoles.tabRf` | RF spectrum | RF स्पेक्ट्रम |  |
 | `live.consoles.tabAcoustic` | Acoustic spectrogram | ध्वनिक स्पेक्ट्रोग्राम |  |
 | `live.consoles.unavailable` | unavailable | उपलब्ध नहीं |  |
-| `live.consoles.scale` | 30 s · 0.25 s per row | 30 से · 0.25 से प्रति पंक्ति |  |
+| `live.consoles.scale` | 30 s · 0.25 s per row · newest at top | 30 से · 0.25 से प्रति पंक्ति · सबसे नई ऊपर |  |
 | `live.consoles.synth.reference` | Synthesised from sensor reports · reference data | सेंसर रिपोर्टों से संश्लेषित · संदर्भ डेटा |  |
 | `live.consoles.synth.verified` | Synthesised from sensor reports · verified data | सेंसर रिपोर्टों से संश्लेषित · सत्यापित डेटा |  |
 | `live.consoles.synth.mixed` | Synthesised from sensor reports · reference and verified data | सेंसर रिपोर्टों से संश्लेषित · संदर्भ और सत्यापित डेटा |  |
@@ -277,7 +277,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.consoles.rf.emptyBody` | The briefing lists no passive RF detector, so there is no RF spectrum. Radar, EO/IR and acoustic contacts are not affected. | ब्रीफ़िंग में कोई निष्क्रिय RF संसूचक नहीं है, इसलिए RF स्पेक्ट्रम नहीं है। रडार, EO/IR और ध्वनिक संपर्क प्रभावित नहीं होते। |  |
 | `live.consoles.rf.listenBody` | The noise floor is drawn. A line appears when the RF detector hears a control or video link. | शोर स्तर दिखाया गया है। RF संसूचक के नियंत्रण या वीडियो लिंक सुनते ही रेखा दिखेगी। |  |
 | `live.consoles.rf.legend` | Five equal band windows, not one continuous axis. Spectrum in dBm; waterfall with the newest row at the top. Dashed line: noise floor at −95 dBm. A hopping link is drawn stepped across its window and held as a faint peak trace. | पाँच समान बैंड विंडो, एक सतत अक्ष नहीं। स्पेक्ट्रम dBm में; वॉटरफ़ॉल में सबसे नई पंक्ति ऊपर। बिंदीदार रेखा: −95 dBm का शोर स्तर। हॉप करता लिंक अपनी विंडो में सीढ़ीनुमा दिखता है और हल्के शिखर निशान के रूप में टिकता है। |  |
-| `live.consoles.rf.scaleRange` | −100 to −40 dBm | −100 से −40 dBm |  |
+| `live.consoles.rf.scaleRange` | −100 to −50 dBm | −100 से −50 dBm |  |
 | `live.consoles.rf.caption` | Latest RF reports | ताज़ा RF रिपोर्टें |  |
 | `live.consoles.rf.band` | Band | बैंड |  |
 | `live.consoles.rf.level` | Level (dBm) | स्तर (dBm) |  |

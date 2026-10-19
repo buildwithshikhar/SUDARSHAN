@@ -50,7 +50,7 @@ export const RF_BINS = RF_BANDS.length * BINS_PER_BAND
 export const HOP_CHANNELS = 16
 /** The vertical scale of the spectrum line. */
 export const RF_FLOOR_DBM = -100
-export const RF_CEIL_DBM = -40
+export const RF_CEIL_DBM = -50
 /** The noise floor of the RF profile (docs/SENSOR_MODELS.md, `noise_floor`). */
 export const RF_NOISE_DBM = -95
 

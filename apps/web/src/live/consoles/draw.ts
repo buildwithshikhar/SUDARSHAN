@@ -232,8 +232,9 @@ export function drawRf(ctx: CanvasRenderingContext2D, s: RfScene): void {
   ctx.textBaseline = 'middle'
   ctx.textAlign = 'right'
 
-  // Spectrum graticule: a line every 20 dB, labelled.
-  for (let dbm = RF_FLOOR_DBM; dbm <= RF_CEIL_DBM; dbm += 20) {
+  // Spectrum graticule: a line every 10 dB, labelled every 20 (every 40 on a short plot).
+  const labelEvery = sp.h >= 44 ? 20 : 40
+  for (let dbm = RF_FLOOR_DBM; dbm <= RF_CEIL_DBM; dbm += 10) {
     const y = Math.round(sp.y + (1 - dbmFraction(dbm)) * sp.h) + 0.5
     ctx.strokeStyle = dbm === RF_FLOOR_DBM || dbm === RF_CEIL_DBM ? PLOT.gridStrong : PLOT.grid
     ctx.beginPath()
@@ -241,7 +242,8 @@ export function drawRf(ctx: CanvasRenderingContext2D, s: RfScene): void {
     ctx.lineTo(sp.x + sp.w, y)
     ctx.stroke()
     ctx.fillStyle = PLOT.text
-    ctx.fillText(String(dbm), sp.x - 5, Math.min(Math.max(y, sp.y + 5), sp.y + sp.h - 5))
+    if ((dbm - RF_FLOOR_DBM) % labelEvery === 0)
+      ctx.fillText(String(dbm), sp.x - 5, Math.min(Math.max(y, sp.y + 5), sp.y + sp.h - 5))
   }
   // Noise floor, dashed.
   const nfY = Math.round(sp.y + (1 - dbmFraction(RF_NOISE_DBM)) * sp.h) + 0.5

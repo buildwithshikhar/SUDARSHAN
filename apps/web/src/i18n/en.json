@@ -339,7 +339,7 @@
       "tabRf": "RF spectrum",
       "tabAcoustic": "Acoustic spectrogram",
       "unavailable": "unavailable",
-      "scale": "30 s · 0.25 s per row",
+      "scale": "30 s · 0.25 s per row · newest at top",
       "synth": {
         "reference": "Synthesised from sensor reports · reference data",
         "verified": "Synthesised from sensor reports · verified data",
@@ -371,7 +371,7 @@
         "emptyBody": "The briefing lists no passive RF detector, so there is no RF spectrum. Radar, EO/IR and acoustic contacts are not affected.",
         "listenBody": "The noise floor is drawn. A line appears when the RF detector hears a control or video link.",
         "legend": "Five equal band windows, not one continuous axis. Spectrum in dBm; waterfall with the newest row at the top. Dashed line: noise floor at −95 dBm. A hopping link is drawn stepped across its window and held as a faint peak trace.",
-        "scaleRange": "−100 to −40 dBm",
+        "scaleRange": "−100 to −50 dBm",
         "caption": "Latest RF reports",
         "band": "Band",
         "level": "Level (dBm)",

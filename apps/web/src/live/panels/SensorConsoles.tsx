@@ -139,6 +139,7 @@ export function SensorConsoles({ className = '' }: { className?: string }) {
   return (
     <section
       aria-label={t('live.consoles.title')}
+      data-testid="sensor-consoles"
       className={`border border-line bg-surface-1 ${className}`}
     >
       <header className="flex h-8 shrink-0 items-end justify-between border-b border-line px-3">

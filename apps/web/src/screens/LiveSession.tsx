@@ -231,7 +231,7 @@ function Workspace() {
         <div className="col-span-5 flex min-h-0 flex-col gap-px">
           <Panel
             title={t('live.ppi.title')}
-            className="flex h-[40%] min-h-0 shrink-0 flex-col [@media(max-height:900px)]:h-[36%]"
+            className="flex h-[40%] min-h-0 shrink-0 flex-col [@media(max-height:900px)]:h-[38%]"
             bodyClassName="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_168px] gap-px bg-line"
             flush
             actions={
@@ -248,7 +248,7 @@ function Workspace() {
               <SensorStatus />
             </div>
           </Panel>
-          <SensorConsoles className="flex h-[32%] min-h-0 shrink-0 flex-col [@media(max-height:900px)]:h-[38%]" />
+          <SensorConsoles className="flex h-[32%] min-h-0 shrink-0 flex-col [@media(max-height:900px)]:h-[34%]" />
           <Panel
             title={t('live.table.title')}
             className="flex min-h-0 flex-1 flex-col"

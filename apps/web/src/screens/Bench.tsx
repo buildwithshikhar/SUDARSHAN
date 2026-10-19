@@ -8,6 +8,8 @@ import {
   CANVAS,
   benchReports,
   cameraBearing,
+  loadBenchScene,
+  type BenchScene,
   quickPhases,
   PHASES,
   type PhaseId,
@@ -58,8 +60,9 @@ export function Bench() {
     setState({ status: 'loading' })
     setSnapshot(null)
     let pack
+    let swarmScene: BenchScene
     try {
-      pack = await loadTerrainPack(BENCH_PACK)
+      ;[pack, swarmScene] = await Promise.all([loadTerrainPack(BENCH_PACK), loadBenchScene()])
     } catch (error) {
       setState({ status: 'error', message: error instanceof Error ? error.message : String(error) })
       return
@@ -105,10 +108,10 @@ export function Bench() {
         draw: (now, timeS) => {
           scene.update({
             position: eye,
-            bearingDeg: cameraBearing(timeS),
+            bearingDeg: cameraBearing(swarmScene, timeS, eye),
             elevationDeg: -1,
             fovDeg: 40,
-            reports: benchReports(timeS, now),
+            reports: benchReports(swarmScene, timeS, now, eye),
             nowMs: now,
           })
           scene.render(now)

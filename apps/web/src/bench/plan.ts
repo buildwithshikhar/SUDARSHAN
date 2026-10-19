@@ -1,15 +1,14 @@
 /**
  * The benchmark scene and the arithmetic of the benchmark gate (docs/04-engine.md): a rural
- * terrain pack, 40-odd buildings, a placeholder swarm of 24 drones and 30 birds, the thermal pass
- * on, measured at 1920 x 1080. Pure: no DOM and no WebGL, so the plan and the pass or fail logic
+ * terrain pack, 40-odd buildings, the recorded run of a real 24-drone swarm and 30-bird flock
+ * (wave 8 behaviours), the thermal pass on, measured at 1920 x 1080. Pure: no DOM and no WebGL, so the plan and the pass or fail logic
  * are tested with synthetic frame times.
  *
- * The swarm and birds are placeholders drawn as EO reports (wave 8 brings the real behaviours).
  * Nothing here claims a result: the numbers come from running the harness on a machine.
  */
 import { FrameStats, type Tier } from '../live/quality'
 import type { EoMode } from '../live/views/eoMode'
-import type { HeldReport } from '../live/views/eoHold'
+import type { EoShape, HeldReport } from '../live/views/eoHold'
 
 export const BENCH_FORMAT = 'bench-result.v1'
 export const BENCH_PACK = { kind: 'pack', id: 'heron-ridge', version: '1.0.0' } as const
@@ -130,47 +129,148 @@ export function evaluateGate(phases: readonly PhaseResult[]): GateOutcome {
 
 // ---------------------------------------------------------------------- the scene
 
-/** Where the benchmark camera looks at time t: a slow pan over the whole pack. */
-export function cameraBearing(timeS: number): number {
-  return (timeS * 6) % 360
+export const SCENE_URL = '/scenes/bench-breadth.v1.json'
+export const SCENE_FORMAT = 'bench-scene.v1'
+
+/**
+ * The recorded run of the real swarm and flock behaviours (`python -m sim.breadth`, wave 8):
+ * positions of every contact sampled at `hz`, in decimetres east, north and up of the pack datum.
+ * The harness replays it; nothing here moves a contact on its own.
+ */
+export interface BenchScene {
+  format: typeof SCENE_FORMAT
+  pack: string
+  hz: number
+  duration_s: number
+  unit: 'dm'
+  members: { id: string; shape: EoShape }[]
+  /** One row per sample; three numbers (x, y, z) per member, in member order. */
+  frames: number[][]
+}
+
+/** Real size of each shape in metres, from the threat catalogue's EO figures. */
+const SIZE_M: Record<EoShape, number> = {
+  'rotary-small': 0.39,
+  'fpv-small': 0.3,
+  'fixed-wing-small': 1.2,
+  'fixed-wing-medium': 3,
+  'fixed-wing-large': 6,
+  bird: 0.79,
+  kite: 1.2,
+  balloon: 1.5,
+  point: 0.5,
+}
+
+/** The picture is 40 degrees wide at 1920 pixels (see Bench.tsx). */
+const FOV_DEG = 40
+
+export function parseBenchScene(raw: unknown): BenchScene {
+  const scene = raw as Partial<BenchScene> | null
+  if (
+    !scene ||
+    scene.format !== SCENE_FORMAT ||
+    !Array.isArray(scene.members) ||
+    !Array.isArray(scene.frames) ||
+    scene.frames.length < 2 ||
+    typeof scene.hz !== 'number' ||
+    scene.hz <= 0
+  ) {
+    throw new Error('the benchmark scene file is not a bench-scene.v1 file')
+  }
+  const width = 3 * scene.members.length
+  if (scene.frames.some((row) => !Array.isArray(row) || row.length !== width)) {
+    throw new Error('the benchmark scene file has a row of the wrong length')
+  }
+  const swarm = scene.members.filter((m) => m.id.startsWith('swarm-')).length
+  const birds = scene.members.filter((m) => m.shape === 'bird').length
+  if (swarm !== SWARM || birds !== BIRDS) {
+    throw new Error(`the benchmark scene must hold ${SWARM} drones and ${BIRDS} birds`)
+  }
+  return scene as BenchScene
+}
+
+export async function loadBenchScene(url: string = SCENE_URL): Promise<BenchScene> {
+  const response = await fetch(url)
+  if (!response.ok) throw new Error(`could not load the benchmark scene (${response.status})`)
+  return parseBenchScene(await response.json())
+}
+
+export interface Eye {
+  x: number
+  y: number
+  z: number
+}
+
+/** Positions in metres at time `timeS`, interpolated between samples; the run loops. */
+export function positionsAt(scene: BenchScene, timeS: number): [number, number, number][] {
+  const span = scene.frames.length - 1
+  const f = (((timeS * scene.hz) % span) + span) % span
+  const i = Math.floor(f)
+  const k = f - i
+  const a = scene.frames[i] ?? []
+  const b = scene.frames[i + 1] ?? a
+  const at = (row: number[], j: number) => row[j] ?? 0
+  return scene.members.map((_, m) => {
+    const j = 3 * m
+    return [0, 1, 2].map((c) => (at(a, j + c) + (at(b, j + c) - at(a, j + c)) * k) / 10) as [
+      number,
+      number,
+      number,
+    ]
+  })
+}
+
+function bearingTo(eye: Eye, x: number, y: number): number {
+  const deg = (Math.atan2(x - eye.x, y - eye.y) * 180) / Math.PI
+  return (deg + 360) % 360
+}
+
+/** Where the benchmark camera looks at time t: at the swarm and the flock, with a slow sway over the terrain. */
+export function cameraBearing(scene: BenchScene, timeS: number, eye: Eye): number {
+  const pos = positionsAt(scene, timeS)
+  let x = 0
+  let y = 0
+  let n = 0
+  scene.members.forEach((m, i) => {
+    const p = pos[i]
+    if (!(m.id.startsWith('swarm-') || m.shape === 'bird') || !p) return
+    x += p[0]
+    y += p[1]
+    n++
+  })
+  return (bearingTo(eye, x / n, y / n) + 5 * Math.sin(timeS * 0.25) + 360) % 360
 }
 
 /**
- * The placeholder swarm and birds, as EO reports around the camera bearing. Positions depend only
- * on `timeS`, so every run draws the same scene. Sizes are a few tenths of a degree, like a real
- * swarm at a few hundred metres.
+ * Every contact of the recorded run as an EO report from the camera position: bearing, elevation
+ * and the angular size its real size subtends at its range. Same time, same scene.
  */
-export function benchReports(timeS: number, nowMs: number): HeldReport[] {
-  const reports: HeldReport[] = []
-  const bearing = cameraBearing(timeS)
-  for (let i = 0; i < SWARM; i++) {
-    const row = i % 6
-    const col = Math.floor(i / 6)
-    const sway = Math.sin(timeS * 0.9 + i * 0.7)
-    reports.push({
-      key: 1 + i,
+export function benchReports(
+  scene: BenchScene,
+  timeS: number,
+  nowMs: number,
+  eye: Eye,
+): HeldReport[] {
+  const pos = positionsAt(scene, timeS)
+  return scene.members.map((m, i) => {
+    const [x, y, z] = pos[i] ?? [0, 0, 0]
+    const dx = x - eye.x
+    const dy = y - eye.y
+    const dz = z - eye.z
+    const ground = Math.hypot(dx, dy)
+    const range = Math.max(Math.hypot(ground, dz), 1)
+    const sizeDeg = ((SIZE_M[m.shape] ?? SIZE_M.point) / range) * (180 / Math.PI)
+    return {
+      key: i + 1,
       sensorId: 'bench',
-      azimuthDeg: bearing + (col - 1.5) * 2.4 + 0.5 * sway,
-      elevationDeg: 4 + row * 1.1 + 0.4 * Math.cos(timeS * 0.8 + i),
-      sizeDeg: 0.55,
-      apparentPx: 12,
-      shape: i % 8 === 7 ? 'fixed-wing-small' : 'rotary-small',
+      azimuthDeg: bearingTo(eye, x, y),
+      elevationDeg: (Math.atan2(dz, ground) * 180) / Math.PI,
+      sizeDeg,
+      apparentPx: (sizeDeg * CANVAS.width) / FOV_DEG,
+      shape: m.shape,
       seenAt: nowMs,
-    })
-  }
-  for (let i = 0; i < BIRDS; i++) {
-    reports.push({
-      key: 100 + i,
-      sensorId: 'bench',
-      azimuthDeg: bearing - 16 + (i % 10) * 3.2 + 1.2 * Math.sin(timeS * 0.5 + i),
-      elevationDeg: 9 + Math.floor(i / 10) * 2.2 + 0.8 * Math.sin(timeS * 1.7 + i * 1.3),
-      sizeDeg: 0.4,
-      apparentPx: 9,
-      shape: 'bird',
-      seenAt: nowMs,
-    })
-  }
-  return reports
+    }
+  })
 }
 
 // ---------------------------------------------------------------------- the runner

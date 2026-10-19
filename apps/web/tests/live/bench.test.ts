@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import {
   BIRDS,
@@ -7,6 +9,8 @@ import {
   SWARM,
   benchReports,
   cameraBearing,
+  parseBenchScene,
+  positionsAt,
   evaluateGate,
   summarise,
   type BenchHooks,
@@ -76,32 +80,62 @@ describe('summarise', () => {
   })
 })
 
+const FILE = resolve(process.cwd(), 'public/scenes/bench-breadth.v1.json')
+const scene = parseBenchScene(JSON.parse(readFileSync(FILE, 'utf8')))
+/** The eye the harness uses: 30 m above the pack centre (Bench.tsx). */
+const EYE = { x: 0, y: 0, z: 65 }
+
 describe('the reference scene', () => {
-  it('has the swarm and the birds, with unique keys, identical for the same time', () => {
-    const a = benchReports(12.5, 1000)
-    expect(a).toHaveLength(SWARM + BIRDS)
-    expect(new Set(a.map((r) => r.key)).size).toBe(a.length)
-    expect(a.filter((r) => r.shape === 'bird')).toHaveLength(BIRDS)
-    expect(benchReports(12.5, 1000)).toEqual(a)
-    expect(benchReports(13, 1000)).not.toEqual(a)
+  it('is the recorded run of the real swarm, the flock, two kites and a balloon', () => {
+    expect(scene.members.filter((m) => m.id.startsWith('swarm-'))).toHaveLength(SWARM)
+    expect(scene.members.filter((m) => m.shape === 'bird')).toHaveLength(BIRDS)
+    expect(scene.members.filter((m) => m.shape === 'kite')).toHaveLength(2)
+    expect(scene.members.filter((m) => m.shape === 'balloon')).toHaveLength(1)
+    expect(scene.pack).toBe('heron-ridge')
   })
 
-  it('stays within the picture as the camera pans', () => {
-    for (const t of [0, 7, 31, 59.9]) {
-      const bearing = cameraBearing(t)
-      for (const r of benchReports(t, 0)) {
+  it('has one report per contact, unique keys, identical for the same time', () => {
+    const a = benchReports(scene, 12.5, 1000, EYE)
+    expect(a).toHaveLength(scene.members.length)
+    expect(new Set(a.map((r) => r.key)).size).toBe(a.length)
+    expect(a.filter((r) => r.shape === 'bird')).toHaveLength(BIRDS)
+    expect(benchReports(scene, 12.5, 1000, EYE)).toEqual(a)
+    expect(benchReports(scene, 13, 1000, EYE)).not.toEqual(a)
+  })
+
+  it('keeps the swarm and the flock in the 40-degree picture as the camera follows', () => {
+    for (const t of [0, 7, 31, 59.9, 75]) {
+      const bearing = cameraBearing(scene, t, EYE)
+      for (const r of benchReports(scene, t, 0, EYE)) {
+        if (r.shape !== 'rotary-small' && r.shape !== 'bird') continue
         const d = Math.abs(((r.azimuthDeg - bearing + 540) % 360) - 180)
-        expect(d).toBeLessThan(20) // the camera's field of view is 40 degrees wide
+        expect(d).toBeLessThan(20)
         expect(r.elevationDeg).toBeGreaterThan(0)
-        expect(r.elevationDeg).toBeLessThan(20)
+        expect(r.sizeDeg).toBeGreaterThan(0)
       }
     }
   })
 
-  it('pans at a constant rate and wraps', () => {
-    expect(cameraBearing(0)).toBe(0)
-    expect(cameraBearing(10)).toBe(60)
-    expect(cameraBearing(61)).toBeCloseTo(6, 6)
+  it('interpolates between samples and loops at the end of the run', () => {
+    const t0 = positionsAt(scene, 1)
+    const t1 = positionsAt(scene, 1 + 0.25)
+    const t2 = positionsAt(scene, 1 + 0.5)
+    const mid = ((t1[0]?.[0] ?? NaN) - ((t0[0]?.[0] ?? NaN) + (t2[0]?.[0] ?? NaN)) / 2) ** 2
+    expect(mid).toBeLessThan(1e-6) // 0.25 s is halfway between two 0.5 s samples
+    expect(positionsAt(scene, scene.duration_s)).toEqual(positionsAt(scene, 0))
+  })
+
+  it('refuses a file that is not the scene the gate needs', () => {
+    expect(() => parseBenchScene(null)).toThrow(/bench-scene/)
+    expect(() => parseBenchScene({ ...scene, format: 'other' })).toThrow(/bench-scene/)
+    expect(() => parseBenchScene({ ...scene, frames: [[1], [2]] })).toThrow(/wrong length/)
+    expect(() =>
+      parseBenchScene({
+        ...scene,
+        members: scene.members.slice(1),
+        frames: scene.frames.map((r) => r.slice(3)),
+      }),
+    ).toThrow(/24 drones/)
   })
 })
 

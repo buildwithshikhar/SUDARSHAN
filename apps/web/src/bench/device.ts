@@ -70,7 +70,7 @@ export const NOTES = [
   'Measured at 1920 x 1080 with the renderer pixel ratio fixed at 1.',
   'Frame times are requestAnimationFrame intervals, so a 60 Hz display caps the figures at 60 fps.',
   'Antialiasing is fixed when the WebGL context is created (high tier), so the medium and low phases keep it on.',
-  'The swarm and birds are placeholder markers drawn from EO-style reports; real behaviours arrive in wave 8.',
+  'The scene replays a recorded run of the real swarm (24 drones, leader-follower) and flock (30 birds) behaviours, plus two kites and a balloon, drawn as EO reports through the instanced meshes.',
   'Thermal is a rendering model, not radiometric.',
 ]
 

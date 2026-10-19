@@ -31,6 +31,7 @@ from .constants import DT, GUST_TAU_S
 from .entity import Drone
 from .eventlog import EventLog
 from .kinematics import Envelope, position, step
+from .recognition import recognition_class
 from .rng import RngStreams
 from .roe import OPERATOR_CLASSES, Context, RuleEngine
 from .terrain import Terrain, TerrainError, terrain_for
@@ -385,12 +386,15 @@ class World:
         course = detmath.wrap360(detmath.atan2(vx, vy) / detmath.DEG)
         count = 0
         for j, other in enumerate(self.drones):
-            if other.status != "active" or self.spec.threats[j].class_id != threat.class_id:
+            if other.status != "active" or (
+                recognition_class(self.spec.threats[j].class_id)
+                != recognition_class(threat.class_id)
+            ):
                 continue
             if math.sqrt((other.x - drone.x) ** 2 + (other.y - drone.y) ** 2) <= radius:
                 count += 1
         return {
-            "class_id": threat.class_id,
+            "class_id": recognition_class(threat.class_id),
             "disposition": threat.disposition,
             "x": round(drone.x, 3),
             "y": round(drone.y, 3),

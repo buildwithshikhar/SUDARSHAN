@@ -9,11 +9,18 @@ the rule pack's `scoring` section; timing standards from its `thresholds`.
 from app.contracts.rulepack import RulePack
 from app.contracts.scenario import Threat
 from app.contracts.score import NodeResult
+from sim.recognition import recognition_class
 
 from .bands import band
 from .facts import POSITIVE_IDENTITIES, LogFacts, Verdict
 
-DRONE_CLASSES = ("rotary-small", "fixed-wing-small")
+DRONE_CLASSES = (
+    "rotary-small",
+    "fpv-small",
+    "fixed-wing-small",
+    "fixed-wing-medium",
+    "fixed-wing-large",
+)
 
 
 def secs(value: float) -> float:
@@ -55,7 +62,7 @@ def classify(threat: Threat, facts: LogFacts, pack: RulePack, first_t: float) ->
     if not calls:
         return NodeResult(node="classify", score=0.0, weight=weight, reason="classify.missing")
     final = str(calls[-1].payload.get("class_id"))
-    actual = threat.class_id
+    actual = recognition_class(threat.class_id)
     if final == "unknown":
         return NodeResult(
             node="classify",

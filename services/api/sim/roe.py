@@ -28,8 +28,20 @@ from app.contracts.paths import packs_root
 from app.contracts.rulepack import Condition, Rule, RulePack
 from app.contracts.scenario import ScenarioSpec
 
-#: Class names an operator may assign, the sensor class vocabulary plus "unknown".
-OPERATOR_CLASSES = ("rotary-small", "fixed-wing-small", "bird", "unknown")
+#: Class names an operator may assign: the catalogue's recognition classes plus "unknown". The
+#: first four keep the positions they had before wave 8, so the decision panel's number keys
+#: still mean the same thing; there are nine, which is what keys 1 to 9 can reach.
+OPERATOR_CLASSES = (
+    "rotary-small",
+    "fixed-wing-small",
+    "bird",
+    "unknown",
+    "fpv-small",
+    "fixed-wing-medium",
+    "fixed-wing-large",
+    "kite",
+    "balloon",
+)
 #: Responses: the actions the decision panel's Respond step offers.
 RESPONSES = ("engage", "hold", "report")
 

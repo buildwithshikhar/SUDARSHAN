@@ -26,8 +26,9 @@ from typing import Any
 
 from app.contracts import TICK_HZ
 
-#: Classes that are not threats. Wave 8 extends this set with the other benign classes.
-NON_THREAT_CLASSES: frozenset[str] = frozenset({"bird"})
+#: Classes that are not threats (operator vocabulary). A permitted civil drone is a quadcopter to
+#: the assist, which cannot see a filed flight, so it is flagged like one.
+NON_THREAT_CLASSES: frozenset[str] = frozenset({"bird", "kite", "balloon"})
 
 #: Shown beside every suggestion, so the console can never read as a real detector.
 SOURCE = "simulated assist"

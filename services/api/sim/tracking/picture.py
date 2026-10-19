@@ -22,6 +22,7 @@ from typing import TYPE_CHECKING, Any
 
 from app.contracts.scenario import ScenarioSpec
 
+from ..recognition import recognition_class
 from ..sensors import SensorSuite, build_sensors
 from .ambiguity import ErrorModel, ErrorPolicy
 from .assist import AiAssist, AssistConfig, TruthRef
@@ -85,7 +86,7 @@ class Picture:
         self.tracker = tracker
         self.ledger = ledger
         self.assist = assist
-        self._class_of = {t.id: t.class_id for t in spec.threats}
+        self._class_of = {t.id: recognition_class(t.class_id) for t in spec.threats}
         self._ref = 0
         #: Report reference -> the drone that caused it. Never leaves the picture.
         self._truth: dict[int, str | None] = {}

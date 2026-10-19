@@ -29,6 +29,7 @@ from app.contracts import SessionRecord
 from app.contracts.rulepack import RulePack
 from app.contracts.scenario import ScenarioSpec, Threat
 from app.contracts.score import Finding, SessionScore, ThreatScore
+from sim.recognition import recognition_class
 
 from . import nodes
 from . import report as report_grading
@@ -72,7 +73,7 @@ def _score_threat(
     base = {
         "threat_id": threat.id,
         "label": threat.label,
-        "class_id": threat.class_id,
+        "class_id": recognition_class(threat.class_id),
         "disposition": threat.disposition,
     }
     first_t = facts.first_report.get(threat.id)
@@ -131,7 +132,7 @@ def _score_threat(
                 reason="finding.false-alarm",
                 params={
                     "given": str(classes[-1].payload.get("class_id")),
-                    "actual": threat.class_id,
+                    "actual": recognition_class(threat.class_id),
                 },
             )
         )

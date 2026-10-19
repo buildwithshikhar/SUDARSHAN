@@ -316,6 +316,9 @@ def test_true_class_outside_the_label_pool_is_handled() -> None:
         ("fixed-wing-small", True),
         ("unknown", True),
         ("bird", False),
+        ("kite", False),
+        ("balloon", False),
+        ("fpv-small", True),
         (None, False),
     ],
 )
@@ -323,8 +326,8 @@ def test_is_threat(class_id: str | None, expected: bool) -> None:
     assert is_threat(class_id) is expected
 
 
-def test_non_threat_set_is_the_bird_only_for_now() -> None:
-    assert frozenset({"bird"}) == NON_THREAT_CLASSES
+def test_non_threat_set_is_the_clutter_classes_of_the_operator_vocabulary() -> None:
+    assert frozenset({"bird", "kite", "balloon"}) == NON_THREAT_CLASSES
 
 
 def test_birds_and_false_tracks_use_the_false_alarm_rate_and_drones_the_hit_rate() -> None:

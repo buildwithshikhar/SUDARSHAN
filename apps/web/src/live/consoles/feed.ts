@@ -76,28 +76,31 @@ export class ConsoleFeed {
       changed = true
     }
 
-    let rf = this.rfRecent
-    let acoustic = this.acousticRecent
+    const newRf: RfEmission[] = []
+    const newAcoustic: AcousticEmission[] = []
     for (const report of frame.reports) {
       if (report.modality === 'rf') {
         const e = rfEmissionOf(report, time)
         if (!e) continue
         this.rf.ingest(e)
-        rf = [e, ...rf]
+        newRf.push(e)
       } else if (report.modality === 'acoustic') {
         const e = acousticEmissionOf(report, time)
         if (!e) continue
         this.acoustic.ingest(e)
-        acoustic = [e, ...acoustic]
+        newAcoustic.push(e)
       }
     }
+    // Newest frame first; inside one frame the reports keep the order they were sent in.
     const fresh = (e: { timeS: number }) => time - e.timeS <= RECENT_S
-    if (rf !== this.rfRecent || rf.some((e) => !fresh(e))) {
-      this.rfRecent = rf.filter(fresh).slice(0, RECENT_MAX)
+    if (newRf.length > 0 || this.rfRecent.some((e) => !fresh(e))) {
+      this.rfRecent = [...newRf, ...this.rfRecent].filter(fresh).slice(0, RECENT_MAX)
       changed = true
     }
-    if (acoustic !== this.acousticRecent || acoustic.some((e) => !fresh(e))) {
-      this.acousticRecent = acoustic.filter(fresh).slice(0, RECENT_MAX)
+    if (newAcoustic.length > 0 || this.acousticRecent.some((e) => !fresh(e))) {
+      this.acousticRecent = [...newAcoustic, ...this.acousticRecent]
+        .filter(fresh)
+        .slice(0, RECENT_MAX)
       changed = true
     }
 

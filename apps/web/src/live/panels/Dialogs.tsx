@@ -19,6 +19,8 @@ const SHORTCUTS: { keys: string; id: string }[] = [
   { keys: 'S', id: 'split' },
   { keys: 'D', id: 'drop' },
   { keys: 'X', id: 'dismiss' },
+  { keys: '← → · Home · End', id: 'consoleTabs' },
+  { keys: '← → · Shift+← →', id: 'consoleCursor' },
   { keys: '?', id: 'help' },
 ]
 

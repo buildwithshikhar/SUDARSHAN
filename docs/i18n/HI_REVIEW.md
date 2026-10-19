@@ -235,6 +235,8 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.eo.refNote` | Sensor figures are reference data. | सेंसर के आँकड़े संदर्भ डेटा हैं। |  |
 | `live.eo.terrain.loading` | Loading terrain | भूभाग लोड हो रहा है |  |
 | `live.eo.terrain.label` | Terrain: {{name}} · reference data | भूभाग: {{name}} · संदर्भ डेटा |  |
+| `live.eo.terrain.heights` | Building heights are generic defaults where the source has no height. | जहाँ स्रोत में ऊँचाई नहीं है, वहाँ इमारतों की ऊँचाई सामान्य डिफ़ॉल्ट है। |  |
+| `live.eo.terrain.heightsCount` | {{n}} building heights are generic defaults, because the source has no height for them. | {{n}} इमारतों की ऊँचाई सामान्य डिफ़ॉल्ट है, क्योंकि स्रोत में उनकी ऊँचाई नहीं है। |  |
 | `live.eo.terrain.error` | Terrain unavailable | भूभाग उपलब्ध नहीं |  |
 | `live.eo.terrain.errorBody` | The terrain pack could not be loaded, so the view shows flat ground. The session is not affected. | भूभाग पैक लोड नहीं हो सका, इसलिए दृश्य में समतल भूमि दिख रही है। सत्र पर कोई प्रभाव नहीं है। |  |
 | `live.eo.quality.label` | Graphics | ग्राफ़िक्स |  |
@@ -245,6 +247,68 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.ppi.title` | Radar PPI | रडार PPI |  |
 | `live.ppi.scale` | {{range}} km · sweep {{period}} s | {{range}} किमी · स्वीप {{period}} से |  |
 | `live.ppi.aria` | Radar plan position indicator, range {{range}} kilometres. Tracks are listed in the track table. | रडार प्लान पोज़िशन इंडिकेटर, परास {{range}} किलोमीटर। ट्रैक, ट्रैक तालिका में सूचीबद्ध हैं। |  |
+| `live.consoles.title` | RF and acoustic consoles | RF और ध्वनिक कंसोल |  |
+| `live.consoles.tabsLabel` | Sensor consoles | सेंसर कंसोल |  |
+| `live.consoles.tabRf` | RF spectrum | RF स्पेक्ट्रम |  |
+| `live.consoles.tabAcoustic` | Acoustic spectrogram | ध्वनिक स्पेक्ट्रोग्राम |  |
+| `live.consoles.unavailable` | unavailable | उपलब्ध नहीं |  |
+| `live.consoles.scale` | 30 s · 0.25 s per row | 30 से · 0.25 से प्रति पंक्ति |  |
+| `live.consoles.synth.reference` | Synthesised from sensor reports · reference data | सेंसर रिपोर्टों से संश्लेषित · संदर्भ डेटा |  |
+| `live.consoles.synth.verified` | Synthesised from sensor reports · verified data | सेंसर रिपोर्टों से संश्लेषित · सत्यापित डेटा |  |
+| `live.consoles.synth.mixed` | Synthesised from sensor reports · reference and verified data | सेंसर रिपोर्टों से संश्लेषित · संदर्भ और सत्यापित डेटा |  |
+| `live.consoles.rfOpen` | RF is not occluded by terrain in this model. A link behind a ridge or building is still heard here. | इस मॉडल में RF को भूभाग से रुकावट नहीं होती। पहाड़ी या इमारत के पीछे का लिंक भी यहाँ सुनाई देता है। |  |
+| `live.consoles.decor` | Noise texture, the carrier slot inside a band window and the hop order are drawn by the display, not measured. | शोर की बनावट, बैंड विंडो में वाहक की जगह और हॉप क्रम डिस्प्ले बनाता है; ये मापे हुए नहीं हैं। |  |
+| `live.consoles.loading` | Waiting for the first frame | पहले फ़्रेम की प्रतीक्षा |  |
+| `live.consoles.failed.title` | Sensor consoles unavailable | सेंसर कंसोल उपलब्ध नहीं |  |
+| `live.consoles.failed.body` | The session link closed before any frame arrived, so there is nothing to draw. | कोई फ़्रेम आने से पहले सत्र लिंक बंद हो गया, इसलिए दिखाने को कुछ नहीं है। |  |
+| `live.consoles.failed.retry` | Reload | पुनः लोड करें |  |
+| `live.consoles.stale.mark` | STALE | पुराना |  |
+| `live.consoles.stale.title` | Display frozen | डिस्प्ले रुका हुआ |  |
+| `live.consoles.stale.body` | No frames are arriving. The picture shows the last frame, at scenario time {{time}}. | कोई फ़्रेम नहीं आ रहा। चित्र अंतिम फ़्रेम दिखाता है, परिदृश्य समय {{time}} पर। |  |
+| `live.consoles.outage` | Sensor {{id}} is in outage: no reports arrive, only the noise floor is drawn. | सेंसर {{id}} बंद है: कोई रिपोर्ट नहीं आती, केवल शोर स्तर दिखता है। |  |
+| `live.consoles.heard` | {{count}} reports in the last {{seconds}} s | पिछले {{seconds}} से में {{count}} रिपोर्ट |  |
+| `live.consoles.heardNone` | Listening: nothing heard yet | सुन रहा है: अभी कुछ सुनाई नहीं दिया |  |
+| `live.consoles.scaleBar` | Colour scale, dark to light | रंग पैमाना, गहरे से हल्का |  |
+| `live.consoles.time` | Time | समय |  |
+| `live.consoles.bearing` | Bearing | दिशा |  |
+| `live.consoles.tableEmpty` | No reports in the last {{seconds}} s | पिछले {{seconds}} से में कोई रिपोर्ट नहीं |  |
+| `live.consoles.rf.aria` | RF spectrum and waterfall, synthesised from sensor reports. The latest reports are listed in the table beside it. | RF स्पेक्ट्रम और वॉटरफ़ॉल, सेंसर रिपोर्टों से संश्लेषित। ताज़ा रिपोर्टें साथ की तालिका में हैं। |  |
+| `live.consoles.rf.emptyTitle` | No RF sensor in this scenario | इस परिदृश्य में कोई RF सेंसर नहीं |  |
+| `live.consoles.rf.emptyBody` | The briefing lists no passive RF detector, so there is no RF spectrum. Radar, EO/IR and acoustic contacts are not affected. | ब्रीफ़िंग में कोई निष्क्रिय RF संसूचक नहीं है, इसलिए RF स्पेक्ट्रम नहीं है। रडार, EO/IR और ध्वनिक संपर्क प्रभावित नहीं होते। |  |
+| `live.consoles.rf.listenBody` | The noise floor is drawn. A line appears when the RF detector hears a control or video link. | शोर स्तर दिखाया गया है। RF संसूचक के नियंत्रण या वीडियो लिंक सुनते ही रेखा दिखेगी। |  |
+| `live.consoles.rf.legend` | Five equal band windows, not one continuous axis. Spectrum in dBm; waterfall with the newest row at the top. Dashed line: noise floor at −95 dBm. A hopping link is drawn stepped across its window and held as a faint peak trace. | पाँच समान बैंड विंडो, एक सतत अक्ष नहीं। स्पेक्ट्रम dBm में; वॉटरफ़ॉल में सबसे नई पंक्ति ऊपर। बिंदीदार रेखा: −95 dBm का शोर स्तर। हॉप करता लिंक अपनी विंडो में सीढ़ीनुमा दिखता है और हल्के शिखर निशान के रूप में टिकता है। |  |
+| `live.consoles.rf.scaleRange` | −100 to −40 dBm | −100 से −40 dBm |  |
+| `live.consoles.rf.caption` | Latest RF reports | ताज़ा RF रिपोर्टें |  |
+| `live.consoles.rf.band` | Band | बैंड |  |
+| `live.consoles.rf.level` | Level (dBm) | स्तर (dBm) |  |
+| `live.consoles.rf.link` | Link | लिंक |  |
+| `live.consoles.rf.fixed` | Fixed | स्थिर |  |
+| `live.consoles.rf.hopping` | Hopping {{rate}} Hz | हॉपिंग {{rate}} हर्ट्ज़ |  |
+| `live.consoles.rf.hoppingUnknown` | Hopping, rate not reported | हॉपिंग, दर रिपोर्ट नहीं हुई |  |
+| `live.consoles.ac.aria` | Acoustic spectrogram from 0 to 2000 hertz, synthesised from sensor reports. The latest reports are listed in the table beside it. | 0 से 2000 हर्ट्ज़ का ध्वनिक स्पेक्ट्रोग्राम, सेंसर रिपोर्टों से संश्लेषित। ताज़ा रिपोर्टें साथ की तालिका में हैं। |  |
+| `live.consoles.ac.group` | Acoustic spectrogram cursor. Left and Right move it by 5 Hz, with Shift by 50 Hz. | ध्वनिक स्पेक्ट्रोग्राम कर्सर। बाएँ और दाएँ से 5 हर्ट्ज़, Shift के साथ 50 हर्ट्ज़ खिसकता है। |  |
+| `live.consoles.ac.emptyTitle` | No acoustic sensor in this scenario | इस परिदृश्य में कोई ध्वनिक सेंसर नहीं |  |
+| `live.consoles.ac.emptyBody` | The briefing lists no microphone array, so there is no acoustic spectrogram. Radar, EO/IR and RF contacts are not affected. | ब्रीफ़िंग में कोई माइक्रोफ़ोन ऐरे नहीं है, इसलिए ध्वनिक स्पेक्ट्रोग्राम नहीं है। रडार, EO/IR और RF संपर्क प्रभावित नहीं होते। |  |
+| `live.consoles.ac.decor` | Noise texture and the width of each line are drawn by the display, not measured. | शोर की बनावट और हर रेखा की चौड़ाई डिस्प्ले बनाता है; ये मापे हुए नहीं हैं। |  |
+| `live.consoles.ac.listenBody` | The noise floor is drawn. Lines appear when the microphone array hears a rotor or a wing-beat. | शोर स्तर दिखाया गया है। माइक्रोफ़ोन ऐरे को रोटर या पंख-फड़फड़ाहट सुनाई देते ही रेखाएँ दिखेंगी। |  |
+| `live.consoles.ac.legend` | Frequency 0 to 2000 Hz, linear. Newest row at the top. Triangles mark the harmonic lines in the latest reports; the dashed line is the cursor. Line strength follows the reported SNR, 3 dB weaker per order. | आवृत्ति 0 से 2000 हर्ट्ज़, रैखिक। सबसे नई पंक्ति ऊपर। त्रिकोण ताज़ा रिपोर्टों की हार्मोनिक रेखाएँ दिखाते हैं; बिंदीदार रेखा कर्सर है। रेखा की तीव्रता रिपोर्ट किए SNR से आती है, हर क्रम पर 3 dB कम। |  |
+| `live.consoles.ac.scaleRange` | 0 to 40 dB above the noise floor | शोर स्तर से 0 से 40 dB ऊपर |  |
+| `live.consoles.ac.cursor` | Cursor | कर्सर |  |
+| `live.consoles.ac.cursorHz` | {{hz}} Hz | {{hz}} हर्ट्ज़ |  |
+| `live.consoles.ac.nearest` | Nearest harmonic | निकटतम हार्मोनिक |  |
+| `live.consoles.ac.nearestValue` | order {{order}} at {{line}} Hz, offset {{delta}} Hz | क्रम {{order}}, {{line}} हर्ट्ज़ पर, अंतर {{delta}} हर्ट्ज़ |  |
+| `live.consoles.ac.implied` | Implied blade-pass rate | निहित ब्लेड-पास दर |  |
+| `live.consoles.ac.impliedValue` | {{bpf}} Hz (cursor ÷ order) | {{bpf}} हर्ट्ज़ (कर्सर ÷ क्रम) |  |
+| `live.consoles.ac.none` | none reported | कोई रिपोर्ट नहीं |  |
+| `live.consoles.ac.keys` | ← → move 5 Hz · Shift 50 Hz | ← → 5 हर्ट्ज़ · Shift से 50 हर्ट्ज़ |  |
+| `live.consoles.ac.moved` | Cursor {{hz}} Hz | कर्सर {{hz}} हर्ट्ज़ |  |
+| `live.consoles.ac.caption` | Latest acoustic reports | ताज़ा ध्वनिक रिपोर्टें |  |
+| `live.consoles.ac.bladePass` | Blade-pass (Hz) | ब्लेड-पास (हर्ट्ज़) |  |
+| `live.consoles.ac.harmonics` | Harmonics | हार्मोनिक |  |
+| `live.consoles.ac.tonal` | Tonal | स्वरयुक्त |  |
+| `live.consoles.ac.yes` | Yes | हाँ |  |
+| `live.consoles.ac.no` | No | नहीं |  |
+| `live.consoles.ac.snr` | SNR (dB) | SNR (dB) |  |
 | `live.sensors.title` | Sensors | सेंसर |  |
 | `live.sensors.ok` | OK | ठीक |  |
 | `live.sensors.cued` | Cued | क्यू पर |  |
@@ -422,6 +486,8 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.keys.drop` | Drop the selected track (asks to confirm) | चयनित ट्रैक हटाएँ (पुष्टि माँगता है) |  |
 | `live.keys.dismiss` | Dismiss the rules verdict | नियम निर्णय हटाएँ |  |
 | `live.keys.help` | Show these shortcuts | ये शॉर्टकट दिखाएँ |  |
+| `live.keys.consoleTabs` | Switch between the RF and acoustic console tabs (with the tab list focused) | RF और ध्वनिक कंसोल टैब के बीच बदलें (टैब सूची पर फ़ोकस हो तब) |  |
+| `live.keys.consoleCursor` | Move the acoustic cursor 5 Hz; with Shift, 50 Hz (with the spectrogram focused) | ध्वनिक कर्सर को 5 हर्ट्ज़ खिसकाएँ; Shift के साथ 50 हर्ट्ज़ (स्पेक्ट्रोग्राम पर फ़ोकस हो तब) |  |
 | `live.keys.note` | Space is not used in this build. Every action is also available with the mouse. | इस संस्करण में Space का उपयोग नहीं होता। हर क्रिया माउस से भी उपलब्ध है। |  |
 | `live.relabel.title` | Relabel track {{track}} | ट्रैक {{track}} का नाम बदलें |  |
 | `live.relabel.label` | New label | नया नाम |  |
@@ -756,4 +822,4 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `bench.unknown` | not reported | रिपोर्ट नहीं हुआ |  |
 | `bench.notes` | Thermal is a rendering model, not radiometric. The swarm and birds are placeholder markers. Frame times are display-refresh intervals, so a 60 Hz screen caps results at 60 fps. | थर्मल एक रेंडरिंग मॉडल है, रेडियोमेट्रिक नहीं। झुंड और पक्षी नमूना चिह्न हैं। फ़्रेम समय डिस्प्ले-रिफ़्रेश अंतराल हैं, इसलिए 60 Hz स्क्रीन परिणामों को 60 fps पर सीमित करती है। |  |
 
-749 strings.
+815 strings.

@@ -315,6 +315,8 @@
       "terrain": {
         "loading": "Loading terrain",
         "label": "Terrain: {{name}} · reference data",
+        "heights": "Building heights are generic defaults where the source has no height.",
+        "heightsCount": "{{n}} building heights are generic defaults, because the source has no height for them.",
         "error": "Terrain unavailable",
         "errorBody": "The terrain pack could not be loaded, so the view shows flat ground. The session is not affected."
       },
@@ -330,6 +332,80 @@
       "title": "Radar PPI",
       "scale": "{{range}} km · sweep {{period}} s",
       "aria": "Radar plan position indicator, range {{range}} kilometres. Tracks are listed in the track table."
+    },
+    "consoles": {
+      "title": "RF and acoustic consoles",
+      "tabsLabel": "Sensor consoles",
+      "tabRf": "RF spectrum",
+      "tabAcoustic": "Acoustic spectrogram",
+      "unavailable": "unavailable",
+      "scale": "30 s · 0.25 s per row",
+      "synth": {
+        "reference": "Synthesised from sensor reports · reference data",
+        "verified": "Synthesised from sensor reports · verified data",
+        "mixed": "Synthesised from sensor reports · reference and verified data"
+      },
+      "rfOpen": "RF is not occluded by terrain in this model. A link behind a ridge or building is still heard here.",
+      "decor": "Noise texture, the carrier slot inside a band window and the hop order are drawn by the display, not measured.",
+      "loading": "Waiting for the first frame",
+      "failed": {
+        "title": "Sensor consoles unavailable",
+        "body": "The session link closed before any frame arrived, so there is nothing to draw.",
+        "retry": "Reload"
+      },
+      "stale": {
+        "mark": "STALE",
+        "title": "Display frozen",
+        "body": "No frames are arriving. The picture shows the last frame, at scenario time {{time}}."
+      },
+      "outage": "Sensor {{id}} is in outage: no reports arrive, only the noise floor is drawn.",
+      "heard": "{{count}} reports in the last {{seconds}} s",
+      "heardNone": "Listening: nothing heard yet",
+      "scaleBar": "Colour scale, dark to light",
+      "time": "Time",
+      "bearing": "Bearing",
+      "tableEmpty": "No reports in the last {{seconds}} s",
+      "rf": {
+        "aria": "RF spectrum and waterfall, synthesised from sensor reports. The latest reports are listed in the table beside it.",
+        "emptyTitle": "No RF sensor in this scenario",
+        "emptyBody": "The briefing lists no passive RF detector, so there is no RF spectrum. Radar, EO/IR and acoustic contacts are not affected.",
+        "listenBody": "The noise floor is drawn. A line appears when the RF detector hears a control or video link.",
+        "legend": "Five equal band windows, not one continuous axis. Spectrum in dBm; waterfall with the newest row at the top. Dashed line: noise floor at −95 dBm. A hopping link is drawn stepped across its window and held as a faint peak trace.",
+        "scaleRange": "−100 to −40 dBm",
+        "caption": "Latest RF reports",
+        "band": "Band",
+        "level": "Level (dBm)",
+        "link": "Link",
+        "fixed": "Fixed",
+        "hopping": "Hopping {{rate}} Hz",
+        "hoppingUnknown": "Hopping, rate not reported"
+      },
+      "ac": {
+        "aria": "Acoustic spectrogram from 0 to 2000 hertz, synthesised from sensor reports. The latest reports are listed in the table beside it.",
+        "group": "Acoustic spectrogram cursor. Left and Right move it by 5 Hz, with Shift by 50 Hz.",
+        "emptyTitle": "No acoustic sensor in this scenario",
+        "emptyBody": "The briefing lists no microphone array, so there is no acoustic spectrogram. Radar, EO/IR and RF contacts are not affected.",
+        "decor": "Noise texture and the width of each line are drawn by the display, not measured.",
+        "listenBody": "The noise floor is drawn. Lines appear when the microphone array hears a rotor or a wing-beat.",
+        "legend": "Frequency 0 to 2000 Hz, linear. Newest row at the top. Triangles mark the harmonic lines in the latest reports; the dashed line is the cursor. Line strength follows the reported SNR, 3 dB weaker per order.",
+        "scaleRange": "0 to 40 dB above the noise floor",
+        "cursor": "Cursor",
+        "cursorHz": "{{hz}} Hz",
+        "nearest": "Nearest harmonic",
+        "nearestValue": "order {{order}} at {{line}} Hz, offset {{delta}} Hz",
+        "implied": "Implied blade-pass rate",
+        "impliedValue": "{{bpf}} Hz (cursor ÷ order)",
+        "none": "none reported",
+        "keys": "← → move 5 Hz · Shift 50 Hz",
+        "moved": "Cursor {{hz}} Hz",
+        "caption": "Latest acoustic reports",
+        "bladePass": "Blade-pass (Hz)",
+        "harmonics": "Harmonics",
+        "tonal": "Tonal",
+        "yes": "Yes",
+        "no": "No",
+        "snr": "SNR (dB)"
+      }
     },
     "sensors": {
       "title": "Sensors",
@@ -559,6 +635,8 @@
       "drop": "Drop the selected track (asks to confirm)",
       "dismiss": "Dismiss the rules verdict",
       "help": "Show these shortcuts",
+      "consoleTabs": "Switch between the RF and acoustic console tabs (with the tab list focused)",
+      "consoleCursor": "Move the acoustic cursor 5 Hz; with Shift, 50 Hz (with the spectrogram focused)",
       "note": "Space is not used in this build. Every action is also available with the mouse."
     },
     "relabel": {

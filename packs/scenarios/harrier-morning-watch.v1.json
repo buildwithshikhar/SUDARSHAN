@@ -14,6 +14,7 @@
   "tick_hz": 20,
   "default_seed": 260118,
   "duration_s": 420,
+  "meta": { "origin": "scripted", "tags": ["morning", "rural", "single-drone"], "difficulty": 30 },
   "world": {
     "terrain": {
       "kind": "flat",

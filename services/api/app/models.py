@@ -70,3 +70,30 @@ class TrainingSession(Base):
     #: The `score-result.v1` JSON, written when a session ends (docs/SCORING.md); it records the
     #: rule-pack and scenario versions it was computed with, so it stays as it was scored.
     score: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+
+class ScenarioRecord(Base):
+    """A scenario kept beyond the shipped packs: authored in the editor or generated and saved.
+
+    `spec` is the `scenario.v1` JSON and `spec_sha256` the hash of its canonical form, so a kept
+    scenario can be checked against what was generated. A generated one also keeps the request,
+    the share code and every check result; the session catalogue looks a scenario up here after
+    the packs, so it plays, replays and scores like any other (docs/SCENARIO_ENGINE.md).
+    """
+
+    __tablename__ = "scenario_records"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    version: Mapped[str] = mapped_column(String(32))
+    owner_id: Mapped[str | None] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+    origin: Mapped[str] = mapped_column(String(16))
+    spec: Mapped[str] = mapped_column(Text)
+    spec_sha256: Mapped[str] = mapped_column(String(64))
+    yaml: Mapped[str | None] = mapped_column(Text, nullable=True)
+    request: Mapped[str | None] = mapped_column(Text, nullable=True)
+    code: Mapped[str | None] = mapped_column(String(96), nullable=True)
+    checks: Mapped[str | None] = mapped_column(Text, nullable=True)
+    features: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now)

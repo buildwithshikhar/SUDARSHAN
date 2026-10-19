@@ -1,0 +1,28 @@
+name: nightly
+
+on:
+  schedule:
+    - cron: "17 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  solvability:
+    # 1,000 generator requests across the whole request space, each generated, then checked again
+    # with a fresh oracle-defender run: "verified solvable by test run" (docs/SCENARIO_ENGINE.md).
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    defaults:
+      run:
+        working-directory: services/api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: services/api/uv.lock
+      - run: uv python install 3.12
+      - run: uv sync --frozen
+      - run: uv run python -m app.cli scenario-sweep --count 1000 --jobs 2

@@ -81,6 +81,32 @@ def pack_lock(
     typer.echo("\n".join(changes) if changes else "packs/versions.lock.json is up to date")
 
 
+@cli.command("scenario-sweep")
+def scenario_sweep(
+    count: int = typer.Option(50, min=1, help="How many requests to generate and check."),
+    start: int = typer.Option(0, min=0, help="Index of the first request of the sweep."),
+    jobs: int = typer.Option(1, min=1, max=16, help="Processes to use."),
+) -> None:
+    """Generate scenarios for a sweep of requests and check each with a fresh oracle run.
+
+    Exits 1 if any request fails to produce a scenario verified solvable by test run. The push
+    check runs 50 of these; the nightly job runs 1,000.
+    """
+    from app.scenarios.sweep import run_sweep
+
+    results = run_sweep(count, start, jobs)
+    failed = [r for r in results if not r.ok]
+    for r in failed:
+        typer.echo(f"request {r.index}: {r.detail}", err=True)
+    eased = sum(1 for r in results if r.relaxations)
+    typer.echo(
+        f"{len(results) - len(failed)} of {len(results)} verified solvable by test run; "
+        f"{eased} needed a relaxation"
+    )
+    if failed:
+        raise typer.Exit(code=1)
+
+
 @cli.command()
 def migrate() -> None:
     """Apply database migrations."""

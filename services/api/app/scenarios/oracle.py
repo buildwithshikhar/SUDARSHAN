@@ -19,9 +19,11 @@ Policy, once per tick, for every confirmed track that follows a real drone:
 - a track the tracker has mixed up is repaired by relabelling it back to the label of the drone it
   follows, so no unfixed track error costs marks.
 
-It stops early once every hostile contact has been answered and nothing else is pending.
+It stops early once every hostile contact has been answered, a few seconds have passed and no
+track error is open.
 """
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 
 from app.contracts import ActionRecord, ScenarioSpec, SessionRecord
@@ -61,6 +63,8 @@ class OracleResult:
     #: Scenario seconds at which the oracle stopped.
     finished_s: float
     actions: tuple[ActionRecord, ...] = field(default=())
+    #: Track errors still open when the run ended, as `kind:error_id:tracks`.
+    open_errors: tuple[str, ...] = field(default=())
 
 
 def _site(spec: ScenarioSpec) -> tuple[float, float]:
@@ -91,9 +95,15 @@ def _report(world: World, track_id: str, drone_id: str, site: tuple[float, float
 
 
 def play(
-    spec: ScenarioSpec, seed: int, *, max_ticks: int | None = None, pack: RulePack | None = None
+    spec: ScenarioSpec,
+    seed: int,
+    *,
+    max_ticks: int | None = None,
+    pack: RulePack | None = None,
+    on_step: Callable[[World], None] | None = None,
 ) -> OracleResult:
-    """Run the oracle defender through `spec` with `seed` and score what it did."""
+    """Run the oracle defender through `spec` with `seed` and score what it did. `on_step`, if
+    given, is called with the world after every tick (the preview samples positions with it)."""
     engine = load_rule_engine(spec)
     pack = engine.pack if pack is None else pack
     world = World(spec, seed, picture=Picture.build(spec, seed), roe=engine)
@@ -136,10 +146,13 @@ def play(
                 last_answer = world.tick
         todo.extend(_repairs(world))
         _apply(world, todo, actions)
+        if on_step is not None:
+            on_step(world)
         if (
             last_answer is not None
             and answered >= hostile
             and world.tick - last_answer >= round(TAIL_S * spec.tick_hz)
+            and not picture.ledger.open_errors()
         ):
             break
     final_tick = world.tick
@@ -161,15 +174,21 @@ def play(
     score = score_session(spec, pack, record)
     presented = {t.threat_id for t in score.threats if t.presented}
     unanswered = tuple(sorted(hostile - (answered & presented)))
-    return OracleResult(record, score, unanswered, final_tick / spec.tick_hz, tuple(actions))
+    leftover = tuple(
+        f"{e['kind']}:{e['id']}:{','.join(e['tracks'])}" for e in world.picture.ledger.open_errors()
+    )
+    return OracleResult(
+        record, score, unanswered, final_tick / spec.tick_hz, tuple(actions), leftover
+    )
 
 
 def _repairs(world: World) -> list[ActionRecord]:
     """Commands that put right the track errors the tracker has made, so none goes unfixed.
 
     A swap: a track that follows drone D under a label that is not D's takes the label of the
-    track now wearing D's label, exchanging the two. A split: the second track on a drone is merged
-    into the first. A merge error clears itself when the tracker finds both drones again.
+    track now wearing D's label (exchanging the two), or D's label if nobody wears it; a track that
+    follows nothing known is dropped. A split: the second confirmed track on a drone is merged into
+    the first. A merge error clears itself when the tracker finds both drones again.
     """
     picture = world.picture
     assert picture is not None
@@ -179,31 +198,31 @@ def _repairs(world: World) -> list[ActionRecord]:
     for error in ledger.open_errors():
         if error["kind"] == "swap":
             for track_id in error["tracks"]:
+                if track_id not in tracks or track_id in touched or ledger.consistent(track_id):
+                    continue
                 drone = ledger.identity_of(track_id)
-                if track_id not in tracks or track_id in touched or drone is None:
-                    continue
-                if ledger.consistent(track_id):
-                    continue
+                bound = [] if drone is None else ledger.bound_labels(drone)
                 wearer = next(
-                    (
-                        u
-                        for u in sorted(tracks)
-                        if u != track_id and ledger.label_of(u) in ledger.bound_labels(drone)
-                    ),
+                    (u for u in sorted(tracks) if u != track_id and ledger.label_of(u) in bound),
                     None,
                 )
-                if wearer is None:
-                    continue
-                label = ledger.label_of(wearer)
-                out.append(
-                    _action(world, "track-relabel", track=track_id, label=label, exchange=True)
-                )
-                touched |= {track_id, wearer}
+                if wearer is not None:
+                    label = ledger.label_of(wearer)
+                    out.append(
+                        _action(world, "track-relabel", track=track_id, label=label, exchange=True)
+                    )
+                    touched |= {track_id, wearer}
+                elif bound:
+                    out.append(_action(world, "track-relabel", track=track_id, label=bound[0]))
+                    touched.add(track_id)
+                else:
+                    out.append(_action(world, "track-drop", track=track_id))
+                    touched.add(track_id)
         elif error["kind"] == "split":
-            live = [t for t in error["tracks"] if t in tracks and t not in touched]
-            if len(live) >= 2:
-                out.append(_action(world, "track-merge", tracks=live[:2]))
-                touched |= set(live[:2])
+            followers = [t for t in ledger.followers_of(error["truths"][0]) if t not in touched]
+            if len(followers) >= 2:
+                out.append(_action(world, "track-merge", tracks=followers[:2]))
+                touched |= set(followers[:2])
     return out
 
 

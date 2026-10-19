@@ -17,7 +17,7 @@ COMPOSE_PROD = $(COMPOSE) -f infra/docker-compose.prod.yml
 rand = $$(python3 -c "import secrets; print(secrets.token_hex($(1)))")
 UV = $(shell command -v uv || echo $$HOME/Library/Python/3.10/bin/uv)
 
-.PHONY: setup env dev schemas lint typecheck test e2e visual build up down demo smoke create-admin prod-check backup-test check-deploy build-amd64 terrain ci-api help
+.PHONY: setup env dev schemas lint typecheck test e2e visual build up down demo smoke create-admin prod-check backup-test check-deploy build-amd64 terrain ci-api solvability help
 
 help:
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | sed 's/:.*##/\t/' || true
@@ -74,6 +74,9 @@ demo: up ## start the stack and seed demo accounts (passwords printed once)
 
 ci-api: ## API tests on x86-64 Linux like the CI job; ARGS="tests/x.py" CI_CPUS=2
 	@cd services/api && docker compose -p $(PROJECT) -f ../../infra/docker-compose.ci.yml run --rm ci-api uv run pytest -q --no-cov $(ARGS)
+
+solvability: ## generate and check scenarios with the oracle defender; COUNT=50 START=0 JOBS=2
+	cd services/api && $(UV) run python -m app.cli scenario-sweep --count $(or $(COUNT),50) --start $(or $(START),0) --jobs $(or $(JOBS),2)
 
 smoke: ## health, readiness and version checks against URL
 	@infra/smoke.sh $(URL)

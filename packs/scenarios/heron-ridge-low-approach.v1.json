@@ -14,6 +14,7 @@
   "tick_hz": 20,
   "default_seed": 260207,
   "duration_s": 420,
+  "meta": { "origin": "scripted", "tags": ["morning", "rural", "low-approach", "terrain"], "difficulty": 45 },
   "world": {
     "terrain": {
       "kind": "pack",

@@ -69,8 +69,10 @@ class ScenarioOut(BaseModel):
 @router.get("/scenarios", dependencies=[Depends(PLAYER)])
 def scenarios(request: Request) -> list[ScenarioOut]:
     out: list[ScenarioOut] = []
-    for entry in manager_of(request).catalog.entries().values():
+    for entry in manager_of(request).catalog.all_entries().values():
         spec = entry.spec
+        if spec.meta is not None and not spec.meta.playable:
+            continue
         out.append(
             ScenarioOut(
                 id=spec.id,
@@ -140,6 +142,8 @@ def _create(request: Request, user_id: str, body: CreateBody) -> SessionOut:
     entry = manager.catalog.get(body.scenario_id)
     if entry is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "No such scenario")
+    if entry.spec.meta is not None and not entry.spec.meta.playable:
+        raise HTTPException(status.HTTP_409_CONFLICT, "This scenario is not playable")
     seed = entry.spec.default_seed if body.seed is None else body.seed
     with manager.session_factory() as db:
         db.execute(

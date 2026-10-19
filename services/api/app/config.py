@@ -39,6 +39,9 @@ class Settings(BaseSettings):
     max_live_sessions: int = 32
     #: Operator `act` messages allowed per second per session (a burst of the same size is allowed).
     live_act_rate: int = 20
+    #: Check the shipped scenarios with the oracle defender in the background after start-up, so
+    #: the library can say which are verified solvable by test run (about a minute of one core).
+    scenario_warmup: bool = True
 
     @field_validator("first_admin_email", "first_admin_password", mode="before")
     @classmethod

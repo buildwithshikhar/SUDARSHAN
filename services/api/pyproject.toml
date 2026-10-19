@@ -37,7 +37,10 @@ package = false
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
-addopts = "--cov=app --cov=sim --cov-report=term-missing --cov-fail-under=90"
+addopts = "--cov=app --cov=sim --cov-report=term-missing --cov-fail-under=90 -m 'not solvability'"
+markers = [
+  "solvability: generates scenarios and runs the oracle defender on each (50 on every push, 1,000 nightly); its own CI job, deselected from the default run",
+]
 
 [tool.coverage.run]
 branch = true

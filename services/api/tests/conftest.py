@@ -24,6 +24,8 @@ def make_settings(tmp_path: Path, **overrides: object) -> Settings:
         "secret_key": STRONG_KEY,
         "git_sha": "abc1234",
         "build_time": "2026-01-01T00:00:00Z",
+        # the background check of the shipped scenarios would load every test run
+        "scenario_warmup": False,
     }
     values.update(overrides)
     return Settings(**values)  # type: ignore[arg-type]

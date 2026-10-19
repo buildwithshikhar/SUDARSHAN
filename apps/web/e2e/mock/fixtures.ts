@@ -183,12 +183,15 @@ export const variantUrl = (variant: {
   rain?: boolean
   hour?: number
   speed?: number
+  /** Report every EO contact as this class, to draw each target model. */
+  eoClass?: string
 }) => {
   const q = new URLSearchParams({ mock: '1', speed: String(variant.speed ?? 4) })
   if (variant.eo) q.set('eo', variant.eo)
   if (variant.terrain) q.set('terrain', variant.terrain)
   if (variant.rain) q.set('rain', '1')
   if (variant.hour !== undefined) q.set('hour', String(variant.hour))
+  if (variant.eoClass) q.set('eoclass', variant.eoClass)
   return `/train/session/mock-session?${q.toString()}`
 }
 

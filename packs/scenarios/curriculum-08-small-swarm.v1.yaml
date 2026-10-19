@@ -1,0 +1,433 @@
+# Fictional scenario · open-source parameters
+contract: scenario.v1
+id: curriculum-08-small-swarm
+version: 1.0.0
+title:
+  en: 'Plover Flats: small swarm'
+  hi: 'प्लोवर फ्लैट्स: छोटा झुंड'
+summary:
+  en: A clear day over a fictional rail siding. Seven small rotary drones fly in as one leader-follower
+    group from the north-east, in trail. Count them, report the group as one picture and answer every
+    member inside the rules.
+  hi: एक काल्पनिक रेल साइडिंग पर साफ़ दिन। सात छोटे रोटरी ड्रोन एक नेता-अनुयायी समूह के रूप में, एक के
+    पीछे एक, उत्तर-पूर्व से आते हैं। उन्हें गिनें, समूह को एक चित्र के रूप में रिपोर्ट करें और नियमों
+    के भीतर हर सदस्य का जवाब दें।
+fictional: true
+tick_hz: 20
+default_seed: 260108
+duration_s: 300.0
+meta:
+  origin: scripted
+  playable: true
+  tags:
+    - day
+    - rural
+    - swarm
+  curriculum_order: 8
+  difficulty: 60
+world:
+  terrain:
+    kind: pack
+    id: heron-ridge
+    version: 1.0.0
+  half_extent_m: 2000.0
+  start_time_of_day_h: 9.5
+  weather:
+    condition: clear
+    visibility_m: 9000.0
+    wind_speed_mps: 3.0
+    wind_from_deg: 240.0
+    gust_sigma_mps: 0.6
+    temperature_c: 23.0
+    cloud_cover_pct: 25.0
+rule_pack:
+  id: training-baseline
+  version: 1.0.0
+zones:
+  - id: inner
+    role: inner
+    label:
+      en: Inner zone
+      hi: आंतरिक क्षेत्र
+    center:
+      x: 0.0
+      y: 0.0
+      z: 34.5
+    radius_m: 500.0
+  - id: outer
+    role: outer
+    label:
+      en: Outer zone
+      hi: बाहरी क्षेत्र
+    center:
+      x: 0.0
+      y: 0.0
+      z: 34.5
+    radius_m: 1500.0
+assets:
+  - id: defended-site
+    label:
+      en: Plover Flats rail siding
+      hi: प्लोवर फ्लैट्स रेल साइडिंग
+    position:
+      x: 0.0
+      y: 0.0
+      z: 34.5
+sensors:
+  - id: radar-1
+    profile:
+      id: radar-generic-s
+      version: 0.3.0
+    position:
+      x: -30.0
+      y: 20.0
+      z: 40.7
+    boresight_deg: 0.0
+  - id: eo-1
+    profile:
+      id: eo-generic-day
+      version: 0.2.0
+    position:
+      x: -25.0
+      y: 25.0
+      z: 40.8
+    boresight_deg: 45.0
+threats:
+  - id: s-01
+    class_id: rotary-small
+    disposition: hostile
+    label:
+      en: Contact A
+      hi: संपर्क A
+    spawn_s: 20.0
+    start:
+      x: 1131.4
+      y: 1131.4
+      z: 144.2
+    start_heading_deg: 225.0
+    start_speed_mps: 12.0
+    limits:
+      max_speed_mps: 18.0
+      max_accel_mps2: 4.0
+      max_climb_mps: 5.0
+      max_descent_mps: 3.5
+      max_turn_rate_dps: 90.0
+      min_altitude_m: 5.0
+      max_altitude_m: 400.0
+    route:
+      - position:
+          x: 777.8
+          y: 777.8
+          z: 119.4
+        speed_mps: 12.0
+        hold_s: 0.0
+      - position:
+          x: 431.0
+          y: 551.6
+          z: 96.3
+        speed_mps: 11.0
+        hold_s: 0.0
+      - position:
+          x: 246.6
+          y: 352.2
+          z: 82.5
+        speed_mps: 10.0
+        hold_s: 0.0
+    on_route_end: loiter
+  - id: s-02
+    class_id: rotary-small
+    disposition: hostile
+    label:
+      en: Contact B
+      hi: संपर्क B
+    spawn_s: 22.0
+    start:
+      x: 1216.2
+      y: 1216.2
+      z: 141.8
+    start_heading_deg: 225.0
+    start_speed_mps: 12.0
+    limits:
+      max_speed_mps: 18.0
+      max_accel_mps2: 4.0
+      max_climb_mps: 5.0
+      max_descent_mps: 3.5
+      max_turn_rate_dps: 90.0
+      min_altitude_m: 5.0
+      max_altitude_m: 400.0
+    route:
+      - position:
+          x: 862.7
+          y: 862.7
+          z: 121.6
+        speed_mps: 12.0
+        hold_s: 0.0
+      - position:
+          x: 515.8
+          y: 636.5
+          z: 98.7
+        speed_mps: 11.0
+        hold_s: 0.0
+      - position:
+          x: 331.5
+          y: 437.1
+          z: 83.6
+        speed_mps: 10.0
+        hold_s: 0.0
+    on_route_end: loiter
+  - id: s-03
+    class_id: rotary-small
+    disposition: hostile
+    label:
+      en: Contact C
+      hi: संपर्क C
+    spawn_s: 24.0
+    start:
+      x: 1301.1
+      y: 1301.1
+      z: 149.4
+    start_heading_deg: 225.0
+    start_speed_mps: 12.0
+    limits:
+      max_speed_mps: 18.0
+      max_accel_mps2: 4.0
+      max_climb_mps: 5.0
+      max_descent_mps: 3.5
+      max_turn_rate_dps: 90.0
+      min_altitude_m: 5.0
+      max_altitude_m: 400.0
+    route:
+      - position:
+          x: 947.5
+          y: 947.5
+          z: 125.9
+        speed_mps: 12.0
+        hold_s: 0.0
+      - position:
+          x: 600.7
+          y: 721.3
+          z: 100.2
+        speed_mps: 11.0
+        hold_s: 0.0
+      - position:
+          x: 416.3
+          y: 521.9
+          z: 85.2
+        speed_mps: 10.0
+        hold_s: 0.0
+    on_route_end: loiter
+  - id: s-04
+    class_id: rotary-small
+    disposition: hostile
+    label:
+      en: Contact D
+      hi: संपर्क D
+    spawn_s: 26.0
+    start:
+      x: 1385.9
+      y: 1385.9
+      z: 154.0
+    start_heading_deg: 225.0
+    start_speed_mps: 12.0
+    limits:
+      max_speed_mps: 18.0
+      max_accel_mps2: 4.0
+      max_climb_mps: 5.0
+      max_descent_mps: 3.5
+      max_turn_rate_dps: 90.0
+      min_altitude_m: 5.0
+      max_altitude_m: 400.0
+    route:
+      - position:
+          x: 1032.4
+          y: 1032.4
+          z: 130.5
+        speed_mps: 12.0
+        hold_s: 0.0
+      - position:
+          x: 685.5
+          y: 806.2
+          z: 103.5
+        speed_mps: 11.0
+        hold_s: 0.0
+      - position:
+          x: 501.2
+          y: 606.8
+          z: 87.7
+        speed_mps: 10.0
+        hold_s: 0.0
+    on_route_end: loiter
+  - id: s-05
+    class_id: rotary-small
+    disposition: hostile
+    label:
+      en: Contact E
+      hi: संपर्क E
+    spawn_s: 28.0
+    start:
+      x: 1470.8
+      y: 1470.8
+      z: 152.5
+    start_heading_deg: 225.0
+    start_speed_mps: 12.0
+    limits:
+      max_speed_mps: 18.0
+      max_accel_mps2: 4.0
+      max_climb_mps: 5.0
+      max_descent_mps: 3.5
+      max_turn_rate_dps: 90.0
+      min_altitude_m: 5.0
+      max_altitude_m: 400.0
+    route:
+      - position:
+          x: 1117.2
+          y: 1117.2
+          z: 134.1
+        speed_mps: 12.0
+        hold_s: 0.0
+      - position:
+          x: 770.4
+          y: 891.0
+          z: 104.4
+        speed_mps: 11.0
+        hold_s: 0.0
+      - position:
+          x: 586.0
+          y: 691.6
+          z: 90.3
+        speed_mps: 10.0
+        hold_s: 0.0
+    on_route_end: loiter
+  - id: s-06
+    class_id: rotary-small
+    disposition: hostile
+    label:
+      en: Contact F
+      hi: संपर्क F
+    spawn_s: 30.0
+    start:
+      x: 1555.6
+      y: 1555.6
+      z: 151.7
+    start_heading_deg: 225.0
+    start_speed_mps: 12.0
+    limits:
+      max_speed_mps: 18.0
+      max_accel_mps2: 4.0
+      max_climb_mps: 5.0
+      max_descent_mps: 3.5
+      max_turn_rate_dps: 90.0
+      min_altitude_m: 5.0
+      max_altitude_m: 400.0
+    route:
+      - position:
+          x: 1202.1
+          y: 1202.1
+          z: 132.8
+        speed_mps: 12.0
+        hold_s: 0.0
+      - position:
+          x: 855.2
+          y: 975.9
+          z: 107.8
+        speed_mps: 11.0
+        hold_s: 0.0
+      - position:
+          x: 670.9
+          y: 776.5
+          z: 92.7
+        speed_mps: 10.0
+        hold_s: 0.0
+    on_route_end: loiter
+  - id: s-07
+    class_id: rotary-small
+    disposition: hostile
+    label:
+      en: Contact G
+      hi: संपर्क G
+    spawn_s: 32.0
+    start:
+      x: 1640.5
+      y: 1640.5
+      z: 152.3
+    start_heading_deg: 225.0
+    start_speed_mps: 12.0
+    limits:
+      max_speed_mps: 18.0
+      max_accel_mps2: 4.0
+      max_climb_mps: 5.0
+      max_descent_mps: 3.5
+      max_turn_rate_dps: 90.0
+      min_altitude_m: 5.0
+      max_altitude_m: 400.0
+    route:
+      - position:
+          x: 1286.9
+          y: 1286.9
+          z: 138.0
+        speed_mps: 12.0
+        hold_s: 0.0
+      - position:
+          x: 940.1
+          y: 1060.7
+          z: 110.0
+        speed_mps: 11.0
+        hold_s: 0.0
+      - position:
+          x: 755.8
+          y: 861.4
+          z: 94.1
+        speed_mps: 10.0
+        hold_s: 0.0
+    on_route_end: loiter
+groups:
+  - id: swarm-a
+    kind: swarm
+    members:
+      - s-01
+      - s-02
+      - s-03
+      - s-04
+      - s-05
+      - s-06
+      - s-07
+    topology: leader-follower
+    leader: s-01
+    intent: transit
+    route:
+      - position:
+          x: 777.8
+          y: 777.8
+          z: 119.4
+        speed_mps: 12.0
+        hold_s: 0.0
+      - position:
+          x: 431.0
+          y: 551.6
+          z: 96.3
+        speed_mps: 11.0
+        hold_s: 0.0
+      - position:
+          x: 246.6
+          y: 352.2
+          z: 82.5
+        speed_mps: 10.0
+        hold_s: 0.0
+    on_route_end: loiter
+    discipline: 0.9
+    spacing_m: 120.0
+    neighbour_radius_m: 360.0
+    link_range_m: 990.0
+    link_loss: 0.0
+    link_epoch_s: 1.0
+    leader_loss: elect
+    leader_loss_hold_s: 4.0
+    probe_standoff_m: 200.0
+    probe_cycles: 2
+    lane_spacing_m: 30.0
+    loiter_radius_m: 90.0
+    weights:
+      separation: 1.0
+      alignment: 1.5
+      cohesion: 0.6
+      goal: 1.0

@@ -1,0 +1,136 @@
+# Fictional scenario · open-source parameters
+contract: scenario.v1
+id: curriculum-01-first-contact
+version: 1.0.0
+title:
+  en: 'Teal Hollow: first contact'
+  hi: 'टील होलो: पहला संपर्क'
+summary:
+  en: Clear morning over farmland and low hills around a fictional depot. One small rotary drone approaches
+    from the north-east. Radar and a day camera cover that side. Detect it, classify it, assess it and
+    answer inside the rules.
+  hi: खेत और नीची पहाड़ियों के बीच एक काल्पनिक डिपो पर साफ़ सुबह। उत्तर-पूर्व से एक छोटा रोटरी ड्रोन आता
+    है। रडार और दिन का कैमरा उसी ओर देखते हैं। उसे पहचानें, वर्गीकृत करें, आकलन करें और नियमों के भीतर
+    जवाब दें।
+fictional: true
+tick_hz: 20
+default_seed: 260101
+duration_s: 240.0
+meta:
+  origin: scripted
+  playable: true
+  tags:
+    - day
+    - rural
+    - single
+  curriculum_order: 1
+  difficulty: 10
+world:
+  terrain:
+    kind: pack
+    id: heron-ridge
+    version: 1.0.0
+  half_extent_m: 2000.0
+  start_time_of_day_h: 8.0
+  weather:
+    condition: clear
+    visibility_m: 9000.0
+    wind_speed_mps: 3.0
+    wind_from_deg: 250.0
+    gust_sigma_mps: 0.6
+    temperature_c: 22.0
+    cloud_cover_pct: 25.0
+rule_pack:
+  id: training-baseline
+  version: 1.0.0
+zones:
+  - id: inner
+    role: inner
+    label:
+      en: Inner zone
+      hi: आंतरिक क्षेत्र
+    center:
+      x: 0.0
+      y: 0.0
+      z: 34.5
+    radius_m: 500.0
+  - id: outer
+    role: outer
+    label:
+      en: Outer zone
+      hi: बाहरी क्षेत्र
+    center:
+      x: 0.0
+      y: 0.0
+      z: 34.5
+    radius_m: 1500.0
+assets:
+  - id: defended-site
+    label:
+      en: Teal Hollow depot
+      hi: टील होलो डिपो
+    position:
+      x: 0.0
+      y: 0.0
+      z: 34.5
+sensors:
+  - id: radar-1
+    profile:
+      id: radar-generic-s
+      version: 0.3.0
+    position:
+      x: -30.0
+      y: 20.0
+      z: 40.7
+    boresight_deg: 0.0
+  - id: eo-1
+    profile:
+      id: eo-generic-day
+      version: 0.2.0
+    position:
+      x: -25.0
+      y: 25.0
+      z: 40.8
+    boresight_deg: 60.0
+threats:
+  - id: contact-a
+    class_id: rotary-small
+    disposition: hostile
+    label:
+      en: Contact A
+      hi: संपर्क A
+    spawn_s: 20.0
+    start:
+      x: 1515.5
+      y: 875.0
+      z: 167.9
+    start_heading_deg: 240.0
+    start_speed_mps: 10.0
+    limits:
+      max_speed_mps: 18.0
+      max_accel_mps2: 4.0
+      max_climb_mps: 5.0
+      max_descent_mps: 3.5
+      max_turn_rate_dps: 90.0
+      min_altitude_m: 5.0
+      max_altitude_m: 400.0
+    route:
+      - position:
+          x: 952.6
+          y: 550.0
+          z: 118.5
+        speed_mps: 14.0
+        hold_s: 0.0
+      - position:
+          x: 566.3
+          y: 411.4
+          z: 97.9
+        speed_mps: 12.0
+        hold_s: 0.0
+      - position:
+          x: 329.4
+          y: 276.4
+          z: 77.0
+        speed_mps: 10.0
+        hold_s: 0.0
+    on_route_end: loiter

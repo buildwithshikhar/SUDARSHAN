@@ -18,7 +18,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['src/lib/**/*.{ts,tsx}', 'src/live/**/*.{ts,tsx}'],
+    files: ['src/lib/**/*.{ts,tsx}', 'src/live/**/*.{ts,tsx}', 'src/scenarios/**/*.{ts,tsx}'],
     rules: { 'react-refresh/only-export-components': 'off' },
   },
   {

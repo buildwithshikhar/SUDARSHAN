@@ -72,8 +72,8 @@ export const NAV: Record<Role, NavGroup[]> = {
     {
       id: 'content',
       modules: [
-        { slug: 'scenarios', wave: '9a' },
-        { slug: 'generator', wave: '9a' },
+        { slug: 'scenarios', wave: '9a', home: '/content/scenarios' },
+        { slug: 'generator', wave: '9a', home: '/content/generator' },
         { slug: 'rule-packs', wave: '10a' },
         { slug: 'curricula', wave: '10a' },
       ],
@@ -114,7 +114,7 @@ export const NAV: Record<Role, NavGroup[]> = {
 }
 
 /** Modules with a real screen behind them; the rest show an empty state naming their wave. */
-export const ACCOUNT_BUILT = new Set(['profile', 'drills'])
+export const ACCOUNT_BUILT = new Set(['profile', 'drills', 'scenarios', 'generator'])
 
 /** The counted sidebar groups: trainee Account (Profile, Help) is shared, so it is listed apart. */
 export function sidebarGroups(role: Role): NavGroup[] {

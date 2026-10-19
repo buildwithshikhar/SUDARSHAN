@@ -11,6 +11,7 @@ import { CodeEditor, type CodeEditorHandle } from '../scenarios/CodeEditor'
 import { flightTimeS, MapLegend, PreviewMap, TimeStrip } from '../scenarios/charts'
 import {
   checkTitle,
+  FeatureList,
   errorText,
   failureOf,
   fmt3,
@@ -527,6 +528,7 @@ export function ScenarioEditor() {
     {
       key: 'value',
       header: t('scenarios.editor.checks.value'),
+      className: 'whitespace-nowrap',
       mono: true,
       align: 'right',
       render: (c) => formatValue(c.code, c.value),
@@ -1026,7 +1028,7 @@ function CheckResult({
 }) {
   const { t } = useTranslation()
   const s = res.solvability
-  const features = Object.entries(res.features)
+  const features = Object.keys(res.features)
   const nearestColumns: Column<CheckResponse['diversity']['nearest'][number]>[] = [
     {
       key: 'id',
@@ -1112,24 +1114,7 @@ function CheckResult({
               dense
             />
           )}
-          {features.length > 0 && (
-            <dl
-              className="m-0 grid grid-cols-2 border-t border-line"
-              aria-label={t('scenarios.editor.checks.features')}
-            >
-              {features.map(([axis, value]) => (
-                <div
-                  key={axis}
-                  className="flex items-baseline justify-between gap-2 border-b border-line px-3 py-0.5"
-                >
-                  <dt className="text-xs text-ink-2">
-                    {t(`scenarios.feature.${axis}`, { defaultValue: axis })}
-                  </dt>
-                  <dd className="num m-0 text-sm">{fmt3(value)}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
+          {features.length > 0 && <FeatureList features={res.features} />}
         </>
       )}
       <Note>{t('scenarios.check.note')}</Note>

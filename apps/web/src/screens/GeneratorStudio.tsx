@@ -9,6 +9,7 @@ import { useLang } from '../live/format'
 import { HeatLegend, HeatMap } from '../scenarios/HeatMap'
 import {
   checkTitle,
+  FeatureList,
   failureOf,
   fmt3,
   fmtPct,
@@ -320,6 +321,7 @@ export function GeneratorStudio() {
     {
       key: 'value',
       header: t('scenarios.editor.checks.value'),
+      className: 'whitespace-nowrap',
       mono: true,
       align: 'right',
       render: (c) =>
@@ -641,22 +643,7 @@ export function GeneratorStudio() {
                           </button>
                         </Fact>
                       </dl>
-                      <dl
-                        className="m-0 grid grid-cols-2 border-t border-line md:grid-cols-4"
-                        aria-label={t('scenarios.editor.checks.features')}
-                      >
-                        {Object.entries(r.features).map(([axis, value]) => (
-                          <div
-                            key={axis}
-                            className="flex items-baseline justify-between gap-2 border-b border-line px-3 py-0.5"
-                          >
-                            <dt className="text-xs text-ink-2">
-                              {t(`scenarios.feature.${axis}`, { defaultValue: axis })}
-                            </dt>
-                            <dd className="num m-0 text-sm">{fmt3(value)}</dd>
-                          </div>
-                        ))}
-                      </dl>
+                      <FeatureList features={r.features} wide />
                       <div className="flex items-center gap-3 border-t border-line px-3 py-2">
                         {r.saved ? (
                           <>

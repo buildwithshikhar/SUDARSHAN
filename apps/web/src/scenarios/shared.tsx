@@ -112,10 +112,12 @@ export function SeverityMark({ severity }: { severity: 'error' | 'warning' }) {
   const { t } = useTranslation()
   const Icon = severity === 'error' ? ErrorFilled : WarningFilled
   return (
-    <span
-      className={`inline-flex items-center gap-1 text-xs ${severity === 'error' ? 'text-track-hostile' : 'text-signal'}`}
-    >
-      <Icon size={16} aria-hidden="true" />
+    <span className="inline-flex items-center gap-1 text-xs text-ink">
+      <Icon
+        size={16}
+        aria-hidden="true"
+        className={severity === 'error' ? 'text-track-hostile' : 'text-signal'}
+      />
       {t(`scenarios.severity.${severity}`)}
     </span>
   )
@@ -123,3 +125,35 @@ export function SeverityMark({ severity }: { severity: 'error' | 'warning' }) {
 
 /** The sensor family named by a profile id such as `radar-generic-s`. */
 export const modalityOf = (profileId: string): string => profileId.split('-')[0] ?? profileId
+
+/** The eight feature axes of a scenario as labelled numbers. */
+export function FeatureList({
+  features,
+  wide = false,
+}: {
+  features: Record<string, number>
+  wide?: boolean
+}) {
+  const { t } = useTranslation()
+  return (
+    <div
+      role="group"
+      aria-label={t('scenarios.editor.checks.features')}
+      className="border-t border-line"
+    >
+      <dl className={`m-0 grid grid-cols-2 ${wide ? 'md:grid-cols-4' : ''}`}>
+        {Object.entries(features).map(([axis, value]) => (
+          <div
+            key={axis}
+            className="flex items-baseline justify-between gap-2 border-b border-line px-3 py-0.5"
+          >
+            <dt className="text-xs text-ink-2">
+              {t(`scenarios.feature.${axis}`, { defaultValue: axis })}
+            </dt>
+            <dd className="num m-0 text-sm">{fmt3(value)}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  )
+}

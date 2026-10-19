@@ -49,7 +49,7 @@ export function HeatMap({ archive, xAxis, yAxis }: Props) {
       ? t('scenarios.generator.heat.cellEmpty', { where })
       : t('scenarios.generator.heat.cell', {
           where,
-          quality: cell.quality.toFixed(3),
+          quality: cell.quality.toFixed(2),
           filled: cell.filled,
           total: za?.bins ?? 1,
           axis: zName,

@@ -190,6 +190,13 @@ export const MOCK_WELCOME: Welcome = {
         position: { x: 212, y: -158, z: 5 },
         boresight_deg: 0,
       },
+      {
+        id: 'acoustic-1',
+        modality: 'acoustic',
+        profile: 'acoustic-generic-array',
+        position: { x: 640, y: 560, z: 4 },
+        boresight_deg: 0,
+      },
     ],
     filed_flights: [
       {
@@ -346,6 +353,9 @@ function site(id: string) {
 const RADAR = site('radar-1')
 const EO = site('eo-1')
 const RF = site('rf-1')
+const ACOUSTIC = site('acoustic-1')
+/** The mock microphone array hears out to this slant range in metres (the profile's own limit is a fictional project value). */
+const ACOUSTIC_RANGE_M = 330
 const RADAR_PERIOD_S = 1.2
 const EO_HOME = { bearing: EO.boresight_deg, elevation: 4.2, fov: 24.4 }
 const EO_NARROW_FOV = 2.6
@@ -588,6 +598,7 @@ export class MockWorld {
     this.radar(t, reports)
     this.eo(t, reports)
     this.rf(t, reports)
+    this.acoustic(t, reports)
     this.lifecycle(t)
     const assist = this.assistViews()
     const events = this.events
@@ -807,6 +818,41 @@ export class MockWorld {
     }
   }
 
+  /** Rotor noise from a rotary contact inside the array's short range; birds are not heard. */
+  private acoustic(t: number, reports: Report[]): void {
+    if (this.tick % 10 !== 0) return
+    for (const entity of ENTITIES) {
+      if (entity.cls !== 'rotary-small' || t < entity.spawnS + 2) continue
+      const truth = entity.pos(t)
+      const polar = polarFrom(ACOUSTIC.position, truth)
+      if (polar.slantM > ACOUSTIC_RANGE_M) continue
+      const k = ENTITIES.indexOf(entity)
+      const snr = 10 + 20 * Math.log10(ACOUSTIC_RANGE_M / Math.max(polar.slantM, 20))
+      const harmonics = Math.max(1, Math.min(8, 1 + Math.floor((snr - 10) / 3)))
+      reports.push({
+        tick: this.tick,
+        sensor_id: 'acoustic-1',
+        modality: 'acoustic',
+        azimuth_deg: round(wrap360(polar.bearingDeg + 4 * wobble(k + 31, t)), 1),
+        elevation_deg: round(polar.elevationDeg + 6 * wobble(k + 32, t), 1),
+        range_m: null,
+        radial_speed_mps: null,
+        sigma_azimuth_deg: 8,
+        sigma_elevation_deg: 14,
+        sigma_range_m: null,
+        sigma_radial_mps: null,
+        reported_class: null,
+        features: {
+          blade_pass_hz: round(188 + 3.4 * wobble(k + 33, t), 1),
+          harmonics,
+          tonal: harmonics >= 3,
+          snr_db: round(snr + 0.9 * wobble(k + 34, t), 1),
+        },
+        data_status: 'reference',
+      })
+    }
+  }
+
   private lifecycle(t: number): void {
     // One bird track starves for a few seconds, as a real tracker's would at the edge of cover.
     const bird4 = this.owner.get('bird-4')
@@ -922,6 +968,18 @@ export class MockWorld {
         modality: 'rf',
         position: RF.position,
         bearing_deg: RF.boresight_deg,
+        elevation_deg: 0,
+        fov_deg: null,
+        cued: false,
+        supports_cue: false,
+        outage: false,
+        data_status: 'reference',
+      },
+      {
+        id: 'acoustic-1',
+        modality: 'acoustic',
+        position: ACOUSTIC.position,
+        bearing_deg: ACOUSTIC.boresight_deg,
         elevation_deg: 0,
         fov_deg: null,
         cued: false,

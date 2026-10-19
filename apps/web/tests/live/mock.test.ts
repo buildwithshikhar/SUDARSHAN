@@ -22,7 +22,7 @@ describe('scripted welcome', () => {
       ['inner', 900],
       ['outer', 3200],
     ])
-    expect(b.sensors.map((s) => s.id)).toEqual(['radar-1', 'eo-1', 'rf-1'])
+    expect(b.sensors.map((s) => s.id)).toEqual(['radar-1', 'eo-1', 'rf-1', 'acoustic-1'])
     expect(b.filed_flights).toHaveLength(1)
     expect(JSON.stringify(MOCK_WELCOME)).not.toMatch(/threat|truth|disposition/i)
     expect(MOCK_WELCOME.rules).toMatchObject({ id: 'training-baseline', version: '1.0.0' })

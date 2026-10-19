@@ -16,6 +16,7 @@ import pytest
 import sim.sensors.acoustic as acoustic_module
 from app.contracts.common import PackRef, Vec3
 from app.contracts.scenario import SensorPlacement
+from sim.catalogue import load_catalogue
 from sim.rng import RngStreams
 from sim.sensors import (
     CueRequest,
@@ -448,10 +449,24 @@ def test_the_shipped_confusion_table_is_row_normalised_and_covers_the_classes() 
     for row in table.rows.values():
         assert sum(row) == pytest.approx(1.0, abs=1e-9)
     assert set(CLASSES) <= set(table.rows)
-    assert set(table.labels) == {"rotary-small", "fixed-wing-small", "bird", "unknown"}
-    for true_class, row in table.rows.items():  # each source is most often labelled as itself
+    original = ["rotary-small", "fixed-wing-small", "bird", "unknown"]
+    assert list(table.labels[:4]) == original  # wave 8 only appends labels
+    assert set(table.labels[4:]) == {
+        "fpv-small",
+        "fixed-wing-medium",
+        "fixed-wing-large",
+        "kite",
+        "balloon",
+    }
+    never_heard = {"kite", "balloon"}  # no acoustic source: mostly unknown, never sampled
+    for true_class, row in table.rows.items():  # each source is most often labelled as its family
         best = table.labels[row.index(max(row))]
-        assert best == ("rotary-small" if true_class == "autonomous-small" else true_class)
+        if true_class in never_heard:
+            assert best == "unknown"
+        elif true_class == "fpv-small":  # the look-alike rule: mostly a quad, partly itself
+            assert best == "rotary-small" and row[table.labels.index("fpv-small")] > 0.2
+        else:
+            assert best == load_catalogue().recognition_class(true_class)
 
 
 def test_every_per_class_parameter_has_a_default() -> None:

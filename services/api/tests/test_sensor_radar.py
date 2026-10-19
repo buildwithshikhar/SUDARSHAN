@@ -153,7 +153,7 @@ def test_aspect_changes_rcs_deterministically_within_the_swing() -> None:
         "fixed-wing-small", 33.0
     )
     # an unlisted class uses the default figures
-    assert s.effective_rcs_dbsm("kite", 90.0) == pytest.approx(
+    assert s.effective_rcs_dbsm("unlisted-class", 90.0) == pytest.approx(
         shipped(RADAR).value("rcs_default") + shipped(RADAR).value("aspect_swing_default")
     )
 

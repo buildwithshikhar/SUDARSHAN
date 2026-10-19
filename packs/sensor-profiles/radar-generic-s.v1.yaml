@@ -28,11 +28,22 @@ parameters:
   rcs_fixed_wing_small: { value: -10, unit: dBsm, source_id: F01, verified: false }
   rcs_bird: { value: -22, unit: dBsm, source_id: F01, verified: false }
   rcs_default: { value: -16, unit: dBsm, source_id: F01, verified: false }
+  rcs_balloon: { value: -26, unit: dBsm, source_id: F01, verified: false }
+  rcs_decoy_small: { value: -20, unit: dBsm, source_id: F01, verified: false }
+  rcs_fixed_wing_large: { value: 3, unit: dBsm, source_id: F01, verified: false }
+  rcs_fixed_wing_medium: { value: -3, unit: dBsm, source_id: F01, verified: false }
+  rcs_fpv_small: { value: -18, unit: dBsm, source_id: F01, verified: false }
+  rcs_kite: { value: -30, unit: dBsm, source_id: F01, verified: false }
   # Aspect: effective RCS swings by +/- this many dB between nose/tail and broadside.
   aspect_swing_rotary_small: { value: 4, unit: dB, source_id: F01, verified: false }
   aspect_swing_fixed_wing_small: { value: 4, unit: dB, source_id: F01, verified: false }
   aspect_swing_bird: { value: 3, unit: dB, source_id: F01, verified: false }
   aspect_swing_default: { value: 4, unit: dB, source_id: F01, verified: false }
+  aspect_swing_balloon: { value: 0, unit: dB, source_id: F01, verified: false }
+  aspect_swing_decoy_small: { value: 3, unit: dB, source_id: F01, verified: false }
+  aspect_swing_fixed_wing_large: { value: 6, unit: dB, source_id: F01, verified: false }
+  aspect_swing_fixed_wing_medium: { value: 5, unit: dB, source_id: F01, verified: false }
+  aspect_swing_kite: { value: 2, unit: dB, source_id: F01, verified: false }
   # Low-slow-small: ground clutter near the horizon and a Doppler notch at zero radial speed.
   clutter_elevation: { value: 3, unit: deg, source_id: F01, verified: false }
   clutter_floor_loss: { value: 3, unit: dB, source_id: F01, verified: false }
@@ -69,22 +80,38 @@ parameters:
 confusion:
   # Reported class when the micro-Doppler signature is resolved.
   default:
-    labels: [rotary-small, fixed-wing-small, bird, unknown]
+    labels: [rotary-small, fixed-wing-small, bird, unknown, fpv-small, fixed-wing-medium, fixed-wing-large, kite, balloon]
     rows:
-      rotary-small: [0.86, 0.02, 0.04, 0.08]
-      fixed-wing-small: [0.03, 0.78, 0.09, 0.10]
-      bird: [0.03, 0.04, 0.85, 0.08]
-      clutter: [0.05, 0.05, 0.20, 0.70]
+      rotary-small: [0.86, 0.02, 0.04, 0.08, 0.00, 0.00, 0.00, 0.00, 0.00]
+      fixed-wing-small: [0.03, 0.78, 0.09, 0.10, 0.00, 0.00, 0.00, 0.00, 0.00]
+      bird: [0.03, 0.04, 0.85, 0.08, 0.00, 0.00, 0.00, 0.00, 0.00]
+      autonomous-small: [0.86, 0.02, 0.04, 0.08, 0.00, 0.00, 0.00, 0.00, 0.00]
+      balloon: [0.01, 0.01, 0.25, 0.52, 0.00, 0.00, 0.00, 0.06, 0.15]
+      civil-drone: [0.86, 0.02, 0.04, 0.08, 0.00, 0.00, 0.00, 0.00, 0.00]
+      decoy-small: [0.78, 0.02, 0.06, 0.14, 0.00, 0.00, 0.00, 0.00, 0.00]
+      fixed-wing-large: [0.00, 0.05, 0.02, 0.08, 0.00, 0.25, 0.60, 0.00, 0.00]
+      fixed-wing-medium: [0.01, 0.30, 0.03, 0.08, 0.00, 0.55, 0.03, 0.00, 0.00]
+      fpv-small: [0.62, 0.02, 0.04, 0.08, 0.24, 0.00, 0.00, 0.00, 0.00]
+      kite: [0.02, 0.01, 0.30, 0.50, 0.00, 0.00, 0.00, 0.12, 0.05]
+      clutter: [0.05, 0.05, 0.20, 0.70, 0.00, 0.00, 0.00, 0.00, 0.00]
     source_id: F01
     verified: false
   # Reported class when it is not: rotor and bird are easily confused on track kinematics alone.
   unresolved:
-    labels: [rotary-small, fixed-wing-small, bird, unknown]
+    labels: [rotary-small, fixed-wing-small, bird, unknown, fpv-small, fixed-wing-medium, fixed-wing-large, kite, balloon]
     rows:
-      rotary-small: [0.44, 0.10, 0.16, 0.30]
-      fixed-wing-small: [0.10, 0.40, 0.20, 0.30]
-      bird: [0.14, 0.12, 0.44, 0.30]
-      clutter: [0.05, 0.05, 0.10, 0.80]
+      rotary-small: [0.44, 0.10, 0.16, 0.30, 0.00, 0.00, 0.00, 0.00, 0.00]
+      fixed-wing-small: [0.10, 0.40, 0.20, 0.30, 0.00, 0.00, 0.00, 0.00, 0.00]
+      bird: [0.14, 0.12, 0.44, 0.30, 0.00, 0.00, 0.00, 0.00, 0.00]
+      autonomous-small: [0.44, 0.10, 0.16, 0.30, 0.00, 0.00, 0.00, 0.00, 0.00]
+      balloon: [0.03, 0.03, 0.28, 0.54, 0.00, 0.00, 0.00, 0.04, 0.08]
+      civil-drone: [0.44, 0.10, 0.16, 0.30, 0.00, 0.00, 0.00, 0.00, 0.00]
+      decoy-small: [0.36, 0.08, 0.20, 0.36, 0.00, 0.00, 0.00, 0.00, 0.00]
+      fixed-wing-large: [0.04, 0.18, 0.12, 0.30, 0.00, 0.18, 0.18, 0.00, 0.00]
+      fixed-wing-medium: [0.06, 0.26, 0.14, 0.30, 0.00, 0.16, 0.08, 0.00, 0.00]
+      fpv-small: [0.34, 0.10, 0.16, 0.30, 0.10, 0.00, 0.00, 0.00, 0.00]
+      kite: [0.04, 0.04, 0.30, 0.52, 0.00, 0.00, 0.00, 0.06, 0.04]
+      clutter: [0.05, 0.05, 0.10, 0.80, 0.00, 0.00, 0.00, 0.00, 0.00]
     source_id: F01
     verified: false
   # The micro-Doppler label the signature processing reports when it resolves something.
@@ -94,6 +121,14 @@ confusion:
       rotary-small: [0.90, 0.01, 0.09]
       fixed-wing-small: [0.30, 0.05, 0.65]
       bird: [0.02, 0.80, 0.18]
+      autonomous-small: [0.90, 0.01, 0.09]
+      balloon: [0.00, 0.01, 0.99]
+      civil-drone: [0.90, 0.01, 0.09]
+      decoy-small: [0.85, 0.01, 0.14]
+      fixed-wing-large: [0.20, 0.02, 0.78]
+      fixed-wing-medium: [0.25, 0.03, 0.72]
+      fpv-small: [0.90, 0.01, 0.09]
+      kite: [0.00, 0.03, 0.97]
       clutter: [0.04, 0.10, 0.86]
     source_id: F01
     verified: false

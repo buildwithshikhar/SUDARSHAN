@@ -1,0 +1,47 @@
+# Threat class `bird` for the threat catalogue (docs/THREAT_CATALOGUE.md).
+# Honesty: a fictional class. Kinematics and signatures only. Every value is project-authored
+# (F01, verified: false) unless a register ID below names the figure the sensor profiles already
+# cited for it. The UAV Database (X01, CC0) has not been downloaded; extracting envelopes from it
+# is pending (Q-11).
+contract: threat-class.v1
+id: bird
+version: 1.0.0
+title:
+  en: "Bird"
+  hi: "पक्षी"
+summary:
+  en: "A bird in flight: slow wing-beat, no radio, no engine. The commonest confuser for a small drone."
+  hi: "उड़ान में पक्षी: धीमी पंख-फड़फड़ाहट, कोई रेडियो नहीं, कोई इंजन नहीं। छोटे ड्रोन का सबसे आम भ्रमकारी।"
+fictional: true
+category: clutter
+recognition_class: bird
+default_disposition: clutter
+uas_group: null
+# The widest limits a scenario threat of this class may use (scenario.KinematicLimits).
+envelope:
+  max_speed: { value: 18, unit: m/s, source_id: F01, verified: false }
+  cruise_speed: { value: 9, unit: m/s, source_id: F01, verified: false }
+  max_accel: { value: 6, unit: m/s2, source_id: F01, verified: false }
+  max_climb: { value: 4, unit: m/s, source_id: F01, verified: false }
+  max_descent: { value: 5, unit: m/s, source_id: F01, verified: false }
+  max_turn_rate: { value: 120, unit: deg/s, source_id: F01, verified: false }
+  min_altitude: { value: 8, unit: m, source_id: F01, verified: false }
+  max_altitude: { value: 180, unit: m, source_id: F01, verified: false }
+# Names are the sensor-profile parameters without the _<class> suffix.
+signature:
+  rcs: { value: -22, unit: dBsm, source_id: F01, verified: false }
+  aspect_swing: { value: 3, unit: dB, source_id: F01, verified: false }
+  size: { value: 0.79, unit: m, source_id: D12, verified: false }
+  contrast: { value: 1, unit: ratio, source_id: F01, verified: false }
+  contrast_eo: { value: 1, unit: ratio, source_id: F01, verified: false }
+  emits: { value: 0, unit: flag, source_id: F01, verified: false }
+  emitter_power: { value: 0, unit: dBm, source_id: F01, verified: false }
+  band: { value: 1, unit: index, source_id: F01, verified: false }
+  hop_rate: { value: 0, unit: Hz, source_id: F01, verified: false }
+  source_level: { value: 52, unit: dB, source_id: F01, verified: false }
+  blades: { value: 1, unit: count, source_id: F01, verified: false }
+  rpm: { value: 720, unit: rpm, source_id: F01, verified: false }
+  harmonics: { value: 1, unit: count, source_id: F01, verified: false }
+notes:
+  en: "Shipped class. The wing-beat is modelled as one blade at 12 Hz (720 rpm); the 5 to 20 Hz band is from a secondary source and unverified (Q-09)."
+  hi: "भेजा गया वर्ग। पंख-फड़फड़ाहट को 12 Hz (720 rpm) पर एक ब्लेड के रूप में मॉडल किया गया है; 5 से 20 Hz की सीमा द्वितीयक स्रोत से है और असत्यापित है (Q-09)।"

@@ -11,12 +11,14 @@ from .rulepack import RulePack
 from .scenario import TICK_HZ, ScenarioSpec
 from .score import SessionScore
 from .sensor_profile import SensorProfile
+from .threat_class import ThreatClass
 
 #: Exported JSON Schemas, by file stem in packs/schemas/.
 SCHEMAS: dict[str, type[BaseModel]] = {
     "scenario.v1": ScenarioSpec,
     "rulepack.v1": RulePack,
     "sensor-profile.v1": SensorProfile,
+    "threat-class.v1": ThreatClass,
     "event-record.v1": EventRecord,
     "action-record.v1": ActionRecord,
     "session-record.v1": SessionRecord,
@@ -26,10 +28,11 @@ SCHEMAS: dict[str, type[BaseModel]] = {
 }
 
 #: Pack contracts, keyed by the value of their `contract` field.
-PACKS: dict[str, type[ScenarioSpec | RulePack | SensorProfile]] = {
+PACKS: dict[str, type[ScenarioSpec | RulePack | SensorProfile | ThreatClass]] = {
     "scenario.v1": ScenarioSpec,
     "rulepack.v1": RulePack,
     "sensor-profile.v1": SensorProfile,
+    "threat-class.v1": ThreatClass,
 }
 
 __all__ = [
@@ -46,4 +49,5 @@ __all__ = [
     "SensorProfile",
     "SessionRecord",
     "SessionScore",
+    "ThreatClass",
 ]

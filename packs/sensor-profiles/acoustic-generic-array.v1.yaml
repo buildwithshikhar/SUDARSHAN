@@ -40,30 +40,60 @@ parameters:
   source_level_bird: { value: 52, unit: dB, source_id: F01, verified: false }
   source_level_autonomous_small: { value: 76, unit: dB, source_id: F01, verified: false }
   source_level_default: { value: 76, unit: dB, source_id: F01, verified: false }
+  source_level_balloon: { value: -10, unit: dB, source_id: F01, verified: false }
+  source_level_civil_drone: { value: 78, unit: dB, source_id: F01, verified: false }
+  source_level_decoy_small: { value: 68, unit: dB, source_id: F01, verified: false }
+  source_level_fixed_wing_large: { value: 86, unit: dB, source_id: F01, verified: false }
+  source_level_fixed_wing_medium: { value: 80, unit: dB, source_id: F01, verified: false }
+  source_level_fpv_small: { value: 82, unit: dB, source_id: F01, verified: false }
+  source_level_kite: { value: -10, unit: dB, source_id: F01, verified: false }
   blades_rotary_small: { value: 2, unit: count, source_id: D11, verified: false }
   blades_fixed_wing_small: { value: 2, unit: count, source_id: F01, verified: false }
   blades_bird: { value: 1, unit: count, source_id: F01, verified: false }
   blades_autonomous_small: { value: 2, unit: count, source_id: D11, verified: false }
   blades_default: { value: 2, unit: count, source_id: F01, verified: false }
+  blades_balloon: { value: 0, unit: count, source_id: F01, verified: false }
+  blades_fixed_wing_large: { value: 3, unit: count, source_id: F01, verified: false }
+  blades_kite: { value: 0, unit: count, source_id: F01, verified: false }
   rpm_rotary_small: { value: 6000, unit: rpm, source_id: D11, verified: false }
   rpm_fixed_wing_small: { value: 3000, unit: rpm, source_id: F01, verified: false }
   rpm_bird: { value: 720, unit: rpm, source_id: F01, verified: false }
   rpm_autonomous_small: { value: 5400, unit: rpm, source_id: D11, verified: false }
   rpm_default: { value: 5400, unit: rpm, source_id: F01, verified: false }
+  rpm_balloon: { value: 0, unit: rpm, source_id: F01, verified: false }
+  rpm_civil_drone: { value: 6000, unit: rpm, source_id: F01, verified: false }
+  rpm_decoy_small: { value: 7200, unit: rpm, source_id: F01, verified: false }
+  rpm_fixed_wing_large: { value: 2400, unit: rpm, source_id: F01, verified: false }
+  rpm_fixed_wing_medium: { value: 3600, unit: rpm, source_id: F01, verified: false }
+  rpm_fpv_small: { value: 9000, unit: rpm, source_id: F01, verified: false }
+  rpm_kite: { value: 0, unit: rpm, source_id: F01, verified: false }
   harmonics_rotary_small: { value: 6, unit: count, source_id: D10, verified: false }
   harmonics_fixed_wing_small: { value: 3, unit: count, source_id: F01, verified: false }
   harmonics_bird: { value: 1, unit: count, source_id: F01, verified: false }
   harmonics_autonomous_small: { value: 6, unit: count, source_id: D10, verified: false }
   harmonics_default: { value: 4, unit: count, source_id: F01, verified: false }
+  harmonics_balloon: { value: 1, unit: count, source_id: F01, verified: false }
+  harmonics_civil_drone: { value: 6, unit: count, source_id: F01, verified: false }
+  harmonics_fixed_wing_large: { value: 6, unit: count, source_id: F01, verified: false }
+  harmonics_fixed_wing_medium: { value: 5, unit: count, source_id: F01, verified: false }
+  harmonics_fpv_small: { value: 6, unit: count, source_id: F01, verified: false }
+  harmonics_kite: { value: 1, unit: count, source_id: F01, verified: false }
 confusion:
   # Rows: the true source. Labels are the class IDs plus "unknown" (rotor vs fixed-wing vs bird).
   default:
-    labels: [rotary-small, fixed-wing-small, bird, unknown]
+    labels: [rotary-small, fixed-wing-small, bird, unknown, fpv-small, fixed-wing-medium, fixed-wing-large, kite, balloon]
     rows:
-      rotary-small: [0.82, 0.05, 0.03, 0.10]
-      fixed-wing-small: [0.12, 0.62, 0.10, 0.16]
-      bird: [0.04, 0.14, 0.58, 0.24]
-      autonomous-small: [0.80, 0.05, 0.03, 0.12]
+      rotary-small: [0.82, 0.05, 0.03, 0.10, 0.00, 0.00, 0.00, 0.00, 0.00]
+      fixed-wing-small: [0.12, 0.62, 0.10, 0.16, 0.00, 0.00, 0.00, 0.00, 0.00]
+      bird: [0.04, 0.14, 0.58, 0.24, 0.00, 0.00, 0.00, 0.00, 0.00]
+      autonomous-small: [0.80, 0.05, 0.03, 0.12, 0.00, 0.00, 0.00, 0.00, 0.00]
+      balloon: [0.00, 0.00, 0.10, 0.90, 0.00, 0.00, 0.00, 0.00, 0.00]
+      civil-drone: [0.82, 0.05, 0.03, 0.10, 0.00, 0.00, 0.00, 0.00, 0.00]
+      decoy-small: [0.74, 0.05, 0.05, 0.16, 0.00, 0.00, 0.00, 0.00, 0.00]
+      fixed-wing-large: [0.01, 0.10, 0.03, 0.12, 0.00, 0.28, 0.46, 0.00, 0.00]
+      fixed-wing-medium: [0.04, 0.30, 0.05, 0.12, 0.00, 0.45, 0.04, 0.00, 0.00]
+      fpv-small: [0.58, 0.04, 0.02, 0.08, 0.28, 0.00, 0.00, 0.00, 0.00]
+      kite: [0.00, 0.00, 0.20, 0.80, 0.00, 0.00, 0.00, 0.00, 0.00]
     source_id: D12
     verified: false
 notes:

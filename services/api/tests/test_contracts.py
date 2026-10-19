@@ -57,7 +57,7 @@ def test_there_is_one_example_of_each_pack_contract() -> None:
     contracts = sorted(raw(p)["contract"] for p in PACK_FILES)
     assert sorted(set(contracts)) == sorted(PACKS)
     for contract in PACKS:
-        if contract not in ("sensor-profile.v1", "scenario.v1"):
+        if contract not in ("sensor-profile.v1", "scenario.v1", "threat-class.v1"):
             assert contracts.count(contract) == 1
     assert sorted(raw(p)["id"] for p in PACK_FILES if raw(p)["contract"] == "scenario.v1") == [
         "harrier-morning-watch",

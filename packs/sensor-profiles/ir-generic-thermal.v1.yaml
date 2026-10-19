@@ -29,12 +29,28 @@ parameters:
   size_bird: { value: 0.79, unit: m, source_id: D12, verified: false }
   size_fixed_wing_small: { value: 1.2, unit: m, source_id: F01, verified: false }
   size_default: { value: 0.5, unit: m, source_id: F01, verified: false }
+  size_autonomous_small: { value: 0.39, unit: m, source_id: F01, verified: false }
+  size_balloon: { value: 0.8, unit: m, source_id: F01, verified: false }
+  size_civil_drone: { value: 0.39, unit: m, source_id: F01, verified: false }
+  size_decoy_small: { value: 0.3, unit: m, source_id: F01, verified: false }
+  size_fixed_wing_large: { value: 6, unit: m, source_id: F01, verified: false }
+  size_fixed_wing_medium: { value: 3, unit: m, source_id: F01, verified: false }
+  size_fpv_small: { value: 0.32, unit: m, source_id: F01, verified: false }
+  size_kite: { value: 1, unit: m, source_id: F01, verified: false }
   # Thermal contrast against the background: UNVERIFIED (Q-09). Warm motors and batteries make a
   # multirotor the reference (1.0); a small electric fixed-wing is cooler.
   contrast_rotary_small: { value: 1.0, unit: ratio, source_id: F01, verified: false }
   contrast_bird: { value: 1.0, unit: ratio, source_id: F01, verified: false }
   contrast_fixed_wing_small: { value: 0.8, unit: ratio, source_id: F01, verified: false }
   contrast_default: { value: 0.8, unit: ratio, source_id: F01, verified: false }
+  contrast_autonomous_small: { value: 1, unit: ratio, source_id: F01, verified: false }
+  contrast_balloon: { value: 0.1, unit: ratio, source_id: F01, verified: false }
+  contrast_civil_drone: { value: 1, unit: ratio, source_id: F01, verified: false }
+  contrast_decoy_small: { value: 0.2, unit: ratio, source_id: F01, verified: false }
+  contrast_fixed_wing_large: { value: 1, unit: ratio, source_id: F01, verified: false }
+  contrast_fixed_wing_medium: { value: 0.9, unit: ratio, source_id: F01, verified: false }
+  contrast_fpv_small: { value: 1.1, unit: ratio, source_id: F01, verified: false }
+  contrast_kite: { value: 0.15, unit: ratio, source_id: F01, verified: false }
   # Thermal does not depend on light, and long-wave infrared passes haze better than visible light.
   low_light_floor: { value: 1.0, unit: ratio, source_id: F01, verified: false }
   extinction_scale: { value: 0.6, unit: ratio, source_id: F01, verified: false }
@@ -45,19 +61,35 @@ parameters:
   glare_noise_gain: { value: 0.2, unit: ratio, source_id: F01, verified: false }
 confusion:
   default:
-    labels: [rotary-small, fixed-wing-small, bird, unknown]
+    labels: [rotary-small, fixed-wing-small, bird, unknown, fpv-small, fixed-wing-medium, fixed-wing-large, kite, balloon]
     rows:
-      rotary-small: [0.85, 0.03, 0.06, 0.06]
-      fixed-wing-small: [0.05, 0.82, 0.07, 0.06]
-      bird: [0.06, 0.08, 0.80, 0.06]
+      rotary-small: [0.85, 0.03, 0.06, 0.06, 0.00, 0.00, 0.00, 0.00, 0.00]
+      fixed-wing-small: [0.05, 0.82, 0.07, 0.06, 0.00, 0.00, 0.00, 0.00, 0.00]
+      bird: [0.06, 0.08, 0.80, 0.06, 0.00, 0.00, 0.00, 0.00, 0.00]
+      autonomous-small: [0.85, 0.03, 0.06, 0.06, 0.00, 0.00, 0.00, 0.00, 0.00]
+      balloon: [0.03, 0.03, 0.18, 0.56, 0.00, 0.00, 0.00, 0.08, 0.12]
+      civil-drone: [0.85, 0.03, 0.06, 0.06, 0.00, 0.00, 0.00, 0.00, 0.00]
+      decoy-small: [0.70, 0.03, 0.07, 0.20, 0.00, 0.00, 0.00, 0.00, 0.00]
+      fixed-wing-large: [0.01, 0.04, 0.03, 0.06, 0.00, 0.22, 0.64, 0.00, 0.00]
+      fixed-wing-medium: [0.02, 0.20, 0.04, 0.06, 0.00, 0.64, 0.04, 0.00, 0.00]
+      fpv-small: [0.52, 0.03, 0.05, 0.06, 0.34, 0.00, 0.00, 0.00, 0.00]
+      kite: [0.03, 0.03, 0.15, 0.50, 0.00, 0.00, 0.00, 0.20, 0.09]
     source_id: F01
     verified: false
   distant:
-    labels: [rotary-small, fixed-wing-small, bird, unknown]
+    labels: [rotary-small, fixed-wing-small, bird, unknown, fpv-small, fixed-wing-medium, fixed-wing-large, kite, balloon]
     rows:
-      rotary-small: [0.35, 0.12, 0.20, 0.33]
-      fixed-wing-small: [0.12, 0.35, 0.20, 0.33]
-      bird: [0.20, 0.14, 0.33, 0.33]
+      rotary-small: [0.35, 0.12, 0.20, 0.33, 0.00, 0.00, 0.00, 0.00, 0.00]
+      fixed-wing-small: [0.12, 0.35, 0.20, 0.33, 0.00, 0.00, 0.00, 0.00, 0.00]
+      bird: [0.20, 0.14, 0.33, 0.33, 0.00, 0.00, 0.00, 0.00, 0.00]
+      autonomous-small: [0.35, 0.12, 0.20, 0.33, 0.00, 0.00, 0.00, 0.00, 0.00]
+      balloon: [0.04, 0.04, 0.24, 0.48, 0.00, 0.00, 0.00, 0.08, 0.12]
+      civil-drone: [0.35, 0.12, 0.20, 0.33, 0.00, 0.00, 0.00, 0.00, 0.00]
+      decoy-small: [0.20, 0.08, 0.20, 0.52, 0.00, 0.00, 0.00, 0.00, 0.00]
+      fixed-wing-large: [0.04, 0.22, 0.15, 0.33, 0.00, 0.13, 0.13, 0.00, 0.00]
+      fixed-wing-medium: [0.06, 0.28, 0.17, 0.33, 0.00, 0.11, 0.05, 0.00, 0.00]
+      fpv-small: [0.28, 0.10, 0.20, 0.33, 0.09, 0.00, 0.00, 0.00, 0.00]
+      kite: [0.05, 0.05, 0.25, 0.45, 0.00, 0.00, 0.00, 0.12, 0.08]
     source_id: F01
     verified: false
 notes:

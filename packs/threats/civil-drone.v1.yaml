@@ -1,0 +1,47 @@
+# Threat class `civil-drone` for the threat catalogue (docs/THREAT_CATALOGUE.md).
+# Honesty: a fictional class. Kinematics and signatures only. Every value is project-authored
+# (F01, verified: false) unless a register ID below names the figure the sensor profiles already
+# cited for it. The UAV Database (X01, CC0) has not been downloaded; extracting envelopes from it
+# is pending (Q-11).
+contract: threat-class.v1
+id: civil-drone
+version: 1.0.0
+title:
+  en: "Permitted civil quadcopter"
+  hi: "अनुमत नागरिक क्वाडकॉप्टर"
+summary:
+  en: "A civil quadcopter flying a filed flight plan. Every sensor sees it as a small rotary drone; the flight plan, not the signature, tells it apart."
+  hi: "दाखिल उड़ान योजना पर उड़ने वाला नागरिक क्वाडकॉप्टर। हर सेंसर इसे छोटे रोटरी ड्रोन के रूप में देखता है; इसे अलग पहचानने का आधार हस्ताक्षर नहीं, उड़ान योजना है।"
+fictional: true
+category: drone
+recognition_class: rotary-small
+default_disposition: civil-permitted
+uas_group: '1'
+# The widest limits a scenario threat of this class may use (scenario.KinematicLimits).
+envelope:
+  max_speed: { value: 16, unit: m/s, source_id: F01, verified: false }
+  cruise_speed: { value: 8, unit: m/s, source_id: F01, verified: false }
+  max_accel: { value: 4, unit: m/s2, source_id: F01, verified: false }
+  max_climb: { value: 5, unit: m/s, source_id: F01, verified: false }
+  max_descent: { value: 3.5, unit: m/s, source_id: F01, verified: false }
+  max_turn_rate: { value: 90, unit: deg/s, source_id: F01, verified: false }
+  min_altitude: { value: 5, unit: m, source_id: F01, verified: false }
+  max_altitude: { value: 120, unit: m, source_id: F01, verified: false }
+# Names are the sensor-profile parameters without the _<class> suffix.
+signature:
+  rcs: { value: -16, unit: dBsm, source_id: F01, verified: false }
+  aspect_swing: { value: 4, unit: dB, source_id: F01, verified: false }
+  size: { value: 0.39, unit: m, source_id: F01, verified: false }
+  contrast: { value: 1, unit: ratio, source_id: F01, verified: false }
+  contrast_eo: { value: 1, unit: ratio, source_id: F01, verified: false }
+  emits: { value: 1, unit: flag, source_id: F01, verified: false }
+  emitter_power: { value: 20, unit: dBm, source_id: F01, verified: false }
+  band: { value: 1, unit: index, source_id: F01, verified: false }
+  hop_rate: { value: 80, unit: Hz, source_id: F01, verified: false }
+  source_level: { value: 78, unit: dB, source_id: F01, verified: false }
+  blades: { value: 2, unit: count, source_id: F01, verified: false }
+  rpm: { value: 6000, unit: rpm, source_id: F01, verified: false }
+  harmonics: { value: 6, unit: count, source_id: F01, verified: false }
+notes:
+  en: "Same signature as rotary-small, emitting on 2.4 GHz; the lower altitude ceiling is the civil limit."
+  hi: "हस्ताक्षर rotary-small जैसा है, 2.4 GHz पर प्रसारण करता है; कम ऊँचाई सीमा नागरिक सीमा है।"

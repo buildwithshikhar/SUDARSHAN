@@ -41,32 +41,54 @@ parameters:
   emits_bird: { value: 0, unit: flag, source_id: F01, verified: false }
   emits_autonomous_small: { value: 0, unit: flag, source_id: F01, verified: false }
   emits_default: { value: 1, unit: flag, source_id: F01, verified: false }
+  emits_balloon: { value: 0, unit: flag, source_id: F01, verified: false }
+  emits_decoy_small: { value: 0, unit: flag, source_id: F01, verified: false }
+  emits_kite: { value: 0, unit: flag, source_id: F01, verified: false }
   emitter_power_rotary_small: { value: 20, unit: dBm, source_id: F01, verified: false }
   emitter_power_fixed_wing_small: { value: 20, unit: dBm, source_id: F01, verified: false }
   emitter_power_bird: { value: 0, unit: dBm, source_id: F01, verified: false }
   emitter_power_autonomous_small: { value: 0, unit: dBm, source_id: F01, verified: false }
   emitter_power_default: { value: 20, unit: dBm, source_id: F01, verified: false }
+  emitter_power_balloon: { value: 0, unit: dBm, source_id: F01, verified: false }
+  emitter_power_decoy_small: { value: 0, unit: dBm, source_id: F01, verified: false }
+  emitter_power_fixed_wing_large: { value: 33, unit: dBm, source_id: F01, verified: false }
+  emitter_power_fixed_wing_medium: { value: 30, unit: dBm, source_id: F01, verified: false }
+  emitter_power_fpv_small: { value: 27, unit: dBm, source_id: F01, verified: false }
+  emitter_power_kite: { value: 0, unit: dBm, source_id: F01, verified: false }
   band_rotary_small: { value: 1, unit: index, source_id: D08, verified: false }
   band_fixed_wing_small: { value: 3, unit: index, source_id: F01, verified: false }
   band_bird: { value: 1, unit: index, source_id: F01, verified: false }
   band_autonomous_small: { value: 1, unit: index, source_id: F01, verified: false }
   band_default: { value: 1, unit: index, source_id: F01, verified: false }
+  band_fixed_wing_large: { value: 5, unit: index, source_id: F01, verified: false }
+  band_fixed_wing_medium: { value: 3, unit: index, source_id: F01, verified: false }
+  band_fpv_small: { value: 2, unit: index, source_id: F01, verified: false }
   hop_rate_rotary_small: { value: 80, unit: Hz, source_id: F01, verified: false }
   hop_rate_fixed_wing_small: { value: 0, unit: Hz, source_id: F01, verified: false }
   hop_rate_bird: { value: 0, unit: Hz, source_id: F01, verified: false }
   hop_rate_autonomous_small: { value: 0, unit: Hz, source_id: F01, verified: false }
   hop_rate_default: { value: 0, unit: Hz, source_id: F01, verified: false }
+  hop_rate_civil_drone: { value: 80, unit: Hz, source_id: F01, verified: false }
+  hop_rate_fpv_small: { value: 120, unit: Hz, source_id: F01, verified: false }
 confusion:
-  # Rows: the true emitter. The bird and autonomous rows are never sampled (neither emits) but
-  # scenarios may contain those classes. The wifi-bluetooth row labels the false alarms.
+  # Rows: the true emitter. The rows of the silent classes (bird, autonomous-small, decoy-small,
+  # kite, balloon) are never sampled (none emits) but scenarios may contain those classes. The
+  # wifi-bluetooth row labels the false alarms. Columns after unknown were appended in wave 8.
   default:
-    labels: [rotary-small, fixed-wing-small, wifi-bluetooth, unknown]
+    labels: [rotary-small, fixed-wing-small, wifi-bluetooth, unknown, fpv-small, fixed-wing-medium, fixed-wing-large]
     rows:
-      rotary-small: [0.80, 0.03, 0.09, 0.08]
-      fixed-wing-small: [0.06, 0.72, 0.10, 0.12]
-      bird: [0.00, 0.00, 0.00, 1.00]
-      autonomous-small: [0.00, 0.00, 0.00, 1.00]
-      wifi-bluetooth: [0.10, 0.04, 0.72, 0.14]
+      rotary-small: [0.80, 0.03, 0.09, 0.08, 0.00, 0.00, 0.00]
+      fixed-wing-small: [0.06, 0.72, 0.10, 0.12, 0.00, 0.00, 0.00]
+      bird: [0.00, 0.00, 0.00, 1.00, 0.00, 0.00, 0.00]
+      autonomous-small: [0.00, 0.00, 0.00, 1.00, 0.00, 0.00, 0.00]
+      balloon: [0.00, 0.00, 0.00, 1.00, 0.00, 0.00, 0.00]
+      civil-drone: [0.74, 0.03, 0.14, 0.09, 0.00, 0.00, 0.00]
+      decoy-small: [0.00, 0.00, 0.00, 1.00, 0.00, 0.00, 0.00]
+      fixed-wing-large: [0.00, 0.10, 0.06, 0.12, 0.00, 0.28, 0.44]
+      fixed-wing-medium: [0.02, 0.40, 0.08, 0.12, 0.00, 0.34, 0.04]
+      fpv-small: [0.52, 0.02, 0.10, 0.10, 0.26, 0.00, 0.00]
+      kite: [0.00, 0.00, 0.00, 1.00, 0.00, 0.00, 0.00]
+      wifi-bluetooth: [0.10, 0.04, 0.72, 0.14, 0.00, 0.00, 0.00]
     source_id: D09
     verified: false
 notes:

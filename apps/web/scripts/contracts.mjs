@@ -25,6 +25,7 @@ const publicNames = {
   'scenario.v1': 'ScenarioV1',
   'rulepack.v1': 'RulePackV1',
   'sensor-profile.v1': 'SensorProfileV1',
+  'threat-class.v1': 'ThreatClassV1',
   'event-record.v1': 'EventRecordV1',
   'action-record.v1': 'ActionRecordV1',
   'session-record.v1': 'SessionRecordV1',

@@ -103,7 +103,7 @@ def test_apparent_size_is_size_over_range_times_ifov(name: str) -> None:
     s = camera(name)
     p = shipped(name)
     ifov = p.value("fov_wide") * (3.141592653589793 / 180.0) / p.value("pixels_h")
-    for class_id in (*CLASSES, "kite"):
+    for class_id in (*CLASSES, "unlisted-class"):
         size = p.for_class("size", class_id)
         for r in (25.0, 100.0, 400.0):
             assert s.geometric_px(class_id, r) == pytest.approx(size / (r * ifov))
@@ -144,7 +144,7 @@ def test_the_research_section_camera_reaches_the_cited_ranges() -> None:
 
 
 @pytest.mark.parametrize("name", FILES)
-@pytest.mark.parametrize("class_id", [*CLASSES, "kite"])
+@pytest.mark.parametrize("class_id", [*CLASSES, "unlisted-class"])
 @pytest.mark.parametrize("daylight", [0.0, 0.5, 1.0])
 @pytest.mark.parametrize(
     ("condition", "visibility"), [("clear", 20000.0), ("haze", 3000.0), ("fog", 400.0)]

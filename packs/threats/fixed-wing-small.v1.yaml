@@ -1,0 +1,47 @@
+# Threat class `fixed-wing-small` for the threat catalogue (docs/THREAT_CATALOGUE.md).
+# Honesty: a fictional class. Kinematics and signatures only. Every value is project-authored
+# (F01, verified: false) unless a register ID below names the figure the sensor profiles already
+# cited for it. The UAV Database (X01, CC0) has not been downloaded; extracting envelopes from it
+# is pending (Q-11).
+contract: threat-class.v1
+id: fixed-wing-small
+version: 1.0.0
+title:
+  en: "Small fixed-wing drone"
+  hi: "छोटा फ़िक्स्ड-विंग ड्रोन"
+summary:
+  en: "A small electric fixed-wing drone flying a route at cruise speed: faster than a quadcopter, cooler in thermal, with a 900 MHz link."
+  hi: "मार्ग पर क्रूज़ गति से उड़ने वाला छोटा विद्युत फ़िक्स्ड-विंग ड्रोन: क्वाडकॉप्टर से तेज़, थर्मल में ठंडा, 900 MHz लिंक के साथ।"
+fictional: true
+category: drone
+recognition_class: fixed-wing-small
+default_disposition: hostile
+uas_group: '1'
+# The widest limits a scenario threat of this class may use (scenario.KinematicLimits).
+envelope:
+  max_speed: { value: 31, unit: m/s, source_id: F01, verified: false }
+  cruise_speed: { value: 24, unit: m/s, source_id: F01, verified: false }
+  max_accel: { value: 2.5, unit: m/s2, source_id: F01, verified: false }
+  max_climb: { value: 4, unit: m/s, source_id: F01, verified: false }
+  max_descent: { value: 5, unit: m/s, source_id: F01, verified: false }
+  max_turn_rate: { value: 20, unit: deg/s, source_id: F01, verified: false }
+  min_altitude: { value: 60, unit: m, source_id: F01, verified: false }
+  max_altitude: { value: 1200, unit: m, source_id: F01, verified: false }
+# Names are the sensor-profile parameters without the _<class> suffix.
+signature:
+  rcs: { value: -10, unit: dBsm, source_id: F01, verified: false }
+  aspect_swing: { value: 4, unit: dB, source_id: F01, verified: false }
+  size: { value: 1.2, unit: m, source_id: F01, verified: false }
+  contrast: { value: 0.8, unit: ratio, source_id: F01, verified: false }
+  contrast_eo: { value: 1, unit: ratio, source_id: F01, verified: false }
+  emits: { value: 1, unit: flag, source_id: F01, verified: false }
+  emitter_power: { value: 20, unit: dBm, source_id: F01, verified: false }
+  band: { value: 3, unit: index, source_id: F01, verified: false }
+  hop_rate: { value: 0, unit: Hz, source_id: F01, verified: false }
+  source_level: { value: 72, unit: dB, source_id: F01, verified: false }
+  blades: { value: 2, unit: count, source_id: F01, verified: false }
+  rpm: { value: 3000, unit: rpm, source_id: F01, verified: false }
+  harmonics: { value: 3, unit: count, source_id: F01, verified: false }
+notes:
+  en: "Shipped class. The altitude ceiling is the limit the shipped Kestrel scenario already uses; it is above the published Group 1 ceiling, which is why uas_group is a label and not a bound."
+  hi: "भेजा गया वर्ग। ऊँचाई सीमा वही है जो भेजा गया Kestrel परिदृश्य पहले से प्रयोग करता है; यह प्रकाशित Group 1 सीमा से ऊपर है, इसलिए uas_group एक लेबल है, बाध्यता नहीं।"

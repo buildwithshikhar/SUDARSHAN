@@ -32,7 +32,18 @@ parameters:
   size_bird: { value: 0.79, unit: m, source_id: D12, verified: false }
   size_fixed_wing_small: { value: 1.2, unit: m, source_id: F01, verified: false }
   size_default: { value: 0.5, unit: m, source_id: F01, verified: false }
+  size_autonomous_small: { value: 0.39, unit: m, source_id: F01, verified: false }
+  size_balloon: { value: 0.8, unit: m, source_id: F01, verified: false }
+  size_civil_drone: { value: 0.39, unit: m, source_id: F01, verified: false }
+  size_decoy_small: { value: 0.3, unit: m, source_id: F01, verified: false }
+  size_fixed_wing_large: { value: 6, unit: m, source_id: F01, verified: false }
+  size_fixed_wing_medium: { value: 3, unit: m, source_id: F01, verified: false }
+  size_fpv_small: { value: 0.32, unit: m, source_id: F01, verified: false }
+  size_kite: { value: 1, unit: m, source_id: F01, verified: false }
   contrast_default: { value: 0.9, unit: ratio, source_id: F01, verified: false }
+  contrast_balloon: { value: 1.08, unit: ratio, source_id: F01, verified: false }
+  contrast_decoy_small: { value: 0.72, unit: ratio, source_id: F01, verified: false }
+  contrast_kite: { value: 1.17, unit: ratio, source_id: F01, verified: false }
   # Light and air: a day sensor keeps 3 % of its performance in the dark.
   low_light_floor: { value: 0.03, unit: ratio, source_id: F01, verified: false }
   extinction_scale: { value: 1.0, unit: ratio, source_id: F01, verified: false }
@@ -46,20 +57,36 @@ parameters:
 confusion:
   # Reported class when the target reaches the recognition threshold.
   default:
-    labels: [rotary-small, fixed-wing-small, bird, unknown]
+    labels: [rotary-small, fixed-wing-small, bird, unknown, fpv-small, fixed-wing-medium, fixed-wing-large, kite, balloon]
     rows:
-      rotary-small: [0.90, 0.02, 0.04, 0.04]
-      fixed-wing-small: [0.03, 0.88, 0.05, 0.04]
-      bird: [0.04, 0.06, 0.86, 0.04]
+      rotary-small: [0.90, 0.02, 0.04, 0.04, 0.00, 0.00, 0.00, 0.00, 0.00]
+      fixed-wing-small: [0.03, 0.88, 0.05, 0.04, 0.00, 0.00, 0.00, 0.00, 0.00]
+      bird: [0.04, 0.06, 0.86, 0.04, 0.00, 0.00, 0.00, 0.00, 0.00]
+      autonomous-small: [0.90, 0.02, 0.04, 0.04, 0.00, 0.00, 0.00, 0.00, 0.00]
+      balloon: [0.01, 0.01, 0.04, 0.04, 0.00, 0.00, 0.00, 0.03, 0.87]
+      civil-drone: [0.90, 0.02, 0.04, 0.04, 0.00, 0.00, 0.00, 0.00, 0.00]
+      decoy-small: [0.84, 0.02, 0.06, 0.08, 0.00, 0.00, 0.00, 0.00, 0.00]
+      fixed-wing-large: [0.00, 0.04, 0.02, 0.04, 0.00, 0.22, 0.68, 0.00, 0.00]
+      fixed-wing-medium: [0.01, 0.20, 0.03, 0.04, 0.00, 0.68, 0.04, 0.00, 0.00]
+      fpv-small: [0.55, 0.02, 0.03, 0.04, 0.36, 0.00, 0.00, 0.00, 0.00]
+      kite: [0.01, 0.01, 0.07, 0.04, 0.00, 0.00, 0.00, 0.83, 0.04]
     source_id: F01
     verified: false
   # Reported class when it is only detected: birds and drones look alike at a few pixels.
   distant:
-    labels: [rotary-small, fixed-wing-small, bird, unknown]
+    labels: [rotary-small, fixed-wing-small, bird, unknown, fpv-small, fixed-wing-medium, fixed-wing-large, kite, balloon]
     rows:
-      rotary-small: [0.40, 0.12, 0.18, 0.30]
-      fixed-wing-small: [0.12, 0.40, 0.18, 0.30]
-      bird: [0.18, 0.14, 0.38, 0.30]
+      rotary-small: [0.40, 0.12, 0.18, 0.30, 0.00, 0.00, 0.00, 0.00, 0.00]
+      fixed-wing-small: [0.12, 0.40, 0.18, 0.30, 0.00, 0.00, 0.00, 0.00, 0.00]
+      bird: [0.18, 0.14, 0.38, 0.30, 0.00, 0.00, 0.00, 0.00, 0.00]
+      autonomous-small: [0.40, 0.12, 0.18, 0.30, 0.00, 0.00, 0.00, 0.00, 0.00]
+      balloon: [0.04, 0.04, 0.26, 0.30, 0.00, 0.00, 0.00, 0.12, 0.24]
+      civil-drone: [0.40, 0.12, 0.18, 0.30, 0.00, 0.00, 0.00, 0.00, 0.00]
+      decoy-small: [0.34, 0.10, 0.20, 0.36, 0.00, 0.00, 0.00, 0.00, 0.00]
+      fixed-wing-large: [0.04, 0.24, 0.14, 0.30, 0.00, 0.14, 0.14, 0.00, 0.00]
+      fixed-wing-medium: [0.06, 0.30, 0.16, 0.30, 0.00, 0.12, 0.06, 0.00, 0.00]
+      fpv-small: [0.32, 0.10, 0.18, 0.30, 0.10, 0.00, 0.00, 0.00, 0.00]
+      kite: [0.06, 0.06, 0.28, 0.30, 0.00, 0.00, 0.00, 0.20, 0.10]
     source_id: F01
     verified: false
 notes:

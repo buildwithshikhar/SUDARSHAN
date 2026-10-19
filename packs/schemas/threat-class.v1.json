@@ -1,0 +1,220 @@
+{
+  "$defs": {
+    "Envelope": {
+      "additionalProperties": false,
+      "description": "How the class may move: the limits a scenario threat stays inside, plus a cruise speed.",
+      "properties": {
+        "cruise_speed": {
+          "$ref": "#/$defs/Quantity"
+        },
+        "max_accel": {
+          "$ref": "#/$defs/Quantity"
+        },
+        "max_altitude": {
+          "$ref": "#/$defs/Quantity"
+        },
+        "max_climb": {
+          "$ref": "#/$defs/Quantity"
+        },
+        "max_descent": {
+          "$ref": "#/$defs/Quantity"
+        },
+        "max_speed": {
+          "$ref": "#/$defs/Quantity"
+        },
+        "max_turn_rate": {
+          "$ref": "#/$defs/Quantity"
+        },
+        "min_altitude": {
+          "$ref": "#/$defs/Quantity"
+        }
+      },
+      "required": [
+        "max_speed",
+        "cruise_speed",
+        "max_accel",
+        "max_climb",
+        "max_descent",
+        "max_turn_rate",
+        "min_altitude",
+        "max_altitude"
+      ],
+      "title": "Envelope",
+      "type": "object"
+    },
+    "Quantity": {
+      "additionalProperties": false,
+      "description": "A numeric parameter with its unit and provenance.",
+      "properties": {
+        "source_id": {
+          "pattern": "^[DGWXF][0-9]{2}$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "unit": {
+          "maxLength": 24,
+          "pattern": "^[A-Za-z%°µ][A-Za-z0-9%°µ/^.\\-]*$",
+          "title": "Unit",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        },
+        "verified": {
+          "description": "True only when the value was checked against the source.",
+          "title": "Verified",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "value",
+        "unit",
+        "source_id",
+        "verified"
+      ],
+      "title": "Quantity",
+      "type": "object"
+    },
+    "Text": {
+      "additionalProperties": false,
+      "description": "User-facing text in both interface languages.",
+      "properties": {
+        "en": {
+          "maxLength": 400,
+          "minLength": 1,
+          "title": "En",
+          "type": "string"
+        },
+        "hi": {
+          "maxLength": 400,
+          "minLength": 1,
+          "title": "Hi",
+          "type": "string"
+        }
+      },
+      "required": [
+        "en",
+        "hi"
+      ],
+      "title": "Text",
+      "type": "object"
+    }
+  },
+  "$id": "threat-class.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "category": {
+      "enum": [
+        "drone",
+        "clutter"
+      ],
+      "title": "Category",
+      "type": "string"
+    },
+    "contract": {
+      "const": "threat-class.v1",
+      "title": "Contract",
+      "type": "string"
+    },
+    "default_disposition": {
+      "enum": [
+        "hostile",
+        "civil-permitted",
+        "clutter"
+      ],
+      "title": "Default Disposition",
+      "type": "string"
+    },
+    "envelope": {
+      "$ref": "#/$defs/Envelope"
+    },
+    "fictional": {
+      "const": true,
+      "title": "Fictional",
+      "type": "boolean"
+    },
+    "id": {
+      "maxLength": 64,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "title": "Id",
+      "type": "string"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Text"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "recognition_class": {
+      "maxLength": 64,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "title": "Recognition Class",
+      "type": "string"
+    },
+    "signature": {
+      "additionalProperties": false,
+      "maxProperties": 32,
+      "minProperties": 1,
+      "patternProperties": {
+        "^[a-z][a-z0-9_]*$": {
+          "$ref": "#/$defs/Quantity"
+        }
+      },
+      "propertyNames": {
+        "maxLength": 64
+      },
+      "title": "Signature",
+      "type": "object"
+    },
+    "summary": {
+      "$ref": "#/$defs/Text"
+    },
+    "title": {
+      "$ref": "#/$defs/Text"
+    },
+    "uas_group": {
+      "anyOf": [
+        {
+          "enum": [
+            "1",
+            "2",
+            "3"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Uas Group"
+    },
+    "version": {
+      "pattern": "^(0|[1-9][0-9]*)(\\.(0|[1-9][0-9]*)){2}$",
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "contract",
+    "id",
+    "version",
+    "title",
+    "summary",
+    "fictional",
+    "category",
+    "recognition_class",
+    "default_disposition",
+    "uas_group",
+    "envelope",
+    "signature"
+  ],
+  "title": "ThreatClass",
+  "type": "object"
+}

@@ -13,6 +13,7 @@ import { EoModeControl, QualityControl } from '../live/panels/EoControls'
 import { EndDialog, RelabelDialog, ShortcutsDialog } from '../live/panels/Dialogs'
 import { EventLog } from '../live/panels/EventLog'
 import { ReportDialog } from '../live/panels/ReportDialog'
+import { SensorConsoles } from '../live/panels/SensorConsoles'
 import { SensorStatus } from '../live/panels/SensorStatus'
 import { TopBar } from '../live/panels/TopBar'
 import { TrackDetail } from '../live/panels/TrackDetail'
@@ -230,7 +231,7 @@ function Workspace() {
         <div className="col-span-5 flex min-h-0 flex-col gap-px">
           <Panel
             title={t('live.ppi.title')}
-            className="flex h-[50%] min-h-0 shrink-0 flex-col"
+            className="flex h-[40%] min-h-0 shrink-0 flex-col [@media(max-height:900px)]:h-[38%]"
             bodyClassName="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_168px] gap-px bg-line"
             flush
             actions={
@@ -247,6 +248,7 @@ function Workspace() {
               <SensorStatus />
             </div>
           </Panel>
+          <SensorConsoles className="flex h-[32%] min-h-0 shrink-0 flex-col [@media(max-height:900px)]:h-[34%]" />
           <Panel
             title={t('live.table.title')}
             className="flex min-h-0 flex-1 flex-col"

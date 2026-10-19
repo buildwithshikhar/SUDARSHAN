@@ -110,7 +110,7 @@ function ReportForm({
     else setRefusals((n) => n + 1)
   }
 
-  // Digits choose the class while the select has focus: 1 to 4, and 0 for not stated.
+  // Digits choose the class while the select has focus: 1 to the number of classes, and 0 for not stated.
   const chooseByDigit = (event: KeyboardEvent<HTMLSelectElement>) => {
     if (event.ctrlKey || event.metaKey || event.altKey || !/^[0-9]$/.test(event.key)) return
     const n = Number(event.key)
@@ -143,7 +143,7 @@ function ReportForm({
       )}
       <Select
         label={t('live.report.what')}
-        hint={t('live.report.whatHint')}
+        hint={t('live.report.whatHint', { max: classes.length })}
         value={values.what}
         onChange={(event) => set('what')(event.target.value)}
         onKeyDown={chooseByDigit}

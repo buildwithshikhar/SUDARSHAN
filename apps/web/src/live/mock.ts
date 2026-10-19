@@ -109,7 +109,17 @@ export const MOCK_WELCOME: Welcome = {
   tick: 0,
   tick_hz: TICK_HZ,
   data_notice: DATA_NOTICE,
-  operator_classes: ['rotary-small', 'fixed-wing-small', 'bird', 'unknown'],
+  operator_classes: [
+    'rotary-small',
+    'fixed-wing-small',
+    'bird',
+    'unknown',
+    'fpv-small',
+    'fixed-wing-medium',
+    'fixed-wing-large',
+    'kite',
+    'balloon',
+  ],
   identities: ['hostile', 'suspect', 'unknown', 'neutral', 'friend'],
   actions: [
     'designate',
@@ -477,7 +487,7 @@ export function evaluateRoe(
 
 /**
  * Scenario variants for the dev-server mock (`?mock=1&eo=thermal&terrain=fixture-ridge&rain=1&hour=22`):
- * the EO camera type, a terrain pack, rain and the start hour. They exist so the 3D view can be
+ * the EO camera type, a terrain pack, rain, the start hour and a forced EO class. They exist so the 3D view can be
  * exercised without the API; none of this ships in production builds.
  */
 export interface MockVariant {
@@ -485,6 +495,8 @@ export interface MockVariant {
   terrain?: string
   condition?: Welcome['briefing']['weather']['condition']
   hour?: number
+  /** Report every EO contact as this class, so each target model can be drawn (`?eoclass=kite`). */
+  eoClass?: string
 }
 
 const EO_PROFILE = { day: 'eo-generic-day', nv: 'eo-generic-nv', thermal: 'ir-generic-thermal' }
@@ -532,8 +544,10 @@ export class MockWorld {
   readonly pointing: Pointing = { ...EO_HOME, cuedUntil: -1, cuedTrack: null }
   private readonly eoModality: 'eo' | 'ir'
   private readonly startHour: number
+  private readonly eoClass: string | null
 
   constructor(variant: MockVariant = {}) {
+    this.eoClass = variant.eoClass ?? null
     this.eoModality = variant.eo === 'thermal' ? 'ir' : 'eo'
     this.startHour = variant.hour ?? MOCK_WELCOME.briefing.start_time_of_day_h
   }
@@ -762,7 +776,7 @@ export class MockWorld {
         sigma_elevation_deg: round((p.fov / 1920) * 3.5, 4),
         sigma_range_m: null,
         sigma_radial_mps: null,
-        reported_class: recognised ? entity.cls : null,
+        reported_class: this.eoClass ?? (recognised ? entity.cls : null),
         features: { apparent_px: round(apparentPx, 1), recognised },
         data_status: 'reference',
       })
@@ -985,8 +999,15 @@ export class MockWorld {
       return
     }
     if (track && ['designate', 'classify', 'assess', 'engage', 'hold', 'report'].includes(action)) {
-      if (action === 'classify' && typeof payload.class_id !== 'string')
-        return this.reject(action, 'classify needs a class_id', payload)
+      if (
+        action === 'classify' &&
+        !(MOCK_WELCOME.operator_classes as string[]).includes(String(payload.class_id))
+      )
+        return this.reject(
+          action,
+          `classify needs a class_id, one of ${MOCK_WELCOME.operator_classes.join(', ')}`,
+          payload,
+        )
       if (
         action === 'assess' &&
         !(MOCK_WELCOME.identities as string[]).includes(String(payload.identity))

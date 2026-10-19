@@ -21,6 +21,7 @@ export async function createTransport(
           eo: eo === 'nv' || eo === 'thermal' || eo === 'day' ? eo : undefined,
           terrain: params.get('terrain') ?? undefined,
           condition: params.get('rain') === '1' ? 'rain' : undefined,
+          eoClass: params.get('eoclass') ?? undefined,
           hour: params.get('hour') !== null && Number.isFinite(hour) ? hour : undefined,
         },
       })

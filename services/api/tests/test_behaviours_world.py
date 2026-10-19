@@ -16,6 +16,8 @@ from sim import audience
 from sim.behaviours import metrics
 from sim.constants import DT
 from sim.entity import Drone
+from sim.replay import replay
+from sim.replay import run as run_session
 from sim.world import World
 from tests.behaviour_support import (
     active,
@@ -26,7 +28,7 @@ from tests.behaviour_support import (
     swarm_scenario,
     wp,
 )
-from tests.sim_cases import kestrel
+from tests.sim_cases import act, kestrel
 
 API_DIR = Path(__file__).resolve().parents[1]
 
@@ -192,6 +194,19 @@ def test_a_snapshot_restores_through_a_leader_loss() -> None:
         resumed = World.restore(spec, json.loads(json.dumps(first.snapshot())))
         play(resumed, 600 - cut)
         assert resumed.state_hash() == straight.state_hash(), cut
+
+
+def test_a_recorded_session_with_groups_replays_exactly() -> None:
+    actions = [
+        act(100, "trainee:op-1", "designate", target="m03"),
+        act(200, "instructor:lead", "set-weather", wind_speed_mps=5.0, wind_from_deg=200),
+    ]
+    spec = noisy()
+    _, record = run_session(spec, 11, actions, 800)
+    result = replay(spec, record)
+    assert result.matches and result.first_divergent_seq is None
+    assert any(r.type == "group.formed" for r in record.events)
+    assert any(r.type == "action.designate" for r in record.events)
 
 
 def test_restore_refuses_groups_that_do_not_fit_the_scenario() -> None:

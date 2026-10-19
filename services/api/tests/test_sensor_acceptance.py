@@ -11,13 +11,16 @@ from pathlib import Path
 
 import pytest
 
+from sim.catalogue import load_catalogue
 from sim.sensors import MODELS, Sensor, SensorParams, load_sensor_profile, register_ids
 
 from .sensor_models import PROFILE_DIR, REGISTER, build, observation, sweep
 
 DOC = REGISTER.parent / "SENSOR_MODELS.md"
 FILES = sorted(p.name for p in PROFILE_DIR.glob("*.v1.yaml"))
-CLASSES = ("rotary-small", "fixed-wing-small", "bird")
+#: Every class of the threat catalogue (wave 8): the acceptance criteria hold for all of them.
+CLASSES = load_catalogue().ids
+_CLASS_SUFFIX = "|".join(c.replace("-", "_") for c in CLASSES)
 #: Weather that costs a sensor something, with the visibility the weather model pairs it with.
 BAD_WEATHER = (("haze", 3000.0), ("fog", 400.0), ("dust", 1500.0), ("rain", 4000.0))
 #: Sensors whose P(d) must not depend on the light.
@@ -127,15 +130,11 @@ def test_every_confusion_row_of_every_profile_sums_to_one(name: str) -> None:
 
 
 @pytest.mark.parametrize("name", FILES)
-def test_every_profile_confusion_table_covers_the_wave_classes(name: str) -> None:
+def test_every_profile_confusion_table_covers_every_catalogue_class(name: str) -> None:
     params = load_sensor_profile(PROFILE_DIR / name)
     for key, table in params.profile.confusion.items():
-        if key in ("clutter", "unresolved", "distant"):
-            continue
         for class_id in CLASSES:
-            if params.modality == "rf" and key == "default":
-                continue  # RF tables are indexed by emitter; silent classes are never sampled
-            assert class_id in table.rows or key == "micro_doppler", f"{name}:{key}:{class_id}"
+            assert class_id in table.rows, f"{name}:{key}:{class_id}"
 
 
 # ------------------------------------------------- provenance: every parameter has a source
@@ -216,9 +215,7 @@ def test_every_profile_parameter_is_named_in_its_section(model: str, ids: tuple[
             if pname in documented:
                 continue
             # per-class figures are documented by prefix, e.g. `rcs_<class>` or `emits_<class>`
-            prefix = re.match(
-                r"([a-z_]+?)_(rotary_small|fixed_wing_small|bird|autonomous_small|default)$", pname
-            )
+            prefix = re.match(rf"([a-z_]+?)_({_CLASS_SUFFIX}|default)$", pname)
             if prefix and any(
                 d.startswith(prefix.group(1) + "_") or d == prefix.group(1) for d in documented
             ):

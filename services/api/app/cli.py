@@ -57,6 +57,30 @@ def sim_check() -> None:
         raise typer.Exit(code=4) from error
 
 
+@cli.command("pack-lock")
+def pack_lock(
+    check: bool = typer.Option(False, "--check", help="Only report; change nothing."),
+) -> None:
+    """Record each sensor profile, threat class and rule pack content hash beside its version.
+
+    A pack whose content changed must carry a higher version first; the command refuses to lock
+    new content under the old one.
+    """
+    from sim.provenance import lock_problems, refresh_lock
+
+    if check:
+        problems = lock_problems()
+        for line in problems:
+            typer.echo(f"error: {line}", err=True)
+        raise typer.Exit(code=1 if problems else 0)
+    try:
+        changes = refresh_lock()
+    except ValueError as error:
+        typer.echo(f"error: {error}", err=True)
+        raise typer.Exit(code=1) from error
+    typer.echo("\n".join(changes) if changes else "packs/versions.lock.json is up to date")
+
+
 @cli.command()
 def migrate() -> None:
     """Apply database migrations."""

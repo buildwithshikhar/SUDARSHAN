@@ -20,12 +20,12 @@ TICKS = 600
 SEED = 5
 #: Profile placed for each modality, with the version the shipped scenarios pin.
 SENSORS = (
-    ("radar-1", "radar-generic-s", "0.2.0"),
-    ("eo-1", "eo-generic-day", "0.1.0"),
-    ("nv-1", "eo-generic-nv", "0.1.0"),
-    ("ir-1", "ir-generic-thermal", "0.1.0"),
-    ("rf-1", "rf-generic-passive", "1.0.0"),
-    ("ac-1", "acoustic-generic-array", "1.0.0"),
+    ("radar-1", "radar-generic-s", "0.3.0"),
+    ("eo-1", "eo-generic-day", "0.2.0"),
+    ("nv-1", "eo-generic-nv", "0.2.0"),
+    ("ir-1", "ir-generic-thermal", "0.2.0"),
+    ("rf-1", "rf-generic-passive", "1.1.0"),
+    ("ac-1", "acoustic-generic-array", "1.1.0"),
 )
 #: A tiny play area inside both packs (the smaller is 1500 m from the centre to an edge).
 HALF = 1200.0

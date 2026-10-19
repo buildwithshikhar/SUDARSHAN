@@ -5,7 +5,7 @@
 # Motor and battery heat-contrast figures are UNVERIFIED (Q-09): project-authored, verified: false.
 contract: sensor-profile.v1
 id: ir-generic-thermal
-version: 0.1.0
+version: 0.2.0
 title:
   en: Generic thermal camera
   hi: सामान्य थर्मल कैमरा

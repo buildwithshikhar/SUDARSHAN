@@ -432,7 +432,7 @@ def test_restoring_sensor_and_stream_state_continues_exactly() -> None:
 
 def test_the_shipped_profile_loads_with_the_register_and_reports_what_is_unverified() -> None:
     p = load_sensor_profile(ACOUSTIC_FILE, register=register_ids(REGISTER))
-    assert (p.id, p.version, p.modality) == ("acoustic-generic-array", "1.0.0", "acoustic")
+    assert (p.id, p.version, p.modality) == ("acoustic-generic-array", "1.1.0", "acoustic")
     assert p.profile.fictional
     assert set(p.unverified) == set(p.profile.parameters) | {"confusion:default"}
     sources = {q_.source_id for q_ in p.profile.parameters.values()} | {
@@ -512,7 +512,7 @@ def test_a_suite_built_from_a_scenario_runs_deterministically_and_hears_the_near
             "sensors": [
                 SensorPlacement(
                     id="mic-1",
-                    profile=PackRef(id="acoustic-generic-array", version="1.0.0"),
+                    profile=PackRef(id="acoustic-generic-array", version="1.1.0"),
                     position=Vec3(x=1300.0, y=1450.0, z=6.0),
                     boresight_deg=0.0,
                 )

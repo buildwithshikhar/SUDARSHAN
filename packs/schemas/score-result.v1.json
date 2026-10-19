@@ -592,6 +592,14 @@
       "title": "Lessons",
       "type": "array"
     },
+    "profiles": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/PackRef"
+      },
+      "title": "Profiles",
+      "type": "array"
+    },
     "report_score": {
       "anyOf": [
         {
@@ -641,6 +649,14 @@
       "minimum": 0,
       "title": "Seed",
       "type": "integer"
+    },
+    "threat_classes": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/PackRef"
+      },
+      "title": "Threat Classes",
+      "type": "array"
     },
     "threats": {
       "items": {

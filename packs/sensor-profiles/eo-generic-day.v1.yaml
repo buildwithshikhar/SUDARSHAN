@@ -5,7 +5,7 @@
 # everything else is project-authored (F01). Weather is modelled.
 contract: sensor-profile.v1
 id: eo-generic-day
-version: 0.1.0
+version: 0.2.0
 title:
   en: Generic daylight EO camera
   hi: सामान्य दिवस-प्रकाश EO कैमरा

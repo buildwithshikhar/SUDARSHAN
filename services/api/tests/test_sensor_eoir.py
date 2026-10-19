@@ -435,7 +435,7 @@ def eo_spec() -> ScenarioSpec:
     sensors = [
         SensorPlacement(
             id=sid,
-            profile=PackRef(id=profile, version="0.1.0"),
+            profile=PackRef(id=profile, version="0.2.0"),
             position=Vec3(x=900, y=900, z=6),
             boresight_deg=45.0,
         )

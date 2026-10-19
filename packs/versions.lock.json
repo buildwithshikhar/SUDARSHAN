@@ -1,0 +1,77 @@
+{
+  "note": "Content hash of every sensor profile, threat class and rule pack, beside its version. A pack whose content changes needs a higher version; refresh with `python -m app.cli pack-lock`, which refuses new content under an old version.",
+  "entries": {
+    "rule-pack/training-baseline": {
+      "version": "1.0.0",
+      "content_sha256": "f5a63ba783d5414a3d7921c2b6910cc6234ad77649563bfef539f00211a265fb"
+    },
+    "sensor-profile/acoustic-generic-array": {
+      "version": "1.1.0",
+      "content_sha256": "4a0228e40eab8b212d838b31114629cfe2870ce29608cd25ba957a04c902d572"
+    },
+    "sensor-profile/eo-generic-day": {
+      "version": "0.2.0",
+      "content_sha256": "f00af56fb58a49050eb9b6b8a6ef2b509777e39a34f011136d3d5f8ebb388a96"
+    },
+    "sensor-profile/eo-generic-nv": {
+      "version": "0.2.0",
+      "content_sha256": "9cd33e459b655b6806365ceed3ea16f4858116d08417934a24eb44cdc09e75a7"
+    },
+    "sensor-profile/ir-generic-thermal": {
+      "version": "0.2.0",
+      "content_sha256": "57f6f2beb0031e08c930113865ef14c470e248cc6acc6e721bf7bed124aa0dbe"
+    },
+    "sensor-profile/radar-generic-s": {
+      "version": "0.3.0",
+      "content_sha256": "276dbb68f6e6702edabf9b19eec25f228f8b6d398d605f5cee34a3e36669952f"
+    },
+    "sensor-profile/rf-generic-passive": {
+      "version": "1.1.0",
+      "content_sha256": "40aeba11abb8572e82ce3b5829347d43adb40b907c89a10b50cfcc2e749c2c13"
+    },
+    "threat-class/autonomous-small": {
+      "version": "1.0.0",
+      "content_sha256": "e4664961b4842c8ec5c6a11daa75deb7e703e7de31e777f97a5d49babb5ea840"
+    },
+    "threat-class/balloon": {
+      "version": "1.0.0",
+      "content_sha256": "bb0e0087ce0f6af4bfc997e4119406bc42bba80f0cb0bc5de462447dd9013871"
+    },
+    "threat-class/bird": {
+      "version": "1.0.0",
+      "content_sha256": "48f0fd16f32fa0324d59133cd0e88fc8a2b34fcee7c18a1daf4d468d156d6e8b"
+    },
+    "threat-class/civil-drone": {
+      "version": "1.0.0",
+      "content_sha256": "d4e042d10e77a137d8c1cc87b7a740b35f5633197278c3eff8a7182991147315"
+    },
+    "threat-class/decoy-small": {
+      "version": "1.0.0",
+      "content_sha256": "3e7f79b24faf9f73b0dfe5a91f29937eff642fde76e410886ee106fc7977b8c2"
+    },
+    "threat-class/fixed-wing-large": {
+      "version": "1.0.0",
+      "content_sha256": "b330e3a8814679a7835883685b8ff18d1459e71567c5d71824ed76a35a369629"
+    },
+    "threat-class/fixed-wing-medium": {
+      "version": "1.0.0",
+      "content_sha256": "6fd85696d31c28e1670ae3e1868976cb7c2393101147e55d865904333e3effea"
+    },
+    "threat-class/fixed-wing-small": {
+      "version": "1.0.0",
+      "content_sha256": "3578b905e4e0822501d4eac9541aa88da61ddefa8fad6cbdea810fd719139450"
+    },
+    "threat-class/fpv-small": {
+      "version": "1.0.0",
+      "content_sha256": "480d151c26c980502bccf2eea1a36034a21f8bf6c7651d9f03dbf5fe2e01a226"
+    },
+    "threat-class/kite": {
+      "version": "1.0.0",
+      "content_sha256": "3ef2563dcd1eb6197b36c3e1e14cb014b8248aee579817b0f0cbed75f6fe9a54"
+    },
+    "threat-class/rotary-small": {
+      "version": "1.0.0",
+      "content_sha256": "45f74d45a9ea17358dd614c5bac72ec7dfc0d89dc4aefd9c66dfa8705f5f53bc"
+    }
+  }
+}

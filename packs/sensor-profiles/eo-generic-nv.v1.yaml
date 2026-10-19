@@ -4,7 +4,7 @@
 # modelled.
 contract: sensor-profile.v1
 id: eo-generic-nv
-version: 0.1.0
+version: 0.2.0
 title:
   en: Generic night-vision camera
   hi: सामान्य नाइट-विज़न कैमरा

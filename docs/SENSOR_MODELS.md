@@ -14,7 +14,7 @@ All arithmetic that reaches a detection uses only `+ - * /`, `sqrt` and `sim.det
 
 ## Radar
 
-`sim/sensors/radar.py`, `RadarSensor`, modality `radar`, profile `radar-generic-s` 0.2.0 (`packs/sensor-profiles/radar-generic-s.v1.yaml`). No cueing (`supports_cue = False`); it covers all bearings inside its elevation limits.
+`sim/sensors/radar.py`, `RadarSensor`, modality `radar`, profile `radar-generic-s` 0.3.0 (`packs/sensor-profiles/radar-generic-s.v1.yaml`). No cueing (`supports_cue = False`); it covers all bearings inside its elevation limits.
 
 ### Purpose
 
@@ -122,9 +122,9 @@ This radar is a trainer's model of how the picture looks, not a model of any rea
 
 | Mode | Profile | Modality | Difference |
 |---|---|---|---|
-| Day | `eo-generic-day` 0.1.0 | `eo` | Keeps 3 % of its performance in the dark. |
-| Night vision | `eo-generic-nv` 0.1.0 | `eo` | Keeps 70 % in the dark; blooms in bright light. |
-| Thermal | `ir-generic-thermal` 0.1.0 | `ir` | Independent of light; passes haze better; the research-section camera (320 px, 24 degrees). |
+| Day | `eo-generic-day` 0.2.0 | `eo` | Keeps 3 % of its performance in the dark. |
+| Night vision | `eo-generic-nv` 0.2.0 | `eo` | Keeps 70 % in the dark; blooms in bright light. |
+| Thermal | `ir-generic-thermal` 0.2.0 | `ir` | Independent of light; passes haze better; the research-section camera (320 px, 24 degrees). |
 
 ### Purpose
 

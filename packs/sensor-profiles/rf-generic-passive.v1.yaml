@@ -5,7 +5,7 @@
 # Band index: 1 = 2.4 GHz, 2 = 5.8 GHz, 3 = 900 MHz, 4 = 433 MHz, 5 = 1.2-1.3 GHz (secondary plan).
 contract: sensor-profile.v1
 id: rf-generic-passive
-version: 1.0.0
+version: 1.1.0
 title:
   en: Generic passive RF detector
   hi: सामान्य निष्क्रिय आरएफ संसूचक

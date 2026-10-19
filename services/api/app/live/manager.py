@@ -34,6 +34,7 @@ from app.models import TrainingSession
 from app.scoring import score_session
 from sim import replay
 from sim.eventlog import verify
+from sim.provenance import used_versions
 from sim.tracking.picture import Picture
 from sim.world import World
 
@@ -394,6 +395,7 @@ class LiveSession:
         assert world is not None
         final = replay.finish(world)
         self.status = status
+        versions = used_versions(world.spec)
         record = SessionRecord(
             contract="session-record.v1",
             scenario=PackRef(id=world.spec.id, version=world.spec.version),
@@ -404,6 +406,8 @@ class LiveSession:
             final_state_hash=final,
             picture=True,
             roe=True,
+            profiles=list(versions.profiles),
+            threat_classes=list(versions.threat_classes),
         )
         conn = self.conn
         if conn is not None:

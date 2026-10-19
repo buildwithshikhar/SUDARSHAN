@@ -34,7 +34,7 @@
     { "id": "kestrel-depot", "label": { "en": "Kestrel Depot", "hi": "केस्ट्रल डिपो" }, "position": { "x": 0, "y": 0, "z": 0 } }
   ],
   "sensors": [
-    { "id": "radar-1", "profile": { "id": "radar-generic-s", "version": "0.2.0" }, "position": { "x": -140, "y": 85, "z": 6 }, "boresight_deg": 45 }
+    { "id": "radar-1", "profile": { "id": "radar-generic-s", "version": "0.3.0" }, "position": { "x": -140, "y": 85, "z": 6 }, "boresight_deg": 45 }
   ],
   "threats": [
     {

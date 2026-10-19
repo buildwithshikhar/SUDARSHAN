@@ -64,3 +64,8 @@ class SessionRecord(Contract):
     #: True when operator actions on tracks were checked against the scenario's rule pack
     #: (wave 5). Absent in earlier records, which read as False.
     roe: bool = False
+    #: The sensor profiles and threat classes (exact versions) the session ran with, so a replay or
+    #: a score can say which numbers it used. Absent in earlier records, which read as empty and
+    #: are not checked.
+    profiles: list[PackRef] = []
+    threat_classes: list[PackRef] = []

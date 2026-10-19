@@ -12,6 +12,7 @@ from itertools import groupby
 from app.contracts import ActionRecord, ScenarioSpec, SessionRecord
 from app.contracts.common import PackRef
 
+from .provenance import check_recorded, used_versions
 from .roe import load_rule_engine
 from .tracking.picture import Picture
 from .world import ActionError, World
@@ -62,6 +63,7 @@ def run(
         actions,
     )
     final = finish(world)
+    versions = used_versions(spec) if picture else None
     record = SessionRecord(
         contract="session-record.v1",
         scenario=PackRef(id=spec.id, version=spec.version),
@@ -72,6 +74,8 @@ def run(
         final_state_hash=final,
         picture=picture,
         roe=roe,
+        profiles=[] if versions is None else list(versions.profiles),
+        threat_classes=[] if versions is None else list(versions.threat_classes),
     )
     return world, record
 
@@ -88,6 +92,7 @@ def replay(spec: ScenarioSpec, record: SessionRecord) -> ReplayResult:
     """Re-run a record, with a sensor picture and rules of engagement if the record had them."""
     if (record.scenario.id, record.scenario.version) != (spec.id, spec.version):
         raise ValueError("the session record is for a different scenario or version")
+    check_recorded(spec, record.profiles, record.threat_classes)
     _, again = run(
         spec, record.seed, record.actions, record.ticks, picture=record.picture, roe=record.roe
     )

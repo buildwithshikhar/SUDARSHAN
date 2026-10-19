@@ -167,3 +167,8 @@ class SessionScore(Contract):
     decision_score: Mark | None
     report_score: Mark | None
     lessons: list[Lesson] = []
+    #: The sensor profile and threat-class versions the session ran with (from its record), so a
+    #: score says which numbers it was earned against. Empty for a record made before they were
+    #: kept.
+    profiles: list[PackRef] = []
+    threat_classes: list[PackRef] = []

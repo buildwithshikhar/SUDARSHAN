@@ -339,7 +339,7 @@ def test_the_shipped_radar_profile_loads_against_the_register_and_lists_what_is_
     from sim.sensors import load_sensor_profile
 
     p = load_sensor_profile(PROFILE_DIR / RADAR, register=register_ids(REGISTER))
-    assert (p.id, p.version, p.modality) == ("radar-generic-s", "0.2.0", "radar")
+    assert (p.id, p.version, p.modality) == ("radar-generic-s", "0.3.0", "radar")
     assert {"rcs_bird", "md_hz_wing_beat", "confusion:default"} <= set(p.unverified)
     assert all(q.source_id == "F01" for q in p.profile.parameters.values())
     assert all(not q.verified for q in p.profile.parameters.values())  # nothing extracted yet
@@ -389,7 +389,7 @@ def test_the_kestrel_scenario_builds_a_radar_from_the_shipped_profile() -> None:
     spec = kestrel()
     suite = build_sensors(spec, register=register_ids(REGISTER))
     sensor = suite["radar-1"]
-    assert isinstance(sensor, RadarSensor) and sensor.params.version == "0.2.0"
+    assert isinstance(sensor, RadarSensor) and sensor.params.version == "0.3.0"
     world = World(spec, 240117)
     found: list[Detection] = []
     while world.tick < 4000:

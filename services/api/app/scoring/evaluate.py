@@ -25,7 +25,10 @@ clutter or civil contact the operator never acted on is left out too (`worked` i
 it alone was the right call. A hostile contact never worked on scores 0.
 """
 
+from collections.abc import Sequence
+
 from app.contracts import SessionRecord
+from app.contracts.common import PackRef
 from app.contracts.rulepack import RulePack
 from app.contracts.scenario import ScenarioSpec, Threat
 from app.contracts.score import Finding, SessionScore, ThreatScore
@@ -210,6 +213,8 @@ def score_events(
     seed: int,
     ticks: int,
     event_head: str,
+    profiles: Sequence[PackRef] = (),
+    threat_classes: Sequence[PackRef] = (),
 ) -> SessionScore:
     if (pack.id, pack.version) != (spec.rule_pack.id, spec.rule_pack.version):
         raise ValueError("the rule pack is not the one the scenario names")
@@ -256,6 +261,8 @@ def score_events(
         decision_score=_mean(decisions),
         report_score=_mean(reports),
         lessons=lessons(threats, session_findings, pack.weights.report),
+        profiles=list(profiles),
+        threat_classes=list(threat_classes),
     )
 
 
@@ -264,5 +271,12 @@ def score_session(spec: ScenarioSpec, pack: RulePack, record: SessionRecord) -> 
         raise ValueError("the session record is for a different scenario or version")
     head = record.events[-1].hash if record.events else "0" * 64
     return score_events(
-        spec, pack, list(record.events), seed=record.seed, ticks=record.ticks, event_head=head
+        spec,
+        pack,
+        list(record.events),
+        seed=record.seed,
+        ticks=record.ticks,
+        event_head=head,
+        profiles=record.profiles,
+        threat_classes=record.threat_classes,
     )

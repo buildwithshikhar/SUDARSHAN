@@ -20,10 +20,11 @@ export type Cost1 = number
 export type Key = string
 export type ThreatId = string | null
 export type Lessons = Lesson[]
-export type ReportScore = number | null
-export type ReportWeight = number
 export type Id = string
 export type Version = string
+export type Profiles = PackRef[]
+export type ReportScore = number | null
+export type ReportWeight = number
 export type En = string
 export type Hi = string
 export type Score = number | null
@@ -41,6 +42,7 @@ export type Misses = number
 export type NoiseTrials = number
 export type SignalTrials = number
 export type Seed = number
+export type ThreatClasses = PackRef[]
 export type ClassId = string
 export type Decision = number | null
 export type Disposition = 'hostile' | 'civil-permitted' | 'clutter'
@@ -77,6 +79,7 @@ export interface SessionScore {
   event_head: EventHead
   findings?: Findings
   lessons?: Lessons
+  profiles?: Profiles
   report_score: ReportScore
   report_weight: ReportWeight
   rule_pack: PackRef
@@ -85,6 +88,7 @@ export interface SessionScore {
   score: Score
   sdt: Sdt
   seed: Seed
+  threat_classes?: ThreatClasses
   threats: Threats
   ticks: Ticks
 }

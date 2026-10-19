@@ -5,7 +5,7 @@
 # have no row in docs/DATA_REGISTER.md yet (Q-20), so they are F01 and verified: false.
 contract: sensor-profile.v1
 id: radar-generic-s
-version: 0.2.0
+version: 0.3.0
 title:
   en: Generic short-range surveillance radar
   hi: सामान्य कम दूरी निगरानी रडार

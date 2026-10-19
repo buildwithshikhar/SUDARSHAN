@@ -946,7 +946,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `scenarios.editor.yaml` | Scenario YAML | परिदृश्य YAML |  |
 | `scenarios.editor.yamlLabel` | Scenario YAML text | परिदृश्य YAML पाठ |  |
 | `scenarios.editor.caret` | Line {{line}}, column {{column}} | पंक्ति {{line}}, स्तंभ {{column}} |  |
-| `scenarios.editor.lines` | {{count}} lines | {{count}} पंक्तियाँ |  |
+| `scenarios.editor.lines` | Lines: {{count}} | पंक्तियाँ: {{count}} |  |
 | `scenarios.editor.hint` | Write or paste scenario.v1 as YAML. Tab leaves the field. Validation runs a moment after you stop typing. | scenario.v1 को YAML में लिखें या चिपकाएँ। Tab दबाने पर फ़ील्ड छूट जाता है। टाइप रुकने के कुछ क्षण बाद जाँच चलती है। |  |
 | `scenarios.editor.opened` | Opened {{id}} ({{origin}}). Saving stores the text under the id it contains. | {{id}} ({{origin}}) खोला गया। सहेजने पर पाठ उसी आईडी से सहेजा जाता है जो उसमें है। |  |
 | `scenarios.editor.outdated` | The text has changed since this ran. Run it again to see the current result. | यह चलने के बाद पाठ बदल गया है। वर्तमान परिणाम के लिए इसे फिर चलाएँ। |  |
@@ -959,7 +959,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `scenarios.editor.validation.checking` | Checking | जाँच हो रही है |  |
 | `scenarios.editor.validation.valid` | Valid | मान्य |  |
 | `scenarios.editor.validation.invalid` | Not valid | मान्य नहीं |  |
-| `scenarios.editor.validation.counts` | {{errors}} errors, {{warnings}} warnings | {{errors}} त्रुटियाँ, {{warnings}} चेतावनियाँ |  |
+| `scenarios.editor.validation.counts` | Errors: {{errors}} · Warnings: {{warnings}} | त्रुटियाँ: {{errors}} · चेतावनियाँ: {{warnings}} |  |
 | `scenarios.editor.validation.clean` | The contract validates and the linter found nothing. | कॉन्ट्रैक्ट मान्य है और लिंटर को कुछ नहीं मिला। |  |
 | `scenarios.editor.validation.list` | Errors and lint items, by line | त्रुटियाँ और लिंट प्रविष्टियाँ, पंक्ति के क्रम में |  |
 | `scenarios.editor.validation.line` | Line {{line}} | पंक्ति {{line}} |  |

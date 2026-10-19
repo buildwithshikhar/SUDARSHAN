@@ -384,13 +384,17 @@ describe('EoScene targets', () => {
 
   it('places a mesh per held report and drops it when the report goes', () => {
     const scene = new EoScene(canvas(), { tier: 'low' })
-    const placed = (scene as unknown as { placed: Map<number, unknown> }).placed
     scene.update({ ...pose, reports: [report(1), report(2, 'bird')] })
-    expect(placed.size).toBe(2)
+    expect(scene.stats()).toMatchObject({
+      targetsDrawn: 2,
+      targetShapes: 'rotary-small,bird',
+    })
     scene.update({ ...pose, reports: [report(2, 'bird')] })
-    expect([...placed.keys()]).toEqual([2])
+    expect(scene.stats()).toMatchObject({ targetsDrawn: 1, targetShapes: 'bird' })
     scene.update({ ...pose, reports: [report(2, 'point')] })
-    expect(placed.size).toBe(1)
+    expect(scene.stats()).toMatchObject({ targetsDrawn: 1, targetShapes: 'point' })
+    scene.update({ ...pose, reports: [] })
+    expect(scene.stats()).toMatchObject({ targetsDrawn: 0, targetTriangles: 0, targetShapes: '' })
     scene.dispose()
   })
 

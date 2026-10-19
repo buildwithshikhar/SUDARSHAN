@@ -107,6 +107,9 @@ export function EoView({ sensorId, mode = 'day' }: { sensorId: string | null; mo
         nowMs: now,
       })
       scene.render(now)
+      // The shapes on screen, for tests and support; written only when the set changes.
+      const shapes = scene.targetShapes()
+      if (wrap.dataset.shapes !== shapes) wrap.dataset.shapes = shapes
       // Frame times feed the tier controller; it may step the tier down or up once.
       const change = qualityStore.frame(now)
       if (change) scene.setQuality(change.tier)

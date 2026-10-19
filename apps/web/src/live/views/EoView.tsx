@@ -6,7 +6,7 @@ import { useLive, useLiveSession } from '../context'
 import { qualityStore, useQuality } from '../qualityStore'
 import { sensorPose } from '../store'
 import { useTerrain } from '../terrain/loader'
-import { terrainOf, type TerrainState } from '../terrain/types'
+import { defaultHeightCount, terrainOf, type TerrainState } from '../terrain/types'
 import { EoHud } from './EoHud'
 import { ReportHold } from './eoHold'
 import { publishLook, resetLook } from './eoLook'
@@ -221,13 +221,19 @@ function TerrainNotice({ terrain }: { terrain: TerrainState }) {
     )
   }
   if (terrain.pack) {
+    const defaults = defaultHeightCount(terrain.pack.manifest)
     return (
-      <p
+      <div
         data-testid="terrain-label"
-        className="num pointer-events-none absolute bottom-12 left-1/2 m-0 -translate-x-1/2 bg-bg/80 px-2 py-0.5 text-2xs text-ink-2"
+        className="num pointer-events-none absolute bottom-12 left-1/2 m-0 flex max-w-[calc(100%-24px)] -translate-x-1/2 flex-col items-center bg-bg/80 px-2 py-0.5 text-center text-2xs text-ink-2"
       >
-        {t('live.eo.terrain.label', { name: terrain.pack.name })}
-      </p>
+        <span>{t('live.eo.terrain.label', { name: terrain.pack.name })}</span>
+        <span data-testid="terrain-heights">
+          {defaults !== null && defaults > 0
+            ? t('live.eo.terrain.heightsCount', { n: defaults })
+            : t('live.eo.terrain.heights')}
+        </span>
+      </div>
     )
   }
   return null

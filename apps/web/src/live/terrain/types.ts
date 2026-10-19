@@ -42,10 +42,24 @@ export interface TerrainManifest {
     min_m: number
     max_m: number
   }
-  buildings: { file: string; count: number }
+  buildings: {
+    file: string
+    count: number
+    /** How many building heights came from an OSM height tag, from levels, or are a default. */
+    height_source?: { tag?: number; levels?: number; default?: number }
+  }
   vegetation: { file: string; count: number }
   meshes?: { terrain?: string; buildings?: string }
   attribution?: string
+}
+
+/**
+ * How many building heights in the pack are generic defaults (the source had no height), or null
+ * when the manifest does not say.
+ */
+export function defaultHeightCount(manifest: TerrainManifest): number | null {
+  const n = manifest.buildings.height_source?.default
+  return typeof n === 'number' && Number.isInteger(n) && n >= 0 ? n : null
 }
 
 export interface TerrainBuilding {

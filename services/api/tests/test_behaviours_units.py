@@ -7,6 +7,7 @@ import math
 
 import pytest
 
+from app.contracts.scenario import TETHER_SIN_ELEVATION
 from sim import detmath
 from sim.behaviours import arrival, boids, clutter, draws, intents, leaderfollower, links, metrics
 from sim.constants import DT
@@ -445,7 +446,7 @@ def test_a_kite_settles_downwind_of_its_anchor_and_never_leaves_the_line() -> No
         assert BAND.min_alt <= m.z <= BAND.max_alt
     late = track[-400:]
     assert all(m.x > 0 for m in late)  # downwind of the anchor
-    assert max(m.z for m in late) == pytest.approx(100.0 * clutter.TETHER_SIN_ELEVATION, abs=1.0)
+    assert max(m.z for m in late) == pytest.approx(100.0 * TETHER_SIN_ELEVATION, abs=1.0)
     assert max(m.y for m in late) > 20.0 and min(m.y for m in late) < -20.0  # it sways
 
 
@@ -485,7 +486,7 @@ def test_a_kite_started_outside_its_line_is_drawn_back_onto_it() -> None:
 def test_a_kite_that_does_not_move_keeps_its_air_heading() -> None:
     # at its station in still air with no sway: no displacement, so the heading is unchanged
     reach = 100.0 * clutter.TETHER_COS_ELEVATION
-    z = 100.0 * clutter.TETHER_SIN_ELEVATION
+    z = 100.0 * TETHER_SIN_ELEVATION
     m = clutter.tether_step(
         0.0, reach, z, 0.6, 0.8, 0.0, (0.0, 0.0, 0.0), 100.0, 0.0, 10.0, (0.0, 0.0), BAND
     )

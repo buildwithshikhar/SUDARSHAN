@@ -130,6 +130,38 @@ describe('operator actions in the scripted session', () => {
     expect(act(world, 3, 'hold', { track: 'T011' })).toMatchObject({ ok: true, seq: 3 })
   })
 
+  it('accepts each of the nine operator classes and refuses anything else', () => {
+    expect(MOCK_WELCOME.operator_classes).toHaveLength(9)
+    const outcome = (id: string) => {
+      const world = session()
+      act(world, 1, 'classify', { track: 'T014', class_id: id })
+      return events(world).map((e) => e.type)
+    }
+    for (const id of MOCK_WELCOME.operator_classes) {
+      const types = outcome(id)
+      expect(types, id).toContain('action.classify')
+      expect(types, id).not.toContain('action.rejected')
+    }
+    for (const bad of ['rotary', 'autonomous-small', 'decoy-small', 'civil-drone', ''])
+      expect(outcome(bad), bad).toContain('action.rejected')
+  })
+
+  it('reports a forced EO class on every EO report, and the default class otherwise', () => {
+    const eoReports = (variant: ConstructorParameters<typeof MockWorld>[0]) => {
+      const world = new MockWorld(variant)
+      world.start()
+      const out = []
+      while (world.timeS < 12) world.step()
+      act(world, 1, 'sensor-cue', { sensor: 'eo-1', track: 'T014', narrow: true })
+      while (world.timeS < 30) out.push(...world.step().reports.filter((r) => r.modality === 'eo'))
+      return out
+    }
+    const forced = eoReports({ eoClass: 'kite' })
+    expect(forced.length).toBeGreaterThan(0)
+    expect(forced.every((r) => r.reported_class === 'kite')).toBe(true)
+    expect(eoReports({}).every((r) => r.reported_class !== 'kite')).toBe(true)
+  })
+
   it('blocks a response the rules do not allow, naming the rule, the pack and what is missing', () => {
     const world = session()
     act(world, 1, 'engage', { track: 'T014', effector_class: 'ec-a' })

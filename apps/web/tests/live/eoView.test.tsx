@@ -63,6 +63,9 @@ vi.mock('../../src/live/views/eoScene', () => {
     render(...a: unknown[]) {
       this.rec('render', a)
     }
+    targetShapes() {
+      return ''
+    }
     dispose() {
       spy.disposed++
     }

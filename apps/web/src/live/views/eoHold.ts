@@ -8,7 +8,16 @@ import type { Report } from '../protocol'
 
 export const HOLD_MS = 400
 
-export type EoShape = 'rotary-small' | 'fixed-wing-small' | 'bird' | 'point'
+export type EoShape =
+  | 'rotary-small'
+  | 'fixed-wing-small'
+  | 'bird'
+  | 'fpv-small'
+  | 'fixed-wing-medium'
+  | 'fixed-wing-large'
+  | 'kite'
+  | 'balloon'
+  | 'point'
 
 export interface HeldReport {
   key: number
@@ -23,7 +32,16 @@ export interface HeldReport {
   seenAt: number
 }
 
-const SHAPES: ReadonlySet<string> = new Set(['rotary-small', 'fixed-wing-small', 'bird'])
+const SHAPES: ReadonlySet<string> = new Set([
+  'rotary-small',
+  'fixed-wing-small',
+  'bird',
+  'fpv-small',
+  'fixed-wing-medium',
+  'fixed-wing-large',
+  'kite',
+  'balloon',
+])
 
 /** The mesh to draw: the reported class if the sensor recognised one, otherwise a generic point. */
 export function shapeFor(reportedClass: string | null): EoShape {

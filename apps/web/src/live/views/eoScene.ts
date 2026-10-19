@@ -15,8 +15,9 @@ import type { Briefing, Vec3 } from '../protocol'
 import { heightAt } from '../terrain/heightAt'
 import type { TerrainPack } from '../terrain/types'
 import { surfaceTemperature, type EoMode, type ThermalClass, isThermal } from './eoMode'
-import type { EoShape, HeldReport } from './eoHold'
+import type { HeldReport } from './eoHold'
 import { parseGlb } from './eoGlb'
+import { patchTargetMaterial, TargetField, bobOffset } from './eoMeshes'
 import { PostPass, type LookReadout } from './eoPost'
 import { Rain } from './eoRain'
 import { createSharedUniforms, patchMaterial, type SharedUniforms } from './eoShading'
@@ -63,12 +64,6 @@ function directionInto(
   return out.set(Math.sin(az) * Math.cos(el), Math.sin(el), -Math.cos(az) * Math.cos(el))
 }
 
-interface Placed {
-  group: THREE.Group
-  shape: EoShape
-  wings: THREE.Object3D[]
-}
-
 /** A mesh with a daylight look and a thermal look; switching is a material swap, once. */
 interface Skin {
   mesh: THREE.Mesh
@@ -103,6 +98,11 @@ export interface SceneStats {
   pixelRatio: number
   drawCalls: number
   triangles: number
+  /** Target contacts drawn in the last update, and the triangles they submit. */
+  targetsDrawn: number
+  targetTriangles: number
+  /** The shapes drawn in the last update, comma separated. */
+  targetShapes: string
 }
 
 export class EoScene {
@@ -126,7 +126,8 @@ export class EoScene {
   private readonly litMaterials = new Set<THREE.Material>()
   private readonly geometry = new Map<string, THREE.BufferGeometry>()
   private readonly targetMaterial: THREE.MeshLambertMaterial
-  private readonly placed = new Map<number, Placed>()
+  private readonly targets: TargetField
+  private readonly pose = new THREE.Object3D()
   private readonly groundMesh: THREE.Mesh
   private readonly groundThermal: THREE.MeshLambertMaterial
   private readonly terrainGroup = new THREE.Group()
@@ -140,7 +141,6 @@ export class EoScene {
     boxThermal: THREE.Material
     mastThermal: THREE.Material
   } | null = null
-  private readonly seen = new Set<number>()
   private trees: THREE.InstancedMesh | null = null
   private pack: TerrainPack | null = null
   private terrainRequested = false
@@ -332,7 +332,10 @@ export class EoScene {
       fog: false,
       depthTest: false,
     })
+    patchTargetMaterial(this.targetMaterial)
     this.disposables.push(this.targetMaterial)
+    this.targets = new TargetField(this.scene, this.targetMaterial)
+    this.disposables.push({ dispose: () => this.targets.dispose(this.scene) })
 
     this.rain = new Rain(this.uniforms)
     this.scene.add(this.rain.object)
@@ -944,19 +947,12 @@ export class EoScene {
       this.placeLights()
     }
 
-    const seen = this.seen
-    seen.clear()
+    const tSec = opts.nowMs / 1000
+    const pose = this.pose
+    this.targets.begin()
     for (const report of opts.reports) {
-      seen.add(report.key)
-      let entry = this.placed.get(report.key)
-      if (!entry || entry.shape !== report.shape) {
-        if (entry) this.scene.remove(entry.group)
-        entry = this.build(report.shape)
-        this.placed.set(report.key, entry)
-        this.scene.add(entry.group)
-      }
       const d = directionInto(this.dir, report.azimuthDeg, report.elevationDeg)
-      entry.group.position.set(
+      pose.position.set(
         this.cam.x + d.x * DRAW_DISTANCE,
         this.cam.y + d.y * DRAW_DISTANCE,
         this.cam.z + d.z * DRAW_DISTANCE,
@@ -965,84 +961,31 @@ export class EoScene {
       const minDeg = (MIN_DRAW_PX / this.width) * opts.fovDeg
       const angle = Math.max(report.sizeDeg, minDeg) * DEG
       const world = 2 * DRAW_DISTANCE * Math.tan(angle / 2)
-      entry.group.scale.setScalar(world)
-      // Face the camera, then pose the model: aircraft seen from above at a slant, birds side on.
-      entry.group.lookAt(this.cam)
+      pose.scale.setScalar(world)
+      // Face the camera, then pose the model: aircraft seen from above at a slant, birds side on,
+      // kites and balloons face-on.
+      pose.rotation.set(0, 0, 0)
+      pose.lookAt(this.cam)
       const spin = (report.key * 1.9) % (Math.PI * 2)
-      if (entry.shape === 'bird') entry.group.rotateY(Math.PI / 2 + 0.3 * Math.sin(spin))
-      else if (entry.shape !== 'point') {
-        entry.group.rotateX(Math.PI / 2 - 0.45)
-        entry.group.rotateY(spin)
+      switch (report.shape) {
+        case 'bird':
+          pose.rotateY(Math.PI / 2 + 0.3 * Math.sin(spin))
+          break
+        case 'kite':
+          pose.rotateZ(0.35 * Math.sin(spin + tSec * 0.5))
+          break
+        case 'balloon':
+          pose.translateY(bobOffset(report.key, tSec) * world)
+          break
+        case 'point':
+          break
+        default:
+          pose.rotateX(Math.PI / 2 - 0.45)
+          pose.rotateY(spin)
       }
-      const flap = Math.sin(opts.nowMs / 70 + report.key)
-      entry.wings.forEach((wing, i) => {
-        wing.rotation.z = (i === 0 ? 1 : -1) * (0.35 + 0.45 * flap)
-      })
+      this.targets.place(report.shape, report.key, pose, tSec)
     }
-    for (const [key, entry] of this.placed) {
-      if (!seen.has(key)) {
-        this.scene.remove(entry.group)
-        this.placed.delete(key)
-      }
-    }
-  }
-
-  /** Low-poly meshes of unit span. */
-  private build(shape: EoShape): Placed {
-    const group = new THREE.Group()
-    const wings: THREE.Object3D[] = []
-    const box = (w: number, h: number, d: number) =>
-      this.shared(`box-${w}-${h}-${d}`, () => new THREE.BoxGeometry(w, h, d))
-    const add = (g: THREE.BufferGeometry, x = 0, y = 0, z = 0, ry = 0) => {
-      const m = new THREE.Mesh(g, this.targetMaterial)
-      m.position.set(x, y, z)
-      m.rotation.y = ry
-      m.renderOrder = 10
-      group.add(m)
-      return m
-    }
-    switch (shape) {
-      case 'rotary-small': {
-        add(box(0.22, 0.1, 0.22))
-        add(box(0.95, 0.035, 0.05), 0, 0, 0, Math.PI / 4)
-        add(box(0.95, 0.035, 0.05), 0, 0, 0, -Math.PI / 4)
-        const disc = this.shared('rotor', () => new THREE.CylinderGeometry(0.17, 0.17, 0.012, 10))
-        for (const [x, z] of [
-          [0.34, 0.34],
-          [-0.34, 0.34],
-          [0.34, -0.34],
-          [-0.34, -0.34],
-        ] as const)
-          add(disc, x, 0.05, z)
-        break
-      }
-      case 'fixed-wing-small': {
-        add(box(0.09, 0.09, 0.78))
-        add(box(1, 0.025, 0.16), 0, 0.01, 0.05)
-        add(box(0.34, 0.025, 0.1), 0, 0.02, -0.34)
-        add(box(0.025, 0.14, 0.1), 0, 0.07, -0.34)
-        break
-      }
-      case 'bird': {
-        add(box(0.16, 0.1, 0.34))
-        for (const side of [-1, 1] as const) {
-          const wingGroup = new THREE.Group()
-          wingGroup.position.set(side * 0.06, 0.02, 0)
-          const wing = new THREE.Mesh(box(0.5, 0.02, 0.2), this.targetMaterial)
-          wing.position.x = side * 0.25
-          wing.renderOrder = 10
-          wingGroup.add(wing)
-          group.add(wingGroup)
-          wings.push(wingGroup)
-        }
-        break
-      }
-      case 'point': {
-        add(this.shared('point', () => new THREE.IcosahedronGeometry(0.4, 0)))
-        break
-      }
-    }
-    return { group, shape, wings }
+    this.targets.end()
   }
 
   /** Render, at most once per `minIntervalMs`. */
@@ -1053,6 +996,11 @@ export class EoScene {
     this.uniforms.time.value = (nowMs - this.startedAt) / 1000
     if (this.post) this.post.render(this.scene, this.camera)
     else this.renderer.render(this.scene, this.camera)
+  }
+
+  /** The shapes drawn in the last update. */
+  targetShapes(): string {
+    return this.targets.shapesDrawn()
   }
 
   /** What is drawn and how, for tests, the debug overlay and the /bench harness. */
@@ -1069,13 +1017,14 @@ export class EoScene {
       pixelRatio: this.renderer.getPixelRatio(),
       drawCalls: info.calls,
       triangles: info.triangles,
+      targetsDrawn: this.targets.drawn(),
+      targetTriangles: this.targets.triangles(),
+      targetShapes: this.targets.shapesDrawn(),
     }
   }
 
   dispose(): void {
     this.disposed = true
-    this.placed.forEach((p) => this.scene.remove(p.group))
-    this.placed.clear()
     this.clearTerrain()
     this.post?.dispose()
     this.post = null

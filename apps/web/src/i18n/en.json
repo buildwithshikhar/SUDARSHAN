@@ -161,7 +161,12 @@
       "rotary-small": "Small rotary",
       "fixed-wing-small": "Small fixed-wing",
       "bird": "Bird",
-      "unknown": "Unknown"
+      "unknown": "Unknown",
+      "fpv-small": "Small FPV quad",
+      "fixed-wing-medium": "Medium fixed-wing",
+      "fixed-wing-large": "Large fixed-wing",
+      "kite": "Kite",
+      "balloon": "Balloon"
     },
     "identity": {
       "hostile": "Hostile",
@@ -714,7 +719,7 @@
       "prefill": "Bearing, range and heading are filled from the selected track. Edit them to what you judge.",
       "what": "What",
       "whatNone": "Not stated",
-      "whatHint": "Keys 1 to 4 choose a class, 0 clears.",
+      "whatHint": "Keys 1 to {{max}} choose a class, 0 clears.",
       "where": "Where, from the site",
       "bearing": "Bearing (°)",
       "bearingHint": "0 to under 360, from north",

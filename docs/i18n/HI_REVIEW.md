@@ -135,6 +135,11 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.class.fixed-wing-small` | Small fixed-wing | छोटा फिक्स्ड-विंग |  |
 | `live.class.bird` | Bird | पक्षी |  |
 | `live.class.unknown` | Unknown | अज्ञात |  |
+| `live.class.fpv-small` | Small FPV quad | छोटा एफपीवी क्वाड |  |
+| `live.class.fixed-wing-medium` | Medium fixed-wing | मध्यम फिक्स्ड-विंग |  |
+| `live.class.fixed-wing-large` | Large fixed-wing | बड़ा फिक्स्ड-विंग |  |
+| `live.class.kite` | Kite | पतंग |  |
+| `live.class.balloon` | Balloon | गुब्बारा |  |
 | `live.identity.hostile` | Hostile | शत्रु |  |
 | `live.identity.suspect` | Suspect | संदिग्ध |  |
 | `live.identity.unknown` | Unknown | अज्ञात |  |
@@ -555,7 +560,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.report.prefill` | Bearing, range and heading are filled from the selected track. Edit them to what you judge. | दिशा, दूरी और शीर्ष चयनित ट्रैक से भरे गए हैं। अपने आकलन के अनुसार बदलें। |  |
 | `live.report.what` | What | क्या |  |
 | `live.report.whatNone` | Not stated | नहीं बताया |  |
-| `live.report.whatHint` | Keys 1 to 4 choose a class, 0 clears. | कुंजी 1 से 4 वर्ग चुनती हैं, 0 मिटाती है। |  |
+| `live.report.whatHint` | Keys 1 to {{max}} choose a class, 0 clears. | कुंजी 1 से {{max}} वर्ग चुनती हैं, 0 मिटाती है। |  |
 | `live.report.where` | Where, from the site | कहाँ, स्थल से |  |
 | `live.report.bearing` | Bearing (°) | दिशा (°) |  |
 | `live.report.bearingHint` | 0 to under 360, from north | 0 से 360 से कम, उत्तर से |  |
@@ -802,6 +807,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `bench.col.p5` | 5th pct fps | 5वाँ पर्सेंटाइल fps |  |
 | `bench.col.p99` | 99th pct ms | 99वाँ पर्सेंटाइल ms |  |
 | `bench.col.frames` | Frames | फ़्रेम |  |
+| `bench.col.slow` | Slow frames | धीमे फ़्रेम |  |
 | `bench.phase.high` | High tier | उच्च स्तर |  |
 | `bench.phase.medium` | Medium tier | मध्यम स्तर |  |
 | `bench.phase.low` | Low tier | निम्न स्तर |  |
@@ -822,4 +828,4 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `bench.unknown` | not reported | रिपोर्ट नहीं हुआ |  |
 | `bench.notes` | Thermal is a rendering model, not radiometric. The swarm and birds are placeholder markers. Frame times are display-refresh intervals, so a 60 Hz screen caps results at 60 fps. | थर्मल एक रेंडरिंग मॉडल है, रेडियोमेट्रिक नहीं। झुंड और पक्षी नमूना चिह्न हैं। फ़्रेम समय डिस्प्ले-रिफ़्रेश अंतराल हैं, इसलिए 60 Hz स्क्रीन परिणामों को 60 fps पर सीमित करती है। |  |
 
-815 strings.
+821 strings.

@@ -127,7 +127,34 @@ describe('Classify, Assess, Respond from the keyboard', () => {
   })
 
   it('ignores a digit beyond the options', () => {
-    expect(press(['c', '9']).state.chosen).toBeNull()
+    // Assess has five identities, so 6 to 9 do nothing there.
+    expect(press(['a', '9']).state.chosen).toBeNull()
+    expect(press(['a', '6']).state.chosen).toBeNull()
+    expect(press(['a', '5']).state.chosen).toBe(4)
+  })
+
+  it('offers nine classes in the welcome order, and 1 to 9 choose them', () => {
+    const classes = [
+      'rotary-small',
+      'fixed-wing-small',
+      'bird',
+      'unknown',
+      'fpv-small',
+      'fixed-wing-medium',
+      'fixed-wing-large',
+      'kite',
+      'balloon',
+    ]
+    expect(stepOptions('classify', w).map((o) => o.value)).toEqual(classes)
+    classes.forEach((id, i) => {
+      const { commands, state } = press(['c', String(i + 1)])
+      expect(state.chosen).toBe(i)
+      const committed = press(['c', String(i + 1), 'Enter'])
+      expect(committed.commands).toEqual([
+        { action: 'classify', payload: { track: 'T014', class_id: id } },
+      ])
+      expect(commands).toEqual([])
+    })
   })
 
   it('cancels a step with Escape and keeps everything else untouched', () => {

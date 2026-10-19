@@ -414,7 +414,6 @@ class World:
         extra = sorted(set(payload) - known)
         if extra:
             raise ActionError(f"{name} does not take {', '.join(extra)}")
-        mine = self.operator.get(track_id, {})
         if name == "classify" and payload.get("class_id") not in OPERATOR_CLASSES:
             raise ActionError(f"classify needs a class_id, one of {', '.join(OPERATOR_CLASSES)}")
         if name == "assess" and payload.get("identity") not in IDENTITIES:
@@ -427,14 +426,7 @@ class World:
         if name == "engage" and self.roe is not None and effector not in self.roe.effectors:
             raise ActionError(f"no effector class {effector!r} in the rule pack")
         if self.roe is not None:
-            view = track.view(self.tick, TICK_HZ)
-            _, support = track.class_estimate()
-            ctx = Context(
-                identity=mine.get("identity"),
-                classification=mine.get("class_id"),
-                zone_role=self.roe.zone_role(view["position"]["x"], view["position"]["y"]),
-                confidence=support,
-            )
+            ctx = self.operator_context(track_id)
             chosen = effector if name == "engage" and isinstance(effector, str) else None
             verdict = self.roe.evaluate(name, ctx, chosen)
             self._emit(
@@ -472,10 +464,29 @@ class World:
                 drone.assigned_identity = str(payload["identity"])
         logged: dict[str, Any] = {**payload, "target": target}
         if name == "report" and drone is not None:
-            logged["truth"] = self._report_truth(drone)
+            logged["truth"] = self.report_truth(drone)
         self._emit(f"action.{name}", logged, action.actor)
 
-    def _report_truth(self, drone: Drone) -> dict[str, Any]:
+    def operator_context(self, track_id: str) -> Context:
+        """What the rules are asked about for a live track: the operator's own assessment and what
+        the tracker shows. Needs rules attached and a track that exists."""
+        picture, roe = self.picture, self.roe
+        if picture is None or roe is None:
+            raise ActionError("this session has no rules of engagement")
+        track = picture.tracker.tracks.get(track_id)
+        if track is None:
+            raise ActionError(f"no live track {track_id!r}")
+        mine = self.operator.get(track_id, {})
+        position = track.view(self.tick, TICK_HZ)["position"]
+        _, support = track.class_estimate()
+        return Context(
+            identity=mine.get("identity"),
+            classification=mine.get("class_id"),
+            zone_role=roe.zone_role(position["x"], position["y"]),
+            confidence=support,
+        )
+
+    def report_truth(self, drone: Drone) -> dict[str, Any]:
         """What a contact report is graded against: the real class, disposition, position, ground
         course and the number of same-class contacts around it. Ground truth: logged for scoring,
         never sent to a trainee."""

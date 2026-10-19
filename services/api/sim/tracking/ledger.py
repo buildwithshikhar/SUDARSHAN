@@ -84,6 +84,10 @@ class TruthLedger:
         """The real drone a track is following, or `None` while there is too little evidence."""
         return _identity(self._window.get(track_id, ()))
 
+    def bound_labels(self, drone_id: str) -> list[str]:
+        """Every label that stands for a real drone, in label order."""
+        return [label for label, drone in sorted(self._registry.items()) if drone == drone_id]
+
     def label_of(self, track_id: str) -> str:
         return self._labels.get(track_id, track_id)
 

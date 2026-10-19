@@ -196,13 +196,20 @@ export const debriefUrl = '/train/session/mock-session/debrief'
 
 export const sessionUrl = (speed = 4) => `/train/session/mock-session?mock=1&speed=${speed}`
 
+/** The rows of the track table (the console report tables come before it in the page). */
+export const trackRows = (page: Page) =>
+  page
+    .locator('table:not([data-testid="rf-reports"]):not([data-testid="ac-reports"])')
+    .first()
+    .locator('tbody tr')
+
 /** Open the workspace, begin the session with the keyboard and wait for the first contacts. */
 export async function beginSession(page: Page, contacts = 4, url = sessionUrl()) {
   await page.goto(url)
   const begin = page.getByRole('button', { name: /Begin session|सत्र आरंभ करें/ })
   await expect(begin).toBeFocused()
   await page.keyboard.press('Enter')
-  await expect(page.locator('table').first().locator('tbody tr')).toHaveCount(contacts, {
+  await expect(trackRows(page)).toHaveCount(contacts, {
     timeout: 30_000,
   })
 }

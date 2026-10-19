@@ -1,5 +1,12 @@
 import { expect, test } from '@playwright/test'
-import { beginSession, expectClean, installApi, installTerrain, variantUrl } from './fixtures'
+import {
+  beginSession,
+  expectClean,
+  installApi,
+  installTerrain,
+  trackRows,
+  variantUrl,
+} from './fixtures'
 
 test.use({ viewport: { width: 1920, height: 1080 } })
 
@@ -43,7 +50,7 @@ test.describe('EO view: terrain pack, thermal and night vision, graphics tier', 
     // the picture, the reticle and the rest of the workspace carry on
     await expect(eo.locator('canvas')).toHaveCount(1)
     await expect(eo.getByText(/BRG\s+038°/)).toBeVisible()
-    await expect(page.getByRole('table').first().locator('tbody tr').first()).toBeVisible()
+    await expect(trackRows(page).first()).toBeVisible()
     await expectClean(page)
   })
 

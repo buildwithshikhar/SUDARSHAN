@@ -9,7 +9,7 @@
  */
 import { ApiError, NetworkError } from '../lib/api'
 import type { DecodedCode, ScenarioApi } from './api'
-import { heatMapFor } from './heatmap'
+import { heatMapFor } from './heatModel'
 import {
   DIFFICULTY_AXES,
   THREAT_MIXES,
@@ -1062,10 +1062,10 @@ export function mockArchive(): Archive {
   let pair = 0
   let pairs = 0
   const centre = (cell: ArchiveCell) => cell.index.map((v, a) => (v + 0.5) / (AXES[a]?.bins ?? 1))
-  for (let a = 0; a < cells.length; a++)
-    for (let b = a + 1; b < cells.length; b++) {
-      const ca = centre(cells[a]!)
-      const cb = centre(cells[b]!)
+  for (const [a, first] of cells.entries())
+    for (const second of cells.slice(a + 1)) {
+      const ca = centre(first)
+      const cb = centre(second)
       pair += Math.hypot(...ca.map((v, n) => v - (cb[n] ?? 0))) / Math.sqrt(8)
       pairs += 1
     }

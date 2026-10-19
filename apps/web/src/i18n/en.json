@@ -1083,5 +1083,465 @@
     "display": "Display",
     "unknown": "not reported",
     "notes": "Thermal is a rendering model, not radiometric. The swarm and birds are placeholder markers. Frame times are display-refresh intervals, so a 60 Hz screen caps results at 60 fps."
+  },
+  "scenarios": {
+    "cancel": "Cancel",
+    "reference": "Reference scenarios",
+    "wording": {
+      "verified": "Verified solvable by test run",
+      "notVerified": "Not verified solvable"
+    },
+    "solvability": {
+      "verified": "Verified solvable by test run",
+      "failed": "Not verified solvable",
+      "unchecked": "Not yet checked"
+    },
+    "severity": {
+      "error": "Error",
+      "warning": "Warning"
+    },
+    "origin": {
+      "scripted": "Scripted",
+      "generated": "Generated",
+      "authored": "Authored",
+      "example": "Example"
+    },
+    "terrain": {
+      "flat": "Flat ground",
+      "heron-ridge": "Heron Ridge",
+      "osprey-town": "Osprey Town"
+    },
+    "time": {
+      "dawn": "Dawn",
+      "day": "Day",
+      "dusk": "Dusk",
+      "night": "Night"
+    },
+    "axis": {
+      "threat_count": "Threat count",
+      "id_ambiguity": "Identification ambiguity",
+      "approach_speed": "Approach speed"
+    },
+    "feature": {
+      "threat_count": "Threat count",
+      "id_ambiguity": "Ambiguity",
+      "approach_speed": "Approach speed",
+      "bearing_spread": "Bearing spread",
+      "clutter_density": "Clutter density",
+      "degradation_load": "Degradation load",
+      "timing_tightness": "Timing tightness",
+      "stealth": "Stealth"
+    },
+    "check": {
+      "note": "Verified solvable by test run means a headless oracle defender cleared this scenario in the simulation. It is a practical check of what the oracle exercises, not a statement about how hard the scenario is for a person. Sensor, threat and tracker numbers are reference data.",
+      "solvability": {
+        "presented": "Every hostile contact was reported by a sensor",
+        "answered": "Every hostile contact was engaged under the rules",
+        "failures": "No hard fail, blocked attempt, false engagement or unfixed track error",
+        "score": "Every hostile contact scored at least the oracle minimum"
+      }
+    },
+    "lint": {
+      "timing": {
+        "reaction-window": "A hostile contact reaches the inner zone before the rule pack's minimum reaction time."
+      },
+      "coverage": {
+        "none": "A hostile contact is never inside any sensor's coverage.",
+        "late": "A hostile contact is first covered after half of the scenario has passed."
+      },
+      "roe": {
+        "no-engage-rule": "No rule of the named pack can permit an engagement in any zone this scenario defines.",
+        "zone-missing": "A rule names a zone role this scenario has no zone for.",
+        "pack-missing": "The named rule pack is not available."
+      },
+      "route": {
+        "leaves-area": "A waypoint is outside the play area.",
+        "below-envelope": "A waypoint is below the altitude the threat class can fly.",
+        "above-envelope": "A waypoint is above the altitude the threat class can fly.",
+        "speed": "A waypoint speed is outside the threat class limits.",
+        "unreachable": "The route cannot be flown before the scenario ends.",
+        "underground": "A waypoint is below the terrain's ground."
+      },
+      "catalogue": {
+        "limits": "The threat catalogue reports a problem with these limits."
+      },
+      "group": {
+        "link-range": "The group's link range does not cover its formation."
+      },
+      "sensor": {
+        "profile": "A sensor profile is missing or is not the version named."
+      }
+    },
+    "error": {
+      "yaml": "The text is not valid YAML.",
+      "contract": "The contract line is missing or is not scenario.v1.",
+      "schema": "A field is missing, unknown or has the wrong type."
+    },
+    "library": {
+      "title": "Scenario library",
+      "caption": "Scenarios held by this instance",
+      "filters": "Filters",
+      "search": "Search by id, title or tag",
+      "all": "All",
+      "tag": "Tag",
+      "sort": "Sort by",
+      "sorts": {
+        "order": "Curriculum order, then origin",
+        "title": "Title",
+        "difficultyUp": "Difficulty, easiest first",
+        "difficultyDown": "Difficulty, hardest first",
+        "hostile": "Hostile contacts, most first",
+        "duration": "Duration, longest first"
+      },
+      "clear": "Clear filters",
+      "count": "{{shown}} of {{total}} scenarios",
+      "loading": "Loading the scenario library",
+      "error": {
+        "network": "The server is unreachable",
+        "forbidden": "Your account cannot open the library",
+        "notFound": "The scenario library was not found",
+        "error": "The scenario library could not be loaded"
+      },
+      "errorBody": "Check the connection and that the service is running, then retry. Authoring needs an instructor or administrator account.",
+      "empty": "The library holds no scenarios",
+      "emptyBody": "No scenario pack is loaded and nothing has been saved. Load a scenario pack, write one in the editor, or generate one.",
+      "noMatch": "No scenario matches these filters",
+      "noMatchBody": "Widen the filters or clear them to see every scenario.",
+      "tableRegion": "Scenario table, scrolls sideways",
+      "col": {
+        "title": "ID and title",
+        "origin": "Origin",
+        "terrain": "Terrain",
+        "time": "Time of day",
+        "weather": "Weather",
+        "contacts": "Hostile / contacts",
+        "sensors": "Sensors",
+        "difficulty": "Difficulty",
+        "solvability": "Solvability",
+        "actions": "Actions"
+      },
+      "degraded": "degraded",
+      "oracleScore": "oracle {{score}}%",
+      "open": "Open in editor",
+      "start": "Start a session",
+      "starting": "Starting",
+      "delete": "Delete",
+      "newInEditor": "New in editor",
+      "deleteTitle": "Delete scenario",
+      "deleteBody": "Delete \"{{title}}\" from this instance? Sessions already played on it keep their records. This cannot be undone.",
+      "confirmDelete": "Delete scenario",
+      "deleting": "Deleting",
+      "deleted": "Deleted {{id}}.",
+      "deleteFailed": "The scenario could not be deleted: {{detail}}",
+      "deleteForbidden": "Your account cannot delete this scenario.",
+      "deleteUnreachable": "The server is unreachable. Check the connection and try again.",
+      "note": "Pack scenarios are read-only; only saved scenarios (authored or generated) can be deleted. Every scenario is fictional. Sensor, threat and tracker numbers are reference data."
+    },
+    "editor": {
+      "title": "Scenario editor",
+      "openById": "Open by scenario id",
+      "open": "Open",
+      "toLibrary": "Open the scenario library",
+      "loading": "Loading the scenario",
+      "loadError": {
+        "network": "The server is unreachable",
+        "forbidden": "Your account cannot open this scenario",
+        "notFound": "No scenario with that id",
+        "error": "The scenario could not be loaded"
+      },
+      "loadErrorBody": "Scenario {{id}} could not be opened. Check the id, or open it from the library.",
+      "yaml": "Scenario YAML",
+      "yamlLabel": "Scenario YAML text",
+      "caret": "Line {{line}}, column {{column}}",
+      "lines": "{{count}} lines",
+      "hint": "Write or paste scenario.v1 as YAML. Tab leaves the field. Validation runs a moment after you stop typing.",
+      "opened": "Opened {{id}} ({{origin}}). Saving stores the text under the id it contains.",
+      "outdated": "The text has changed since this ran. Run it again to see the current result.",
+      "seed": "Test seed",
+      "summary": {
+        "emptyTitle": "Nothing to summarise yet",
+        "emptyBody": "This panel fills from the last text that validated.",
+        "lastValid": "Last valid text"
+      },
+      "validation": {
+        "title": "Validation",
+        "loading": "Validating the text",
+        "checking": "Checking",
+        "valid": "Valid",
+        "invalid": "Not valid",
+        "counts": "{{errors}} errors, {{warnings}} warnings",
+        "clean": "The contract validates and the linter found nothing.",
+        "list": "Errors and lint items, by line",
+        "line": "Line {{line}}",
+        "moved": "Caret moved to line {{line}}",
+        "emptyTitle": "No scenario text yet",
+        "emptyBody": "Write or paste scenario YAML above, or open a scenario from the library.",
+        "error": {
+          "network": "The server is unreachable",
+          "forbidden": "Your account cannot validate scenarios",
+          "notFound": "The validation service was not found",
+          "error": "The text could not be validated"
+        },
+        "errorBody": "The server did not answer the validation request. Retry; your text is kept."
+      },
+      "checks": {
+        "title": "Solvability and diversity",
+        "run": "Run checks",
+        "running": "Running the oracle defender",
+        "idle": "Run checks to put the scenario through the oracle defender and the diversity test. Errors in the text must be fixed first.",
+        "caption": "Solvability checks",
+        "check": "Check",
+        "result": "Result",
+        "passed": "Passed",
+        "failed": "Failed",
+        "value": "Value",
+        "detail": "Engine detail",
+        "engineWording": "Engine wording:",
+        "score": "lowest hostile contact score {{score}}",
+        "seconds": "{{seconds}} s",
+        "notRun": "The oracle did not run",
+        "notRunBody": "The text has errors, so there is nothing to run. Fix the errors in the validation panel first.",
+        "history": "Scenarios in your history",
+        "novelty": "Novelty",
+        "threshold": "Threshold",
+        "diversity": "Diversity test",
+        "diversityPass": "Passes",
+        "diversityFail": "Too close to your history",
+        "diversityNone": "Not applicable",
+        "nearest": "Nearest scenario",
+        "distance": "Distance",
+        "nearestCaption": "Nearest scenarios in your history",
+        "features": "Feature vector",
+        "error": {
+          "network": "The server is unreachable",
+          "forbidden": "Your account cannot run checks",
+          "notFound": "The check service was not found",
+          "error": "The checks could not be run"
+        },
+        "errorBody": "The server did not return a result. Retry; your text is kept."
+      },
+      "preview": {
+        "title": "Preview run",
+        "run": "Run preview",
+        "running": "Running the preview",
+        "idle": "A preview runs the oracle defender once and draws the zones, sensors and the true threat paths. Truth positions are shown to instructors only.",
+        "mapAlt": "Top-down map with {{zones}} zones, {{sensors}} sensors and {{paths}} threat paths",
+        "legend": {
+          "hostile": "Hostile path (solid)",
+          "civil": "Civil path (dashed)",
+          "clutter": "Clutter path (dotted)",
+          "zone": "Zone",
+          "sensor": "Sensor",
+          "asset": "Defended place"
+        },
+        "finished": "Finished at {{time}} s · lowest hostile contact score {{score}}",
+        "contacts": "Contacts in the preview run",
+        "coverage": "Sensor coverage of each threat",
+        "firstReport": "First report",
+        "answered": "Answered",
+        "score": "Score",
+        "firstCovered": "First covered",
+        "never": "never",
+        "sensors": "Covered by",
+        "notRun": "The preview did not run",
+        "notRunBody": "The text does not validate. Fix the errors first.",
+        "note": "Threat routes are kinematics only. Sensor, threat and tracker numbers are reference data.",
+        "error": {
+          "network": "The server is unreachable",
+          "forbidden": "Your account cannot run a preview",
+          "notFound": "The preview service was not found",
+          "error": "The preview could not be run"
+        },
+        "errorBody": "The server did not return a result. Retry; your text is kept."
+      },
+      "terrain": {
+        "title": "Terrain and site",
+        "terrain": "Terrain",
+        "flat": "Flat ground, elevation {{elevation}} m",
+        "area": "Play area",
+        "rules": "Rule pack",
+        "assets": "Defended places",
+        "zones": "Zones",
+        "zone": "Zone",
+        "role": "Role",
+        "radius": "Radius",
+        "note": "Fictional site. Terrain and numbers are reference data."
+      },
+      "threats": {
+        "title": "Threat timeline",
+        "caption": "Threats by spawn time",
+        "id": "Threat",
+        "class": "Class",
+        "disposition": "Disposition",
+        "spawn": "Spawn",
+        "flight": "Route time",
+        "route": "Waypoints",
+        "group": "Group",
+        "note": "Each bar runs from the spawn time to the end of the route at the waypoint speeds, within the scenario duration. Solid fill is hostile, dashed outline civil, dotted outline clutter.",
+        "reference": "Threat behaviour is kinematics only. Class limits are reference data."
+      },
+      "timeline": {
+        "alt": "Time strip of {{count}} threats over {{duration}} s, from spawn to the end of the route"
+      },
+      "sensors": {
+        "title": "Sensors and degradations",
+        "caption": "Sensors placed in the scenario",
+        "id": "Sensor",
+        "modality": "Modality",
+        "profile": "Profile",
+        "position": "Position x, y (m)",
+        "boresight": "Boresight",
+        "none": "No sensor is placed",
+        "conditions": "Conditions on the sensors",
+        "note": "Sensor numbers come from reference sensor profiles (reference data). Weather and light are modelled."
+      },
+      "weather": {
+        "title": "Weather and light",
+        "start": "Start time and length",
+        "condition": "Condition",
+        "visibility": "Visibility",
+        "wind": "Wind from / speed",
+        "gust": "gust sigma {{sigma}}",
+        "temperature": "Temperature",
+        "cloud": "Cloud cover",
+        "note": "Weather is modelled. Thermal is a rendering model, not radiometric."
+      },
+      "save": {
+        "button": "Save",
+        "title": "Save scenario",
+        "id": "Scenario id",
+        "name": "Title",
+        "idNote": "The id and title come from the YAML text. Saving a text whose id is already saved replaces that saved scenario.",
+        "tags": "Tags",
+        "tagsHint": "Separate tags with commas.",
+        "confirm": "Save scenario",
+        "saving": "Saving",
+        "done": "Saved {{id}} to the library.",
+        "failed": "The scenario could not be saved: {{detail}}",
+        "unreachable": "The server is unreachable. Check the connection and try again."
+      }
+    },
+    "generator": {
+      "title": "Generator studio",
+      "difficulty": {
+        "title": "Difficulty vector",
+        "note": "Difficulty axes are project-authored heuristics, not measured values."
+      },
+      "axis": {
+        "threat_load": "Threat load",
+        "ambiguity": "Ambiguity",
+        "speed": "Speed",
+        "stealth": "Stealth",
+        "degradation": "Degradation"
+      },
+      "constraints": {
+        "title": "Constraint set",
+        "terrain": "Terrain",
+        "time": "Time of day",
+        "weather": "Weather",
+        "mix": "Threat mix",
+        "mixError": "Choose at least one threat type.",
+        "oracle": "Oracle minimum score (%)",
+        "oracleHint": "50 to 100",
+        "oracleError": "Enter a whole number from 50 to 100.",
+        "attempts": "Retry budget",
+        "attemptsHint": "Candidates per constraint set, 1 to 64",
+        "attemptsError": "Enter a whole number from 1 to 64."
+      },
+      "mix": {
+        "single": "Single",
+        "swarm": "Swarm",
+        "fast-mover": "Fast mover",
+        "fixed-wing": "Fixed-wing",
+        "decoy-mix": "Decoy mix",
+        "silent-raid": "Silent raid"
+      },
+      "seed": {
+        "title": "Seed and share code",
+        "seed": "Seed",
+        "randomise": "Randomise",
+        "error": "Enter a whole number from 0 to 4294967295."
+      },
+      "code": {
+        "label": "Share code",
+        "decode": "Decode",
+        "copy": "Copy",
+        "encode": "Encode",
+        "copied": "Copied to the clipboard.",
+        "copyManual": "The clipboard is not available here. The code is selected; copy it with Ctrl+C.",
+        "decoded": "Code decoded: the form now holds the request (seed {{seed}}).",
+        "encoded": "Share code made from the form.",
+        "invalid": "That share code is not valid.",
+        "unreachable": "The server is unreachable. Check the connection and try again.",
+        "versionWarning": "Code decoded, but it was made by another generator version, so the spec will differ: {{detail}}",
+        "note": "A code carries the request, the seed and the generator version. The same code and version give the identical scenario."
+      },
+      "run": {
+        "title": "Generate",
+        "save": "Save generated scenarios to the library",
+        "generate": "Generate",
+        "generating": "Generating",
+        "count": "Batch size",
+        "countError": "1 to 12",
+        "batch": "Batch generate",
+        "fromCode": "Generate from the share code",
+        "note": "Every candidate is run through the oracle defender; only scenarios verified solvable by test run are returned. Saved scenarios become playable and join the archive."
+      },
+      "result": {
+        "title": "Generated scenarios",
+        "count": "{{count}} generated",
+        "loading": "Generating and checking scenarios",
+        "loadingNote": "Each candidate is run through the oracle defender. This can take several seconds.",
+        "emptyTitle": "Nothing generated yet",
+        "emptyBody": "Set the request and generate. Each result lists its checks, the relaxations that were applied and its features.",
+        "error": {
+          "network": "The server is unreachable",
+          "forbidden": "Your account cannot generate scenarios",
+          "notFound": "The generator was not found",
+          "error": "No scenario could be generated"
+        },
+        "errorBody": "The generator returned no scenario. Change the request or the retry budget, then try again.",
+        "attempts": "Attempts",
+        "relaxations": "Relaxations applied",
+        "noRelaxations": "None",
+        "diversity": "Novelty / threshold",
+        "history": "{{count}} in history",
+        "version": "Generator and spec hash",
+        "code": "Share code",
+        "save": "Save to the library",
+        "saving": "Saving",
+        "saved": "Saved to the library",
+        "saveFailed": "The scenario could not be saved: {{detail}}",
+        "saveUnreachable": "The server is unreachable. Check the connection and try again."
+      },
+      "report": {
+        "title": "Diversity report",
+        "loading": "Loading the archive",
+        "error": {
+          "network": "The server is unreachable",
+          "forbidden": "Your account cannot read the archive",
+          "notFound": "The archive was not found",
+          "error": "The archive could not be loaded"
+        },
+        "errorBody": "The diversity report could not be read. Retry; the generator above still works.",
+        "emptyBody": "The archive holds no scenario yet. Generate with \"Save generated scenarios to the library\" to start filling it.",
+        "xAxis": "Columns",
+        "yAxis": "Rows",
+        "coverage": "Coverage",
+        "cells": "{{filled}} of {{total}} cells",
+        "qd": "QD-score",
+        "pairwise": "Mean pairwise distance",
+        "note": "Each cell holds the best scenario that fell in it; its quality is the oracle's lowest hostile contact score, from 0 to 1. The map shows the best quality over the third axis. Coverage is the share of filled cells; QD-score is the sum of the elites' quality."
+      },
+      "heat": {
+        "label": "Expressive-range heat map: {{x}} across, {{y}} up, best over {{z}}",
+        "axes": "Across: {{x}}. Up: {{y}}. Best quality over {{z}}.",
+        "prompt": "Move over a cell or focus it with the arrow keys to read it.",
+        "cell": "{{where}}: best quality {{quality}}. {{filled}} of {{total}} {{axis}} bins filled. Scenario {{id}}.",
+        "cellEmpty": "{{where}}: empty, no scenario has landed here.",
+        "legend": "Quality scale",
+        "empty": "empty"
+      }
+    }
   }
 }

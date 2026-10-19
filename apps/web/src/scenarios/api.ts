@@ -83,7 +83,9 @@ const real: ScenarioApi = {
     }),
   save: (body) => api<ScenarioSummary>(`${ROOT}/scenario-library`, { method: 'POST', body }),
   remove: (id) =>
-    api<void>(`${ROOT}/scenario-library/${encodeURIComponent(id)}`, { method: 'DELETE' }),
+    api<undefined>(`${ROOT}/scenario-library/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    }).then(() => undefined),
   generate: (body) =>
     api<GeneratedScenario>(`${ROOT}/generator/generate`, { method: 'POST', body }),
   batch: (body) =>

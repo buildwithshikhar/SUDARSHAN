@@ -827,5 +827,359 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `bench.display` | Display | डिस्प्ले |  |
 | `bench.unknown` | not reported | रिपोर्ट नहीं हुआ |  |
 | `bench.notes` | Thermal is a rendering model, not radiometric. The swarm and birds are placeholder markers. Frame times are display-refresh intervals, so a 60 Hz screen caps results at 60 fps. | थर्मल एक रेंडरिंग मॉडल है, रेडियोमेट्रिक नहीं। झुंड और पक्षी नमूना चिह्न हैं। फ़्रेम समय डिस्प्ले-रिफ़्रेश अंतराल हैं, इसलिए 60 Hz स्क्रीन परिणामों को 60 fps पर सीमित करती है। |  |
+| `scenarios.cancel` | Cancel | रद्द करें |  |
+| `scenarios.reference` | Reference scenarios | संदर्भ परिदृश्य |  |
+| `scenarios.wording.verified` | Verified solvable by test run | परीक्षण-रन से हल-योग्य सत्यापित |  |
+| `scenarios.wording.notVerified` | Not verified solvable | हल-योग्य सत्यापित नहीं |  |
+| `scenarios.solvability.verified` | Verified solvable by test run | परीक्षण-रन से हल-योग्य सत्यापित |  |
+| `scenarios.solvability.failed` | Not verified solvable | हल-योग्य सत्यापित नहीं |  |
+| `scenarios.solvability.unchecked` | Not yet checked | अभी जाँचा नहीं गया |  |
+| `scenarios.severity.error` | Error | त्रुटि |  |
+| `scenarios.severity.warning` | Warning | चेतावनी |  |
+| `scenarios.origin.scripted` | Scripted | स्क्रिप्टेड |  |
+| `scenarios.origin.generated` | Generated | उत्पन्न |  |
+| `scenarios.origin.authored` | Authored | लिखित |  |
+| `scenarios.origin.example` | Example | उदाहरण |  |
+| `scenarios.terrain.flat` | Flat ground | समतल भूमि |  |
+| `scenarios.terrain.heron-ridge` | Heron Ridge | हेरॉन रिज |  |
+| `scenarios.terrain.osprey-town` | Osprey Town | ऑस्प्रे टाउन |  |
+| `scenarios.time.dawn` | Dawn | भोर |  |
+| `scenarios.time.day` | Day | दिन |  |
+| `scenarios.time.dusk` | Dusk | साँझ |  |
+| `scenarios.time.night` | Night | रात |  |
+| `scenarios.axis.threat_count` | Threat count | खतरों की संख्या |  |
+| `scenarios.axis.id_ambiguity` | Identification ambiguity | पहचान की अस्पष्टता |  |
+| `scenarios.axis.approach_speed` | Approach speed | आगमन की गति |  |
+| `scenarios.feature.threat_count` | Threat count | खतरों की संख्या |  |
+| `scenarios.feature.id_ambiguity` | Ambiguity | अस्पष्टता |  |
+| `scenarios.feature.approach_speed` | Approach speed | आगमन की गति |  |
+| `scenarios.feature.bearing_spread` | Bearing spread | दिशा-विस्तार |  |
+| `scenarios.feature.clutter_density` | Clutter density | क्लटर घनत्व |  |
+| `scenarios.feature.degradation_load` | Degradation load | क्षमता-ह्रास भार |  |
+| `scenarios.feature.timing_tightness` | Timing tightness | समय की कसावट |  |
+| `scenarios.feature.stealth` | Stealth | छिपाव |  |
+| `scenarios.check.note` | Verified solvable by test run means a headless oracle defender cleared this scenario in the simulation. It is a practical check of what the oracle exercises, not a statement about how hard the scenario is for a person. Sensor, threat and tracker numbers are reference data. | परीक्षण-रन से हल-योग्य सत्यापित का अर्थ है कि एक हेडलेस ओरेकल रक्षक ने इस परिदृश्य को सिमुलेशन में पूरा किया। यह उसी की व्यावहारिक जाँच है जिसे ओरेकल आज़माता है; यह नहीं बताता कि परिदृश्य किसी व्यक्ति के लिए कितना कठिन है। सेंसर, खतरे और ट्रैकर के आँकड़े संदर्भ डेटा हैं। |  |
+| `scenarios.check.solvability.presented` | Every hostile contact was reported by a sensor | हर शत्रु संपर्क की रिपोर्ट किसी सेंसर ने की |  |
+| `scenarios.check.solvability.answered` | Every hostile contact was engaged under the rules | हर शत्रु संपर्क पर नियमों के अंतर्गत कार्रवाई हुई |  |
+| `scenarios.check.solvability.failures` | No hard fail, blocked attempt, false engagement or unfixed track error | कोई कठोर विफलता, अवरुद्ध प्रयास, झूठी कार्रवाई या अनसुधारी ट्रैक त्रुटि नहीं |  |
+| `scenarios.check.solvability.score` | Every hostile contact scored at least the oracle minimum | हर शत्रु संपर्क ने ओरेकल का न्यूनतम स्कोर पाया |  |
+| `scenarios.lint.timing.reaction-window` | A hostile contact reaches the inner zone before the rule pack's minimum reaction time. | एक शत्रु संपर्क नियम पैक के न्यूनतम प्रतिक्रिया-समय से पहले आंतरिक क्षेत्र में पहुँच जाता है। |  |
+| `scenarios.lint.coverage.none` | A hostile contact is never inside any sensor's coverage. | एक शत्रु संपर्क कभी किसी सेंसर के कवरेज में नहीं आता। |  |
+| `scenarios.lint.coverage.late` | A hostile contact is first covered after half of the scenario has passed. | एक शत्रु संपर्क परिदृश्य का आधा समय बीतने के बाद ही पहली बार कवर होता है। |  |
+| `scenarios.lint.roe.no-engage-rule` | No rule of the named pack can permit an engagement in any zone this scenario defines. | नामित पैक का कोई नियम इस परिदृश्य के किसी भी क्षेत्र में कार्रवाई की अनुमति नहीं दे सकता। |  |
+| `scenarios.lint.roe.zone-missing` | A rule names a zone role this scenario has no zone for. | एक नियम ऐसे क्षेत्र-भूमिका का नाम लेता है जिसका क्षेत्र इस परिदृश्य में नहीं है। |  |
+| `scenarios.lint.roe.pack-missing` | The named rule pack is not available. | नामित नियम पैक उपलब्ध नहीं है। |  |
+| `scenarios.lint.route.leaves-area` | A waypoint is outside the play area. | एक वेपॉइंट खेल-क्षेत्र से बाहर है। |  |
+| `scenarios.lint.route.below-envelope` | A waypoint is below the altitude the threat class can fly. | एक वेपॉइंट उस ऊँचाई से नीचे है जिस पर यह खतरा-श्रेणी उड़ सकती है। |  |
+| `scenarios.lint.route.above-envelope` | A waypoint is above the altitude the threat class can fly. | एक वेपॉइंट उस ऊँचाई से ऊपर है जिस पर यह खतरा-श्रेणी उड़ सकती है। |  |
+| `scenarios.lint.route.speed` | A waypoint speed is outside the threat class limits. | एक वेपॉइंट की गति खतरा-श्रेणी की सीमा से बाहर है। |  |
+| `scenarios.lint.route.unreachable` | The route cannot be flown before the scenario ends. | परिदृश्य समाप्त होने से पहले यह मार्ग उड़ा नहीं जा सकता। |  |
+| `scenarios.lint.route.underground` | A waypoint is below the terrain's ground. | एक वेपॉइंट भूभाग की सतह से नीचे है। |  |
+| `scenarios.lint.catalogue.limits` | The threat catalogue reports a problem with these limits. | खतरा सूची इन सीमाओं में समस्या बताती है। |  |
+| `scenarios.lint.group.link-range` | The group's link range does not cover its formation. | समूह की लिंक-सीमा उसके पूरे फ़ॉर्मेशन को नहीं ढकती। |  |
+| `scenarios.lint.sensor.profile` | A sensor profile is missing or is not the version named. | सेंसर प्रोफ़ाइल अनुपलब्ध है या नामित संस्करण की नहीं है। |  |
+| `scenarios.error.yaml` | The text is not valid YAML. | यह पाठ मान्य YAML नहीं है। |  |
+| `scenarios.error.contract` | The contract line is missing or is not scenario.v1. | कॉन्ट्रैक्ट पंक्ति नहीं है या scenario.v1 नहीं है। |  |
+| `scenarios.error.schema` | A field is missing, unknown or has the wrong type. | कोई फ़ील्ड नहीं है, अज्ञात है या गलत प्रकार का है। |  |
+| `scenarios.library.title` | Scenario library | परिदृश्य पुस्तकालय |  |
+| `scenarios.library.caption` | Scenarios held by this instance | इस इंस्टेंस में उपलब्ध परिदृश्य |  |
+| `scenarios.library.filters` | Filters | फ़िल्टर |  |
+| `scenarios.library.search` | Search by id, title or tag | आईडी, शीर्षक या टैग से खोजें |  |
+| `scenarios.library.all` | All | सभी |  |
+| `scenarios.library.tag` | Tag | टैग |  |
+| `scenarios.library.sort` | Sort by | क्रम |  |
+| `scenarios.library.sorts.order` | Curriculum order, then origin | पाठ्यक्रम क्रम, फिर स्रोत |  |
+| `scenarios.library.sorts.title` | Title | शीर्षक |  |
+| `scenarios.library.sorts.difficultyUp` | Difficulty, easiest first | कठिनाई, सरल पहले |  |
+| `scenarios.library.sorts.difficultyDown` | Difficulty, hardest first | कठिनाई, कठिन पहले |  |
+| `scenarios.library.sorts.hostile` | Hostile contacts, most first | शत्रु संपर्क, अधिक पहले |  |
+| `scenarios.library.sorts.duration` | Duration, longest first | अवधि, लंबी पहले |  |
+| `scenarios.library.clear` | Clear filters | फ़िल्टर हटाएँ |  |
+| `scenarios.library.count` | {{shown}} of {{total}} scenarios | {{total}} में से {{shown}} परिदृश्य |  |
+| `scenarios.library.loading` | Loading the scenario library | परिदृश्य पुस्तकालय लोड हो रहा है |  |
+| `scenarios.library.error.network` | The server is unreachable | सर्वर तक पहुँच नहीं हो रही |  |
+| `scenarios.library.error.forbidden` | Your account cannot open the library | आपका खाता पुस्तकालय नहीं खोल सकता |  |
+| `scenarios.library.error.notFound` | The scenario library was not found | परिदृश्य पुस्तकालय नहीं मिला |  |
+| `scenarios.library.error.error` | The scenario library could not be loaded | परिदृश्य पुस्तकालय लोड नहीं हो सका |  |
+| `scenarios.library.errorBody` | Check the connection and that the service is running, then retry. Authoring needs an instructor or administrator account. | कनेक्शन और सेवा के चालू होने की जाँच करें, फिर पुनः प्रयास करें। लेखन के लिए प्रशिक्षक या प्रशासक खाता चाहिए। |  |
+| `scenarios.library.empty` | The library holds no scenarios | पुस्तकालय में कोई परिदृश्य नहीं है |  |
+| `scenarios.library.emptyBody` | No scenario pack is loaded and nothing has been saved. Load a scenario pack, write one in the editor, or generate one. | कोई परिदृश्य पैक लोड नहीं है और कुछ सहेजा नहीं गया। परिदृश्य पैक लोड करें, संपादक में लिखें या जनरेटर से बनाएँ। |  |
+| `scenarios.library.noMatch` | No scenario matches these filters | इन फ़िल्टरों से कोई परिदृश्य मेल नहीं खाता |  |
+| `scenarios.library.noMatchBody` | Widen the filters or clear them to see every scenario. | फ़िल्टर ढीले करें या हटाएँ ताकि सभी परिदृश्य दिखें। |  |
+| `scenarios.library.tableRegion` | Scenario table, scrolls sideways | परिदृश्य तालिका, बगल में सरकती है |  |
+| `scenarios.library.col.title` | ID and title | आईडी और शीर्षक |  |
+| `scenarios.library.col.origin` | Origin | स्रोत |  |
+| `scenarios.library.col.terrain` | Terrain | भूभाग |  |
+| `scenarios.library.col.time` | Time of day | दिन का समय |  |
+| `scenarios.library.col.weather` | Weather | मौसम |  |
+| `scenarios.library.col.contacts` | Hostile / contacts | शत्रु / संपर्क |  |
+| `scenarios.library.col.sensors` | Sensors | सेंसर |  |
+| `scenarios.library.col.difficulty` | Difficulty | कठिनाई |  |
+| `scenarios.library.col.solvability` | Solvability | हल-योग्यता |  |
+| `scenarios.library.col.actions` | Actions | कार्रवाइयाँ |  |
+| `scenarios.library.degraded` | degraded | क्षमता घटी |  |
+| `scenarios.library.oracleScore` | oracle {{score}}% | ओरेकल {{score}}% |  |
+| `scenarios.library.open` | Open in editor | संपादक में खोलें |  |
+| `scenarios.library.start` | Start a session | सत्र आरंभ करें |  |
+| `scenarios.library.starting` | Starting | आरंभ हो रहा है |  |
+| `scenarios.library.delete` | Delete | हटाएँ |  |
+| `scenarios.library.newInEditor` | New in editor | संपादक में नया |  |
+| `scenarios.library.deleteTitle` | Delete scenario | परिदृश्य हटाएँ |  |
+| `scenarios.library.deleteBody` | Delete "{{title}}" from this instance? Sessions already played on it keep their records. This cannot be undone. | "{{title}}" को इस इंस्टेंस से हटाएँ? इस पर खेले जा चुके सत्रों के रिकॉर्ड बने रहते हैं। यह वापस नहीं हो सकता। |  |
+| `scenarios.library.confirmDelete` | Delete scenario | परिदृश्य हटाएँ |  |
+| `scenarios.library.deleting` | Deleting | हटाया जा रहा है |  |
+| `scenarios.library.deleted` | Deleted {{id}}. | {{id}} हटाया गया। |  |
+| `scenarios.library.deleteFailed` | The scenario could not be deleted: {{detail}} | परिदृश्य नहीं हटाया जा सका: {{detail}} |  |
+| `scenarios.library.deleteForbidden` | Your account cannot delete this scenario. | आपका खाता यह परिदृश्य नहीं हटा सकता। |  |
+| `scenarios.library.deleteUnreachable` | The server is unreachable. Check the connection and try again. | सर्वर तक पहुँच नहीं हो रही। कनेक्शन जाँचें और पुनः प्रयास करें। |  |
+| `scenarios.library.note` | Pack scenarios are read-only; only saved scenarios (authored or generated) can be deleted. Every scenario is fictional. Sensor, threat and tracker numbers are reference data. | पैक के परिदृश्य केवल पढ़ने योग्य हैं; केवल सहेजे गए (लिखित या उत्पन्न) परिदृश्य हटाए जा सकते हैं। हर परिदृश्य काल्पनिक है। सेंसर, खतरे और ट्रैकर के आँकड़े संदर्भ डेटा हैं। |  |
+| `scenarios.editor.title` | Scenario editor | परिदृश्य संपादक |  |
+| `scenarios.editor.openById` | Open by scenario id | परिदृश्य आईडी से खोलें |  |
+| `scenarios.editor.open` | Open | खोलें |  |
+| `scenarios.editor.toLibrary` | Open the scenario library | परिदृश्य पुस्तकालय खोलें |  |
+| `scenarios.editor.loading` | Loading the scenario | परिदृश्य लोड हो रहा है |  |
+| `scenarios.editor.loadError.network` | The server is unreachable | सर्वर तक पहुँच नहीं हो रही |  |
+| `scenarios.editor.loadError.forbidden` | Your account cannot open this scenario | आपका खाता यह परिदृश्य नहीं खोल सकता |  |
+| `scenarios.editor.loadError.notFound` | No scenario with that id | इस आईडी का कोई परिदृश्य नहीं |  |
+| `scenarios.editor.loadError.error` | The scenario could not be loaded | परिदृश्य लोड नहीं हो सका |  |
+| `scenarios.editor.loadErrorBody` | Scenario {{id}} could not be opened. Check the id, or open it from the library. | परिदृश्य {{id}} नहीं खुल सका। आईडी जाँचें या उसे पुस्तकालय से खोलें। |  |
+| `scenarios.editor.yaml` | Scenario YAML | परिदृश्य YAML |  |
+| `scenarios.editor.yamlLabel` | Scenario YAML text | परिदृश्य YAML पाठ |  |
+| `scenarios.editor.caret` | Line {{line}}, column {{column}} | पंक्ति {{line}}, स्तंभ {{column}} |  |
+| `scenarios.editor.lines` | {{count}} lines | {{count}} पंक्तियाँ |  |
+| `scenarios.editor.hint` | Write or paste scenario.v1 as YAML. Tab leaves the field. Validation runs a moment after you stop typing. | scenario.v1 को YAML में लिखें या चिपकाएँ। Tab दबाने पर फ़ील्ड छूट जाता है। टाइप रुकने के कुछ क्षण बाद जाँच चलती है। |  |
+| `scenarios.editor.opened` | Opened {{id}} ({{origin}}). Saving stores the text under the id it contains. | {{id}} ({{origin}}) खोला गया। सहेजने पर पाठ उसी आईडी से सहेजा जाता है जो उसमें है। |  |
+| `scenarios.editor.outdated` | The text has changed since this ran. Run it again to see the current result. | यह चलने के बाद पाठ बदल गया है। वर्तमान परिणाम के लिए इसे फिर चलाएँ। |  |
+| `scenarios.editor.seed` | Test seed | परीक्षण सीड |  |
+| `scenarios.editor.summary.emptyTitle` | Nothing to summarise yet | सार देने के लिए अभी कुछ नहीं |  |
+| `scenarios.editor.summary.emptyBody` | This panel fills from the last text that validated. | यह पैनल उस अंतिम पाठ से भरता है जो मान्य हुआ। |  |
+| `scenarios.editor.summary.lastValid` | Last valid text | अंतिम मान्य पाठ |  |
+| `scenarios.editor.validation.title` | Validation | मान्यता जाँच |  |
+| `scenarios.editor.validation.loading` | Validating the text | पाठ की जाँच हो रही है |  |
+| `scenarios.editor.validation.checking` | Checking | जाँच हो रही है |  |
+| `scenarios.editor.validation.valid` | Valid | मान्य |  |
+| `scenarios.editor.validation.invalid` | Not valid | मान्य नहीं |  |
+| `scenarios.editor.validation.counts` | {{errors}} errors, {{warnings}} warnings | {{errors}} त्रुटियाँ, {{warnings}} चेतावनियाँ |  |
+| `scenarios.editor.validation.clean` | The contract validates and the linter found nothing. | कॉन्ट्रैक्ट मान्य है और लिंटर को कुछ नहीं मिला। |  |
+| `scenarios.editor.validation.list` | Errors and lint items, by line | त्रुटियाँ और लिंट प्रविष्टियाँ, पंक्ति के क्रम में |  |
+| `scenarios.editor.validation.line` | Line {{line}} | पंक्ति {{line}} |  |
+| `scenarios.editor.validation.moved` | Caret moved to line {{line}} | कर्सर पंक्ति {{line}} पर गया |  |
+| `scenarios.editor.validation.emptyTitle` | No scenario text yet | अभी कोई परिदृश्य पाठ नहीं |  |
+| `scenarios.editor.validation.emptyBody` | Write or paste scenario YAML above, or open a scenario from the library. | ऊपर परिदृश्य YAML लिखें या चिपकाएँ, या पुस्तकालय से कोई परिदृश्य खोलें। |  |
+| `scenarios.editor.validation.error.network` | The server is unreachable | सर्वर तक पहुँच नहीं हो रही |  |
+| `scenarios.editor.validation.error.forbidden` | Your account cannot validate scenarios | आपका खाता परिदृश्यों की जाँच नहीं कर सकता |  |
+| `scenarios.editor.validation.error.notFound` | The validation service was not found | जाँच सेवा नहीं मिली |  |
+| `scenarios.editor.validation.error.error` | The text could not be validated | पाठ की जाँच नहीं हो सकी |  |
+| `scenarios.editor.validation.errorBody` | The server did not answer the validation request. Retry; your text is kept. | सर्वर ने जाँच के अनुरोध का उत्तर नहीं दिया। पुनः प्रयास करें; आपका पाठ सुरक्षित है। |  |
+| `scenarios.editor.checks.title` | Solvability and diversity | हल-योग्यता और विविधता |  |
+| `scenarios.editor.checks.run` | Run checks | जाँच चलाएँ |  |
+| `scenarios.editor.checks.running` | Running the oracle defender | ओरेकल रक्षक चल रहा है |  |
+| `scenarios.editor.checks.idle` | Run checks to put the scenario through the oracle defender and the diversity test. Errors in the text must be fixed first. | परिदृश्य को ओरेकल रक्षक और विविधता परीक्षण से गुज़ारने के लिए जाँच चलाएँ। पहले पाठ की त्रुटियाँ ठीक करनी होंगी। |  |
+| `scenarios.editor.checks.caption` | Solvability checks | हल-योग्यता की जाँचें |  |
+| `scenarios.editor.checks.check` | Check | जाँच |  |
+| `scenarios.editor.checks.result` | Result | परिणाम |  |
+| `scenarios.editor.checks.passed` | Passed | उत्तीर्ण |  |
+| `scenarios.editor.checks.failed` | Failed | अनुत्तीर्ण |  |
+| `scenarios.editor.checks.value` | Value | मान |  |
+| `scenarios.editor.checks.detail` | Engine detail | इंजन का विवरण |  |
+| `scenarios.editor.checks.engineWording` | Engine wording: | इंजन का शब्दांकन: |  |
+| `scenarios.editor.checks.score` | lowest hostile contact score {{score}} | सबसे कम शत्रु संपर्क स्कोर {{score}} |  |
+| `scenarios.editor.checks.seconds` | {{seconds}} s | {{seconds}} से. |  |
+| `scenarios.editor.checks.notRun` | The oracle did not run | ओरेकल नहीं चला |  |
+| `scenarios.editor.checks.notRunBody` | The text has errors, so there is nothing to run. Fix the errors in the validation panel first. | पाठ में त्रुटियाँ हैं, इसलिए चलाने को कुछ नहीं है। पहले मान्यता जाँच पैनल की त्रुटियाँ ठीक करें। |  |
+| `scenarios.editor.checks.history` | Scenarios in your history | आपके इतिहास में परिदृश्य |  |
+| `scenarios.editor.checks.novelty` | Novelty | नवीनता |  |
+| `scenarios.editor.checks.threshold` | Threshold | सीमा |  |
+| `scenarios.editor.checks.diversity` | Diversity test | विविधता परीक्षण |  |
+| `scenarios.editor.checks.diversityPass` | Passes | उत्तीर्ण |  |
+| `scenarios.editor.checks.diversityFail` | Too close to your history | आपके इतिहास के बहुत निकट |  |
+| `scenarios.editor.checks.diversityNone` | Not applicable | लागू नहीं |  |
+| `scenarios.editor.checks.nearest` | Nearest scenario | निकटतम परिदृश्य |  |
+| `scenarios.editor.checks.distance` | Distance | दूरी |  |
+| `scenarios.editor.checks.nearestCaption` | Nearest scenarios in your history | आपके इतिहास के निकटतम परिदृश्य |  |
+| `scenarios.editor.checks.features` | Feature vector | विशेषता सदिश |  |
+| `scenarios.editor.checks.error.network` | The server is unreachable | सर्वर तक पहुँच नहीं हो रही |  |
+| `scenarios.editor.checks.error.forbidden` | Your account cannot run checks | आपका खाता जाँच नहीं चला सकता |  |
+| `scenarios.editor.checks.error.notFound` | The check service was not found | जाँच सेवा नहीं मिली |  |
+| `scenarios.editor.checks.error.error` | The checks could not be run | जाँच नहीं चल सकी |  |
+| `scenarios.editor.checks.errorBody` | The server did not return a result. Retry; your text is kept. | सर्वर ने परिणाम नहीं लौटाया। पुनः प्रयास करें; आपका पाठ सुरक्षित है। |  |
+| `scenarios.editor.preview.title` | Preview run | पूर्वावलोकन रन |  |
+| `scenarios.editor.preview.run` | Run preview | पूर्वावलोकन चलाएँ |  |
+| `scenarios.editor.preview.running` | Running the preview | पूर्वावलोकन चल रहा है |  |
+| `scenarios.editor.preview.idle` | A preview runs the oracle defender once and draws the zones, sensors and the true threat paths. Truth positions are shown to instructors only. | पूर्वावलोकन ओरेकल रक्षक को एक बार चलाता है और क्षेत्र, सेंसर और खतरों के वास्तविक मार्ग बनाता है। वास्तविक स्थितियाँ केवल प्रशिक्षकों को दिखती हैं। |  |
+| `scenarios.editor.preview.mapAlt` | Top-down map with {{zones}} zones, {{sensors}} sensors and {{paths}} threat paths | ऊपर से नक्शा: {{zones}} क्षेत्र, {{sensors}} सेंसर और {{paths}} खतरा-मार्ग |  |
+| `scenarios.editor.preview.legend.hostile` | Hostile path (solid) | शत्रु मार्ग (ठोस रेखा) |  |
+| `scenarios.editor.preview.legend.civil` | Civil path (dashed) | नागरिक मार्ग (टूटी रेखा) |  |
+| `scenarios.editor.preview.legend.clutter` | Clutter path (dotted) | क्लटर मार्ग (बिंदु रेखा) |  |
+| `scenarios.editor.preview.legend.zone` | Zone | क्षेत्र |  |
+| `scenarios.editor.preview.legend.sensor` | Sensor | सेंसर |  |
+| `scenarios.editor.preview.legend.asset` | Defended place | रक्षित स्थान |  |
+| `scenarios.editor.preview.finished` | Finished at {{time}} s · lowest hostile contact score {{score}} | {{time}} से. पर समाप्त · सबसे कम शत्रु संपर्क स्कोर {{score}} |  |
+| `scenarios.editor.preview.contacts` | Contacts in the preview run | पूर्वावलोकन रन के संपर्क |  |
+| `scenarios.editor.preview.coverage` | Sensor coverage of each threat | हर खतरे का सेंसर कवरेज |  |
+| `scenarios.editor.preview.firstReport` | First report | पहली रिपोर्ट |  |
+| `scenarios.editor.preview.answered` | Answered | कार्रवाई |  |
+| `scenarios.editor.preview.score` | Score | स्कोर |  |
+| `scenarios.editor.preview.firstCovered` | First covered | पहली बार कवर |  |
+| `scenarios.editor.preview.never` | never | कभी नहीं |  |
+| `scenarios.editor.preview.sensors` | Covered by | कवर करने वाले |  |
+| `scenarios.editor.preview.notRun` | The preview did not run | पूर्वावलोकन नहीं चला |  |
+| `scenarios.editor.preview.notRunBody` | The text does not validate. Fix the errors first. | पाठ मान्य नहीं है। पहले त्रुटियाँ ठीक करें। |  |
+| `scenarios.editor.preview.note` | Threat routes are kinematics only. Sensor, threat and tracker numbers are reference data. | खतरों के मार्ग केवल गति-विज्ञान हैं। सेंसर, खतरे और ट्रैकर के आँकड़े संदर्भ डेटा हैं। |  |
+| `scenarios.editor.preview.error.network` | The server is unreachable | सर्वर तक पहुँच नहीं हो रही |  |
+| `scenarios.editor.preview.error.forbidden` | Your account cannot run a preview | आपका खाता पूर्वावलोकन नहीं चला सकता |  |
+| `scenarios.editor.preview.error.notFound` | The preview service was not found | पूर्वावलोकन सेवा नहीं मिली |  |
+| `scenarios.editor.preview.error.error` | The preview could not be run | पूर्वावलोकन नहीं चल सका |  |
+| `scenarios.editor.preview.errorBody` | The server did not return a result. Retry; your text is kept. | सर्वर ने परिणाम नहीं लौटाया। पुनः प्रयास करें; आपका पाठ सुरक्षित है। |  |
+| `scenarios.editor.terrain.title` | Terrain and site | भूभाग और स्थल |  |
+| `scenarios.editor.terrain.terrain` | Terrain | भूभाग |  |
+| `scenarios.editor.terrain.flat` | Flat ground, elevation {{elevation}} m | समतल भूमि, ऊँचाई {{elevation}} मी. |  |
+| `scenarios.editor.terrain.area` | Play area | खेल-क्षेत्र |  |
+| `scenarios.editor.terrain.rules` | Rule pack | नियम पैक |  |
+| `scenarios.editor.terrain.assets` | Defended places | रक्षित स्थान |  |
+| `scenarios.editor.terrain.zones` | Zones | क्षेत्र |  |
+| `scenarios.editor.terrain.zone` | Zone | क्षेत्र |  |
+| `scenarios.editor.terrain.role` | Role | भूमिका |  |
+| `scenarios.editor.terrain.radius` | Radius | त्रिज्या |  |
+| `scenarios.editor.terrain.note` | Fictional site. Terrain and numbers are reference data. | काल्पनिक स्थल। भूभाग और आँकड़े संदर्भ डेटा हैं। |  |
+| `scenarios.editor.threats.title` | Threat timeline | खतरा समय-रेखा |  |
+| `scenarios.editor.threats.caption` | Threats by spawn time | उत्पत्ति समय के अनुसार खतरे |  |
+| `scenarios.editor.threats.id` | Threat | खतरा |  |
+| `scenarios.editor.threats.class` | Class | श्रेणी |  |
+| `scenarios.editor.threats.disposition` | Disposition | प्रकृति |  |
+| `scenarios.editor.threats.spawn` | Spawn | उत्पत्ति |  |
+| `scenarios.editor.threats.flight` | Route time | मार्ग समय |  |
+| `scenarios.editor.threats.route` | Waypoints | वेपॉइंट |  |
+| `scenarios.editor.threats.group` | Group | समूह |  |
+| `scenarios.editor.threats.note` | Each bar runs from the spawn time to the end of the route at the waypoint speeds, within the scenario duration. Solid fill is hostile, dashed outline civil, dotted outline clutter. | हर पट्टी उत्पत्ति समय से वेपॉइंट गति पर मार्ग के अंत तक चलती है, परिदृश्य की अवधि के भीतर। ठोस भराव शत्रु है, टूटी रूपरेखा नागरिक, बिंदु रूपरेखा क्लटर। |  |
+| `scenarios.editor.threats.reference` | Threat behaviour is kinematics only. Class limits are reference data. | खतरे का व्यवहार केवल गति-विज्ञान है। श्रेणी की सीमाएँ संदर्भ डेटा हैं। |  |
+| `scenarios.editor.timeline.alt` | Time strip of {{count}} threats over {{duration}} s, from spawn to the end of the route | {{duration}} से. में {{count}} खतरों की समय-पट्टी, उत्पत्ति से मार्ग के अंत तक |  |
+| `scenarios.editor.sensors.title` | Sensors and degradations | सेंसर और क्षमता-ह्रास |  |
+| `scenarios.editor.sensors.caption` | Sensors placed in the scenario | परिदृश्य में लगाए गए सेंसर |  |
+| `scenarios.editor.sensors.id` | Sensor | सेंसर |  |
+| `scenarios.editor.sensors.modality` | Modality | प्रकार |  |
+| `scenarios.editor.sensors.profile` | Profile | प्रोफ़ाइल |  |
+| `scenarios.editor.sensors.position` | Position x, y (m) | स्थिति x, y (मी.) |  |
+| `scenarios.editor.sensors.boresight` | Boresight | बोरसाइट |  |
+| `scenarios.editor.sensors.none` | No sensor is placed | कोई सेंसर नहीं लगा है |  |
+| `scenarios.editor.sensors.conditions` | Conditions on the sensors | सेंसरों पर परिस्थितियाँ |  |
+| `scenarios.editor.sensors.note` | Sensor numbers come from reference sensor profiles (reference data). Weather and light are modelled. | सेंसर के आँकड़े संदर्भ सेंसर प्रोफ़ाइलों से आते हैं (संदर्भ डेटा)। मौसम और प्रकाश मॉडल किए गए हैं। |  |
+| `scenarios.editor.weather.title` | Weather and light | मौसम और प्रकाश |  |
+| `scenarios.editor.weather.start` | Start time and length | आरंभ समय और अवधि |  |
+| `scenarios.editor.weather.condition` | Condition | स्थिति |  |
+| `scenarios.editor.weather.visibility` | Visibility | दृश्यता |  |
+| `scenarios.editor.weather.wind` | Wind from / speed | हवा की दिशा / गति |  |
+| `scenarios.editor.weather.gust` | gust sigma {{sigma}} | झोंका सिग्मा {{sigma}} |  |
+| `scenarios.editor.weather.temperature` | Temperature | तापमान |  |
+| `scenarios.editor.weather.cloud` | Cloud cover | बादल |  |
+| `scenarios.editor.weather.note` | Weather is modelled. Thermal is a rendering model, not radiometric. | मौसम मॉडल किया गया है। थर्मल एक रेंडरिंग मॉडल है, रेडियोमेट्रिक नहीं। |  |
+| `scenarios.editor.save.button` | Save | सहेजें |  |
+| `scenarios.editor.save.title` | Save scenario | परिदृश्य सहेजें |  |
+| `scenarios.editor.save.id` | Scenario id | परिदृश्य आईडी |  |
+| `scenarios.editor.save.name` | Title | शीर्षक |  |
+| `scenarios.editor.save.idNote` | The id and title come from the YAML text. Saving a text whose id is already saved replaces that saved scenario. | आईडी और शीर्षक YAML पाठ से आते हैं। जिस आईडी का परिदृश्य पहले से सहेजा है, उसी आईडी का पाठ सहेजने पर वह बदल जाता है। |  |
+| `scenarios.editor.save.tags` | Tags | टैग |  |
+| `scenarios.editor.save.tagsHint` | Separate tags with commas. | टैग अल्पविराम से अलग करें। |  |
+| `scenarios.editor.save.confirm` | Save scenario | परिदृश्य सहेजें |  |
+| `scenarios.editor.save.saving` | Saving | सहेजा जा रहा है |  |
+| `scenarios.editor.save.done` | Saved {{id}} to the library. | {{id}} पुस्तकालय में सहेजा गया। |  |
+| `scenarios.editor.save.failed` | The scenario could not be saved: {{detail}} | परिदृश्य नहीं सहेजा जा सका: {{detail}} |  |
+| `scenarios.editor.save.unreachable` | The server is unreachable. Check the connection and try again. | सर्वर तक पहुँच नहीं हो रही। कनेक्शन जाँचें और पुनः प्रयास करें। |  |
+| `scenarios.generator.title` | Generator studio | जनरेटर स्टूडियो |  |
+| `scenarios.generator.difficulty.title` | Difficulty vector | कठिनाई सदिश |  |
+| `scenarios.generator.difficulty.note` | Difficulty axes are project-authored heuristics, not measured values. | कठिनाई के अक्ष परियोजना द्वारा रचित अनुमान हैं, मापे गए मान नहीं। |  |
+| `scenarios.generator.axis.threat_load` | Threat load | खतरा भार |  |
+| `scenarios.generator.axis.ambiguity` | Ambiguity | अस्पष्टता |  |
+| `scenarios.generator.axis.speed` | Speed | गति |  |
+| `scenarios.generator.axis.stealth` | Stealth | छिपाव |  |
+| `scenarios.generator.axis.degradation` | Degradation | क्षमता-ह्रास |  |
+| `scenarios.generator.constraints.title` | Constraint set | बाधा समुच्चय |  |
+| `scenarios.generator.constraints.terrain` | Terrain | भूभाग |  |
+| `scenarios.generator.constraints.time` | Time of day | दिन का समय |  |
+| `scenarios.generator.constraints.weather` | Weather | मौसम |  |
+| `scenarios.generator.constraints.mix` | Threat mix | खतरों का मिश्रण |  |
+| `scenarios.generator.constraints.mixError` | Choose at least one threat type. | कम से कम एक खतरा प्रकार चुनें। |  |
+| `scenarios.generator.constraints.oracle` | Oracle minimum score (%) | ओरेकल न्यूनतम स्कोर (%) |  |
+| `scenarios.generator.constraints.oracleHint` | 50 to 100 | 50 से 100 |  |
+| `scenarios.generator.constraints.oracleError` | Enter a whole number from 50 to 100. | 50 से 100 के बीच पूर्ण संख्या दें। |  |
+| `scenarios.generator.constraints.attempts` | Retry budget | पुनः प्रयास सीमा |  |
+| `scenarios.generator.constraints.attemptsHint` | Candidates per constraint set, 1 to 64 | प्रति बाधा समुच्चय उम्मीदवार, 1 से 64 |  |
+| `scenarios.generator.constraints.attemptsError` | Enter a whole number from 1 to 64. | 1 से 64 के बीच पूर्ण संख्या दें। |  |
+| `scenarios.generator.mix.single` | Single | एकल |  |
+| `scenarios.generator.mix.swarm` | Swarm | झुंड |  |
+| `scenarios.generator.mix.fast-mover` | Fast mover | तेज़ गति वाला |  |
+| `scenarios.generator.mix.fixed-wing` | Fixed-wing | फिक्स्ड-विंग |  |
+| `scenarios.generator.mix.decoy-mix` | Decoy mix | डिकॉय मिश्रण |  |
+| `scenarios.generator.mix.silent-raid` | Silent raid | मौन हमला |  |
+| `scenarios.generator.seed.title` | Seed and share code | सीड और साझा कोड |  |
+| `scenarios.generator.seed.seed` | Seed | सीड |  |
+| `scenarios.generator.seed.randomise` | Randomise | यादृच्छिक करें |  |
+| `scenarios.generator.seed.error` | Enter a whole number from 0 to 4294967295. | 0 से 4294967295 के बीच पूर्ण संख्या दें। |  |
+| `scenarios.generator.code.label` | Share code | साझा कोड |  |
+| `scenarios.generator.code.decode` | Decode | डिकोड करें |  |
+| `scenarios.generator.code.copy` | Copy | कॉपी करें |  |
+| `scenarios.generator.code.encode` | Encode | एन्कोड करें |  |
+| `scenarios.generator.code.copied` | Copied to the clipboard. | क्लिपबोर्ड पर कॉपी किया गया। |  |
+| `scenarios.generator.code.copyManual` | The clipboard is not available here. The code is selected; copy it with Ctrl+C. | यहाँ क्लिपबोर्ड उपलब्ध नहीं है। कोड चुना हुआ है; Ctrl+C से कॉपी करें। |  |
+| `scenarios.generator.code.decoded` | Code decoded: the form now holds the request (seed {{seed}}). | कोड डिकोड हुआ: फ़ॉर्म में अब अनुरोध है (सीड {{seed}})। |  |
+| `scenarios.generator.code.encoded` | Share code made from the form. | फ़ॉर्म से साझा कोड बना। |  |
+| `scenarios.generator.code.invalid` | That share code is not valid. | यह साझा कोड मान्य नहीं है। |  |
+| `scenarios.generator.code.unreachable` | The server is unreachable. Check the connection and try again. | सर्वर तक पहुँच नहीं हो रही। कनेक्शन जाँचें और पुनः प्रयास करें। |  |
+| `scenarios.generator.code.versionWarning` | Code decoded, but it was made by another generator version, so the spec will differ: {{detail}} | कोड डिकोड हुआ, पर वह किसी दूसरे जनरेटर संस्करण का है, इसलिए स्पेक अलग होगी: {{detail}} |  |
+| `scenarios.generator.code.note` | A code carries the request, the seed and the generator version. The same code and version give the identical scenario. | कोड में अनुरोध, सीड और जनरेटर संस्करण होता है। वही कोड और संस्करण वही परिदृश्य देते हैं। |  |
+| `scenarios.generator.run.title` | Generate | उत्पन्न करें |  |
+| `scenarios.generator.run.save` | Save generated scenarios to the library | उत्पन्न परिदृश्य पुस्तकालय में सहेजें |  |
+| `scenarios.generator.run.generate` | Generate | उत्पन्न करें |  |
+| `scenarios.generator.run.generating` | Generating | उत्पन्न हो रहा है |  |
+| `scenarios.generator.run.count` | Batch size | बैच आकार |  |
+| `scenarios.generator.run.countError` | 1 to 12 | 1 से 12 |  |
+| `scenarios.generator.run.batch` | Batch generate | बैच उत्पन्न करें |  |
+| `scenarios.generator.run.fromCode` | Generate from the share code | साझा कोड से उत्पन्न करें |  |
+| `scenarios.generator.run.note` | Every candidate is run through the oracle defender; only scenarios verified solvable by test run are returned. Saved scenarios become playable and join the archive. | हर उम्मीदवार ओरेकल रक्षक से गुज़रता है; केवल वही परिदृश्य लौटते हैं जो परीक्षण-रन से हल-योग्य सत्यापित हैं। सहेजे गए परिदृश्य खेलने योग्य बनते हैं और संग्रह में जुड़ते हैं। |  |
+| `scenarios.generator.result.title` | Generated scenarios | उत्पन्न परिदृश्य |  |
+| `scenarios.generator.result.count` | {{count}} generated | {{count}} उत्पन्न |  |
+| `scenarios.generator.result.loading` | Generating and checking scenarios | परिदृश्य उत्पन्न और जाँचे जा रहे हैं |  |
+| `scenarios.generator.result.loadingNote` | Each candidate is run through the oracle defender. This can take several seconds. | हर उम्मीदवार ओरेकल रक्षक से गुज़रता है। इसमें कई सेकंड लग सकते हैं। |  |
+| `scenarios.generator.result.emptyTitle` | Nothing generated yet | अभी कुछ उत्पन्न नहीं हुआ |  |
+| `scenarios.generator.result.emptyBody` | Set the request and generate. Each result lists its checks, the relaxations that were applied and its features. | अनुरोध तय करें और उत्पन्न करें। हर परिणाम अपनी जाँचें, लागू ढील और विशेषताएँ दिखाता है। |  |
+| `scenarios.generator.result.error.network` | The server is unreachable | सर्वर तक पहुँच नहीं हो रही |  |
+| `scenarios.generator.result.error.forbidden` | Your account cannot generate scenarios | आपका खाता परिदृश्य उत्पन्न नहीं कर सकता |  |
+| `scenarios.generator.result.error.notFound` | The generator was not found | जनरेटर नहीं मिला |  |
+| `scenarios.generator.result.error.error` | No scenario could be generated | कोई परिदृश्य उत्पन्न नहीं हो सका |  |
+| `scenarios.generator.result.errorBody` | The generator returned no scenario. Change the request or the retry budget, then try again. | जनरेटर ने कोई परिदृश्य नहीं लौटाया। अनुरोध या पुनः प्रयास सीमा बदलें, फिर दोबारा करें। |  |
+| `scenarios.generator.result.attempts` | Attempts | प्रयास |  |
+| `scenarios.generator.result.relaxations` | Relaxations applied | लागू ढील |  |
+| `scenarios.generator.result.noRelaxations` | None | कोई नहीं |  |
+| `scenarios.generator.result.diversity` | Novelty / threshold | नवीनता / सीमा |  |
+| `scenarios.generator.result.history` | {{count}} in history | इतिहास में {{count}} |  |
+| `scenarios.generator.result.version` | Generator and spec hash | जनरेटर और स्पेक हैश |  |
+| `scenarios.generator.result.code` | Share code | साझा कोड |  |
+| `scenarios.generator.result.save` | Save to the library | पुस्तकालय में सहेजें |  |
+| `scenarios.generator.result.saving` | Saving | सहेजा जा रहा है |  |
+| `scenarios.generator.result.saved` | Saved to the library | पुस्तकालय में सहेजा गया |  |
+| `scenarios.generator.result.saveFailed` | The scenario could not be saved: {{detail}} | परिदृश्य नहीं सहेजा जा सका: {{detail}} |  |
+| `scenarios.generator.result.saveUnreachable` | The server is unreachable. Check the connection and try again. | सर्वर तक पहुँच नहीं हो रही। कनेक्शन जाँचें और पुनः प्रयास करें। |  |
+| `scenarios.generator.report.title` | Diversity report | विविधता रिपोर्ट |  |
+| `scenarios.generator.report.loading` | Loading the archive | संग्रह लोड हो रहा है |  |
+| `scenarios.generator.report.error.network` | The server is unreachable | सर्वर तक पहुँच नहीं हो रही |  |
+| `scenarios.generator.report.error.forbidden` | Your account cannot read the archive | आपका खाता संग्रह नहीं पढ़ सकता |  |
+| `scenarios.generator.report.error.notFound` | The archive was not found | संग्रह नहीं मिला |  |
+| `scenarios.generator.report.error.error` | The archive could not be loaded | संग्रह लोड नहीं हो सका |  |
+| `scenarios.generator.report.errorBody` | The diversity report could not be read. Retry; the generator above still works. | विविधता रिपोर्ट नहीं पढ़ी जा सकी। पुनः प्रयास करें; ऊपर का जनरेटर चलता रहेगा। |  |
+| `scenarios.generator.report.emptyBody` | The archive holds no scenario yet. Generate with "Save generated scenarios to the library" to start filling it. | संग्रह में अभी कोई परिदृश्य नहीं है। इसे भरना शुरू करने के लिए "उत्पन्न परिदृश्य पुस्तकालय में सहेजें" के साथ उत्पन्न करें। |  |
+| `scenarios.generator.report.xAxis` | Columns | स्तंभ |  |
+| `scenarios.generator.report.yAxis` | Rows | पंक्तियाँ |  |
+| `scenarios.generator.report.coverage` | Coverage | कवरेज |  |
+| `scenarios.generator.report.cells` | {{filled}} of {{total}} cells | {{total}} में से {{filled}} खाने |  |
+| `scenarios.generator.report.qd` | QD-score | QD-स्कोर |  |
+| `scenarios.generator.report.pairwise` | Mean pairwise distance | औसत युग्म-दूरी |  |
+| `scenarios.generator.report.note` | Each cell holds the best scenario that fell in it; its quality is the oracle's lowest hostile contact score, from 0 to 1. The map shows the best quality over the third axis. Coverage is the share of filled cells; QD-score is the sum of the elites' quality. | हर खाने में उसमें आया सबसे अच्छा परिदृश्य रहता है; उसकी गुणवत्ता ओरेकल का सबसे कम शत्रु संपर्क स्कोर है, 0 से 1। नक्शा तीसरे अक्ष पर सबसे अच्छी गुणवत्ता दिखाता है। कवरेज भरे खानों का अनुपात है; QD-स्कोर श्रेष्ठ परिदृश्यों की गुणवत्ता का योग है। |  |
+| `scenarios.generator.heat.label` | Expressive-range heat map: {{x}} across, {{y}} up, best over {{z}} | विस्तार-परिसर ताप-नक्शा: {{x}} आड़ा, {{y}} ऊपर, {{z}} पर सर्वोत्तम |  |
+| `scenarios.generator.heat.axes` | Across: {{x}}. Up: {{y}}. Best quality over {{z}}. | आड़ा: {{x}}। ऊपर: {{y}}। {{z}} पर सर्वोत्तम गुणवत्ता। |  |
+| `scenarios.generator.heat.prompt` | Move over a cell or focus it with the arrow keys to read it. | पढ़ने के लिए किसी खाने पर जाएँ या तीर कुंजियों से उस पर फ़ोकस करें। |  |
+| `scenarios.generator.heat.cell` | {{where}}: best quality {{quality}}. {{filled}} of {{total}} {{axis}} bins filled. Scenario {{id}}. | {{where}}: सर्वोत्तम गुणवत्ता {{quality}}। {{axis}} के {{total}} में से {{filled}} खाने भरे। परिदृश्य {{id}}। |  |
+| `scenarios.generator.heat.cellEmpty` | {{where}}: empty, no scenario has landed here. | {{where}}: खाली, यहाँ कोई परिदृश्य नहीं आया। |  |
+| `scenarios.generator.heat.legend` | Quality scale | गुणवत्ता पैमाना |  |
+| `scenarios.generator.heat.empty` | empty | खाली |  |
 
-821 strings.
+1175 strings.

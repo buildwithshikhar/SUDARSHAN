@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { lazy, Suspense, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   BrowserRouter,
@@ -25,6 +25,29 @@ import { SessionLobby } from './screens/SessionLobby'
 import { SignIn } from './screens/SignIn'
 import { Status } from './screens/Status'
 import { LoadingState } from './ui/States'
+
+// The authoring screens are loaded when first opened, so they stay out of the initial bundle.
+const ScenarioLibrary = lazy(() =>
+  import('./screens/ScenarioLibrary').then((m) => ({ default: m.ScenarioLibrary })),
+)
+const ScenarioEditor = lazy(() =>
+  import('./screens/ScenarioEditor').then((m) => ({ default: m.ScenarioEditor })),
+)
+const GeneratorStudio = lazy(() =>
+  import('./screens/GeneratorStudio').then((m) => ({ default: m.GeneratorStudio })),
+)
+
+const AUTHORS: Role[] = ['instructor', 'admin']
+
+/** An authoring screen: instructor and admin only, loaded on demand. */
+function Authoring({ children }: { children: ReactNode }) {
+  const { t } = useTranslation()
+  return (
+    <RoleGate roles={AUTHORS}>
+      <Suspense fallback={<LoadingState label={t('app.loading')} />}>{children}</Suspense>
+    </RoleGate>
+  )
+}
 
 /** Pages that are reachable with or without a session pick the matching frame. */
 function Frame({ children }: { children: ReactNode }) {
@@ -188,6 +211,38 @@ export function AppRoutes() {
             <RoleGate roles={['trainee', 'instructor']}>
               <SessionLobby />
             </RoleGate>
+          }
+        />
+        <Route
+          path="/content/scenarios"
+          element={
+            <Authoring>
+              <ScenarioLibrary />
+            </Authoring>
+          }
+        />
+        <Route
+          path="/content/scenarios/editor"
+          element={
+            <Authoring>
+              <ScenarioEditor />
+            </Authoring>
+          }
+        />
+        <Route
+          path="/content/scenarios/editor/:id"
+          element={
+            <Authoring>
+              <ScenarioEditor />
+            </Authoring>
+          }
+        />
+        <Route
+          path="/content/generator"
+          element={
+            <Authoring>
+              <GeneratorStudio />
+            </Authoring>
           }
         />
         <Route path="/status" element={<Status />} />

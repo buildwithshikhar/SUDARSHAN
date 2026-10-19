@@ -22,11 +22,49 @@ export type ToS = number
  * @maxItems 32
  */
 export type FiledFlights = FiledFlight[]
+export type Discipline = number
 export type Id2 = string
+export type Intent = 'transit' | 'loiter' | 'probe' | 'saturation'
+export type Kind = 'swarm' | 'flock'
+export type LaneSpacingM = number
+export type Leader = string | null
+export type LeaderLoss = 'elect' | 'disperse' | 'loiter'
+export type LeaderLossHoldS = number
+export type LinkEpochS = number
+export type LinkLoss = number
+export type LinkRangeM = number
+export type LoiterRadiusM = number
+/**
+ * @minItems 2
+ * @maxItems 64
+ */
+export type Members = [string, string, ...string[]]
+export type NeighbourRadiusM = number
+export type OnRouteEnd = 'loiter' | 'loop' | 'despawn'
+export type ProbeCycles = number
+export type ProbeStandoffM = number
+/**
+ * @minItems 1
+ * @maxItems 200
+ */
+export type Route = [Waypoint, ...Waypoint[]]
+export type HoldS = number
+export type SpeedMps = number
+export type SpacingM = number
+export type Topology = 'leader-follower' | 'leaderless'
+export type Alignment = number
+export type Cohesion = number
+export type Goal = number
+export type Separation = number
+/**
+ * @maxItems 32
+ */
+export type Groups = Group[]
 export type Id3 = string
+export type Id4 = string
 export type Version = string
 export type BoresightDeg = number
-export type Id4 = string
+export type Id5 = string
 /**
  * @maxItems 32
  */
@@ -38,7 +76,7 @@ export type Sensors = SensorPlacement[]
 export type Threats = [Threat, ...Threat[]]
 export type ClassId = string
 export type Disposition = 'hostile' | 'civil-permitted' | 'clutter'
-export type Id5 = string
+export type Id6 = string
 export type MaxAccelMps2 = number
 export type MaxAltitudeM = number
 export type MaxClimbMps = number
@@ -46,14 +84,19 @@ export type MaxDescentMps = number
 export type MaxSpeedMps = number
 export type MaxTurnRateDps = number
 export type MinAltitudeM = number
-export type OnRouteEnd = 'loiter' | 'loop' | 'despawn'
+export type Motion = (Tether | Drift) | null
+export type Kind1 = 'tether'
+export type LengthM = number
+export type SwayM = number
+export type SwayPeriodS = number
+export type ClimbMps = number
+export type Kind2 = 'drift'
+export type OnRouteEnd1 = 'loiter' | 'loop' | 'despawn'
 /**
  * @minItems 1
  * @maxItems 200
  */
-export type Route = [Waypoint, ...Waypoint[]]
-export type HoldS = number
-export type SpeedMps = number
+export type Route1 = [Waypoint, ...Waypoint[]]
 export type SpawnS = number
 export type StartHeadingDeg = number
 export type StartSpeedMps = number
@@ -63,9 +106,9 @@ export type HalfExtentM = number
 export type StartTimeOfDayH = number
 export type Terrain = FlatTerrain | PackTerrain
 export type ElevationM = number
-export type Kind = 'flat'
-export type Id6 = string
-export type Kind1 = 'pack'
+export type Kind3 = 'flat'
+export type Id7 = string
+export type Kind4 = 'pack'
 export type Version2 = string
 export type CloudCoverPct = number
 export type Condition = 'clear' | 'haze' | 'rain' | 'fog' | 'dust'
@@ -74,7 +117,7 @@ export type TemperatureC = number
 export type VisibilityM = number
 export type WindFromDeg = number
 export type WindSpeedMps = number
-export type Id7 = string
+export type Id8 = string
 export type RadiusM1 = number
 export type Role = 'inner' | 'outer' | 'restricted'
 /**
@@ -89,7 +132,8 @@ export interface ScenarioSpec {
   duration_s: DurationS
   fictional: Fictional
   filed_flights?: FiledFlights
-  id: Id2
+  groups?: Groups
+  id: Id3
   rule_pack: PackRef
   sensors?: Sensors
   summary: Text
@@ -134,26 +178,74 @@ export interface FiledFlight {
   to_s: ToS
 }
 /**
+ * Members of a group are ordinary threats (own class, limits, spawn and start); the group
+ * decides where they steer, and each member stays inside its own class envelope. Behaviour is
+ * kinematics only: a member goes where the group's own route and its group-mates take it.
+ *
+ * Every numeric value is project-authored (register F01, verified: false); the model basis is
+ * Reynolds boids, Vicsek noise, consensus with link loss and leader-follower, cited as the model
+ * and never as validation (docs/02-research.md section 3).
+ */
+export interface Group {
+  discipline?: Discipline
+  id: Id2
+  intent?: Intent
+  kind?: Kind
+  lane_spacing_m?: LaneSpacingM
+  leader?: Leader
+  leader_loss?: LeaderLoss
+  leader_loss_hold_s?: LeaderLossHoldS
+  link_epoch_s?: LinkEpochS
+  link_loss?: LinkLoss
+  link_range_m?: LinkRangeM
+  loiter_radius_m?: LoiterRadiusM
+  members: Members
+  neighbour_radius_m?: NeighbourRadiusM
+  on_route_end?: OnRouteEnd
+  probe_cycles?: ProbeCycles
+  probe_standoff_m?: ProbeStandoffM
+  route: Route
+  spacing_m?: SpacingM
+  topology?: Topology
+  weights?: GroupWeights
+}
+export interface Waypoint {
+  hold_s?: HoldS
+  position: Vec3
+  speed_mps: SpeedMps
+}
+/**
+ * Weights of the four flocking terms (Reynolds boids). Project-authored (register F01,
+ * verified: false).
+ */
+export interface GroupWeights {
+  alignment?: Alignment
+  cohesion?: Cohesion
+  goal?: Goal
+  separation?: Separation
+}
+/**
  * Reference to another versioned pack by ID and exact version.
  */
 export interface PackRef {
-  id: Id3
+  id: Id4
   version: Version
 }
 export interface SensorPlacement {
   boresight_deg: BoresightDeg
-  id: Id4
+  id: Id5
   position: Vec3
   profile: PackRef
 }
 export interface Threat {
   class_id: ClassId
   disposition?: Disposition
-  id: Id5
+  id: Id6
   label: Text
   limits: KinematicLimits
-  on_route_end: OnRouteEnd
-  route: Route
+  motion?: Motion
+  on_route_end: OnRouteEnd1
+  route: Route1
   spawn_s: SpawnS
   start: Vec3
   start_heading_deg: StartHeadingDeg
@@ -171,10 +263,24 @@ export interface KinematicLimits {
   max_turn_rate_dps: MaxTurnRateDps
   min_altitude_m: MinAltitudeM
 }
-export interface Waypoint {
-  hold_s?: HoldS
-  position: Vec3
-  speed_mps: SpeedMps
+/**
+ * Clutter motion: a kite held on a line from a fixed anchor. It rides downwind of the anchor
+ * at about 50 degrees elevation, swaying across the wind; the route is ignored.
+ */
+export interface Tether {
+  anchor: Vec3
+  kind: Kind1
+  length_m: LengthM
+  sway_m: SwayM
+  sway_period_s: SwayPeriodS
+}
+/**
+ * Clutter motion: a free balloon carried by the wind (mean wind plus gust), climbing at
+ * `climb_mps` until the top of its altitude band; the route is ignored.
+ */
+export interface Drift {
+  climb_mps: ClimbMps
+  kind: Kind2
 }
 export interface World {
   half_extent_m: HalfExtentM
@@ -184,15 +290,15 @@ export interface World {
 }
 export interface FlatTerrain {
   elevation_m?: ElevationM
-  kind: Kind
+  kind: Kind3
 }
 /**
  * A baked terrain pack (`packs/terrain/<id>/`, docs/TERRAIN_PACKS.md). Positions in the
  * scenario are metres above the pack datum, in the pack's local frame.
  */
 export interface PackTerrain {
-  id: Id6
-  kind: Kind1
+  id: Id7
+  kind: Kind4
   version: Version2
 }
 /**
@@ -212,7 +318,7 @@ export interface Weather {
  */
 export interface Zone {
   center: Vec3
-  id: Id7
+  id: Id8
   label: Text
   radius_m: RadiusM1
   role: Role

@@ -24,6 +24,29 @@
       "title": "DefendedAsset",
       "type": "object"
     },
+    "Drift": {
+      "additionalProperties": false,
+      "description": "Clutter motion: a free balloon carried by the wind (mean wind plus gust), climbing at\n`climb_mps` until the top of its altitude band; the route is ignored.",
+      "properties": {
+        "climb_mps": {
+          "maximum": 3,
+          "minimum": 0,
+          "title": "Climb Mps",
+          "type": "number"
+        },
+        "kind": {
+          "const": "drift",
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "climb_mps"
+      ],
+      "title": "Drift",
+      "type": "object"
+    },
     "FiledFlight": {
       "additionalProperties": false,
       "description": "A civil flight plan the trainee is told about: an area and a time window, nothing more.\n\nIt does not name the contact that flies it; matching a track to a plan is the trainee's job.",
@@ -86,6 +109,224 @@
         "kind"
       ],
       "title": "FlatTerrain",
+      "type": "object"
+    },
+    "Group": {
+      "additionalProperties": false,
+      "description": "Members of a group are ordinary threats (own class, limits, spawn and start); the group\ndecides where they steer, and each member stays inside its own class envelope. Behaviour is\nkinematics only: a member goes where the group's own route and its group-mates take it.\n\nEvery numeric value is project-authored (register F01, verified: false); the model basis is\nReynolds boids, Vicsek noise, consensus with link loss and leader-follower, cited as the model\nand never as validation (docs/02-research.md section 3).",
+      "properties": {
+        "discipline": {
+          "default": 0.9,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Discipline",
+          "type": "number"
+        },
+        "id": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "intent": {
+          "default": "transit",
+          "enum": [
+            "transit",
+            "loiter",
+            "probe",
+            "saturation"
+          ],
+          "title": "Intent",
+          "type": "string"
+        },
+        "kind": {
+          "default": "swarm",
+          "enum": [
+            "swarm",
+            "flock"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "lane_spacing_m": {
+          "default": 30.0,
+          "maximum": 200,
+          "minimum": 3,
+          "title": "Lane Spacing M",
+          "type": "number"
+        },
+        "leader": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Leader"
+        },
+        "leader_loss": {
+          "default": "elect",
+          "enum": [
+            "elect",
+            "disperse",
+            "loiter"
+          ],
+          "title": "Leader Loss",
+          "type": "string"
+        },
+        "leader_loss_hold_s": {
+          "default": 4.0,
+          "maximum": 30,
+          "minimum": 0,
+          "title": "Leader Loss Hold S",
+          "type": "number"
+        },
+        "link_epoch_s": {
+          "default": 1.0,
+          "maximum": 60,
+          "minimum": 0.5,
+          "title": "Link Epoch S",
+          "type": "number"
+        },
+        "link_loss": {
+          "default": 0.0,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Link Loss",
+          "type": "number"
+        },
+        "link_range_m": {
+          "default": 150.0,
+          "maximum": 5000,
+          "minimum": 10,
+          "title": "Link Range M",
+          "type": "number"
+        },
+        "loiter_radius_m": {
+          "default": 120.0,
+          "maximum": 5000,
+          "minimum": 20,
+          "title": "Loiter Radius M",
+          "type": "number"
+        },
+        "members": {
+          "items": {
+            "maxLength": 64,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "maxItems": 64,
+          "minItems": 2,
+          "title": "Members",
+          "type": "array"
+        },
+        "neighbour_radius_m": {
+          "default": 80.0,
+          "maximum": 1000,
+          "minimum": 5,
+          "title": "Neighbour Radius M",
+          "type": "number"
+        },
+        "on_route_end": {
+          "default": "loiter",
+          "enum": [
+            "loiter",
+            "loop",
+            "despawn"
+          ],
+          "title": "On Route End",
+          "type": "string"
+        },
+        "probe_cycles": {
+          "default": 2,
+          "maximum": 10,
+          "minimum": 1,
+          "title": "Probe Cycles",
+          "type": "integer"
+        },
+        "probe_standoff_m": {
+          "default": 200.0,
+          "maximum": 5000,
+          "minimum": 10,
+          "title": "Probe Standoff M",
+          "type": "number"
+        },
+        "route": {
+          "items": {
+            "$ref": "#/$defs/Waypoint"
+          },
+          "maxItems": 200,
+          "minItems": 1,
+          "title": "Route",
+          "type": "array"
+        },
+        "spacing_m": {
+          "default": 20.0,
+          "maximum": 200,
+          "minimum": 3,
+          "title": "Spacing M",
+          "type": "number"
+        },
+        "topology": {
+          "default": "leaderless",
+          "enum": [
+            "leader-follower",
+            "leaderless"
+          ],
+          "title": "Topology",
+          "type": "string"
+        },
+        "weights": {
+          "$ref": "#/$defs/GroupWeights"
+        }
+      },
+      "required": [
+        "id",
+        "members",
+        "route"
+      ],
+      "title": "Group",
+      "type": "object"
+    },
+    "GroupWeights": {
+      "additionalProperties": false,
+      "description": "Weights of the four flocking terms (Reynolds boids). Project-authored (register F01,\nverified: false).",
+      "properties": {
+        "alignment": {
+          "default": 1.5,
+          "maximum": 5,
+          "minimum": 0,
+          "title": "Alignment",
+          "type": "number"
+        },
+        "cohesion": {
+          "default": 0.6,
+          "maximum": 5,
+          "minimum": 0,
+          "title": "Cohesion",
+          "type": "number"
+        },
+        "goal": {
+          "default": 1.0,
+          "maximum": 5,
+          "minimum": 0,
+          "title": "Goal",
+          "type": "number"
+        },
+        "separation": {
+          "default": 1.0,
+          "maximum": 5,
+          "minimum": 0,
+          "title": "Separation",
+          "type": "number"
+        }
+      },
+      "title": "GroupWeights",
       "type": "object"
     },
     "KinematicLimits": {
@@ -230,6 +471,47 @@
       "title": "SensorPlacement",
       "type": "object"
     },
+    "Tether": {
+      "additionalProperties": false,
+      "description": "Clutter motion: a kite held on a line from a fixed anchor. It rides downwind of the anchor\nat about 50 degrees elevation, swaying across the wind; the route is ignored.",
+      "properties": {
+        "anchor": {
+          "$ref": "#/$defs/Vec3"
+        },
+        "kind": {
+          "const": "tether",
+          "title": "Kind",
+          "type": "string"
+        },
+        "length_m": {
+          "maximum": 300,
+          "minimum": 5,
+          "title": "Length M",
+          "type": "number"
+        },
+        "sway_m": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Sway M",
+          "type": "number"
+        },
+        "sway_period_s": {
+          "maximum": 60,
+          "minimum": 2,
+          "title": "Sway Period S",
+          "type": "number"
+        }
+      },
+      "required": [
+        "kind",
+        "anchor",
+        "length_m",
+        "sway_m",
+        "sway_period_s"
+      ],
+      "title": "Tether",
+      "type": "object"
+    },
     "Text": {
       "additionalProperties": false,
       "description": "User-facing text in both interface languages.",
@@ -284,6 +566,32 @@
         },
         "limits": {
           "$ref": "#/$defs/KinematicLimits"
+        },
+        "motion": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "drift": "#/$defs/Drift",
+                  "tether": "#/$defs/Tether"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/Tether"
+                },
+                {
+                  "$ref": "#/$defs/Drift"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Motion"
         },
         "on_route_end": {
           "enum": [
@@ -586,6 +894,15 @@
       },
       "maxItems": 32,
       "title": "Filed Flights",
+      "type": "array"
+    },
+    "groups": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Group"
+      },
+      "maxItems": 32,
+      "title": "Groups",
       "type": "array"
     },
     "id": {

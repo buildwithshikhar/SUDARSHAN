@@ -17,7 +17,7 @@ Sensor models are calibrated from open research datasets and published specifica
 | Wave 5 · Live-session vertical slice | Built locally, CI confirmation and redeploy pending |
 | Wave 6 · Scoring and contact reports | Built locally, CI confirmation and redeploy pending |
 | Wave 7 · 3D realism and terrain packs | Built locally; floor-laptop benchmark, CI confirmation and redeploy pending |
-| Wave 8 · Threat breadth | Not started |
+| Wave 8 · Threat breadth | Built locally; floor-laptop benchmark, CI confirmation and redeploy pending |
 | Waves 9a–9c · Scenario engine, site builder, sensor placement trainer | Not started |
 | Waves 10a–10b · Class management and rule packs, live monitor and director mode | Not started |
 | Waves 11a–11b · Adaptive learning and adversary, recognition academy | Not started |
@@ -36,7 +36,7 @@ Every row is **Planned**. This table changes to **Available** only when the feat
 | Area | Capability | State |
 |---|---|---|
 | Simulation | Server-authoritative, deterministic 20 Hz simulation; identical seed and actions give an identical run | Planned |
-| | Drone classes from hobby quadcopters to fixed-wing and swarms, plus birds and permitted civil traffic as clutter | Planned |
+| | Drone classes from hobby quadcopters to fixed-wing and swarms, plus birds, kites, balloons and permitted civil traffic as clutter | Built (wave 8) |
 | | Day, night, thermal and night-vision looks; modelled weather; generic and fictionalised terrain | Planned |
 | Sensors | Radar, EO/IR, RF and acoustic models with range, noise and degradation | Planned |
 | | Track table, fusion, cross-cueing and a simulated AI assist that is sometimes wrong | Planned |

@@ -81,10 +81,8 @@ def test_the_benchmark_trajectory_is_the_recorded_run_of_the_real_behaviours() -
     assert {"kite", "balloon"} <= set(shapes)
 
 
-def test_the_command_writes_the_file_and_refuses_a_missing_path(
-    tmp_path: pytest.TempPathFactory,
-) -> None:
-    target = tmp_path / "scene.json"  # type: ignore[operator]
+def test_the_command_writes_the_file_and_refuses_a_missing_path(tmp_path: Path) -> None:
+    target = tmp_path / "scene.json"
     assert breadth.main([str(target)]) == 0
     assert json.loads(target.read_text("utf-8")) == json.loads(SCENE_FILE.read_text("utf-8"))
     assert breadth.main([]) == 2

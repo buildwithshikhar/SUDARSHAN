@@ -4,3 +4,4 @@ playwright-report
 test-results
 package-lock.json
 tests/fixtures/terrain/fixture-ridge
+public/scenes/

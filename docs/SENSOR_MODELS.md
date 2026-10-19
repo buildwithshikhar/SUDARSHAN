@@ -55,11 +55,12 @@ False alarms. Each update takes `false_alarm_slots` slots of 8 uniforms each, al
 | `snr_ref_range` | m | 1000 | F01 | no |
 | `detection_threshold` | dB | 13 | F01 | no |
 | `pd_slope` | dB | 2.5 | F01 | no |
-| `rcs_rotary_small` | dBsm | -16 | F01 | no |
-| `rcs_fixed_wing_small` | dBsm | -10 | F01 | no |
-| `rcs_bird` | dBsm | -22 | F01 | no |
-| `rcs_default` | dBsm | -16 | F01 | no |
-| `aspect_swing_rotary_small` / `_fixed_wing_small` / `_bird` / `_default` | dB | 4 / 4 / 3 / 4 | F01 | no |
+| `rcs_<class>`: `rotary_small` / `fixed_wing_small` / `bird` / `default` | dBsm | -16 / -10 / -22 / -16 | F01 | no |
+| `rcs_<class>`, wave 8: `fpv_small` / `decoy_small` / `fixed_wing_medium` / `fixed_wing_large` / `kite` / `balloon` | dBsm | -18 / -20 / -3 / 3 / -30 / -26 | F01 | no |
+| `aspect_swing_<class>`: `rotary_small` / `fixed_wing_small` / `bird` / `default` | dB | 4 / 4 / 3 / 4 | F01 | no |
+| `aspect_swing_<class>`, wave 8: `decoy_small` / `fixed_wing_medium` / `fixed_wing_large` / `kite` / `balloon` | dB | 3 / 5 / 6 / 2 / 0 | F01 | no |
+
+`autonomous-small`, `civil-drone` and (for `aspect_swing`) `fpv-small` take the same figures as the profile's `_default`, which equal `rotary-small`, so the profile lists no entry for them. The values for all eleven classes are the signature of the threat catalogue ([THREAT_CATALOGUE.md](THREAT_CATALOGUE.md)); a test asserts that every profile resolves to the catalogue.
 | `clutter_elevation` | deg | 3 | F01 | no |
 | `clutter_floor_loss` | dB | 3 | F01 | no |
 | `notch_speed` | m/s | 2.5 | F01 | no |
@@ -82,13 +83,21 @@ The RCS values sit inside the ranges in [02-research.md](02-research.md) section
 
 ### Confusion matrices
 
-Three tables, all F01 and unverified, each row-normalised and each with a `clutter` row for false alarms. Labels for `default` and `unresolved`: `rotary-small`, `fixed-wing-small`, `bird`, `unknown`. Labels for `micro_doppler`: `rotor`, `wing-beat`, `none`.
+Three tables, all F01 and unverified, each row-normalised and each with a `clutter` row for false alarms. Labels for `default` and `unresolved`: `rotary-small`, `fixed-wing-small`, `bird`, `unknown`, then (appended in wave 8) `fpv-small`, `fixed-wing-medium`, `fixed-wing-large`, `kite`, `balloon`. Labels for `micro_doppler`: `rotor`, `wing-beat`, `none`. There is a row for every class of the threat catalogue; the wave-8 columns are 0 in the three original rows and the `clutter` row, so those rows are unchanged.
 
-| True class | `default` (resolved), correct label | `unresolved`, correct label | `micro_doppler` modal label |
+| True class | `default` (resolved), most likely label | `unresolved`, most likely label | `micro_doppler` modal label |
 |---|---|---|---|
-| `rotary-small` | 0.86 | 0.44 | `rotor` 0.90 |
-| `fixed-wing-small` | 0.78 | 0.40 | `none` 0.65, `rotor` 0.30 (propeller modulation) |
-| `bird` | 0.85 | 0.44 | `wing-beat` 0.80 |
+| `rotary-small`, `autonomous-small`, `civil-drone` | `rotary-small` 0.86 | `rotary-small` 0.44 | `rotor` 0.90 |
+| `fpv-small` | `rotary-small` 0.62, `fpv-small` 0.24 | `rotary-small` 0.34 | `rotor` 0.90 |
+| `decoy-small` | `rotary-small` 0.78 | `rotary-small` 0.36 | `rotor` 0.85 |
+| `fixed-wing-small` | `fixed-wing-small` 0.78 | `fixed-wing-small` 0.40 | `none` 0.65, `rotor` 0.30 (propeller modulation) |
+| `fixed-wing-medium` | `fixed-wing-medium` 0.55, `fixed-wing-small` 0.30 | `fixed-wing-small` 0.26 | `none` 0.72, `rotor` 0.25 |
+| `fixed-wing-large` | `fixed-wing-large` 0.60, `fixed-wing-medium` 0.25 | `fixed-wing-medium` 0.18, `fixed-wing-large` 0.18 | `none` 0.78, `rotor` 0.20 |
+| `bird` | `bird` 0.85 | `bird` 0.44 | `wing-beat` 0.80 |
+| `kite` | `unknown` 0.50, `bird` 0.30 | `unknown` 0.52, `bird` 0.30 | `none` 0.97 |
+| `balloon` | `unknown` 0.52, `bird` 0.25 | `unknown` 0.54, `bird` 0.28 | `none` 0.99 |
+
+The radar cannot tell an FPV quadcopter from a camera quadcopter, a decoy or a civil quadcopter on cross-section and micro-Doppler: it reports them as `rotary-small` most of the time (look-alike rule, below). A kite or a balloon gives so little return that it is mostly `unknown` or `bird`.
 
 ### Degradations
 
@@ -161,8 +170,13 @@ All three profiles read the same names. Values are given as day / night vision /
 | `size_bird` | m | 0.79 | D12 | no (derived) |
 | `size_fixed_wing_small` | m | 1.2 | F01 | no |
 | `size_default` | m | 0.5 | F01 | no |
+| `size_<class>`, wave 8: `autonomous_small` / `civil_drone` / `fpv_small` / `decoy_small` / `fixed_wing_medium` / `fixed_wing_large` / `kite` / `balloon` | m | 0.39 / 0.39 / 0.32 / 0.30 / 3.0 / 6.0 / 1.0 / 0.8 | F01 | no |
 | `contrast_default` | ratio | 0.9 / 0.75 / 0.8 | F01 | no |
 | `contrast_rotary_small`, `_bird`, `_fixed_wing_small` (thermal only) | ratio | 1.0, 1.0, 0.8 | F01 | no (UNVERIFIED, Q-09) |
+| `contrast_<class>`, wave 8, thermal: `autonomous_small` / `civil_drone` / `fpv_small` / `decoy_small` / `fixed_wing_medium` / `fixed_wing_large` / `kite` / `balloon` | ratio | 1.0 / 1.0 / 1.1 / 0.2 / 0.9 / 1.0 / 0.15 / 0.1 | F01 | no (UNVERIFIED, Q-09) |
+| `contrast_<class>`, wave 8, day and night vision: `decoy_small` / `kite` / `balloon` | ratio | day 0.72, 0.9 x 1.3, 0.9 x 1.2; night vision 0.6, 0.75 x 1.3, 0.75 x 1.2 (see below) | F01 | no |
+
+The visible-band cameras have one `contrast_default`; a class that differs gets `contrast_<class>` equal to `contrast_default` times the catalogue's `contrast_eo` factor (decoy 0.8, kite 1.3, balloon 1.2: a kite is bright and distinctive in a visible-band camera, a decoy dull). The thermal profile uses the catalogue's `contrast` (thermal contrast) as it is. The sizes and contrasts for all eleven classes are the signature of the threat catalogue ([THREAT_CATALOGUE.md](THREAT_CATALOGUE.md)).
 | `low_light_floor` | ratio | 0.03 / 0.7 / 1.0 | F01 | no |
 | `extinction_scale` | ratio | 1.0 / 0.9 / 0.6 | F01 | no |
 | `sigma_pixels` | px | 0.8 / 1.1 / 1.0 | F01 | no |
@@ -182,6 +196,20 @@ Two tables per profile, F01, unverified, row-normalised; labels `rotary-small`, 
 | Thermal | 0.85 / 0.82 / 0.80 | 0.35 / 0.35 / 0.33 |
 
 Entries are `rotary-small` / `fixed-wing-small` / `bird`. At a few pixels a bird and a drone are easily confused, which is the point of the `distant` tables.
+
+Wave 8 appends the labels `fpv-small`, `fixed-wing-medium`, `fixed-wing-large`, `kite` and `balloon` (0 in the original rows) and adds a row per catalogue class. Correct-or-family label in the `default` (recognised) table, day / night vision / thermal:
+
+| True class | Most likely label | Day / night vision / thermal |
+|---|---|---|
+| `autonomous-small`, `civil-drone` | `rotary-small` | 0.90 / 0.82 / 0.85 (as `rotary-small`) |
+| `fpv-small` | `rotary-small`, then `fpv-small` | 0.55, 0.36 / 0.50, 0.33 / 0.52, 0.34 |
+| `decoy-small` | `rotary-small` | 0.84 / 0.76 / 0.70 (thermal sees little of it: `unknown` 0.20) |
+| `fixed-wing-medium` | `fixed-wing-medium` | 0.68 / 0.60 / 0.64 |
+| `fixed-wing-large` | `fixed-wing-large` | 0.68 / 0.60 / 0.64 |
+| `kite` | `kite` | 0.83 / 0.72 / 0.20 (thermal: `unknown` 0.50) |
+| `balloon` | `balloon` | 0.87 / 0.76 / 0.12 (thermal: `unknown` 0.56) |
+
+A visible-band camera that recognises a kite or a balloon resolves it best; a thermal camera sees a balloon poorly because it is cold. The `distant` tables spread the same classes over their look-alikes, with more `unknown`.
 
 ### Degradations
 
@@ -254,13 +282,15 @@ Band plan (index in `band_<class>`, labels and centre frequencies in code, `rf.B
 | `confuser_hop_rate` | Hz | 800 | D09 | no |
 | `confuser_margin_span` | dB | 14 | D09 | no |
 | `confuser_elevation_max` | deg | 25 | F01 | no |
-| `emits_<class>` | flag | rotary 1 (D08), fixed-wing 1 (F01), bird 0, autonomous 0, default 1 | D08 / F01 | no |
-| `emitter_power_<class>` | dBm | 20 / 20 / 0 / 0, default 20 | F01 | no |
-| `band_<class>` | index | rotary 1 (D08), fixed-wing 3, bird 1, autonomous 1, default 1 | D08 / F01 | no |
-| `hop_rate_<class>` | Hz | rotary 80, others 0 | F01 | no |
+| `emits_<class>` | flag | rotary 1 (D08), fixed-wing 1 (F01), bird 0, autonomous 0, default 1; wave 8: `decoy_small`, `kite`, `balloon` 0, `fpv_small`, `civil_drone`, `fixed_wing_medium`, `fixed_wing_large` 1 (default) | D08 / F01 | no |
+| `emitter_power_<class>` | dBm | 20 / 20 / 0 / 0, default 20; wave 8: `fpv_small` 27, `fixed_wing_medium` 30, `fixed_wing_large` 33, `decoy_small`, `kite`, `balloon` 0 | F01 | no |
+| `band_<class>` | index | rotary 1 (D08), fixed-wing 3, bird 1, autonomous 1, default 1; wave 8: `fpv_small` 2 (5.8 GHz), `fixed_wing_medium` 3 (900 MHz), `fixed_wing_large` 5 (1.2-1.3 GHz) | D08 / F01 | no |
+| `hop_rate_<class>` | Hz | rotary 80, others 0; wave 8: `fpv_small` 120, `civil_drone` 80 | F01 | no |
 | confusion `default` | | see below | D09 | no |
 
-**Confusion.** Rows are the true emitter, columns `rotary-small`, `fixed-wing-small`, `wifi-bluetooth`, `unknown`; every row sums to 1. Rotary: 0.80 / 0.03 / 0.09 / 0.08. Fixed-wing: 0.06 / 0.72 / 0.10 / 0.12. The `wifi-bluetooth` row labels false alarms: 0.10 / 0.04 / 0.72 / 0.14. The `bird` and `autonomous-small` rows are `unknown` = 1; they exist so a scenario may contain those classes, and are never sampled because those classes are never detected.
+Classes that never emit (`bird`, `autonomous-small`, `decoy-small`, `kite`, `balloon`) have `emits_<class> = 0`, so `P(d)` is exactly 0 for them. The values for all eleven classes are the signature of the threat catalogue ([THREAT_CATALOGUE.md](THREAT_CATALOGUE.md)).
+
+**Confusion.** Rows are the true emitter, columns `rotary-small`, `fixed-wing-small`, `wifi-bluetooth`, `unknown`, then (wave 8) `fpv-small`, `fixed-wing-medium`, `fixed-wing-large`; every row sums to 1. Rotary: 0.80 / 0.03 / 0.09 / 0.08. Fixed-wing: 0.06 / 0.72 / 0.10 / 0.12. The `wifi-bluetooth` row labels false alarms: 0.10 / 0.04 / 0.72 / 0.14. The silent classes (`bird`, `autonomous-small`, `decoy-small`, `kite`, `balloon`) have rows that are `unknown` = 1; they exist so a scenario may contain those classes, and are never sampled because those classes are never detected. New emitting rows, over the first five labels: `fpv-small` 0.52 `rotary-small` / 0.26 `fpv-small` (the receiver cannot tell the two links apart reliably; the 5.8 GHz band and the faster hop rate are the cues), `civil-drone` 0.74 `rotary-small` with 0.14 `wifi-bluetooth` (a consumer link looks like Wi-Fi), `fixed-wing-medium` 0.40 `fixed-wing-small` / 0.34 `fixed-wing-medium`, `fixed-wing-large` 0.44 `fixed-wing-large` / 0.28 `fixed-wing-medium`.
 
 **Degradations.**
 - `interference`: raises the noise floor by `interference_noise_rise x severity` dB, carried as an amplitude ratio in `Effects.noise_factor`. P(d) falls, every sigma grows by the same ratio, and `clutter_factor = 1 + gain x severity` raises the false-alarm rate. Stacked injects add in decibels.
@@ -312,15 +342,17 @@ Measurement: azimuth and elevation noise as RF; range `None`. Features:
 | `sigma_blade_pass` | Hz | 4 | D10 | no |
 | `sigma_snr` | dB | 1.5 | F01 | no |
 | `wind_noise_penalty` | dB | 12 | F01 | no |
-| `source_level_<class>` | dB | rotary 78, fixed-wing 72, bird 52, autonomous 76, default 76 | F01 | no |
-| `blades_<class>` | count | 2, 2, 1, 2, default 2 | D11 (rotor classes) / F01 | no |
-| `rpm_<class>` | rpm | 6000, 3000, 720 (bird, UNVERIFIED), 5400, default 5400 | D11 / F01 | no |
-| `harmonics_<class>` | count | 6, 3, 1, 6, default 4 | D10 / F01 | no |
+| `source_level_<class>` | dB | rotary 78, fixed-wing 72, bird 52, autonomous 76, default 76; wave 8: `fpv_small` 82, `decoy_small` 68, `civil_drone` 78, `fixed_wing_medium` 80, `fixed_wing_large` 86, `kite` -10, `balloon` -10 | F01 | no |
+| `blades_<class>` | count | 2, 2, 1, 2, default 2; wave 8: `fixed_wing_large` 3, `kite` and `balloon` 0 | D11 (rotor classes) / F01 | no |
+| `rpm_<class>` | rpm | 6000, 3000, 720 (bird, UNVERIFIED), 5400, default 5400; wave 8: `fpv_small` 9000, `decoy_small` 7200, `civil_drone` 6000, `fixed_wing_medium` 3600, `fixed_wing_large` 2400, `kite` and `balloon` 0 | D11 / F01 | no |
+| `harmonics_<class>` | count | 6, 3, 1, 6, default 4; wave 8: `fpv_small` 6, `fixed_wing_medium` 5, `fixed_wing_large` 6, `civil_drone` 6, `decoy_small` 4, `kite` and `balloon` 1 | D10 / F01 | no |
 | confusion `default` | | see below | D12 | no |
 
-Resulting fundamentals: rotary 200 Hz, fixed-wing 100 Hz, autonomous 180 Hz, bird 12 Hz. The bird wing-beat band (5-20 Hz) against the drone fundamental (50-400 Hz) is UNVERIFIED (Q-09): `verified: false`.
+Resulting fundamentals: rotary 200 Hz, fixed-wing 100 Hz, autonomous 180 Hz, bird 12 Hz; wave 8: FPV 300 Hz (louder and higher-pitched), decoy 240 Hz, medium fixed-wing 120 Hz (piston-engine tone), large fixed-wing 120 Hz. The bird wing-beat band (5-20 Hz) against the drone fundamental (50-400 Hz) is UNVERIFIED (Q-09): `verified: false`.
 
-**Confusion.** Rows are the true source, columns `rotary-small`, `fixed-wing-small`, `bird`, `unknown`; every row sums to 1. Rotary: 0.82 / 0.05 / 0.03 / 0.10. Fixed-wing: 0.12 / 0.62 / 0.10 / 0.16. Bird: 0.04 / 0.14 / 0.58 / 0.24. Autonomous: 0.80 / 0.05 / 0.03 / 0.12. Each source is most often labelled as itself (the autonomous rotor as `rotary-small`).
+A kite and a balloon have no acoustic source. Their `source_level` of -10 dB puts the received level below the array's noise floor at every range, including a metre: with calm air `P(d)` is below 1e-6 at any range from 1 m to the instrumented range, and wind, rain and a wind-noise degradation only lower it. A test asserts it. Their blade-pass fundamental (blades x rpm) is 0 Hz and is never reported.
+
+**Confusion.** Rows are the true source, columns `rotary-small`, `fixed-wing-small`, `bird`, `unknown`, then (wave 8) `fpv-small`, `fixed-wing-medium`, `fixed-wing-large`, `kite`, `balloon`; every row sums to 1. Rotary: 0.82 / 0.05 / 0.03 / 0.10. Fixed-wing: 0.12 / 0.62 / 0.10 / 0.16. Bird: 0.04 / 0.14 / 0.58 / 0.24. Autonomous: 0.80 / 0.05 / 0.03 / 0.12. Each source is most often labelled as itself (the autonomous rotor as `rotary-small`). Wave 8, over the first five labels: `fpv-small` 0.58 `rotary-small` / 0.28 `fpv-small` (the higher pitch separates it part of the time); `decoy-small` 0.74 `rotary-small`; `civil-drone` as rotary; `fixed-wing-medium` 0.30 `fixed-wing-small` / 0.45 `fixed-wing-medium`; `fixed-wing-large` 0.28 `fixed-wing-medium` / 0.46 `fixed-wing-large`; `kite` and `balloon` mostly `unknown` (0.80, 0.90), rows that are never sampled because the array never hears them.
 
 **Degradations.**
 - `wind-noise`: an extra noise-floor penalty of `wind_noise_penalty x severity` dB (amplitude ratio in `noise_factor`), so P(d) falls and sigmas grow. It stacks with real wind from the weather.
@@ -329,6 +361,27 @@ Resulting fundamentals: rotary 200 Hz, fixed-wing 100 Hz, autonomous 180 Hz, bir
 - Weather: wind speed (including gusts) raises the noise floor linearly in decibels; `rain` adds a rain-noise source. Fog, dust, haze, temperature and visibility do nothing. Time of day has no effect.
 
 **Honesty note.** Fictional parameters built from open research datasets and published specifications, in fictional scenarios. D10 (DroneAudioDataset, indoor recordings), D11 (DREGON) and D12 (Svanstrom multi-sensor set) are calibration-only: parameters are "calibrated from" them in structure, not trained on them, and none is marked verified. The 50-300 m detection range is from secondary literature (not in the data register), so the 300 m limit is a project value; long-range acoustic ranges are UNVERIFIED (Q-09). Weather is modelled, not measured.
+
+## Class coverage and the look-alike rule (wave 8)
+
+Every sensor profile covers all eleven classes of the threat catalogue ([THREAT_CATALOGUE.md](THREAT_CATALOGUE.md)): `rotary-small`, `fpv-small`, `autonomous-small`, `decoy-small`, `civil-drone`, `fixed-wing-small`, `fixed-wing-medium`, `fixed-wing-large`, `bird`, `kite` and `balloon`. This closes Q-21. Two things carry a class into a sensor:
+
+- **Per-class parameters** `<prefix>_<class>` (hyphens become underscores, `<prefix>_default` is the fallback), for every class whose figure differs from the profile's `_default`. The figures are the catalogue's signature values, and a test (`tests/test_catalogue_profiles.py`) asserts that every profile resolves to them. The three original classes keep every figure they had; so does `autonomous-small` in the RF and acoustic profiles.
+- **Confusion tables** with one row per class. The `labels` were extended by appending, never by reordering, and the new columns are 0 in every original row, so the original rows, the random draws that sample them and every recorded hash are unchanged.
+
+**Label semantics.** A sensor label is a coarse family, not the truth class. The sensor vocabulary is `rotary-small`, `fixed-wing-small`, `bird`, `unknown`, plus `fpv-small`, `fixed-wing-medium`, `fixed-wing-large`, `kite` and `balloon` where the sensor can resolve them (RF labels emitters only). A decoy, a pre-programmed multirotor and a civil quadcopter are reported as `rotary-small`; the trainee separates them by behaviour, by RF silence and by the filed flight plan, not by the label. Likewise `fixed-wing-small`, `fixed-wing-medium` and `fixed-wing-large`, and `fpv-small` against `rotary-small`, are separated by combining features (speed, size in pixels, band, rotor pitch), not read off a label.
+
+**Look-alike rule.** Each sensor mostly reports a class as its own look-alike family, and the spread is set by what the sensor can resolve:
+
+| Sensor | What it can resolve | Look-alike behaviour |
+|---|---|---|
+| Radar | Cross-section and micro-Doppler, not shape | Cannot tell `fpv-small` from `rotary-small`: mostly `rotary-small`, `fpv-small` sometimes. `decoy-small`, `autonomous-small` and `civil-drone` are labelled like a quad. Medium and large fixed-wing spread over `fixed-wing-small`, `fixed-wing-medium` and `fixed-wing-large` by cross-section. `kite` and `balloon` mostly `unknown` or `bird`. Micro-Doppler: the rotary family `rotor`, fixed-wing `none` or `rotor`, bird `wing-beat`, kite and balloon `none`. |
+| Day and night-vision camera | Shape, once recognised | Best at `kite` and `balloon` when recognised (`default` table); `fpv-small` partly resolved from `rotary-small`; the `distant` table spreads every class over its look-alikes with more `unknown`. |
+| Thermal camera | Heat | `decoy-small`, `kite` and `balloon` are cold, so they are mostly `unknown`; a balloon is seen poorly. |
+| RF | What a class transmits | Only emitters have a meaningful row; `fpv-small` is partly told from `rotary-small` (5.8 GHz and the hop rate are in the features); `civil-drone` picks up some `wifi-bluetooth`. Silent classes are `unknown` = 1 and are never sampled. |
+| Acoustic | Rotor and engine tone | `fpv-small` is partly told from `rotary-small` by pitch; medium and large fixed-wing spread over the fixed-wing labels; `kite` and `balloon` are never heard. |
+
+Every confusion table keeps `source_id: F01` (or the source it already cited) and `verified: false`. The figures say how this simulator labels fictional classes; they say nothing about any real sensor.
 
 ## Line of sight (wave 7)
 

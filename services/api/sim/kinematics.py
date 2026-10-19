@@ -78,15 +78,24 @@ def _next_leg(d: Drone, threat: Threat, events: list[Event]) -> None:
         events.append(("threat.despawn", {"id": d.id, "reason": "route-end", **position(d)}))
 
 
-def _orbit_direction(d: Drone, cx: float, cy: float) -> tuple[float, float]:
-    """Clockwise orbit of radius ORBIT_RADIUS_M around (cx, cy), pulling back onto the circle."""
-    rx, ry = d.x - cx, d.y - cy
+def orbit_direction(
+    x: float, y: float, ux: float, uy: float, cx: float, cy: float, radius: float
+) -> tuple[float, float]:
+    """Clockwise orbit of the given radius around (cx, cy), pulling back onto the circle.
+
+    (ux, uy) is the current heading, returned unchanged when the point sits on the centre."""
+    rx, ry = x - cx, y - cy
     dist = math.sqrt(rx * rx + ry * ry)
     if dist == 0.0:
-        return d.ux, d.uy
+        return ux, uy
     rx, ry = rx / dist, ry / dist
-    pull = detmath.clamp((dist - ORBIT_RADIUS_M) / ORBIT_RADIUS_M * ORBIT_GAIN, -1.0, 4.0)
+    pull = detmath.clamp((dist - radius) / radius * ORBIT_GAIN, -1.0, 4.0)
     return detmath.unit(ry - pull * rx, -rx - pull * ry)
+
+
+def _orbit_direction(d: Drone, cx: float, cy: float) -> tuple[float, float]:
+    """Clockwise orbit of radius ORBIT_RADIUS_M around (cx, cy), pulling back onto the circle."""
+    return orbit_direction(d.x, d.y, d.ux, d.uy, cx, cy, ORBIT_RADIUS_M)
 
 
 def step(d: Drone, threat: Threat, env: Envelope, wind: tuple[float, float]) -> list[Event]:
@@ -114,19 +123,38 @@ def step(d: Drone, threat: Threat, env: Envelope, wind: tuple[float, float]) -> 
         return events
     wp = threat.route[d.leg]
 
-    # 2. heading
     if d.mode == "route":
         want = detmath.unit(wp.position.x - d.x, wp.position.y - d.y)
     else:
         want = _orbit_direction(d, wp.position.x, wp.position.y)
+    step_steered(d, env, wind, want, wp.speed_mps, wp.position.z)
+    return events
+
+
+def step_steered(
+    d: Drone,
+    env: Envelope,
+    wind: tuple[float, float],
+    want: tuple[float, float],
+    speed: float,
+    altitude: float,
+) -> None:
+    """Steps 2-5 of a tick for a drone told which way, how fast and how high to fly.
+
+    The drone is limited by its own class envelope exactly like a route follower: heading turns
+    at most one tick's turn rate, airspeed changes at most one tick's acceleration and stays
+    within the class maximum, altitude changes at the climb or descent limit and is clamped to
+    the altitude band. `want` is a unit vector (east, north).
+    """
+    # 2. heading
     d.ux, d.uy = detmath.rotate_towards((d.ux, d.uy), want, env.cos_turn, env.sin_turn)
 
     # 3. airspeed
-    change = detmath.clamp(wp.speed_mps - d.airspeed, -env.accel_step, env.accel_step)
+    change = detmath.clamp(speed - d.airspeed, -env.accel_step, env.accel_step)
     d.airspeed = detmath.clamp(d.airspeed + change, 0.0, env.max_speed)
 
     # 4. altitude
-    vz = detmath.clamp((wp.position.z - d.z) * CLIMB_GAIN_PER_S, -env.max_descent, env.max_climb)
+    vz = detmath.clamp((altitude - d.z) * CLIMB_GAIN_PER_S, -env.max_descent, env.max_climb)
     z = detmath.clamp(d.z + vz * DT, env.min_alt, env.max_alt)
     d.vz = (z - d.z) / DT
     d.z = z
@@ -134,4 +162,3 @@ def step(d: Drone, threat: Threat, env: Envelope, wind: tuple[float, float]) -> 
     # 5. position: air velocity plus wind
     d.x += (d.ux * d.airspeed + wind[0]) * DT
     d.y += (d.uy * d.airspeed + wind[1]) * DT
-    return events

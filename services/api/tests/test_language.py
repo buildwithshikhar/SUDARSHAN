@@ -66,7 +66,8 @@ def test_layout_header_order_and_unicode() -> None:
 
 
 def test_absent_and_empty_fields_are_left_out() -> None:
-    text = base_text()
+    bare = pack_spec().model_copy(update={"meta": None})
+    text = to_yaml(bare)
     for absent in ("meta:", "degradations:", "groups:", "motion:", "null", "[]", "leader"):
         assert absent not in text
 

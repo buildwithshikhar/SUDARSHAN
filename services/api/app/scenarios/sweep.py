@@ -35,9 +35,9 @@ def sweep_request(index: int) -> GeneratorRequest:
         mix = [ARCHETYPES[int(_u(index, "mix-one") * len(ARCHETYPES))]]
     return GeneratorRequest(
         seed=index,
-        terrain=TERRAINS[index % len(TERRAINS)],  # type: ignore[arg-type]
-        time_of_day=TIMES_OF_DAY[(index // 3) % len(TIMES_OF_DAY)],  # type: ignore[arg-type]
-        weather=WEATHERS[(index // 12) % len(WEATHERS)],  # type: ignore[arg-type]
+        terrain=TERRAINS[index % len(TERRAINS)],
+        time_of_day=TIMES_OF_DAY[(index // 3) % len(TIMES_OF_DAY)],
+        weather=WEATHERS[(index // 12) % len(WEATHERS)],
         difficulty=DifficultyVector(
             threat_load=int(_u(index, "load") * 101),
             ambiguity=int(_u(index, "ambiguity") * 101),
@@ -45,7 +45,7 @@ def sweep_request(index: int) -> GeneratorRequest:
             stealth=int(_u(index, "stealth") * 101),
             degradation=int(_u(index, "degradation") * 61),
         ),
-        threat_mix=mix,  # type: ignore[arg-type]
+        threat_mix=mix,
     )
 
 

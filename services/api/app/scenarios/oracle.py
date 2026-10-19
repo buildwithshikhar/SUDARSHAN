@@ -20,7 +20,7 @@ Policy, once per tick, for every confirmed track that follows a real drone:
   follows, so no unfixed track error costs marks.
 
 It stops early once every hostile contact has been answered, a few seconds have passed and no
-track error is open.
+track error is open (or it has kept repairing for `REPAIR_S` seconds without clearing them).
 """
 
 from collections.abc import Callable
@@ -41,6 +41,9 @@ from sim.world import ActionError, World
 ACTOR = "trainee:oracle"
 #: Seconds the oracle keeps playing after its last answer, so late events are in the log.
 TAIL_S = 4.0
+#: Seconds after the last answer the oracle keeps repairing track errors before it gives up and
+#: lets the score show what is left.
+REPAIR_S = 40.0
 IDENTITY = {"hostile": "hostile", "civil-permitted": "neutral", "clutter": "neutral"}
 
 
@@ -152,7 +155,10 @@ def play(
             last_answer is not None
             and answered >= hostile
             and world.tick - last_answer >= round(TAIL_S * spec.tick_hz)
-            and not picture.ledger.open_errors()
+            and (
+                not picture.ledger.open_errors()
+                or world.tick - last_answer >= round(REPAIR_S * spec.tick_hz)
+            )
         ):
             break
     final_tick = world.tick

@@ -15,9 +15,21 @@ from app.guard import StartupError, validate_production
 from app.live.catalog import ScenarioCatalog
 from app.live.manager import SessionManager
 from app.ratelimit import LoginRateLimiter
-from app.routers import auth, health, sessions, terrain, users, version
+from app.routers import auth, health, scenarios, sessions, terrain, users, version
+from app.scenarios.insights import Insights
+from app.scenarios.store import ScenarioStore
 
 log = logging.getLogger("app")
+
+
+async def _warm(live: SessionManager, insights: Insights) -> None:
+    """Check the shipped scenarios with the oracle defender in the background, so the library can
+    say which are verified solvable by test run without making a request wait for it."""
+    try:
+        specs = [e.spec for e in (await asyncio.to_thread(live.catalog.entries)).values()]
+        await asyncio.to_thread(insights.warm, specs)
+    except Exception:  # noqa: BLE001 - the library only shows "not yet checked"
+        log.exception("could not check the shipped scenarios")
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -25,9 +37,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     engine = make_engine(settings.database_url)
 
     session_factory = make_session_factory(engine)
+    scenario_store = ScenarioStore(session_factory)
+    insights = Insights()
     live = SessionManager(
         session_factory,
-        ScenarioCatalog(),
+        ScenarioCatalog(saved=scenario_store),
         grace_s=settings.session_grace_s,
         max_sessions=settings.max_live_sessions,
         act_rate=settings.live_act_rate,
@@ -45,7 +59,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             await asyncio.to_thread(live.abandon_stale)
         except SQLAlchemyError:
             log.warning("could not mark stale live sessions (is the database migrated?)")
+        warm = asyncio.create_task(_warm(live, insights)) if settings.scenario_warmup else None
         yield
+        if warm is not None:
+            warm.cancel()
         await live.shutdown()
         engine.dispose()
 
@@ -54,6 +71,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.engine = engine
     app.state.session_factory = session_factory
     app.state.live = live
+    app.state.scenario_store = scenario_store
+    app.state.insights = insights
     app.state.rate_limiter = LoginRateLimiter(
         settings.login_max_attempts, settings.login_window_seconds
     )
@@ -70,6 +89,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(auth.router)
     app.include_router(users.router)
     app.include_router(sessions.router)
+    app.include_router(scenarios.router)
     app.include_router(terrain.router)
     return app
 

@@ -141,7 +141,8 @@ def site_for(terrain: str) -> Site:
     if terrain == "flat":
         return Site(None, None, 5000.0, 900.0, 3200.0)
     pack = load_pack(pack_dir(terrain))
-    return Site(pack, terrain, pack.half_extent_m, 500.0, 1500.0)
+    half = pack.half_extent_m
+    return Site(pack, terrain, half, round(half * 0.3 / 50) * 50.0, round(half * 0.73 / 50) * 50.0)
 
 
 class Draw:
@@ -254,20 +255,28 @@ class Sampler:
         reach = self.site.inner_m + v * (RESPOND_S + REACTION_MARGIN_S + slack)
         return min(self.site.spawn_limit_m, max(reach, self.site.inner_m + 400.0))
 
-    def standoff(self, reserve: float, key: str) -> float:
-        """Where an approach ends: inside the inner zone for most, outside it for some."""
-        floor = STANDOFF_M + ORBIT_M + reserve
+    def standoff(self, reserve: float, key: str, orbit: float = ORBIT_M) -> float:
+        """Where an approach ends: inside the inner zone for most, outside it for some. `orbit` is
+        the radius flown round the end point and `reserve` the spread of a formation round it."""
+        floor = STANDOFF_M + orbit + reserve
         inside = self.d.u(key, "inside") < 0.7
         top = self.site.inner_m * 0.85 if inside else self.site.inner_m * 1.5
         low = min(floor, top)
         return r1(max(floor, self.d.between(low, max(top, floor), key, "standoff")))
 
     def approach(
-        self, key: str, bearing: float, v: float, agl: float, class_id: str, reserve: float = 0.0
+        self,
+        key: str,
+        bearing: float,
+        v: float,
+        agl: float,
+        class_id: str,
+        reserve: float = 0.0,
+        orbit: float = ORBIT_M,
     ) -> tuple[list[tuple[float, float, float, float]], tuple[float, float, float]]:
         """A dog-leg from the edge of the play area to a stand-off: (route, start)."""
         r0 = min(self.spawn_range(v), self.site.half_extent_m * 0.9 - 1.5 * reserve - 50.0)
-        rs = self.standoff(reserve, key)
+        rs = self.standoff(reserve, key, orbit)
         side = self.d.pick((-1.0, 1.0), key, "side")
         lateral = side * self.d.between(0.08, 0.22, key, "lateral") * r0
         mx, my = polar(bearing, r0 * 0.62)
@@ -396,8 +405,12 @@ class Sampler:
         spacing = self.swarm_spacing(n)
         edge = self.site.half_extent_m - 40.0
         for _ in range(8):  # close the formation up until it starts inside the play area
-            extent = spacing * math.sqrt(n) * 0.75
-            route, start = self.approach(key, bearing, v, agl, "rotary-small", reserve=extent)
+            offsets_xy = formation_starts(n, spacing, (0.0, 0.0), 0.0, intent)
+            radius = max(math.hypot(x, y) for x, y in offsets_xy)
+            orbit = max(90.0, radius + spacing)
+            route, start = self.approach(
+                key, bearing, v, agl, "rotary-small", reserve=radius, orbit=orbit
+            )
             heading = bearing_of(route[0][0] - start[0], route[0][1] - start[1])
             spots = formation_starts(n, spacing, (start[0], start[1]), heading, intent)
             if all(abs(x) <= edge and abs(y) <= edge for x, y in spots) or spacing <= 40.0:

@@ -74,6 +74,30 @@ class Waypoint(Contract):
     hold_s: Annotated[float, Field(ge=0, le=3600)] = 0.0
 
 
+class Tether(Contract):
+    """Clutter motion: a kite held on a line from a fixed anchor. It rides downwind of the anchor
+    at about 50 degrees elevation, swaying across the wind; the route is ignored."""
+
+    kind: Literal["tether"]
+    anchor: Vec3
+    length_m: Annotated[float, Field(ge=5, le=300)]
+    sway_m: Annotated[float, Field(ge=0, le=100)]
+    sway_period_s: Annotated[float, Field(ge=2, le=60)]
+
+
+class Drift(Contract):
+    """Clutter motion: a free balloon carried by the wind (mean wind plus gust), climbing at
+    `climb_mps` until the top of its altitude band; the route is ignored."""
+
+    kind: Literal["drift"]
+    climb_mps: Annotated[float, Field(ge=0, le=3)]
+
+
+Motion = Annotated[Tether | Drift, Field(discriminator="kind")]
+
+#: Sine of the elevation (50 degrees) at which a tethered kite rides above its anchor.
+TETHER_SIN_ELEVATION = 0.766044443118978
+
 #: What a contact really is. Ground truth: never sent to a trainee during a session; scoring
 #: (wave 6) and the instructor use it.
 Disposition = Literal["hostile", "civil-permitted", "clutter"]
@@ -92,6 +116,9 @@ class Threat(Contract):
     limits: KinematicLimits
     route: Annotated[list[Waypoint], Field(min_length=1, max_length=200)]
     on_route_end: Literal["loiter", "loop", "despawn"]
+    #: Prescribed clutter motion (kite on a tether, drifting balloon). A threat with a motion
+    #: ignores its `route` but still obeys its class altitude band.
+    motion: Motion | None = None
 
     @model_validator(mode="after")
     def _inside_limits(self) -> Self:
@@ -107,6 +134,82 @@ class Threat(Contract):
         for i, w in enumerate(self.route):
             if w.speed_mps > lim.max_speed_mps:
                 raise ValueError(f"threat {self.id}: waypoint {i} speed above class max speed")
+        if isinstance(self.motion, Tether):
+            height = self.motion.anchor.z + self.motion.length_m * TETHER_SIN_ELEVATION
+            if not lim.min_altitude_m <= height <= lim.max_altitude_m:
+                raise ValueError(
+                    f"threat {self.id}: the tethered flying height ({height:.1f} m) is outside "
+                    "the class band"
+                )
+        return self
+
+
+Intent = Literal["transit", "loiter", "probe", "saturation"]
+
+
+class GroupWeights(Contract):
+    """Weights of the four flocking terms (Reynolds boids). Project-authored (register F01,
+    verified: false)."""
+
+    separation: Annotated[float, Field(ge=0, le=5)] = 1.0
+    alignment: Annotated[float, Field(ge=0, le=5)] = 1.5
+    cohesion: Annotated[float, Field(ge=0, le=5)] = 0.6
+    goal: Annotated[float, Field(ge=0, le=5)] = 1.0
+
+
+class Group(Contract):
+    """Members of a group are ordinary threats (own class, limits, spawn and start); the group
+    decides where they steer, and each member stays inside its own class envelope. Behaviour is
+    kinematics only: a member goes where the group's own route and its group-mates take it.
+
+    Every numeric value is project-authored (register F01, verified: false); the model basis is
+    Reynolds boids, Vicsek noise, consensus with link loss and leader-follower, cited as the model
+    and never as validation (docs/02-research.md section 3).
+    """
+
+    id: Slug
+    kind: Literal["swarm", "flock"] = "swarm"
+    members: Annotated[list[Slug], Field(min_length=2, max_length=64)]
+    topology: Literal["leader-follower", "leaderless"] = "leaderless"
+    #: Required with `leader-follower`, refused otherwise.
+    leader: Slug | None = None
+    intent: Intent = "transit"
+    #: The group's guide path, in the scenario's local metres.
+    route: Annotated[list[Waypoint], Field(min_length=1, max_length=200)]
+    on_route_end: Literal["loiter", "loop", "despawn"] = "loiter"
+    #: 1 = perfectly ordered, 0 = disordered (the Vicsek noise knob).
+    discipline: Annotated[float, Field(ge=0, le=1)] = 0.9
+    #: Desired distance between neighbours.
+    spacing_m: Annotated[float, Field(ge=3, le=200)] = 20.0
+    #: How far a member looks for neighbours to align with and stay close to.
+    neighbour_radius_m: Annotated[float, Field(ge=5, le=1000)] = 80.0
+    #: Pairs closer than this share a communication link.
+    link_range_m: Annotated[float, Field(ge=10, le=5000)] = 150.0
+    #: Probability that a link is down during one link epoch.
+    link_loss: Annotated[float, Field(ge=0, le=1)] = 0.0
+    link_epoch_s: Annotated[float, Field(ge=0.5, le=60)] = 1.0
+    leader_loss: Literal["elect", "disperse", "loiter"] = "elect"
+    leader_loss_hold_s: Annotated[float, Field(ge=0, le=30)] = 4.0
+    probe_standoff_m: Annotated[float, Field(ge=10, le=5000)] = 200.0
+    probe_cycles: Annotated[int, Field(ge=1, le=10)] = 2
+    lane_spacing_m: Annotated[float, Field(ge=3, le=200)] = 30.0
+    loiter_radius_m: Annotated[float, Field(ge=20, le=5000)] = 120.0
+    weights: GroupWeights = Field(default_factory=GroupWeights)
+
+    @model_validator(mode="after")
+    def _consistent(self) -> Self:
+        unique(self.members, f"group {self.id} member")
+        if self.topology == "leader-follower":
+            if self.leader is None:
+                raise ValueError(f"group {self.id}: a leader-follower group needs a leader")
+            if self.leader not in self.members:
+                raise ValueError(f"group {self.id}: the leader must be one of the members")
+        elif self.leader is not None:
+            raise ValueError(f"group {self.id}: a leaderless group has no leader")
+        if self.neighbour_radius_m < self.spacing_m:
+            raise ValueError(f"group {self.id}: neighbour_radius_m must be at least spacing_m")
+        if any(w.hold_s > 0 for w in self.route):
+            raise ValueError(f"group {self.id}: a group route cannot hold at a waypoint")
         return self
 
 
@@ -170,6 +273,7 @@ class ScenarioSpec(Contract):
     sensors: Annotated[list[SensorPlacement], Field(max_length=32)] = []
     filed_flights: Annotated[list[FiledFlight], Field(max_length=32)] = []
     threats: Annotated[list[Threat], Field(min_length=1, max_length=256)]
+    groups: Annotated[list[Group], Field(max_length=32)] = []
 
     @model_validator(mode="after")
     def _consistent(self) -> Self:
@@ -188,4 +292,41 @@ class ScenarioSpec(Contract):
         for p in [*(a.position for a in self.assets), *(s.position for s in self.sensors)]:
             if abs(p.x) > h or abs(p.y) > h:
                 raise ValueError("asset or sensor outside the play area")
+        for t in self.threats:
+            if isinstance(t.motion, Tether) and (
+                abs(t.motion.anchor.x) > h or abs(t.motion.anchor.y) > h
+            ):
+                raise ValueError(f"threat {t.id}: tether anchor outside the play area")
+        self._check_groups()
         return self
+
+    def _check_groups(self) -> None:
+        unique([g.id for g in self.groups], "group")
+        by_id = {t.id: t for t in self.threats}
+        h = self.world.half_extent_m
+        claimed: dict[str, str] = {}
+        for g in self.groups:
+            for m in g.members:
+                if m not in by_id:
+                    raise ValueError(f"group {g.id}: member {m} is not a threat")
+                if m in claimed:
+                    raise ValueError(f"threat {m} is in groups {claimed[m]} and {g.id}")
+                claimed[m] = g.id
+                member = by_id[m]
+                if member.motion is not None:
+                    raise ValueError(f"group {g.id}: member {m} has its own motion")
+                if (member.disposition == "clutter") != (g.kind == "flock"):
+                    raise ValueError(
+                        f"group {g.id}: a {g.kind} is made of "
+                        f"{'clutter' if g.kind == 'flock' else 'non-clutter'} threats"
+                    )
+            low = max(by_id[m].limits.min_altitude_m for m in g.members)
+            high = min(by_id[m].limits.max_altitude_m for m in g.members)
+            for i, w in enumerate(g.route):
+                if abs(w.position.x) > h or abs(w.position.y) > h:
+                    raise ValueError(f"group {g.id}: route waypoint {i} leaves the play area")
+                if not low <= w.position.z <= high:
+                    raise ValueError(
+                        f"group {g.id}: route waypoint {i} altitude is outside the band "
+                        "every member can fly"
+                    )

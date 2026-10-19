@@ -6,7 +6,11 @@ One call to `World.step` advances one tick, always in this order:
 2. spawn threats whose spawn tick has come, in scenario order;
 2b. if the world has a picture: sensors report, the tracker updates, the ledger and assist run;
 3. advance the wind gust (the `weather` RNG stream);
-4. move every active drone, in scenario order, then retire drones that left the play area;
+3b. if the scenario has groups: plan each group's steering once, in scenario order (ground-truth
+   events `group.formed`, `group.leader_lost`, `group.leader_elected`, `group.route_end`);
+4. move every active drone, in scenario order: group members by their group's command inside
+   their own class envelope, clutter on its prescribed motion, the rest along their route; then
+   retire drones that left the play area;
 5. increment the tick counter.
 
 Events carry the tick being processed. Nothing reads the wall clock, iterates a set, or depends
@@ -23,14 +27,16 @@ from pydantic import ValidationError
 from app.contracts import TICK_HZ, ActionRecord, EventRecord
 from app.contracts.common import PackRef
 from app.contracts.events import Payload, TrackAction
-from app.contracts.scenario import ScenarioSpec, Weather
+from app.contracts.scenario import Drift, ScenarioSpec, Tether, Weather
 
 from . import detmath
+from .behaviours.clutter import Band, Moved, drift_step, tether_step
+from .behaviours.groups import Command, GroupController, MemberView
 from .canonical import sha256_hex
 from .constants import DT, GUST_TAU_S
 from .entity import Drone
 from .eventlog import EventLog
-from .kinematics import Envelope, position, step
+from .kinematics import Envelope, position, step, step_steered
 from .recognition import recognition_class
 from .rng import RngStreams
 from .roe import OPERATOR_CLASSES, Context, RuleEngine
@@ -105,6 +111,53 @@ class ActionError(ValueError):
     pass
 
 
+# --- groups: begin
+class GroupLayer:
+    """The groups of a scenario: one controller each, and the members they steer."""
+
+    def __init__(self, spec: ScenarioSpec, seed: int) -> None:
+        index = {t.id: i for i, t in enumerate(spec.threats)}
+        self.controllers = [GroupController(g, seed) for g in spec.groups]
+        #: Threat indices of each group's members, in scenario order.
+        self.members = [sorted(index[m] for m in g.members) for g in spec.groups]
+        self.member_flags = [False] * len(spec.threats)
+        for indices in self.members:
+            for i in indices:
+                self.member_flags[i] = True
+
+    def plan(self, world: "World", wind: tuple[float, float]) -> dict[int, Command]:
+        """Plan every group for this tick, emit its events, retire members whose route ended with
+        `despawn`, and return the command of each member that is still active."""
+        commands: dict[int, Command] = {}
+        for controller, indices in zip(self.controllers, self.members, strict=True):
+            views = [world.member_view(i) for i in indices]
+            plan = controller.plan(world.tick, wind, views)
+            for kind, payload in plan.events:
+                world.emit(kind, payload)
+            for i in indices:
+                drone = world.drones[i]
+                if drone.id in plan.despawn:
+                    drone.status = "despawned"
+                    world.emit(
+                        "threat.despawn", {"id": drone.id, "reason": "route-end", **position(drone)}
+                    )
+                elif drone.id in plan.commands:
+                    commands[i] = plan.commands[drone.id]
+        return commands
+
+    def state(self) -> dict[str, Any]:
+        return {c.group.id: c.state() for c in self.controllers}
+
+    def restore(self, state: dict[str, Any]) -> None:
+        if sorted(state) != sorted(c.group.id for c in self.controllers):
+            raise ValueError("snapshot groups do not match the scenario groups")
+        for c in self.controllers:
+            c.restore(state[c.group.id])
+
+
+# --- groups: end
+
+
 class World:
     def __init__(
         self,
@@ -142,6 +195,9 @@ class World:
         self.drones = [Drone.pending(t) for t in spec.threats]
         self._envelopes = [Envelope.of(t.limits) for t in spec.threats]
         self._spawn_ticks = [spawn_tick(t.spawn_s) for t in spec.threats]
+        #: Swarms and flocks (wave 8); `None` for a scenario without groups, which then hashes
+        #: and behaves exactly as before.
+        self.groups = GroupLayer(spec, seed) if spec.groups else None
         if _log is not None:
             self.log = _log
         else:
@@ -198,17 +254,62 @@ class World:
         self._advance_gust()
         wind = self.wind()
         half = self.spec.world.half_extent_m
+        commands = self.groups.plan(self, wind) if self.groups is not None else {}
         for i, drone in enumerate(self.drones):
             if drone.status != "active":
                 continue
-            for kind, payload in step(drone, self.spec.threats[i], self._envelopes[i], wind):
-                self._emit(kind, payload)
+            threat = self.spec.threats[i]
+            if i in commands:
+                cmd = commands[i]
+                step_steered(
+                    drone, self._envelopes[i], wind, (cmd.ux, cmd.uy), cmd.speed, cmd.altitude
+                )
+            elif threat.motion is not None:
+                self._move_clutter(drone, i, wind)
+            else:
+                for kind, payload in step(drone, threat, self._envelopes[i], wind):
+                    self._emit(kind, payload)
             if drone.status == "active" and (abs(drone.x) > half or abs(drone.y) > half):
                 drone.status = "despawned"
                 self._emit(
                     "threat.despawn", {"id": drone.id, "reason": "left-area", **position(drone)}
                 )
         self.tick += 1
+
+    def member_view(self, index: int) -> MemberView:
+        """What a group may know about one of its members."""
+        d, env = self.drones[index], self._envelopes[index]
+        return MemberView(
+            d.id, d.status, d.x, d.y, d.z, d.ux, d.uy, d.airspeed, env.max_speed, env.turn_rate
+        )
+
+    def _move_clutter(self, drone: Drone, index: int, wind: tuple[float, float]) -> None:
+        """Prescribed clutter motion (a kite on its tether, a drifting balloon)."""
+        motion, env = self.spec.threats[index].motion, self._envelopes[index]
+        band = Band(env.max_speed, env.max_climb, env.max_descent, env.min_alt, env.max_alt)
+        moved: Moved
+        if isinstance(motion, Tether):
+            moved = tether_step(
+                drone.x,
+                drone.y,
+                drone.z,
+                drone.ux,
+                drone.uy,
+                self.time_s,
+                (motion.anchor.x, motion.anchor.y, motion.anchor.z),
+                motion.length_m,
+                motion.sway_m,
+                motion.sway_period_s,
+                wind,
+                band,
+            )
+        else:
+            assert isinstance(motion, Drift)
+            moved = drift_step(
+                drone.x, drone.y, drone.z, drone.ux, drone.uy, motion.climb_mps, wind, band
+            )
+        drone.x, drone.y, drone.z = moved.x, moved.y, moved.z
+        drone.ux, drone.uy, drone.airspeed, drone.vz = moved.ux, moved.uy, moved.airspeed, moved.vz
 
     def wind(self) -> tuple[float, float]:
         """Wind vector (east, north) in m/s: mean wind plus the current gust."""
@@ -418,6 +519,9 @@ class World:
             "event_count": len(self.log),
             "event_head": self.log.head,
         }
+        if self.groups is not None:
+            # Only present when the scenario has groups, so every other scenario hashes as before.
+            state["groups"] = self.groups.state()
         if self.picture is not None:
             # Only present when a picture is attached, so a bare world hashes as it always did.
             state["picture"] = self.picture.state()
@@ -465,7 +569,11 @@ class World:
                 if "operator" in snapshot
                 else "a rule engine was given but the snapshot has no operator state"
             )
+        if ("groups" in snapshot) != bool(spec.groups):
+            raise ValueError("the snapshot's groups do not match the scenario's groups")
         world = cls(spec, int(snapshot["seed"]), picture=picture, roe=roe, _log=log)
+        if world.groups is not None:
+            world.groups.restore(snapshot["groups"])
         world.operator = {k: dict(v) for k, v in snapshot.get("operator", {}).items()}
         world.tick = int(snapshot["tick"])
         world.weather = WeatherState(**snapshot["weather"])

@@ -4,10 +4,10 @@ The resumable state of the build. After every `/clear`, Claude Code reads [CLAUD
 
 ## Current position
 
-- **Phase:** wave 7 built (3D realism and terrain packs); every acceptance criterion has a passing test except the floor-laptop benchmark (the owner runs `/bench`; harness and protocol in [PERFORMANCE.md](PERFORMANCE.md)), CI confirmation and the post-deploy check (map under the wave 7 entry). CI for the wave 3, 4a, 4b, 5, 6 and 7 commits is **pending owner confirmation** (CI cannot be read from this machine), so wave 3 stays In progress and waves 4a to 6 are recorded as Done with CI pending; wave 7 stays In progress until the gate is recorded.
-- **Current wave:** 7 · 3D realism + terrain packs → [waves/wave-07-3d-realism-terrain.md](waves/wave-07-3d-realism-terrain.md) (built; gate pending)
-- **Next step:** the owner runs `/bench` on the floor laptop and records the result in PERFORMANCE.md (if the gate fails, stop: the fix continues on Opus). Then wave 8 at the entry point under the wave 7 entry. Owner also to confirm CI for the wave 3 to 7 commits, answer Q-23 (consoles), Q-25 to Q-27, redeploy, run the wave 5, 6 and 7 post-deploy checks, and record the smoke date.
-- **Main is:** CI was red on the `api` job from run #38 (wave 5) to #44 (causes and fixes under **CI status** below); green again on 55b2b6b, all six jobs. Green locally (lint, typecheck, unit, real-stack e2e, visual, `make prod-check`); one pre-existing mock-e2e test fails (see the wave 7 entry); CI result for the latest commits is owner-confirmed only.
+- **Phase:** wave 8 built (threat breadth); every acceptance criterion has a passing test except the floor-laptop benchmark with the real swarm (the owner runs `/bench`; harness and protocol in [PERFORMANCE.md](PERFORMANCE.md)), the redeploy and the post-deploy check (map under the wave 8 entry). Wave 7's gate is pending for the same reason. CI for each pushed commit is read with `gh` (see **CI status**).
+- **Current wave:** 8 · Threat breadth → [waves/wave-08-threat-breadth.md](waves/wave-08-threat-breadth.md) (built; gate pending)
+- **Next step:** wave 9a (scenario engine), entry point under the wave 8 entry. Owner: run `/bench` on the floor laptop (waves 7 and 8 share the gate), redeploy, run the wave 5 to 8 post-deploy checks, answer Q-26, Q-27, Q-11 (download X01) and Q-29.
+- **Main is:** see **CI status**; green locally (lint, typecheck, unit, real-stack e2e, visual, mock e2e, `make prod-check`).
 - **Deployed build:** live at https://sudarshan.centralindia.cloudapp.azure.com, running commit b722313 (wave 2 build; owner-reported, 2026-10-18).
 
 ## CI status (confirmed with `gh`, 2026-10-19)
@@ -52,7 +52,7 @@ Status values: Not started · In progress · Blocked · Done. A wave is Done onl
 | 5 | [Live-session vertical slice](waves/wave-05-live-session-slice.md) | 2, 4b | Sonnet | Redeploy: playable slice | Cut | Done (CI pending) |
 | 6 | [Scoring + debrief](waves/wave-06-scoring-debrief.md) | 5 | Sonnet | Redeploy | Cut | Done (CI pending) |
 | 7 | [3D realism + terrain packs](waves/wave-07-3d-realism-terrain.md) | 5 | Sonnet (Opus if gate fails) | Keep live build green | Cut | In progress (built; floor-laptop gate and CI pending) |
-| 8 | [Threat breadth](waves/wave-08-threat-breadth.md) | 4a, 7 | Sonnet | Keep live build green | Cut | Not started |
+| 8 | [Threat breadth](waves/wave-08-threat-breadth.md) | 4a, 7 | Sonnet | Keep live build green | Cut | In progress (built; floor-laptop benchmark, CI and redeploy pending) |
 | 9a | [Scenario engine](waves/wave-09a-scenario-engine.md) | 6, 8 | Opus | Redeploy: generated scenarios | Cut | Not started |
 | 9b | [Site builder](waves/wave-09b-site-builder.md) | 9a, 7 | Sonnet | Redeploy | Cut | Not started |
 | 9c | [Sensor placement trainer](waves/wave-09c-sensor-placement.md) | 9b, 4a, 7 | Sonnet | Redeploy | Cut | Not started |
@@ -708,3 +708,57 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 **Next wave entry point**
 - First, the owner's benchmark and the Q-23 decision. Then wave 8 (threat breadth): read docs/waves/wave-08-threat-breadth.md. First step: STEP 1, the catalogue in `packs/threats/` (YAML per class with envelope and signature parameters, each with a register source ID; generic names only; clutter types). Wave 8 must re-run `/bench` with the real 24-drone swarm and 30 birds in place of the placeholder markers, and every class must instantiate in both terrain packs (`packs/terrain/heron-ridge` and `osprey-town`). If Q-23 is approved, the RF waterfall and acoustic spectrogram consoles are its new first step.
 
+### Wave 8 · Threat breadth
+
+- Status: In progress. Everything the build can prove has a passing test (map below). Outstanding: the owner's floor-laptop run of `/bench` with the real swarm, the redeploy and the post-deploy check.
+- Started from commit: 9f89b42
+- Goal: the full threat and clutter library, including swarms, decoys and RF-silent threats, at behaviour level only.
+- Done by: main session (operator vocabulary and scoring, breadth scene, bench replay, integration, docs) and three Sonnet subagents in separate worktrees (W: RF and acoustic consoles; A: threat catalogue and sensor-profile extension; B: behaviours; W2: nine classes and instanced meshes). W and A hit a session rate limit once and were resumed from their saved work. At most two ran at once.
+
+**Done**
+- Step 0 (owner-approved change to the wave file, Q-23): RF spectrum and acoustic spectrogram consoles as tabs under the radar PPI, synthesised from sensor reports and labelled reference data; the RF console and the docs say RF is not occluded by terrain (Q-25); the EO terrain notice says building heights are generic defaults (Q-26). Subagent W, merged at 1476885.
+- bb5ee76 fix(web): the benchmark counts slow frames and leaves out only paused intervals (Q-28 root cause: a frame over one second was dropped, so software rendering recorded none; the spec passes)
+- Step 1, subagent A, merged at c95ba60: `threat-class.v1`, eleven classes in `packs/threats/`, `sim/catalogue.py`, all six sensor profiles extended (Q-21 closed), `docs/THREAT_CATALOGUE.md` with generated tables
+- d603b08 feat(sim): nine operator classes (recognition classes), scoring, report truth and assist use them; kite and balloon are non-threats for the assist
+- Step 2, subagent B, merged at fc274b3: `groups` and `Threat.motion` in `scenario.v1`, `sim/behaviours/`, `step_steered`, `GroupLayer` in the world, events `group.*` (ground truth)
+- Subagent W2, merged at ad1d8f6: labels for the new classes (EN, HI), instanced meshes, the mock session with nine classes
+- 8e3040f feat(sim): the breadth scene (24 swarm, 30 flock, 2 kites, 1 balloon, six sensors) and its recorded trajectory; `/bench` replays the real behaviours
+- docs: SIM_CORE and DESIGN sections, ADR-022 and ADR-023, traceability R1 and R12, changelog, PERFORMANCE, Q-11, Q-21, Q-22, Q-23, Q-25, Q-28, Q-29
+
+**Acceptance map**
+| Criterion | Proof |
+|---|---|
+| No guidance, targeting or terminal-attack logic anywhere; code review note (locked rule 2) | **Code review note.** I read the whole `sim/behaviours/` package (1,341 lines) and the group part of `sim/world.py` and `sim/kinematics.py`: a member's inputs are its group's authored route, the guide that flies it and its group-mates' positions and headings; nothing takes or reads an asset, zone, sensor, operator, tracker or rule pack; saturation is parallel lanes along a route and ends like any route (loiter, loop or despawn); probe is out-and-back along the group's own final leg; there is no pursuit, aiming, closing-rate or terminal-phase code. The catalogue holds envelopes and sensor signatures only. `tests/test_behaviours_rule2.py` reads the sources and fails on the forbidden words, on imports that could supply a destination and on arguments that name one. The contract has no field that could carry a destination other than the group's own route (and a tether anchor). |
+| Every class instantiates in both terrain packs | `tests/test_catalogue_flights.py` (11 classes × 2 packs: spawns, flies 600 ticks inside its envelope, identical state hash twice) and `tests/test_breadth_scene.py` (swarm, flock, kites, balloon with six sensors on both packs) |
+| Swarm determinism and cohesion-metric tests; removing a leader changes behaviour as specified | `tests/test_behaviours_world.py` (hash twice, two processes with different hash salts, mid-run snapshot, replay; polarisation and radius of gyration sweeps over discipline and link loss; leader removal per `leader_loss` mode with hold, election and event ticks; a leaderless group unaffected), `test_behaviours_units.py`, `test_group_contract.py` |
+| Benchmark scene with the real 24-drone swarm and 30 birds still meets the gate | Harness runs on the real recorded behaviours (`tests/live/bench.test.ts`, `e2e/mock/bench.spec.ts`, `test_breadth_scene.py` checks the trajectory file). **Gate not run: pending owner** (floor laptop). No figure is claimed. |
+| `docs/THREAT_CATALOGUE.md` lists every class and clutter type with parameters and register IDs | Generated block checked by `test_threat_catalogue.py` |
+| Every new string in EN and HI | `tests/i18n.test.ts`, `tests/live/i18nCoverage.test.ts`; Hindi unreviewed (Q-15), sheet regenerated (821 strings) |
+| New screens: four states, keyboard, axe | Consoles: `e2e/mock/consoles.spec.ts` (7: placement, keyboard tabs, honesty text, cursor keys, 1366×768, Hindi, axe en/hi × dark/light), `tests/live/sensorConsoles.test.tsx`; classes: `e2e/mock/classes.spec.ts` (16) |
+| CI green, tests for every feature, none weakened | Tests below; see **CI status** for the pushed run |
+| Production images build; stack passes `make smoke` | `make prod-check` (see Deploy check) |
+
+**Decisions** (ADR-022, ADR-023)
+- Eleven truth classes, nine recognition classes; the first four keep their key positions. Sensor labels are coarse look-alike families (radar cannot tell an FPV from a quadcopter).
+- Profile versions were not bumped (additive rows, nothing stored in the field); from the first pilot session a content change bumps the version. The sensor profile parameter limit is 128.
+- All envelope and signature values are F01 `verified: false`; X01 was not downloaded (no network beyond registries), Q-11 stays open. The trainee sees them as reference data (Q-20).
+- Existing assertions edited, none loosened: `test_non_threat_set_is_the_bird_only_for_now` became the three-class set; three sensor tests that called an unlisted class "kite" now use "unlisted-class"; the sensor acoustic test's label assertions grew with the labels; the old placeholder-scene bench tests were replaced by tests of the recorded scene (the placeholder no longer exists); `decision.test.ts` "ignores a digit beyond the options" now tests Assess (Classify has nine options).
+- The console tables precede the track table in the page, so `beginSession` in the mock e2e uses a `trackRows(page)` helper.
+
+**Tests**
+- api: 3,705 passed, coverage 99.24% (every `sim/` module 100%) · web unit: 544 passed (443 before wave 8) · real-stack e2e: 51 passed · mock e2e: 101 passed (includes `report.spec.ts` and `bench.spec.ts`, both failing before) · visual: 4 passed · `make lint typecheck test` pass
+
+**Open issues**
+- The benchmark gate (waves 7 and 8) has not been run on the floor laptop (Q-04). If it fails, stop and say so; the fix continues on Opus.
+- Hindi strings are unreviewed drafts (Q-15). Q-11 (X01), Q-26, Q-27, Q-29 are open.
+- The follower's link range must cover the formation or the follower falls back to flocking; the scenario generator (9a) must set it. Stigmergy is not implemented.
+- The 12-client load test was not re-run with a swarm scenario. No shipped scenario uses groups yet: the swarm exists in the engine, the tests and `/bench`; wave 9a generates scenarios with it.
+- The RF and acoustic consoles are synthesised from reports (the server sends no spectra); the mock acoustic sensor's range (330 m) is mock data.
+
+**Next wave entry point**
+- Wave 9a (scenario engine): read docs/waves/wave-09a-scenario-engine.md. First step: the scenario generator's feature space and sampler, using `sim/behaviours/arrival.py` (`arrival_offsets`, `compose_members`, `formation_starts`) and `Catalogue.limits_for` for member limits, and `Catalogue.check_scenario` as a hard constraint; solvability by an oracle-defender run comes next. Set each group's `link_range_m` to cover its formation.
+
+**Deploy check**
+- Production images built: yes · `make prod-check` (production mode, HTTPS through Caddy, `sim-check` inside the API image now also loads the threat catalogue and checks every pack scenario): **PASS** (285 MiB for four containers; the API container read 145 MiB right after `sim-check`, 68 MiB idle in wave 4b) · `make smoke` runs inside it.
+- Commit to deploy: the last commit on `main` after this entry (the hash is in the final report). This build changes the web app (consoles, meshes, nine classes, `/scenes/` data file), the API image (`packs/threats/`, `sim/catalogue.py`, `sim/behaviours/`, `sim/breadth.py`, extended sensor profiles) and `scenario.v1` (additive). No migration.
+- Post-deploy check (owner): sign in as a trainee, open Drills, start Harrier Field, confirm Connected, the radar PPI with the RF and acoustic tabs below it (the RF tab reads "Synthesised from sensor reports · reference data" and the not-occluded note), and the Classify list shows nine classes; then `make smoke URL=https://sudarshan.centralindia.cloudapp.azure.com` and `make check-deploy URL=...`; record the date under **Deployed build**. Benchmark: on the floor laptop run `make demo`, open `/bench`, run, and paste the JSON into PERFORMANCE.md.

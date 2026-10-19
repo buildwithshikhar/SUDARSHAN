@@ -12,12 +12,24 @@ export type Z = number
 export type Assets = DefendedAsset[]
 export type Contract = 'scenario.v1'
 export type DefaultSeed = number
+export type FromS = number
+export type Kind =
+  'outage' | 'sector-outage' | 'clutter' | 'haze' | 'glare' | 'interference' | 'wind-noise'
+export type SectorFromDeg = number | null
+export type SectorToDeg = number | null
+export type Sensor = string
+export type Severity = number
+export type ToS = number | null
+/**
+ * @maxItems 64
+ */
+export type Degradations = SensorDegradation[]
 export type DurationS = number
 export type Fictional = true
-export type FromS = number
+export type FromS1 = number
 export type Id1 = string
 export type RadiusM = number
-export type ToS = number
+export type ToS1 = number
 /**
  * @maxItems 32
  */
@@ -25,7 +37,7 @@ export type FiledFlights = FiledFlight[]
 export type Discipline = number
 export type Id2 = string
 export type Intent = 'transit' | 'loiter' | 'probe' | 'saturation'
-export type Kind = 'swarm' | 'flock'
+export type Kind1 = 'swarm' | 'flock'
 export type LaneSpacingM = number
 export type Leader = string | null
 export type LeaderLoss = 'elect' | 'disperse' | 'loiter'
@@ -61,6 +73,16 @@ export type Separation = number
  */
 export type Groups = Group[]
 export type Id3 = string
+export type CurriculumOrder = number | null
+export type Difficulty = number | null
+export type Code = string
+export type GeneratorVersion = string
+export type Origin = 'scripted' | 'generated' | 'authored' | 'example'
+export type Playable = boolean
+/**
+ * @maxItems 12
+ */
+export type Tags = string[]
 export type Id4 = string
 export type Version = string
 export type BoresightDeg = number
@@ -85,12 +107,12 @@ export type MaxSpeedMps = number
 export type MaxTurnRateDps = number
 export type MinAltitudeM = number
 export type Motion = (Tether | Drift) | null
-export type Kind1 = 'tether'
+export type Kind2 = 'tether'
 export type LengthM = number
 export type SwayM = number
 export type SwayPeriodS = number
 export type ClimbMps = number
-export type Kind2 = 'drift'
+export type Kind3 = 'drift'
 export type OnRouteEnd1 = 'loiter' | 'loop' | 'despawn'
 /**
  * @minItems 1
@@ -106,9 +128,9 @@ export type HalfExtentM = number
 export type StartTimeOfDayH = number
 export type Terrain = FlatTerrain | PackTerrain
 export type ElevationM = number
-export type Kind3 = 'flat'
+export type Kind4 = 'flat'
 export type Id7 = string
-export type Kind4 = 'pack'
+export type Kind5 = 'pack'
 export type Version2 = string
 export type CloudCoverPct = number
 export type Condition = 'clear' | 'haze' | 'rain' | 'fog' | 'dust'
@@ -129,11 +151,13 @@ export interface ScenarioSpec {
   assets?: Assets
   contract: Contract
   default_seed: DefaultSeed
+  degradations?: Degradations
   duration_s: DurationS
   fictional: Fictional
   filed_flights?: FiledFlights
   groups?: Groups
   id: Id3
+  meta?: ScenarioMeta | null
   rule_pack: PackRef
   sensors?: Sensors
   summary: Text
@@ -165,17 +189,30 @@ export interface Vec3 {
   z: Z
 }
 /**
+ * A time-limited condition that makes one of the scenario's sensors worse (docs/SIM_CORE.md,
+ * "Sensor framework"): the same data an instructor inject carries (wave 10b).
+ */
+export interface SensorDegradation {
+  from_s: FromS
+  kind: Kind
+  sector_from_deg?: SectorFromDeg
+  sector_to_deg?: SectorToDeg
+  sensor: Sensor
+  severity?: Severity
+  to_s?: ToS
+}
+/**
  * A civil flight plan the trainee is told about: an area and a time window, nothing more.
  *
  * It does not name the contact that flies it; matching a track to a plan is the trainee's job.
  */
 export interface FiledFlight {
   center: Vec3
-  from_s: FromS
+  from_s: FromS1
   id: Id1
   label: Text
   radius_m: RadiusM
-  to_s: ToS
+  to_s: ToS1
 }
 /**
  * Members of a group are ordinary threats (own class, limits, spawn and start); the group
@@ -190,7 +227,7 @@ export interface Group {
   discipline?: Discipline
   id: Id2
   intent?: Intent
-  kind?: Kind
+  kind?: Kind1
   lane_spacing_m?: LaneSpacingM
   leader?: Leader
   leader_loss?: LeaderLoss
@@ -223,6 +260,24 @@ export interface GroupWeights {
   cohesion?: Cohesion
   goal?: Goal
   separation?: Separation
+}
+/**
+ * What the scenario library shows and filters on. Optional, and never read by the sim.
+ */
+export interface ScenarioMeta {
+  curriculum_order?: CurriculumOrder
+  difficulty?: Difficulty
+  generated?: GeneratedFrom | null
+  origin?: Origin
+  playable?: Playable
+  tags?: Tags
+}
+/**
+ * Where a generated scenario came from: enough to make it again (docs/SCENARIO_ENGINE.md).
+ */
+export interface GeneratedFrom {
+  code: Code
+  generator_version: GeneratorVersion
 }
 /**
  * Reference to another versioned pack by ID and exact version.
@@ -269,7 +324,7 @@ export interface KinematicLimits {
  */
 export interface Tether {
   anchor: Vec3
-  kind: Kind1
+  kind: Kind2
   length_m: LengthM
   sway_m: SwayM
   sway_period_s: SwayPeriodS
@@ -280,7 +335,7 @@ export interface Tether {
  */
 export interface Drift {
   climb_mps: ClimbMps
-  kind: Kind2
+  kind: Kind3
 }
 export interface World {
   half_extent_m: HalfExtentM
@@ -290,7 +345,7 @@ export interface World {
 }
 export interface FlatTerrain {
   elevation_m?: ElevationM
-  kind: Kind3
+  kind: Kind4
 }
 /**
  * A baked terrain pack (`packs/terrain/<id>/`, docs/TERRAIN_PACKS.md). Positions in the
@@ -298,7 +353,7 @@ export interface FlatTerrain {
  */
 export interface PackTerrain {
   id: Id7
-  kind: Kind4
+  kind: Kind5
   version: Version2
 }
 /**

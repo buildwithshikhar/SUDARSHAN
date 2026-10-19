@@ -111,6 +111,30 @@
       "title": "FlatTerrain",
       "type": "object"
     },
+    "GeneratedFrom": {
+      "additionalProperties": false,
+      "description": "Where a generated scenario came from: enough to make it again (docs/SCENARIO_ENGINE.md).",
+      "properties": {
+        "code": {
+          "maxLength": 96,
+          "minLength": 8,
+          "pattern": "^[A-Z0-9-]+$",
+          "title": "Code",
+          "type": "string"
+        },
+        "generator_version": {
+          "pattern": "^(0|[1-9][0-9]*)(\\.(0|[1-9][0-9]*)){2}$",
+          "title": "Generator Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "generator_version",
+        "code"
+      ],
+      "title": "GeneratedFrom",
+      "type": "object"
+    },
     "Group": {
       "additionalProperties": false,
       "description": "Members of a group are ordinary threats (own class, limits, spawn and start); the group\ndecides where they steer, and each member stays inside its own class envelope. Behaviour is\nkinematics only: a member goes where the group's own route and its group-mates take it.\n\nEvery numeric value is project-authored (register F01, verified: false); the model basis is\nReynolds boids, Vicsek noise, consensus with link loss and leader-follower, cited as the model\nand never as validation (docs/02-research.md section 3).",
@@ -438,6 +462,165 @@
         "version"
       ],
       "title": "PackTerrain",
+      "type": "object"
+    },
+    "ScenarioMeta": {
+      "additionalProperties": false,
+      "description": "What the scenario library shows and filters on. Optional, and never read by the sim.",
+      "properties": {
+        "curriculum_order": {
+          "anyOf": [
+            {
+              "maximum": 999,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Curriculum Order"
+        },
+        "difficulty": {
+          "anyOf": [
+            {
+              "maximum": 100,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Difficulty"
+        },
+        "generated": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/GeneratedFrom"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "origin": {
+          "default": "scripted",
+          "enum": [
+            "scripted",
+            "generated",
+            "authored",
+            "example"
+          ],
+          "title": "Origin",
+          "type": "string"
+        },
+        "playable": {
+          "default": true,
+          "title": "Playable",
+          "type": "boolean"
+        },
+        "tags": {
+          "default": [],
+          "items": {
+            "maxLength": 64,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "type": "string"
+          },
+          "maxItems": 12,
+          "title": "Tags",
+          "type": "array"
+        }
+      },
+      "title": "ScenarioMeta",
+      "type": "object"
+    },
+    "SensorDegradation": {
+      "additionalProperties": false,
+      "description": "A time-limited condition that makes one of the scenario's sensors worse (docs/SIM_CORE.md,\n\"Sensor framework\"): the same data an instructor inject carries (wave 10b).",
+      "properties": {
+        "from_s": {
+          "minimum": 0,
+          "title": "From S",
+          "type": "number"
+        },
+        "kind": {
+          "enum": [
+            "outage",
+            "sector-outage",
+            "clutter",
+            "haze",
+            "glare",
+            "interference",
+            "wind-noise"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "sector_from_deg": {
+          "anyOf": [
+            {
+              "exclusiveMaximum": 360,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sector From Deg"
+        },
+        "sector_to_deg": {
+          "anyOf": [
+            {
+              "exclusiveMaximum": 360,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sector To Deg"
+        },
+        "sensor": {
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Sensor",
+          "type": "string"
+        },
+        "severity": {
+          "default": 1.0,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Severity",
+          "type": "number"
+        },
+        "to_s": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "To S"
+        }
+      },
+      "required": [
+        "sensor",
+        "kind",
+        "from_s"
+      ],
+      "title": "SensorDegradation",
       "type": "object"
     },
     "SensorPlacement": {
@@ -876,6 +1059,15 @@
       "title": "Default Seed",
       "type": "integer"
     },
+    "degradations": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/SensorDegradation"
+      },
+      "maxItems": 64,
+      "title": "Degradations",
+      "type": "array"
+    },
     "duration_s": {
       "exclusiveMinimum": 0,
       "maximum": 7200,
@@ -910,6 +1102,17 @@
       "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
       "title": "Id",
       "type": "string"
+    },
+    "meta": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ScenarioMeta"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     },
     "rule_pack": {
       "$ref": "#/$defs/PackRef"

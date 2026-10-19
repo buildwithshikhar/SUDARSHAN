@@ -256,6 +256,71 @@ class SensorPlacement(Contract):
     boresight_deg: Heading
 
 
+DEGRADATION_KINDS = (
+    "outage",
+    "sector-outage",
+    "clutter",
+    "haze",
+    "glare",
+    "interference",
+    "wind-noise",
+)
+
+
+class SensorDegradation(Contract):
+    """A time-limited condition that makes one of the scenario's sensors worse (docs/SIM_CORE.md,
+    "Sensor framework"): the same data an instructor inject carries (wave 10b)."""
+
+    sensor: Slug
+    kind: Literal[
+        "outage", "sector-outage", "clutter", "haze", "glare", "interference", "wind-noise"
+    ]
+    from_s: Annotated[float, Field(ge=0)]
+    #: When it ends; absent means it lasts to the end of the scenario.
+    to_s: Annotated[float, Field(gt=0)] | None = None
+    #: 0 (no effect) to 1 (worst the sensor model represents). `outage` kinds ignore it.
+    severity: Annotated[float, Field(ge=0, le=1)] = 1.0
+    #: Clockwise sector blocked by `sector-outage`, compass degrees.
+    sector_from_deg: Heading | None = None
+    sector_to_deg: Heading | None = None
+
+    @model_validator(mode="after")
+    def _window(self) -> Self:
+        if self.to_s is not None and self.to_s <= self.from_s:
+            raise ValueError(f"degradation on {self.sensor}: the window must end after it starts")
+        has_sector = self.sector_from_deg is not None and self.sector_to_deg is not None
+        if (self.sector_from_deg is None) != (self.sector_to_deg is None):
+            raise ValueError(f"degradation on {self.sensor}: a sector needs both ends")
+        if (self.kind == "sector-outage") != has_sector:
+            raise ValueError(
+                f"degradation on {self.sensor}: a sector is required for sector-outage and only "
+                "for sector-outage"
+            )
+        return self
+
+
+class GeneratedFrom(Contract):
+    """Where a generated scenario came from: enough to make it again (docs/SCENARIO_ENGINE.md)."""
+
+    generator_version: SemVer
+    #: The seed-share code carrying the request and the seed.
+    code: Annotated[str, Field(min_length=8, max_length=96, pattern=r"^[A-Z0-9-]+$")]
+
+
+class ScenarioMeta(Contract):
+    """What the scenario library shows and filters on. Optional, and never read by the sim."""
+
+    origin: Literal["scripted", "generated", "authored", "example"] = "scripted"
+    #: False hides the scenario from the session lobby (it stays in the library).
+    playable: bool = True
+    tags: Annotated[list[Slug], Field(max_length=12)] = []
+    #: Position in the curriculum, from 1; absent for a scenario outside the curriculum.
+    curriculum_order: Annotated[int, Field(ge=1, le=999)] | None = None
+    #: A rough 0 to 100 difficulty for the library; the generator fills it from its request.
+    difficulty: Annotated[int, Field(ge=0, le=100)] | None = None
+    generated: GeneratedFrom | None = None
+
+
 class ScenarioSpec(Contract):
     contract: Literal["scenario.v1"]
     id: Slug
@@ -274,6 +339,8 @@ class ScenarioSpec(Contract):
     filed_flights: Annotated[list[FiledFlight], Field(max_length=32)] = []
     threats: Annotated[list[Threat], Field(min_length=1, max_length=256)]
     groups: Annotated[list[Group], Field(max_length=32)] = []
+    degradations: Annotated[list[SensorDegradation], Field(max_length=64)] = []
+    meta: ScenarioMeta | None = None
 
     @model_validator(mode="after")
     def _consistent(self) -> Self:
@@ -298,6 +365,12 @@ class ScenarioSpec(Contract):
             ):
                 raise ValueError(f"threat {t.id}: tether anchor outside the play area")
         self._check_groups()
+        sensors = {s.id for s in self.sensors}
+        for d in self.degradations:
+            if d.sensor not in sensors:
+                raise ValueError(f"degradation: no sensor {d.sensor!r} in this scenario")
+            if d.from_s >= self.duration_s:
+                raise ValueError(f"degradation on {d.sensor}: starts after the scenario ends")
         return self
 
     def _check_groups(self) -> None:

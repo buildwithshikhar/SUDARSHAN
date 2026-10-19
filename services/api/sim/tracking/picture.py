@@ -23,7 +23,7 @@ from typing import TYPE_CHECKING, Any
 from app.contracts.scenario import ScenarioSpec
 
 from ..recognition import recognition_class
-from ..sensors import SensorSuite, build_sensors
+from ..sensors import Degradation, SensorSuite, build_sensors
 from .ambiguity import ErrorModel, ErrorPolicy
 from .assist import AiAssist, AssistConfig, TruthRef
 from .commands import apply as apply_command
@@ -110,6 +110,18 @@ class Picture:
         assist_config: AssistConfig | None = None,
     ) -> "Picture":
         suite = build_sensors(spec, profile_dir, register=register)
+        for d in spec.degradations:
+            suite.inject(
+                Degradation(
+                    sensor_id=d.sensor,
+                    kind=d.kind,
+                    start_tick=round(d.from_s * spec.tick_hz),
+                    end_tick=None if d.to_s is None else round(d.to_s * spec.tick_hz),
+                    severity=d.severity,
+                    sector_from_deg=d.sector_from_deg,
+                    sector_to_deg=d.sector_to_deg,
+                )
+            )
         tracker = Tracker(
             {s.id: s.position for s in suite.sensors},
             config=tracker_config,

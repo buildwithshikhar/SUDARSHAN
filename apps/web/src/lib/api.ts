@@ -19,7 +19,7 @@ export function setCsrfToken(token: string | null): void {
 }
 
 interface Options {
-  method?: 'GET' | 'POST' | 'PATCH'
+  method?: 'GET' | 'POST' | 'PATCH' | 'DELETE'
   body?: unknown
   signal?: AbortSignal
 }
@@ -47,6 +47,13 @@ export async function api<T>(path: string, options: Options = {}): Promise<T> {
     try {
       const data = (await response.json()) as { detail?: unknown }
       if (typeof data.detail === 'string') detail = data.detail
+      else if (Array.isArray(data.detail)) {
+        // Validation errors: {"detail": [{"loc": [...], "msg": string}]}
+        const messages = data.detail
+          .map((item) => (item as { msg?: unknown }).msg)
+          .filter((msg): msg is string => typeof msg === 'string')
+        if (messages.length > 0) detail = messages.join('; ')
+      }
     } catch {
       /* no JSON body */
     }

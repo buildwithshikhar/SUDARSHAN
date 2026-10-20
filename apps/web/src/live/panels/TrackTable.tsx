@@ -69,12 +69,6 @@ export function TrackTable() {
               {t('live.table.mergeMark')}
             </span>
           )}
-          <abbr
-            title={t('live.table.refTitle')}
-            className="num border border-line px-1 text-2xs text-ink-2 no-underline"
-          >
-            {t('live.table.ref')}
-          </abbr>
         </span>
       ),
     },
@@ -161,10 +155,7 @@ export function TrackTable() {
         />
       </div>
       <p className="m-0 flex shrink-0 items-center justify-between gap-2 border-t border-line px-2 py-1 text-2xs text-ink-2">
-        <span>
-          <span className="num mr-1 border border-line px-1">{t('live.table.ref')}</span>
-          {t('live.table.legend')}
-        </span>
+        <span />
         <span className="num">{t('live.table.count', { count: rows.length })}</span>
       </p>
     </div>

@@ -19,21 +19,10 @@ const siteSensor = (s: LiveState, modality: Tab): string | null =>
 const outageOf = (s: LiveState, modality: Tab): boolean =>
   (s.frame?.sensors ?? []).some((x) => x.modality === modality && x.outage)
 
-/** The data-status labels of a modality's sensors in the last frame, as one primitive string. */
-const statusesOf = (s: LiveState, modality: Tab): string =>
-  (s.frame?.sensors ?? [])
-    .filter((x) => x.modality === modality)
-    .map((x) => x.data_status)
-    .sort()
-    .join(',')
-
-const splitStatuses = (value: string): ('reference' | 'verified')[] =>
-  value === '' ? [] : value.split(',').map((x) => (x === 'verified' ? 'verified' : 'reference'))
-
 /**
  * The RF spectrum and acoustic spectrogram consoles as tabs under the radar PPI. Both models keep
  * following the frames while one tab is hidden. A tab for a sensor the scenario lacks stays in
- * the list and says it is unavailable.
+ * the list and says it has no data.
  */
 export function SensorConsoles({ className = '' }: { className?: string }) {
   const { t } = useTranslation()
@@ -45,8 +34,6 @@ export function SensorConsoles({ className = '' }: { className?: string }) {
   const acId = useLive((s) => siteSensor(s, 'acoustic'))
   const rfOutage = useLive((s) => outageOf(s, 'rf'))
   const acOutage = useLive((s) => outageOf(s, 'acoustic'))
-  const rfStatuses = useLive((s) => statusesOf(s, 'rf'))
-  const acStatuses = useLive((s) => statusesOf(s, 'acoustic'))
   const [picked, setPicked] = useState<Tab | null>(null)
   const buttons = useRef<Record<string, HTMLButtonElement | null>>({})
 
@@ -119,7 +106,6 @@ export function SensorConsoles({ className = '' }: { className?: string }) {
               sensorId={rfId ?? ''}
               outage={rfOutage}
               lang={lang}
-              sensorStatuses={splitStatuses(rfStatuses)}
             />
           ) : (
             <AcousticConsole
@@ -128,7 +114,6 @@ export function SensorConsoles({ className = '' }: { className?: string }) {
               sensorId={acId ?? ''}
               outage={acOutage}
               lang={lang}
-              sensorStatuses={splitStatuses(acStatuses)}
             />
           )}
         </div>

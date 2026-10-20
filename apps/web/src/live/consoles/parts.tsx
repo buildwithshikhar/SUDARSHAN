@@ -3,35 +3,10 @@ import { useTranslation } from 'react-i18next'
 import { InlineAlert } from '../../ui/InlineAlert'
 import { useLive, useLiveSession } from '../context'
 import { fmtElapsed } from '../format'
-import { INFERNO_LUT, type DataStatus } from './spectra'
+import { INFERNO_LUT } from './spectra'
 
 /** No frame for this long while the session runs means the stream has stopped. */
 export const STALE_AFTER_MS = 3000
-
-export type SynthKey = 'reference' | 'verified' | 'mixed'
-
-/** Which honesty label matches the data the display was built from. Reference unless all is verified. */
-export function synthKey(statuses: Iterable<DataStatus>): SynthKey {
-  let reference = false
-  let verified = false
-  for (const s of statuses) {
-    if (s === 'verified') verified = true
-    else reference = true
-  }
-  if (reference && verified) return 'mixed'
-  return verified ? 'verified' : 'reference'
-}
-
-/** The label every console carries, visible in the console and not only in a tooltip. */
-export function SynthLabel({ statuses }: { statuses: Iterable<DataStatus> }) {
-  const { t } = useTranslation()
-  const key = synthKey(statuses)
-  return (
-    <span data-testid="synth-label" data-status={key}>
-      {t(`live.consoles.synth.${key}`)}
-    </span>
-  )
-}
 
 export interface StreamState {
   /** The link dropped or frames stopped arriving: the picture is frozen. */
@@ -95,19 +70,17 @@ export function ScaleBar({ range }: { range: string }) {
 }
 
 /**
- * The body of one console: the plot on the left, a scrollable readout column on the right and a
- * footer that always carries the honesty text. The column is a keyboard stop because it scrolls.
+ * The body of one console: the plot on the left and a scrollable readout column on the right.
+ * The column is a keyboard stop because it scrolls.
  */
 export function ConsoleBody({
   plot,
   side,
   sideLabel,
-  footer,
 }: {
   plot: ReactNode
   side: ReactNode
   sideLabel: string
-  footer: ReactNode
 }) {
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -122,9 +95,6 @@ export function ConsoleBody({
           {side}
         </div>
       </div>
-      <footer className="shrink-0 border-t border-line bg-surface-1 px-2 py-0.5 text-2xs leading-4 text-ink-2">
-        {footer}
-      </footer>
     </div>
   )
 }

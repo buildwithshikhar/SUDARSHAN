@@ -209,7 +209,7 @@ export function EoHud({ sensorId, mode = 'day' }: { sensorId: string; mode?: EoM
             {chip(
               w - 22,
               h - 24,
-              `${sensorId}  ${t(`live.eo.health.${health}`)}  ${t('live.eo.range')}${sensor.data_status === 'reference' ? `  ${t('live.table.ref')}` : ''}`,
+              `${sensorId}  ${t(`live.eo.health.${health}`)}  ${t('live.eo.range')}`,
               'end',
             )}
           </>
@@ -223,11 +223,7 @@ export function EoHud({ sensorId, mode = 'day' }: { sensorId: string; mode?: EoM
               elevation: sensor.elevation_deg.toFixed(1),
               fov: fov === null ? '—' : fov.toFixed(1),
               health: t(`live.eo.health.${health}`),
-            }) +
-            (mode === 'day'
-              ? ''
-              : ` ${t(`live.eo.modeHelp.${mode.startsWith('thermal') ? 'thermal' : mode}`)}`) +
-            (sensor.data_status === 'reference' ? ` ${t('live.eo.refNote')}` : '')
+            })
           : ''}
       </p>
     </div>

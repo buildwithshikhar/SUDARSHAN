@@ -143,7 +143,6 @@ function TerrainPanel({ spec, stale }: { spec: ScenarioSpec | null; stale: boole
               dense
             />
           )}
-          <Note>{t('scenarios.editor.terrain.note')}</Note>
         </>
       )}
     </Panel>

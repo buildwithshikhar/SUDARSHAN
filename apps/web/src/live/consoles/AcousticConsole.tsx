@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 import { fmtBearing } from '../format'
 import { RECENT_S, type ConsoleFeed } from './feed'
 import { drawAcoustic, RowImage } from './draw'
-import { ConsoleBody, ScaleBar, SynthLabel, type StreamState } from './parts'
+import { ConsoleBody, ScaleBar, type StreamState } from './parts'
 import { moveCursor, nearestHarmonic } from './spectra'
 import { useInstrument } from './useInstrument'
 
@@ -23,14 +23,12 @@ export function AcousticConsole({
   sensorId,
   outage,
   lang,
-  sensorStatuses,
 }: {
   feed: ConsoleFeed
   stream: StreamState
   sensorId: string
   outage: boolean
   lang: string
-  sensorStatuses: readonly ('reference' | 'verified')[]
 }) {
   const { t } = useTranslation()
   const readoutId = useId()
@@ -84,7 +82,6 @@ export function AcousticConsole({
   }
 
   const state = outage ? 'outage' : recent.length > 0 ? 'heard' : 'listening'
-  const statuses = [...sensorStatuses, ...recent.map((e) => e.dataStatus)]
 
   return (
     <ConsoleBody
@@ -211,13 +208,7 @@ export function AcousticConsole({
           </table>
           <ScaleBar range={t('live.consoles.ac.scaleRange')} />
           <p className="m-0 text-2xs text-ink-2">{t('live.consoles.ac.legend')}</p>
-          <p className="m-0 text-2xs text-ink-2">{t('live.consoles.ac.decor')}</p>
         </>
-      }
-      footer={
-        <p className="m-0 text-ink">
-          <SynthLabel statuses={statuses} />
-        </p>
       }
     />
   )

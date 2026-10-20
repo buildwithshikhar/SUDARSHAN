@@ -28,7 +28,6 @@ import {
   renderReason,
 } from '../live/scoring'
 import { Badge } from '../ui/Badge'
-import { InlineAlert } from '../ui/InlineAlert'
 import { Panel } from '../ui/Panel'
 import { EmptyState, ErrorState, LoadingState } from '../ui/States'
 import { Table, type Column } from '../ui/Table'
@@ -132,7 +131,6 @@ function DebriefBody({ sessionId, score }: { sessionId: string; score: SessionSc
       data-session={sessionId}
     >
       <div className="flex flex-col gap-2">
-        <InlineAlert tone="info">{t('debrief.reference')}</InlineAlert>
         <p className="m-0 text-xs text-ink-2">{t('debrief.truthNote')}</p>
       </div>
 

@@ -81,14 +81,7 @@ export function TrackDetail({ welcome }: { welcome: Welcome }) {
         {track.label}
         {track.label !== track.id && <span className="text-ink-2"> ({track.id})</span>} ·{' '}
         {t(`live.track.status.${track.status}`)} · {track.age_s.toFixed(0)} s{' '}
-        {track.data_status === 'reference' ? (
-          <abbr
-            title={t('live.detail.reference')}
-            className="border border-line px-1 text-2xs text-ink-2 no-underline"
-          >
-            {t('live.table.ref')}
-          </abbr>
-        ) : (
+        {track.data_status !== 'reference' && (
           <span className="text-ink-2">{t('live.detail.verified')}</span>
         )}
       </Row>

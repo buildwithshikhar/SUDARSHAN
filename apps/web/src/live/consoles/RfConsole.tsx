@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { fmtBearing } from '../format'
 import { RECENT_S, type ConsoleFeed } from './feed'
 import { drawRf, RowImage } from './draw'
-import { ConsoleBody, ScaleBar, SynthLabel, type StreamState } from './parts'
+import { ConsoleBody, ScaleBar, type StreamState } from './parts'
 import { useInstrument } from './useInstrument'
 
 const MONO = '"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace'
@@ -14,14 +14,12 @@ export function RfConsole({
   sensorId,
   outage,
   lang,
-  sensorStatuses,
 }: {
   feed: ConsoleFeed
   stream: StreamState
   sensorId: string
   outage: boolean
   lang: string
-  sensorStatuses: readonly ('reference' | 'verified')[]
 }) {
   const { t } = useTranslation()
   useSyncExternalStore(feed.subscribe, feed.getVersion)
@@ -52,7 +50,6 @@ export function RfConsole({
   useEffect(invalidate, [invalidate, stale, staleMark, lang])
 
   const state = outage ? 'outage' : recent.length > 0 ? 'heard' : 'listening'
-  const statuses = [...sensorStatuses, ...recent.map((e) => e.dataStatus)]
 
   return (
     <ConsoleBody
@@ -134,17 +131,6 @@ export function RfConsole({
           </table>
           <ScaleBar range={t('live.consoles.rf.scaleRange')} />
           <p className="m-0 text-2xs text-ink-2">{t('live.consoles.rf.legend')}</p>
-          <p className="m-0 text-2xs text-ink-2">{t('live.consoles.decor')}</p>
-        </>
-      }
-      footer={
-        <>
-          <p className="m-0 text-ink">
-            <SynthLabel statuses={statuses} />
-          </p>
-          <p className="m-0" data-testid="rf-open-note">
-            {t('live.consoles.rfOpen')}
-          </p>
         </>
       }
     />

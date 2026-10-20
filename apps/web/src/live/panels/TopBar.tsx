@@ -5,12 +5,11 @@ import { Link } from 'react-router-dom'
 import brand from '../../../../../brand.json'
 import { BrandMark } from '../../ui/BrandMark'
 import { useLive } from '../context'
-import { fmtElapsed, fmtHours, fmtUtc, useLang } from '../format'
+import { fmtElapsed, fmtHours, fmtUtc } from '../format'
 
-/** 32 px bar: session clock, weather and light, rule pack, link state, and the permanent label. */
+/** 32 px bar: session clock, weather and light, rule pack and link state. */
 export function TopBar({ onHelp, onEnd }: { onHelp: () => void; onEnd: () => void }) {
   const { t } = useTranslation()
-  const lang = useLang()
   const welcome = useLive((s) => s.welcome)
   const connection = useLive((s) => s.connection)
   const latency = useLive((s) => s.latencyMs)
@@ -87,9 +86,6 @@ export function TopBar({ onHelp, onEnd }: { onHelp: () => void; onEnd: () => voi
           </span>
         </span>
         <span className="num hidden text-ink-2 2xl:inline">{t(`live.status.${status}`)}</span>
-        <p className="micro-label m-0 text-ink" lang={lang}>
-          {t('live.top.fictional')}
-        </p>
         <button
           type="button"
           onClick={onHelp}

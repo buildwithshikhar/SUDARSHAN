@@ -67,7 +67,7 @@ export function DevComponents() {
           }
         >
           <Table
-            caption="Sample tracks"
+            caption="Tracks"
             density={density}
             rows={rows}
             rowKey={(row) => row.id}
@@ -93,7 +93,7 @@ export function DevComponents() {
         </Panel>
         <Panel title="Tabs, alerts, dialog">
           <Tabs
-            label="Sample tabs"
+            label="Tabs"
             tabs={[
               { id: 'a', label: 'First', panel: <p>First panel</p> },
               { id: 'b', label: 'Second', panel: <p>Second panel</p> },

@@ -6,9 +6,25 @@ export interface TabItem {
   panel: ReactNode
 }
 
-export function Tabs({ label, tabs }: { label: string; tabs: TabItem[] }) {
+export function Tabs({
+  label,
+  tabs,
+  value,
+  onChange,
+}: {
+  label: string
+  tabs: TabItem[]
+  /** Selected tab id when the parent owns the selection (for example from the address). */
+  value?: string
+  onChange?: (id: string) => void
+}) {
   const base = useId()
-  const [selected, setSelected] = useState(tabs[0]?.id ?? '')
+  const [own, setOwn] = useState(tabs[0]?.id ?? '')
+  const selected = value !== undefined && tabs.some((tab) => tab.id === value) ? value : own
+  const setSelected = (id: string) => {
+    setOwn(id)
+    onChange?.(id)
+  }
   const buttons = useRef<Record<string, HTMLButtonElement | null>>({})
 
   const move = (event: KeyboardEvent, index: number) => {

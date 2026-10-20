@@ -1,0 +1,356 @@
+[
+ {
+  "file": "trainee-status.png",
+  "title": "Status",
+  "seat": "trainee",
+  "href": "/status"
+ },
+ {
+  "file": "trainee-trainee-today-t0.png",
+  "title": "Today \u00b7 Today overview",
+  "seat": "trainee",
+  "href": "/trainee/today"
+ },
+ {
+  "file": "trainee-trainee-drills-t0.png",
+  "title": "Drills \u00b7 Curriculum",
+  "seat": "trainee",
+  "href": "/trainee/drills"
+ },
+ {
+  "file": "trainee-trainee-drills-t1.png",
+  "title": "Drills \u00b7 Quick drill",
+  "seat": "trainee",
+  "href": "/trainee/drills"
+ },
+ {
+  "file": "trainee-trainee-drills-t2.png",
+  "title": "Drills \u00b7 Session lobby",
+  "seat": "trainee",
+  "href": "/trainee/drills"
+ },
+ {
+  "file": "trainee-trainee-recognition-library-t0.png",
+  "title": "Recognition library \u00b7 Threat catalogue",
+  "seat": "trainee",
+  "href": "/trainee/recognition-library"
+ },
+ {
+  "file": "trainee-trainee-recognition-library-t1.png",
+  "title": "Recognition library \u00b7 Clutter catalogue",
+  "seat": "trainee",
+  "href": "/trainee/recognition-library"
+ },
+ {
+  "file": "trainee-trainee-recognition-library-t2.png",
+  "title": "Recognition library \u00b7 Signature drills",
+  "seat": "trainee",
+  "href": "/trainee/recognition-library"
+ },
+ {
+  "file": "trainee-trainee-my-performance-t0.png",
+  "title": "My performance \u00b7 Sessions",
+  "seat": "trainee",
+  "href": "/trainee/my-performance"
+ },
+ {
+  "file": "trainee-trainee-my-performance-t1.png",
+  "title": "My performance \u00b7 Progress",
+  "seat": "trainee",
+  "href": "/trainee/my-performance"
+ },
+ {
+  "file": "trainee-trainee-my-performance-t2.png",
+  "title": "My performance \u00b7 Reports",
+  "seat": "trainee",
+  "href": "/trainee/my-performance"
+ },
+ {
+  "file": "trainee-account-profile-t0.png",
+  "title": "Profile and preferences \u00b7 Language and theme",
+  "seat": "trainee",
+  "href": "/account/profile"
+ },
+ {
+  "file": "trainee-account-profile-t1.png",
+  "title": "Profile and preferences \u00b7 Accessibility",
+  "seat": "trainee",
+  "href": "/account/profile"
+ },
+ {
+  "file": "trainee-account-help-t0.png",
+  "title": "Help and SOPs \u00b7 Keyboard shortcuts",
+  "seat": "trainee",
+  "href": "/account/help"
+ },
+ {
+  "file": "trainee-account-help-t1.png",
+  "title": "Help and SOPs \u00b7 Standard procedures",
+  "seat": "trainee",
+  "href": "/account/help"
+ },
+ {
+  "file": "trainee-account-help-t2.png",
+  "title": "Help and SOPs \u00b7 About",
+  "seat": "trainee",
+  "href": "/account/help"
+ },
+ {
+  "file": "commander-commander-command-t0.png",
+  "title": "Team command \u00b7 Sector assignment",
+  "seat": "commander",
+  "href": "/commander/command"
+ },
+ {
+  "file": "commander-commander-command-t1.png",
+  "title": "Team command \u00b7 Track handover",
+  "seat": "commander",
+  "href": "/commander/command"
+ },
+ {
+  "file": "commander-commander-command-t2.png",
+  "title": "Team command \u00b7 Team score",
+  "seat": "commander",
+  "href": "/commander/command"
+ },
+ {
+  "file": "instructor-instructor-cohorts-t0.png",
+  "title": "Cohorts \u00b7 Cohort list",
+  "seat": "instructor",
+  "href": "/instructor/cohorts"
+ },
+ {
+  "file": "instructor-instructor-cohorts-t1.png",
+  "title": "Cohorts \u00b7 Cohort detail",
+  "seat": "instructor",
+  "href": "/instructor/cohorts"
+ },
+ {
+  "file": "instructor-instructor-trainees-t0.png",
+  "title": "Trainees \u00b7 Trainee list",
+  "seat": "instructor",
+  "href": "/instructor/trainees"
+ },
+ {
+  "file": "instructor-instructor-trainees-t1.png",
+  "title": "Trainees \u00b7 Trainee profile",
+  "seat": "instructor",
+  "href": "/instructor/trainees"
+ },
+ {
+  "file": "instructor-instructor-live-sessions-t0.png",
+  "title": "Live sessions \u00b7 Launch session",
+  "seat": "instructor",
+  "href": "/instructor/live-sessions"
+ },
+ {
+  "file": "instructor-instructor-live-sessions-t1.png",
+  "title": "Live sessions \u00b7 Live monitor",
+  "seat": "instructor",
+  "href": "/instructor/live-sessions"
+ },
+ {
+  "file": "instructor-instructor-live-sessions-t2.png",
+  "title": "Live sessions \u00b7 Compare sessions",
+  "seat": "instructor",
+  "href": "/instructor/live-sessions"
+ },
+ {
+  "file": "instructor-instructor-team-exercise-t0.png",
+  "title": "Team exercise \u00b7 Team setup",
+  "seat": "instructor",
+  "href": "/instructor/team-exercise"
+ },
+ {
+  "file": "instructor-instructor-team-exercise-t1.png",
+  "title": "Team exercise \u00b7 Team monitor",
+  "seat": "instructor",
+  "href": "/instructor/team-exercise"
+ },
+ {
+  "file": "instructor-content-scenarios.png",
+  "title": "Scenario library",
+  "seat": "instructor",
+  "href": "/content/scenarios"
+ },
+ {
+  "file": "instructor-content-generator.png",
+  "title": "Generator studio",
+  "seat": "instructor",
+  "href": "/content/generator"
+ },
+ {
+  "file": "instructor-instructor-rule-packs-t0.png",
+  "title": "Rule packs \u00b7 Rule-pack list",
+  "seat": "instructor",
+  "href": "/instructor/rule-packs"
+ },
+ {
+  "file": "instructor-instructor-rule-packs-t1.png",
+  "title": "Rule packs \u00b7 Rule-pack editor",
+  "seat": "instructor",
+  "href": "/instructor/rule-packs"
+ },
+ {
+  "file": "instructor-instructor-curricula-t0.png",
+  "title": "Curricula \u00b7 Curriculum list",
+  "seat": "instructor",
+  "href": "/instructor/curricula"
+ },
+ {
+  "file": "instructor-instructor-curricula-t1.png",
+  "title": "Curricula \u00b7 Curriculum editor",
+  "seat": "instructor",
+  "href": "/instructor/curricula"
+ },
+ {
+  "file": "instructor-instructor-unit-aar-t0.png",
+  "title": "Unit AAR \u00b7 Unit dashboard",
+  "seat": "instructor",
+  "href": "/instructor/unit-aar"
+ },
+ {
+  "file": "instructor-instructor-unit-aar-t1.png",
+  "title": "Unit AAR \u00b7 Compare trainees",
+  "seat": "instructor",
+  "href": "/instructor/unit-aar"
+ },
+ {
+  "file": "instructor-instructor-unit-aar-t2.png",
+  "title": "Unit AAR \u00b7 Annotated replay",
+  "seat": "instructor",
+  "href": "/instructor/unit-aar"
+ },
+ {
+  "file": "instructor-instructor-reports-t0.png",
+  "title": "Reports \u00b7 Report builder",
+  "seat": "instructor",
+  "href": "/instructor/reports"
+ },
+ {
+  "file": "admin-admin-users-and-roles-t0.png",
+  "title": "Users and roles \u00b7 User list",
+  "seat": "admin",
+  "href": "/admin/users-and-roles"
+ },
+ {
+  "file": "admin-admin-users-and-roles-t1.png",
+  "title": "Users and roles \u00b7 User detail",
+  "seat": "admin",
+  "href": "/admin/users-and-roles"
+ },
+ {
+  "file": "admin-admin-organisation-t0.png",
+  "title": "Organisation \u00b7 Units",
+  "seat": "admin",
+  "href": "/admin/organisation"
+ },
+ {
+  "file": "admin-admin-packs-t0.png",
+  "title": "Packs \u00b7 Pack manager",
+  "seat": "admin",
+  "href": "/admin/packs"
+ },
+ {
+  "file": "admin-admin-data-register-t0.png",
+  "title": "Data register \u00b7 Sources",
+  "seat": "admin",
+  "href": "/admin/data-register"
+ },
+ {
+  "file": "admin-admin-data-register-t1.png",
+  "title": "Data register \u00b7 Parameter provenance",
+  "seat": "admin",
+  "href": "/admin/data-register"
+ },
+ {
+  "file": "admin-admin-records-t0.png",
+  "title": "Records \u00b7 Audit log",
+  "seat": "admin",
+  "href": "/admin/records"
+ },
+ {
+  "file": "admin-admin-records-t1.png",
+  "title": "Records \u00b7 Record verification",
+  "seat": "admin",
+  "href": "/admin/records"
+ },
+ {
+  "file": "admin-admin-health-t0.png",
+  "title": "Health \u00b7 Services",
+  "seat": "admin",
+  "href": "/admin/health"
+ },
+ {
+  "file": "admin-admin-health-t1.png",
+  "title": "Health \u00b7 Performance",
+  "seat": "admin",
+  "href": "/admin/health"
+ },
+ {
+  "file": "admin-admin-health-t2.png",
+  "title": "Health \u00b7 Storage",
+  "seat": "admin",
+  "href": "/admin/health"
+ },
+ {
+  "file": "admin-admin-settings-t0.png",
+  "title": "Settings \u00b7 Instance settings",
+  "seat": "admin",
+  "href": "/admin/settings"
+ },
+ {
+  "file": "admin-admin-backup-t0.png",
+  "title": "Backup \u00b7 Backup and restore",
+  "seat": "admin",
+  "href": "/admin/backup"
+ },
+ {
+  "file": "live-workspace-day.png",
+  "title": "Live workspace \u00b7 day EO",
+  "seat": "trainee",
+  "href": "workspace"
+ },
+ {
+  "file": "live-workspace-nv.png",
+  "title": "Live workspace \u00b7 night vision",
+  "seat": "trainee",
+  "href": "workspace"
+ },
+ {
+  "file": "live-workspace-thermal.png",
+  "title": "Live workspace \u00b7 thermal",
+  "seat": "trainee",
+  "href": "workspace"
+ },
+ {
+  "file": "live-workspace-rain.png",
+  "title": "Live workspace \u00b7 rain at dusk",
+  "seat": "trainee",
+  "href": "workspace"
+ },
+ {
+  "file": "debrief.png",
+  "title": "Session debrief",
+  "seat": "trainee",
+  "href": "/train/session/mock-session/debrief"
+ },
+ {
+  "file": "live-workspace-hindi.png",
+  "title": "Live workspace \u00b7 Hindi",
+  "seat": "trainee",
+  "href": "workspace"
+ },
+ {
+  "file": "status-light.png",
+  "title": "Status \u00b7 light theme",
+  "seat": "trainee",
+  "href": "/status"
+ },
+ {
+  "file": "sign-in.png",
+  "title": "Sign in with seat switcher",
+  "seat": "public",
+  "href": "/sign-in"
+ }
+]

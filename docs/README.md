@@ -12,6 +12,7 @@ Planning pack for SIH 2026 PS 26247, plus the working documents that drive the b
 | [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) | Everything unverified or undecided, each with an owner and how to close it. |
 | [DECISIONS.md](DECISIONS.md) | Decision log, one short ADR per decision. |
 | [DESIGN.md](DESIGN.md) | Design system tokens, rules for every screen and the banned list. |
+| [PPT_ARCHITECTURE.md](PPT_ARCHITECTURE.md) | One-page architecture slide source: boxes, arrows, banner, session data flow and an image-generation prompt. |
 | [SIM_CORE.md](SIM_CORE.md) | Simulation core: contracts, tick model, random streams, determinism rules, event log, snapshots, replay and golden files. |
 | [TERRAIN_PACKS.md](TERRAIN_PACKS.md) | Terrain pack format, frame, bake pipeline, line-of-sight and serving contract. |
 | [TRACEABILITY.md](TRACEABILITY.md) | Live requirements traceability; the built-proof column fills as waves land. |

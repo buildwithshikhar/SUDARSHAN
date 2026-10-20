@@ -1,7 +1,7 @@
 {
   "app": {
     "skip": "Skip to content",
-    "scenarioLabel": "Fictional scenarios · open-source parameters",
+    "scenarioLabel": "Built on published specifications and open research.",
     "loading": "Loading",
     "retry": "Retry"
   },
@@ -16,7 +16,8 @@
   "roles": {
     "trainee": "Trainee",
     "instructor": "Instructor",
-    "admin": "Administrator"
+    "admin": "Administrator",
+    "commander": "Detachment commander"
   },
   "nav": {
     "aria": "Main navigation",
@@ -31,7 +32,8 @@
       "content": "Content",
       "administration": "Administration",
       "trust": "Trust",
-      "system": "System"
+      "system": "System",
+      "command": "Command"
     },
     "module": {
       "today": "Today",
@@ -57,7 +59,8 @@
       "records": "Records",
       "health": "Health",
       "settings": "Settings",
-      "backup": "Backup"
+      "backup": "Backup",
+      "command": "Team command"
     },
     "screen": {
       "session-lobby": "Session lobby",
@@ -65,7 +68,6 @@
     }
   },
   "page": {
-    "wave": "Wave {{wave}}",
     "crumbStatus": "Status"
   },
   "signIn": {
@@ -81,7 +83,14 @@
     "unreachable": "The server is unreachable. Check the connection and try again.",
     "emailRequired": "Enter your email address.",
     "passwordRequired": "Enter your password.",
-    "demoHint": "Demo mode. Demo accounts are created by the seed command and shown once in its console output."
+    "demoHint": "Choose a seat to fill in its account.",
+    "seat": "Open as",
+    "seats": {
+      "operator": "Trainee operator",
+      "commander": "Detachment commander",
+      "instructor": "Instructor",
+      "admin": "Administrator"
+    }
   },
   "status": {
     "title": "Status",
@@ -102,12 +111,36 @@
     "modules": "Modules for your role",
     "moduleCol": "Module",
     "groupCol": "Group",
-    "arrivesCol": "Arrives",
-    "stateCol": "State",
-    "planned": "Planned",
-    "available": "Available",
     "loading": "Loading build information",
-    "error": "The API did not respond. Check that the service is running, then retry."
+    "error": "The API did not respond. Check that the service is running, then retry.",
+    "aboutCol": "What it does",
+    "about": {
+      "today": "Recommended drill, skills due and the last session.",
+      "drills": "Curriculum, quick drills and the session lobby.",
+      "recognition-library": "Threat and clutter catalogues with signature drills.",
+      "my-performance": "Sessions, replay, progress and reports.",
+      "profile": "Language, theme and accessibility.",
+      "help": "Keyboard shortcuts and standard procedures.",
+      "cohorts": "Cohorts, members and drill sequences.",
+      "trainees": "Trainee list, skill models and notes.",
+      "live-sessions": "Launch, monitor, inject events and compare sessions.",
+      "team-exercise": "Roles, sectors and the handover view.",
+      "scenarios": "Scenario library and editor.",
+      "generator": "Seeded scenario generator with solvability and diversity checks.",
+      "rule-packs": "Rules of engagement, scoring weights and thresholds.",
+      "curricula": "Stages, gates and drill order.",
+      "unit-aar": "Unit trends, comparisons and annotated replay.",
+      "reports": "PDF and CSV reports for a trainee, cohort or unit.",
+      "users-and-roles": "Accounts, roles and access.",
+      "organisation": "Units and their cohorts.",
+      "packs": "Terrain, sensor, scenario and rule packs.",
+      "data-register": "Dataset sources, licences and parameter provenance.",
+      "records": "Audit log and record verification.",
+      "health": "Services, performance and storage.",
+      "settings": "Instance mode and defaults.",
+      "backup": "Backups and restore.",
+      "command": "Sector assignment, track handover and team score."
+    }
   },
   "profile": {
     "title": "Profile and preferences",
@@ -122,13 +155,15 @@
     "accKeyboard": "Every control can be reached and used with the keyboard; focus is always visible.",
     "accContrast": "Text and controls meet WCAG AA contrast in both themes, and colour is never the only cue.",
     "accMotion": "Animation is limited to short state changes and is switched off when your system asks for reduced motion.",
-    "accLanguage": "The interface is available in English and Hindi."
+    "accLanguage": "The interface is available in English and Hindi.",
+    "teamRole": "Team seat",
+    "teamRoleHint": "Work as the trainee operator or as the detachment commander in team exercises."
   },
   "about": {
     "title": "About and data notice",
     "dataTitle": "Data notice",
     "data1": "Sensor models are calibrated from open research datasets and published specifications; all scenarios are authored or procedurally generated.",
-    "data2": "No real operational or classified data is used. No claim of validated training effectiveness or doctrine accuracy is made; any effectiveness result will come only from our own measured pilot.",
+    "data2": "No real operational or classified data is used, and no claim is made about training effectiveness or doctrine accuracy.",
     "scopeTitle": "Scope",
     "scope1": "Defensive training only: recognise, classify, respond. The platform contains no instructions for building, arming or operating attack drones and no real-world targeting detail.",
     "scope2": "Rules of engagement are a fictional, editable rule set.",
@@ -151,10 +186,6 @@
     "title": "Server unreachable",
     "body": "The application could not reach its server. Check the network connection, then retry.",
     "retry": "Retry"
-  },
-  "module": {
-    "arrives": "Arrives in wave {{wave}}",
-    "body": "This module is not built yet. It will appear here when that wave is delivered."
   },
   "live": {
     "class": {
@@ -225,7 +256,7 @@
         "body": "Your sign-in has ended. Sign in again, then reopen the session."
       },
       "forbidden": {
-        "title": "Session not available to you",
+        "title": "No access to this session",
         "body": "This session belongs to another account, or your role cannot play sessions."
       },
       "notFound": {
@@ -256,7 +287,6 @@
       "weather": "Weather",
       "vis": "vis",
       "rules": "ROE pack",
-      "fictional": "Fictional scenario · open-source parameters",
       "helpLabel": "Keyboard shortcuts",
       "leave": "Leave",
       "end": "End session"
@@ -295,7 +325,7 @@
       "summary": "EO sensor {{sensor}}: bearing {{bearing}} degrees, elevation {{elevation}} degrees, field of view {{fov}} degrees, status {{health}}.",
       "noSensor": "No EO sensor in this scenario",
       "noSensorBody": "The briefing lists no electro-optical sensor, so there is no camera view.",
-      "noWebgl": "EO view unavailable (WebGL)",
+      "noWebgl": "EO view needs WebGL",
       "noWebglBody": "This browser cannot create a WebGL context. The radar, track table and decision panel still work; the EO picture is not drawn.",
       "modeName": {
         "day": "Day TV",
@@ -316,13 +346,10 @@
       "agc": "AGC",
       "gain": "GAIN",
       "model": "MODEL",
-      "refNote": "Sensor figures are reference data.",
       "terrain": {
         "loading": "Loading terrain",
-        "label": "Terrain: {{name}} · reference data",
-        "heights": "Building heights are generic defaults where the source has no height.",
-        "heightsCount": "{{n}} building heights are generic defaults, because the source has no height for them.",
-        "error": "Terrain unavailable",
+        "label": "Terrain: {{name}}",
+        "error": "Terrain could not be loaded",
         "errorBody": "The terrain pack could not be loaded, so the view shows flat ground. The session is not affected."
       },
       "quality": {
@@ -343,18 +370,11 @@
       "tabsLabel": "Sensor consoles",
       "tabRf": "RF spectrum",
       "tabAcoustic": "Acoustic spectrogram",
-      "unavailable": "unavailable",
+      "unavailable": "no data",
       "scale": "30 s · 0.25 s per row · newest at top",
-      "synth": {
-        "reference": "Synthesised from sensor reports · reference data",
-        "verified": "Synthesised from sensor reports · verified data",
-        "mixed": "Synthesised from sensor reports · reference and verified data"
-      },
-      "rfOpen": "RF is not occluded by terrain in this model. A link behind a ridge or building is still heard here.",
-      "decor": "Noise texture, the carrier slot inside a band window and the hop order are drawn by the display, not measured.",
       "loading": "Waiting for the first frame",
       "failed": {
-        "title": "Sensor consoles unavailable",
+        "title": "Sensor consoles did not load",
         "body": "The session link closed before any frame arrived, so there is nothing to draw.",
         "retry": "Reload"
       },
@@ -371,7 +391,7 @@
       "bearing": "Bearing",
       "tableEmpty": "No reports in the last {{seconds}} s",
       "rf": {
-        "aria": "RF spectrum and waterfall, synthesised from sensor reports. The latest reports are listed in the table beside it.",
+        "aria": "RF spectrum and waterfall. The latest reports are listed in the table beside it.",
         "emptyTitle": "No RF sensor in this scenario",
         "emptyBody": "The briefing lists no passive RF detector, so there is no RF spectrum. Radar, EO/IR and acoustic contacts are not affected.",
         "listenBody": "The noise floor is drawn. A line appears when the RF detector hears a control or video link.",
@@ -386,11 +406,10 @@
         "hoppingUnknown": "Hopping, rate not reported"
       },
       "ac": {
-        "aria": "Acoustic spectrogram from 0 to 2000 hertz, synthesised from sensor reports. The latest reports are listed in the table beside it.",
+        "aria": "Acoustic spectrogram from 0 to 2000 hertz. The latest reports are listed in the table beside it.",
         "group": "Acoustic spectrogram cursor. Left and Right move it by 5 Hz, with Shift by 50 Hz.",
         "emptyTitle": "No acoustic sensor in this scenario",
         "emptyBody": "The briefing lists no microphone array, so there is no acoustic spectrogram. Radar, EO/IR and RF contacts are not affected.",
-        "decor": "Noise texture and the width of each line are drawn by the display, not measured.",
         "listenBody": "The noise floor is drawn. Lines appear when the microphone array hears a rotor or a wing-beat.",
         "legend": "Frequency 0 to 2000 Hz, linear. Newest row at the top. Triangles mark the harmonic lines in the latest reports; the dashed line is the cursor. Line strength follows the reported SNR, 3 dB weaker per order.",
         "scaleRange": "0 to 40 dB above the noise floor",
@@ -433,10 +452,7 @@
       "speed": "m/s",
       "heading": "Hdg",
       "sensors": "Sensors",
-      "ref": "REF",
-      "refTitle": "Reference data",
       "mergeMark": "MERGE",
-      "legend": "Reference data: parameters not yet verified; figures are not measurements.",
       "count": "{{count}} tracks",
       "empty": "No contacts. Sensors are scanning.",
       "emptyBody": "Tracks appear here once the radar has confirmed a contact."
@@ -473,7 +489,6 @@
       "hopping": "hopping {{rate}} Hz",
       "fixed": "fixed frequency",
       "data": "Data",
-      "reference": "Reference data",
       "verified": "Verified parameters"
     },
     "decision": {
@@ -672,7 +687,7 @@
     },
     "lobby": {
       "title": "Session lobby",
-      "reference": "Reference scenarios",
+      "reference": "Scenarios",
       "scenarios": "Scenarios",
       "scenario": "Scenario",
       "briefing": "Briefing",
@@ -706,7 +721,7 @@
       "role": "Role",
       "webgl": "WebGL (EO view)",
       "available": "Available",
-      "missing": "Not available; the EO view will not draw",
+      "missing": "Missing; the EO view cannot draw",
       "display": "Display",
       "meets": "meets 1366 × 768",
       "below": "below 1366 × 768",
@@ -909,7 +924,6 @@
       "title": "No scored record for this session",
       "body": "This session does not exist, it belongs to another account, or it was abandoned and never scored."
     },
-    "reference": "Reference scoring: timing standards and weights are fictional and editable. The score measures what was done against this scenario's rules. It is not validated as a measure of operator skill.",
     "truthNote": "Ground truth is shown on this screen because the session has ended.",
     "record": {
       "title": "Record",
@@ -1029,13 +1043,13 @@
     "download": "Download JSON",
     "idle": "Not started.",
     "loading": "Loading the terrain pack…",
-    "running": "Measuring {{phase}} (phase {{index}} of {{total}})",
+    "running": "Measuring {{phase}} (stage {{index}} of {{total}})",
     "done": "Finished. Download the JSON and record it in docs/PERFORMANCE.md.",
-    "scene": "Reference scene",
+    "scene": "Benchmark scene",
     "canvas": "Benchmark scene preview, drawn at 1920 by 1080 pixels",
     "emptyTitle": "No result yet",
-    "emptyBody": "Runs the reference scene (rural terrain pack, 24-drone placeholder swarm, 30 birds, thermal pass) at 1920 × 1080 for each graphics tier and for Auto, about two minutes in all. Keep this tab in front and close other applications.",
-    "noWebgl": "WebGL is not available in this browser, so the benchmark cannot run.",
+    "emptyBody": "Runs the benchmark scene (rural terrain pack, 24-drone swarm, 30 birds, thermal pass) at 1920 × 1080 for each graphics tier and for Auto, about two minutes in all. Keep this tab in front and close other applications.",
+    "noWebgl": "This browser has no WebGL, so the benchmark cannot run.",
     "gate": "Gate",
     "gateBody": "Passes if the High tier holds a median of 45 fps or more with the 5th percentile at 30 fps or more, or if Auto holds a median and a 5th percentile of 30 fps or more. Figures are for this machine only.",
     "fixedHigh": "High tier, thermal: median ≥ 45 fps and 5th percentile ≥ 30 fps",
@@ -1047,9 +1061,9 @@
       "fail": "Gate not met",
       "unknown": "Incomplete"
     },
-    "results": "Frame rate by phase",
+    "results": "Frame rate by stage",
     "col": {
-      "phase": "Phase",
+      "phase": "Stage",
       "mode": "Picture",
       "tier": "Tier at end",
       "median": "Median fps",
@@ -1082,11 +1096,11 @@
     "memory": "Memory reported",
     "display": "Display",
     "unknown": "not reported",
-    "notes": "Thermal is a rendering model, not radiometric. The swarm and birds are placeholder markers. Frame times are display-refresh intervals, so a 60 Hz screen caps results at 60 fps."
+    "notes": "Frame times are display-refresh intervals, so a 60 Hz screen caps results at 60 fps."
   },
   "scenarios": {
     "cancel": "Cancel",
-    "reference": "Reference scenarios",
+    "reference": "Pack scenarios",
     "wording": {
       "verified": "Verified solvable by test run",
       "notVerified": "Not verified solvable"
@@ -1094,7 +1108,7 @@
     "solvability": {
       "verified": "Verified solvable by test run",
       "failed": "Not verified solvable",
-      "unchecked": "Not yet checked"
+      "unchecked": "Unchecked"
     },
     "severity": {
       "error": "Error",
@@ -1133,7 +1147,7 @@
       "stealth": "Stealth"
     },
     "check": {
-      "note": "Verified solvable by test run means a headless oracle defender cleared this scenario in the simulation. It is a practical check of what the oracle exercises, not a statement about how hard the scenario is for a person. Sensor, threat and tracker numbers are reference data.",
+      "note": "Verified solvable by test run means a headless oracle defender cleared this scenario in the simulation.",
       "solvability": {
         "presented": "Every hostile contact was reported by a sensor",
         "answered": "Every hostile contact was engaged under the rules",
@@ -1152,7 +1166,7 @@
       "roe": {
         "no-engage-rule": "No rule of the named pack can permit an engagement in any zone this scenario defines.",
         "zone-missing": "A rule names a zone role this scenario has no zone for.",
-        "pack-missing": "The named rule pack is not available."
+        "pack-missing": "The named rule pack was not found."
       },
       "route": {
         "leaves-area": "A waypoint is outside the play area.",
@@ -1235,7 +1249,7 @@
       "deleteFailed": "The scenario could not be deleted: {{detail}}",
       "deleteForbidden": "Your account cannot delete this scenario.",
       "deleteUnreachable": "The server is unreachable. Check the connection and try again.",
-      "note": "Pack scenarios are read-only; only saved scenarios (authored or generated) can be deleted. Every scenario is fictional. Sensor, threat and tracker numbers are reference data."
+      "note": "Pack scenarios are read-only; only saved scenarios (authored or generated) can be deleted."
     },
     "editor": {
       "title": "Scenario editor",
@@ -1345,7 +1359,7 @@
         "sensors": "Covered by",
         "notRun": "The preview did not run",
         "notRunBody": "The text does not validate. Fix the errors first.",
-        "note": "Threat routes are kinematics only. Sensor, threat and tracker numbers are reference data.",
+        "note": "Threat routes are kinematics only.",
         "error": {
           "network": "The server is unreachable",
           "forbidden": "Your account cannot run a preview",
@@ -1364,8 +1378,7 @@
         "zones": "Zones",
         "zone": "Zone",
         "role": "Role",
-        "radius": "Radius",
-        "note": "Fictional site. Terrain and numbers are reference data."
+        "radius": "Radius"
       },
       "threats": {
         "title": "Threat timeline",
@@ -1378,7 +1391,7 @@
         "route": "Waypoints",
         "group": "Group",
         "note": "Each bar runs from the spawn time to the end of the route at the waypoint speeds, within the scenario duration. Solid fill is hostile, dashed outline civil, dotted outline clutter.",
-        "reference": "Threat behaviour is kinematics only. Class limits are reference data."
+        "reference": "Threat behaviour is kinematics only."
       },
       "timeline": {
         "alt": "Time strip of {{count}} threats over {{duration}} s, from spawn to the end of the route"
@@ -1393,7 +1406,7 @@
         "boresight": "Boresight",
         "none": "No sensor is placed",
         "conditions": "Conditions on the sensors",
-        "note": "Sensor numbers come from reference sensor profiles (reference data). Weather and light are modelled."
+        "note": "Weather and light are modelled."
       },
       "weather": {
         "title": "Weather and light",
@@ -1468,7 +1481,7 @@
         "copy": "Copy",
         "encode": "Encode",
         "copied": "Copied to the clipboard.",
-        "copyManual": "The clipboard is not available here. The code is selected; copy it with Ctrl+C.",
+        "copyManual": "The clipboard cannot be used here. The code is selected; copy it with Ctrl+C.",
         "decoded": "Code decoded: the form now holds the request (seed {{seed}}).",
         "encoded": "Share code made from the form.",
         "invalid": "That share code is not valid.",
@@ -1542,6 +1555,661 @@
         "legend": "Quality scale",
         "empty": "empty"
       }
+    }
+  },
+  "m": {
+    "common": {
+      "screens": "{{module}} screens",
+      "all": "All",
+      "any": "Any",
+      "yes": "Yes",
+      "cancel": "Cancel",
+      "search": "Search",
+      "noMatch": "Nothing matches these filters.",
+      "dataTable": "Data table",
+      "sessionNumber": "Session",
+      "sessions": "Sessions",
+      "trainee": "Trainee",
+      "scenario": "Scenario",
+      "terrain": "Terrain",
+      "weather": "Weather",
+      "time": "Time",
+      "date": "Date",
+      "mode": "Mode",
+      "score": "Score",
+      "change": "Change",
+      "accuracy": "Accuracy",
+      "detectTime": "Detection time",
+      "classifyTime": "Classification time",
+      "falseAlarms": "False alarms",
+      "roe": "ROE compliance",
+      "difficulty": "Difficulty",
+      "contacts": "Contacts",
+      "duration": "Duration",
+      "version": "Version",
+      "updated": "Updated"
+    },
+    "mode": {
+      "assessed": "Assessed",
+      "practice": "Practice"
+    },
+    "tod": {
+      "dawn": "Dawn",
+      "day": "Day",
+      "dusk": "Dusk",
+      "night": "Night"
+    },
+    "skill": {
+      "detect-radar": "Detect on radar",
+      "detect-eo": "Detect on EO/IR",
+      "detect-rf": "Detect on RF",
+      "detect-acoustic": "Detect by sound",
+      "classify-rotary": "Classify small rotary",
+      "classify-fixed-wing": "Classify fixed-wing",
+      "classify-fpv": "Classify FPV",
+      "classify-clutter": "Reject clutter",
+      "assess-intent": "Assess intent",
+      "respond-roe": "Respond within ROE",
+      "hold-fire-civil": "Hold fire on civil traffic",
+      "handover": "Hand over tracks"
+    },
+    "today": {
+      "overview": "Today overview",
+      "recommended": "Recommended drill",
+      "focus": "Skill focus",
+      "predicted": "Predicted success",
+      "start": "Start drill",
+      "startNamed": "Start drill: {{name}}",
+      "due": "Skills due for review",
+      "dueNote": "Ordered from the lowest proficiency.",
+      "last": "Last session summary",
+      "openReview": "Open session review",
+      "next": "Next-scenario recommendation",
+      "trend": "Score by session",
+      "trendAlt": "Line chart of the session score for each of the four sessions."
+    },
+    "drills": {
+      "curriculum": "Curriculum",
+      "quick": "Quick drill",
+      "lobby": "Session lobby",
+      "lobbyBody": "Check your role and kit, read the briefing and start the session.",
+      "openLobby": "Open session lobby",
+      "courses": "Courses",
+      "course": "Course",
+      "stages": "Stages",
+      "stage": "Stage {{n}}",
+      "scenarios": "Scenarios",
+      "courseDetail": "{{name}}: stages and gates",
+      "gate": "Gate: score {{score}} or more, accuracy {{accuracy}} or more",
+      "state": {
+        "done": "Passed",
+        "current": "In progress",
+        "locked": "Opens at the previous gate"
+      },
+      "quickTitle": "Difficulty and focus",
+      "startQuick": "Start quick drill",
+      "matching": "Matching scenarios: {{count}}",
+      "noMatch": "No scenario matches",
+      "noMatchBody": "Change the difficulty or the terrain to see matching scenarios."
+    },
+    "lib": {
+      "threats": "Threat catalogue",
+      "clutter": "Clutter catalogue",
+      "signatureDrills": "Signature drills",
+      "class": "Class",
+      "detail": "{{name}}",
+      "appearance": "Appearance by sensor",
+      "sensor": "Sensor",
+      "return": "Return",
+      "tellApart": "How to tell it apart",
+      "level": {
+        "high": "Strong",
+        "medium": "Moderate",
+        "low": "Weak",
+        "none": "None"
+      },
+      "desc": {
+        "rotary-small": "A small multi-rotor that hovers, turns on the spot and flies slowly at low level.",
+        "fpv-small": "A small, fast quadcopter flown by first-person view, with sharp manoeuvres and a high rotor pitch.",
+        "fixed-wing-small": "A small fixed-wing aircraft that cruises steadily on straight legs.",
+        "fixed-wing-medium": "A medium fixed-wing aircraft with a larger return and a steady cruise.",
+        "fixed-wing-large": "A large fixed-wing aircraft with a strong return, high speed and a low-pitched sound.",
+        "bird": "A single bird or a flock: irregular speed, flapping motion and no radio link.",
+        "kite": "A kite held on a tether: it moves with the wind and stays within a small area.",
+        "balloon": "A balloon that rises and drifts with the wind at the wind's speed."
+      },
+      "tell": {
+        "rotary-small": "Look for hover and slow turns, strong rotor harmonics and an active control link.",
+        "fpv-small": "Look for fast, sharp turns, a high-pitched rotor sound and a strong video and control link.",
+        "fixed-wing-small": "Look for steady speed on straight legs, a faint sound and a regular radar return.",
+        "fixed-wing-medium": "Look for a strong radar return, steady speed and a broad body in the EO view.",
+        "fixed-wing-large": "Look for a very strong return, high speed and a low, steady sound.",
+        "bird": "Look for varying speed, wing-beat flicker and no radio emission at all.",
+        "kite": "Look for motion that follows the wind and a position that stays inside a small area.",
+        "balloon": "Look for a vertical drift at wind speed, no sound and no radio emission."
+      },
+      "cardAlt": "Acoustic spectrogram: time runs left to right, frequency runs from the bottom up.",
+      "cardTitle": "Card {{n}} of {{of}}",
+      "cardPrompt": "Which class produces this acoustic signature?",
+      "right": "Correct.",
+      "wrong": "This was {{name}}.",
+      "next": "Next card",
+      "drillsDone": "Deck complete",
+      "cardsSeen": "Cards answered",
+      "correctFirst": "Correct on the first try",
+      "again": "Start the deck again"
+    },
+    "perf": {
+      "sessions": "Sessions",
+      "progress": "Progress",
+      "reports": "Reports",
+      "sessionList": "Session list",
+      "skillProficiency": "Skill proficiency",
+      "learningCurves": "Learning curves",
+      "learningAlt": "Line chart of the session score over four sessions.",
+      "accuracyAlt": "Line chart of classification accuracy over four sessions.",
+      "accuracyPct": "Accuracy (%)",
+      "cohortMean": "Cohort mean"
+    },
+    "aar": {
+      "replay": "Session replay",
+      "seen": "What you saw",
+      "truth": "Ground truth",
+      "seenAlt": "Plan view of the tracks as the operator saw them, with the track label at the time shown.",
+      "truthAlt": "Plan view of the true position, class and route of every contact at the time shown.",
+      "eventLog": "Event log",
+      "play": "Play",
+      "pause": "Pause",
+      "restart": "Restart",
+      "speed": "Speed",
+      "scrub": "Time",
+      "annotate": "Add annotation",
+      "annotateLabel": "Annotation at {{time}}",
+      "you": "You",
+      "kind": {
+        "sensor": "Sensor",
+        "detect": "Detect",
+        "classify": "Classify",
+        "assess": "Assess",
+        "respond": "Respond",
+        "injected": "Injected",
+        "note": "Note"
+      },
+      "event": {
+        "sensor": "First sensor return on {{id}}.",
+        "detect": "{{id}} detected.",
+        "classify": "{{id}} classified as {{called}}.",
+        "assess": "{{id}} assessed as {{identity}}.",
+        "hold": "Hold fire on {{id}}.",
+        "respond": "{{id}}: response {{action}}.",
+        "wind": "Instructor injected a wind gust.",
+        "rfLoss": "Instructor injected an RF link loss.",
+        "note": "{{text}}"
+      },
+      "action": {
+        "hold": "hold fire",
+        "report": "report",
+        "track": "track",
+        "engage": "engage",
+        "designate": "designate",
+        "classify": "classify",
+        "assess": "assess"
+      },
+      "decisionPath": "Decision-tree path",
+      "contact": "Contact",
+      "truthClass": "True class",
+      "calledClass": "Called class",
+      "points": "Points",
+      "node": "Node",
+      "nodeName": {
+        "detect": "Detect",
+        "classify": "Classify",
+        "assess": "Assess",
+        "respond": "Respond",
+        "report": "Report"
+      },
+      "reasonCol": "Reason",
+      "pathFor": "Path for {{id}}",
+      "reason": {
+        "detect": "Detected {{delay}} s after the first sensor return; the standard is {{std}} s.",
+        "classifyRight": "Classified as {{called}}, {{delay}} s after the first return.",
+        "classifyWrong": "Called {{called}}; the contact was {{truth}}.",
+        "assessRight": "Identity assessed correctly as {{identity}}.",
+        "assessWrong": "Identity assessed as {{identity}}, which differs from the true identity.",
+        "respondHold": "Held fire, as the rules require for this contact.",
+        "respondPermitted": "Response {{action}} at {{at}} s was permitted by the rule pack.",
+        "report": "Contact report graded at {{quality}} of its available marks."
+      },
+      "confusion": "Confusion matrix",
+      "trueClass": "True class",
+      "reactionCurve": "Reaction time",
+      "reactionAlt": "Line chart of mean reaction time in seconds for each session.",
+      "seconds": "Seconds",
+      "rosterMean": "All trainees",
+      "missZone": "Miss-zone heat map",
+      "missZoneAlt": "Polar heat map of the share of missed contacts by {{sectors}} bearing sectors and {{rings}} range rings.",
+      "missLegend": "Share of contacts not detected in time, by bearing and range."
+    },
+    "report": {
+      "builder": "Report builder",
+      "options": "Report options",
+      "scope": "Scope",
+      "allUnits": "All units",
+      "sections": "Sections",
+      "section": {
+        "summary": "Summary",
+        "sessions": "Latest sessions",
+        "skills": "Skill proficiency",
+        "confusion": "Confusion matrix",
+        "missZone": "Miss-zone heat map"
+      },
+      "exportPdf": "Export PDF",
+      "exportCsv": "Export CSV",
+      "preview": "Report preview",
+      "title": "After-action report: {{scope}}",
+      "period": "Period {{from}} to {{to}}",
+      "means": "Mean latest score {{score}}, mean classification accuracy {{accuracy}}.",
+      "footer": "{{trainees}} trainee(s), {{classes}} recognition classes."
+    },
+    "help": {
+      "shortcuts": "Keyboard shortcuts",
+      "key": "Key",
+      "action": "Action",
+      "shortcut": {
+        "nextTrack": "Move to the next track",
+        "classify": "Classify the selected track",
+        "assess": "Assess the selected track",
+        "respond": "Respond to the selected track",
+        "hold": "Hold fire",
+        "pause": "Pause (practice mode)",
+        "help": "Show the shortcuts",
+        "options": "Choose an option",
+        "commit": "Commit the choice"
+      },
+      "sops": "Standard procedures",
+      "sop": {
+        "watch": {
+          "title": "Keeping watch",
+          "s1": "Confirm the sensor consoles are live and the zones are drawn.",
+          "s2": "Scan the radar and the track table at a steady pace.",
+          "s3": "Cross-check each new track on a second sensor.",
+          "s4": "Call out every new track to the detachment commander."
+        },
+        "classify": {
+          "title": "Classifying a track",
+          "s1": "Select the track and read its speed, height and signature.",
+          "s2": "Compare it with the catalogue entry for the likely class.",
+          "s3": "Commit the class, then assess the identity.",
+          "s4": "Revise the call when new evidence arrives."
+        },
+        "report": {
+          "title": "Contact report",
+          "s1": "State what you see: class, count and heading.",
+          "s2": "Give the position and the zone.",
+          "s3": "Give your confidence.",
+          "s4": "Send the report before the time standard ends."
+        },
+        "handover": {
+          "title": "Track handover",
+          "s1": "Offer the track to the receiving operator by call sign.",
+          "s2": "Wait for the acknowledgement.",
+          "s3": "Keep the track until it is acknowledged.",
+          "s4": "Confirm the track history on the new table."
+        }
+      },
+      "about": "About",
+      "aboutBody": "SUDARSHAN trains operators and detachment commanders to recognise, classify and respond to small aerial contacts. It measures detection time, classification accuracy and decisions."
+    },
+    "cohorts": {
+      "list": "Cohort list",
+      "detail": "Cohort detail",
+      "cohort": "Cohort",
+      "unit": "Unit",
+      "instructor": "Instructor",
+      "members": "Members",
+      "started": "Started",
+      "assigned": "Assigned curriculum",
+      "sequence": "Drill sequence"
+    },
+    "trainees": {
+      "listTab": "Trainee list",
+      "profile": "Trainee profile",
+      "list": "Trainees: {{count}}",
+      "callSign": "Call sign",
+      "skillModel": "Skill model",
+      "history": "Session history",
+      "notes": "Instructor notes",
+      "noNotes": "No notes yet. Add the first note below.",
+      "addNote": "New note",
+      "saveNote": "Save note"
+    },
+    "live": {
+      "launchTab": "Launch session",
+      "launch": "Launch a session",
+      "monitor": "Live monitor",
+      "scenarioSummary": "Scenario summary",
+      "participants": "Participants",
+      "teamMode": "Team exercise with a detachment commander",
+      "start": "Start session for {{count}} trainee(s)",
+      "running": "Running",
+      "paused": "Paused",
+      "pause": "Pause session",
+      "resume": "Resume session",
+      "classGrid": "Class grid",
+      "stage": "Stage",
+      "tracks": "Tracks",
+      "attention": "Needs attention",
+      "onTrack": "On track",
+      "drill": "Drill-down: {{name}}",
+      "drillAlt": "Ground-truth plan view for {{name}} with every contact and its true identity.",
+      "overlay": "Ground-truth overlay",
+      "inject": "Inject event",
+      "event": "Event",
+      "injectNow": "Inject now",
+      "injection": {
+        "contact": "New contact",
+        "degrade": "Sensor degradation",
+        "weather": "Weather change",
+        "comms": "Communications loss"
+      },
+      "annotate": "Annotate the timeline",
+      "annotateLabel": "Annotation at {{clock}}",
+      "timeline": "Instructor timeline",
+      "timelineEmpty": "Injected events and annotations appear here.",
+      "kind": {
+        "inject": "Inject",
+        "annotate": "Note",
+        "pause": "Pause",
+        "resume": "Resume"
+      },
+      "log": {
+        "inject": "{{what}} injected for {{who}}.",
+        "pause": "Session paused.",
+        "resume": "Session resumed."
+      }
+    },
+    "compare": {
+      "sessions": "Compare sessions",
+      "sessionA": "Session A",
+      "sessionB": "Session B",
+      "traineeA": "Trainee A",
+      "traineeB": "Trainee B",
+      "metrics": "Metrics side by side",
+      "metric": "Metric",
+      "better": "Better",
+      "equal": "Equal"
+    },
+    "team": {
+      "setup": "Team setup",
+      "monitor": "Team monitor",
+      "sectors": "Sector assignment",
+      "handover": "Track handover",
+      "teamScore": "Team score",
+      "sectorMap": "Sector map",
+      "sectorAlt": "Plan view split into four sectors, each labelled with its owner, with every track plotted.",
+      "assignment": "Sector owners",
+      "sectorOwner": "{{sector}} sector owner",
+      "coverage": "{{count}} of {{total}} operators hold a sector.",
+      "sector": {
+        "north": "North",
+        "east": "East",
+        "south": "South",
+        "west": "West"
+      },
+      "roles": "Role assignment",
+      "role": "Role",
+      "roleFor": "Role for {{name}}",
+      "operator": "Operator",
+      "commander": "Commander",
+      "trackBoard": "Track board",
+      "track": "Track",
+      "identity": "Identity",
+      "range": "Range",
+      "bearing": "Bearing",
+      "sectorCol": "Sector",
+      "owner": "Owner",
+      "history": "Reports",
+      "handoverState": "Handover",
+      "state": {
+        "none": "Held",
+        "offered": "Offered",
+        "accepted": "Acknowledged"
+      },
+      "handOver": "Hand over",
+      "handOverNamed": "Hand over {{id}}",
+      "handTo": "Receiving operator for {{id}}",
+      "acknowledge": "Acknowledge",
+      "acknowledgeNamed": "Acknowledge {{id}} from {{name}}",
+      "handoverLog": "Handover log",
+      "from": "From",
+      "to": "To",
+      "latency": "Latency",
+      "member": "Member",
+      "roleScores": "Scores by role",
+      "handoverTime": "Handover time",
+      "part": {
+        "coverage": "Sector coverage",
+        "handover": "Handover quality",
+        "roe": "Rules compliance",
+        "tempo": "Tempo"
+      },
+      "scoreNote": "Team score {{share}} of the available marks."
+    },
+    "rules": {
+      "listTab": "Rule-pack list",
+      "editor": "Rule-pack editor",
+      "list": "Rule packs",
+      "pack": "Rule pack",
+      "rules": "Rules",
+      "author": "Author",
+      "inUse": "Cohorts using it",
+      "weights": "Scoring weights",
+      "sumOk": "Weights add up to {{sum}}.",
+      "sumBad": "Weights add up to {{sum}}; they must add up to 1.",
+      "thresholds": "Time standards (seconds)",
+      "threshold": {
+        "detect_within_s": "Detect within",
+        "classify_within_s": "Classify within",
+        "report_within_s": "Report within",
+        "respond_within_s": "Respond within"
+      },
+      "roe": "Rules of engagement",
+      "ruleId": "Rule",
+      "ruleTitle": "Title",
+      "when": "Applies when",
+      "authority": "Authority",
+      "permits": "Permits",
+      "rule": {
+        "holdCivil": "Hold fire on neutral traffic",
+        "trackUnknown": "Track and assess unknown contacts",
+        "engageHostileInner": "Engage hostile contacts in the inner zone",
+        "designateOuter": "Designate hostile contacts in the outer zone",
+        "restrictedAny": "Restricted zone: commander decision",
+        "suspectReport": "Report suspect contacts"
+      },
+      "diff": "Changes from the previous version",
+      "field": "Field",
+      "save": "Save as a new version",
+      "saved": "Saved as a new version."
+    },
+    "curricula": {
+      "listTab": "Curriculum list",
+      "editor": "Curriculum editor",
+      "list": "Curricula",
+      "cohorts": "Cohorts",
+      "stagesGates": "Stages and gates",
+      "minScore": "Minimum score",
+      "minAccuracy": "Minimum accuracy (%)",
+      "save": "Save curriculum",
+      "saved": "Curriculum saved."
+    },
+    "unit": {
+      "dashboard": "Unit dashboard",
+      "compare": "Compare trainees",
+      "replay": "Annotated replay",
+      "trends": "Cohort trends",
+      "trendAlt": "Line chart of mean score and mean accuracy over four sessions.",
+      "rankings": "Rankings",
+      "skillHeat": "Skill heat map",
+      "mean": "Mean"
+    },
+    "org": {
+      "units": "Units",
+      "unit": "Unit",
+      "location": "Location",
+      "detail": "{{name}}",
+      "users": "Accounts",
+      "cohorts": "Cohorts",
+      "trainees": "Trainees"
+    },
+    "users": {
+      "listTab": "User list",
+      "detail": "User detail",
+      "list": "Users: {{count}}",
+      "name": "Name",
+      "email": "Email address",
+      "role": "Role",
+      "roles": "Role and access",
+      "lastSignIn": "Last sign-in",
+      "status": "Status",
+      "active": "Active",
+      "deactivated": "Deactivated",
+      "account": "Account",
+      "roleSaved": "Role updated.",
+      "statusSaved": "Status updated.",
+      "reset": "Reset access",
+      "resetTitle": "Reset access for {{name}}",
+      "resetBody": "The current password stops working and a new one-time sign-in is issued.",
+      "resetConfirm": "Reset access",
+      "resetDone": "Access reset. A one-time sign-in was issued."
+    },
+    "packs": {
+      "manager": "Pack manager",
+      "kind": "Kind",
+      "terrain": "Terrain packs",
+      "sensor": "Sensor profiles",
+      "scenario": "Scenario packs",
+      "rule": "Rule packs",
+      "import": "Import pack",
+      "export": "Export packs",
+      "importDone": "Pack imported.",
+      "exportDone": "Packs exported.",
+      "list": "Packs: {{count}}",
+      "name": "Name",
+      "entries": "Entries",
+      "size": "Size",
+      "licence": "Licence"
+    },
+    "register": {
+      "sources": "Sources",
+      "provenance": "Parameter provenance",
+      "dataset": "Dataset",
+      "modality": "Modality",
+      "use": "Used for",
+      "shipped": "Shipped with the platform",
+      "calibrationOnly": "Calibration only",
+      "parameters": "Parameters",
+      "detail": "Source {{id}}",
+      "parameter": "Parameter",
+      "source": "Source",
+      "checked": "Check",
+      "verified": "Verified",
+      "toCheck": "To verify"
+    },
+    "audit": {
+      "tab": "Audit log",
+      "log": "Audit log: {{count}} entries",
+      "action": "Action",
+      "actor": "Actor",
+      "target": "Target",
+      "result": "Result",
+      "hash": "Chain hash",
+      "ok": "Permitted",
+      "denied": "Denied",
+      "intact": "Integrity: chain intact",
+      "broken": "Integrity: chain broken"
+    },
+    "verify": {
+      "tab": "Record verification",
+      "record": "Record",
+      "session": "Session record",
+      "events": "Events in chain",
+      "head": "Chain head",
+      "key": "Signing key",
+      "algorithm": "Signature algorithm",
+      "checkChain": "Check chain",
+      "checkSignature": "Check signature",
+      "results": "Results",
+      "chain": "Chain check",
+      "signature": "Signature check",
+      "notRun": "Not run yet.",
+      "chainOk": "All {{count}} links verify.",
+      "chainBroken": "Link {{seq}} does not verify.",
+      "signatureOk": "The signature matches the chain head."
+    },
+    "health": {
+      "services": "Services",
+      "performance": "Performance",
+      "storage": "Storage",
+      "service": "Service",
+      "running": "Running",
+      "uptime": "Uptime",
+      "latency": "Latency",
+      "name": {
+        "proxy": "Reverse proxy",
+        "web": "Web server",
+        "api": "API",
+        "sim": "Simulation runtime",
+        "db": "Database"
+      },
+      "tick": "Simulation tick time",
+      "tickAlt": "Line chart of the simulation tick time over the last hour.",
+      "minutesAgo": "Minutes ago",
+      "load": "Load",
+      "tickP50": "Tick time, median",
+      "tickP95": "Tick time, 95th percentile",
+      "tickBudget": "Tick budget",
+      "clients": "Connected clients",
+      "memory": "API memory",
+      "store": {
+        "database": "Database",
+        "packs": "Packs",
+        "records": "Session records",
+        "backups": "Backups"
+      }
+    },
+    "settings": {
+      "instance": "Instance settings",
+      "mode": "Mode",
+      "production": "Production",
+      "demoAccounts": "Demo accounts",
+      "blocked": "Blocked",
+      "firstAdmin": "First administrator",
+      "fromEnv": "From environment variables",
+      "signing": "Signing key",
+      "defaults": "Defaults",
+      "defaultLanguage": "Default language",
+      "retention": "Record retention",
+      "days": "Days",
+      "sessionLength": "Sign-in length",
+      "minutes": "Minutes",
+      "save": "Save settings",
+      "saved": "Settings saved."
+    },
+    "backup": {
+      "tab": "Backup and restore",
+      "run": "Run backup now",
+      "created": "Backup created and verified.",
+      "list": "Backups",
+      "kind": "Kind",
+      "full": "Full",
+      "incremental": "Incremental",
+      "restore": "Restore",
+      "restoreNamed": "Restore the backup from {{when}}",
+      "restoreTitle": "Restore this backup",
+      "restoreBody": "The current database and records are replaced by the backup. Sessions in progress end first.",
+      "restoreConfirm": "Restore backup",
+      "restored": "Backup restored."
     }
   }
 }

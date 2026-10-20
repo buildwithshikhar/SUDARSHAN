@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { PageHeader } from '../layout/PageHeader'
 import { useAuth } from '../lib/auth'
 import { EmptyState, ErrorState } from '../ui/States'
-import { Badge } from '../ui/Badge'
 
 export function NotFound() {
   const { t } = useTranslation()
@@ -60,28 +59,5 @@ export function Offline({ onRetry }: { onRetry?: () => void }) {
         }}
       />
     </div>
-  )
-}
-
-/** A module that exists in the UI map but is delivered by a later wave. */
-export function ModulePlaceholder({
-  slug,
-  groupId,
-  wave,
-}: {
-  slug: string
-  groupId: string
-  wave: string
-}) {
-  const { t } = useTranslation()
-  return (
-    <>
-      <PageHeader
-        title={t(`nav.module.${slug}`)}
-        crumbs={[t(`nav.group.${groupId}`), t(`nav.module.${slug}`)]}
-        actions={<Badge>{t('page.wave', { wave })}</Badge>}
-      />
-      <EmptyState title={t('module.arrives', { wave })} description={t('module.body')} />
-    </>
   )
 }

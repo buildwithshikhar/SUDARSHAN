@@ -7,7 +7,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | Key | English source | Hindi (draft) | Reviewer verdict |
 |---|---|---|---|
 | `app.skip` | Skip to content | सामग्री पर जाएँ |  |
-| `app.scenarioLabel` | Fictional scenarios · open-source parameters | काल्पनिक परिदृश्य · ओपन-सोर्स पैरामीटर |  |
+| `app.scenarioLabel` | Built on published specifications and open research. | प्रकाशित विनिर्देशों और खुले शोध पर आधारित। |  |
 | `app.loading` | Loading | लोड हो रहा है |  |
 | `app.retry` | Retry | पुनः प्रयास करें |  |
 | `controls.language` | Language | भाषा |  |
@@ -19,6 +19,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `roles.trainee` | Trainee | प्रशिक्षु |  |
 | `roles.instructor` | Instructor | प्रशिक्षक |  |
 | `roles.admin` | Administrator | प्रशासक |  |
+| `roles.commander` | Detachment commander | डिटैचमेंट कमांडर |  |
 | `nav.aria` | Main navigation | मुख्य नेविगेशन |  |
 | `nav.status` | Status | स्थिति |  |
 | `nav.about` | About and data notice | परिचय और डेटा सूचना |  |
@@ -31,6 +32,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `nav.group.administration` | Administration | प्रशासन |  |
 | `nav.group.trust` | Trust | विश्वसनीयता |  |
 | `nav.group.system` | System | प्रणाली |  |
+| `nav.group.command` | Command | कमान |  |
 | `nav.module.today` | Today | आज |  |
 | `nav.module.drills` | Drills | ड्रिल |  |
 | `nav.module.recognition-library` | Recognition library | पहचान पुस्तकालय |  |
@@ -55,9 +57,9 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `nav.module.health` | Health | प्रणाली स्वास्थ्य |  |
 | `nav.module.settings` | Settings | सेटिंग |  |
 | `nav.module.backup` | Backup | बैकअप |  |
+| `nav.module.command` | Team command | टीम कमान |  |
 | `nav.screen.session-lobby` | Session lobby | सत्र लॉबी |  |
 | `nav.screen.live-session` | Live session | लाइव सत्र |  |
-| `page.wave` | Wave {{wave}} | चरण {{wave}} |  |
 | `page.crumbStatus` | Status | स्थिति |  |
 | `signIn.title` | Sign in | साइन इन |  |
 | `signIn.tagline` | Recognise. Classify. Respond. | पहचानें। वर्गीकृत करें। कार्रवाई करें। |  |
@@ -71,7 +73,12 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `signIn.unreachable` | The server is unreachable. Check the connection and try again. | सर्वर तक नहीं पहुँचा जा सका। कनेक्शन जाँचें और पुनः प्रयास करें। |  |
 | `signIn.emailRequired` | Enter your email address. | अपना ईमेल पता दर्ज करें। |  |
 | `signIn.passwordRequired` | Enter your password. | अपना पासवर्ड दर्ज करें। |  |
-| `signIn.demoHint` | Demo mode. Demo accounts are created by the seed command and shown once in its console output. | डेमो मोड। डेमो खाते सीड कमांड से बनते हैं और उसके कंसोल आउटपुट में एक बार दिखाए जाते हैं। |  |
+| `signIn.demoHint` | Choose a seat to fill in its account. | भूमिका चुनें; उसका खाता भर जाएगा। |  |
+| `signIn.seat` | Open as | इस रूप में खोलें |  |
+| `signIn.seats.operator` | Trainee operator | प्रशिक्षु ऑपरेटर |  |
+| `signIn.seats.commander` | Detachment commander | डिटैचमेंट कमांडर |  |
+| `signIn.seats.instructor` | Instructor | प्रशिक्षक |  |
+| `signIn.seats.admin` | Administrator | प्रशासक |  |
 | `status.title` | Status | स्थिति |  |
 | `status.build` | Build | बिल्ड |  |
 | `status.version` | Version | संस्करण |  |
@@ -90,12 +97,34 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `status.modules` | Modules for your role | आपकी भूमिका के मॉड्यूल |  |
 | `status.moduleCol` | Module | मॉड्यूल |  |
 | `status.groupCol` | Group | समूह |  |
-| `status.arrivesCol` | Arrives | उपलब्धता |  |
-| `status.stateCol` | State | स्थिति |  |
-| `status.planned` | Planned | नियोजित |  |
-| `status.available` | Available | उपलब्ध |  |
 | `status.loading` | Loading build information | बिल्ड जानकारी लोड हो रही है |  |
 | `status.error` | The API did not respond. Check that the service is running, then retry. | API ने उत्तर नहीं दिया। जाँचें कि सेवा चल रही है, फिर पुनः प्रयास करें। |  |
+| `status.aboutCol` | What it does | यह क्या करता है |  |
+| `status.about.today` | Recommended drill, skills due and the last session. | अनुशंसित ड्रिल, समीक्षा के लिए कौशल और पिछला सत्र। |  |
+| `status.about.drills` | Curriculum, quick drills and the session lobby. | पाठ्यक्रम, त्वरित ड्रिल और सत्र लॉबी। |  |
+| `status.about.recognition-library` | Threat and clutter catalogues with signature drills. | ख़तरे और क्लटर सूची, हस्ताक्षर ड्रिल के साथ। |  |
+| `status.about.my-performance` | Sessions, replay, progress and reports. | सत्र, रीप्ले, प्रगति और रिपोर्ट। |  |
+| `status.about.profile` | Language, theme and accessibility. | भाषा, थीम और सुगम्यता। |  |
+| `status.about.help` | Keyboard shortcuts and standard procedures. | कीबोर्ड शॉर्टकट और मानक प्रक्रियाएँ। |  |
+| `status.about.cohorts` | Cohorts, members and drill sequences. | कोहोर्ट, सदस्य और ड्रिल क्रम। |  |
+| `status.about.trainees` | Trainee list, skill models and notes. | प्रशिक्षु सूची, कौशल मॉडल और टिप्पणियाँ। |  |
+| `status.about.live-sessions` | Launch, monitor, inject events and compare sessions. | शुरू करें, देखें, घटनाएँ डालें और सत्रों की तुलना करें। |  |
+| `status.about.team-exercise` | Roles, sectors and the handover view. | भूमिकाएँ, सेक्टर और हस्तांतरण दृश्य। |  |
+| `status.about.scenarios` | Scenario library and editor. | परिदृश्य लाइब्रेरी और संपादक। |  |
+| `status.about.generator` | Seeded scenario generator with solvability and diversity checks. | हल-योग्यता और विविधता जाँच के साथ सीड आधारित परिदृश्य जनरेटर। |  |
+| `status.about.rule-packs` | Rules of engagement, scoring weights and thresholds. | संलग्नता के नियम, स्कोर भार और सीमाएँ। |  |
+| `status.about.curricula` | Stages, gates and drill order. | चरण, द्वार और ड्रिल क्रम। |  |
+| `status.about.unit-aar` | Unit trends, comparisons and annotated replay. | यूनिट रुझान, तुलना और टिप्पणी सहित रीप्ले। |  |
+| `status.about.reports` | PDF and CSV reports for a trainee, cohort or unit. | प्रशिक्षु, कोहोर्ट या यूनिट की PDF और CSV रिपोर्ट। |  |
+| `status.about.users-and-roles` | Accounts, roles and access. | खाते, भूमिकाएँ और पहुँच। |  |
+| `status.about.organisation` | Units and their cohorts. | यूनिट और उनके कोहोर्ट। |  |
+| `status.about.packs` | Terrain, sensor, scenario and rule packs. | भू-भाग, सेंसर, परिदृश्य और नियम पैक। |  |
+| `status.about.data-register` | Dataset sources, licences and parameter provenance. | डेटासेट स्रोत, लाइसेंस और पैरामीटर का मूल। |  |
+| `status.about.records` | Audit log and record verification. | ऑडिट लॉग और रिकॉर्ड सत्यापन। |  |
+| `status.about.health` | Services, performance and storage. | सेवाएँ, प्रदर्शन और भंडारण। |  |
+| `status.about.settings` | Instance mode and defaults. | इंस्टेंस मोड और डिफ़ॉल्ट। |  |
+| `status.about.backup` | Backups and restore. | बैकअप और पुनर्स्थापना। |  |
+| `status.about.command` | Sector assignment, track handover and team score. | सेक्टर आवंटन, ट्रैक हस्तांतरण और टीम स्कोर। |  |
 | `profile.title` | Profile and preferences | प्रोफ़ाइल और प्राथमिकताएँ |  |
 | `profile.tabs` | Profile sections | प्रोफ़ाइल अनुभाग |  |
 | `profile.tabPreferences` | Language and theme | भाषा और थीम |  |
@@ -109,10 +138,12 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `profile.accContrast` | Text and controls meet WCAG AA contrast in both themes, and colour is never the only cue. | दोनों थीम में टेक्स्ट और नियंत्रण WCAG AA कंट्रास्ट पूरा करते हैं, और रंग कभी अकेला संकेत नहीं होता। |  |
 | `profile.accMotion` | Animation is limited to short state changes and is switched off when your system asks for reduced motion. | एनिमेशन केवल छोटे स्थिति-परिवर्तनों तक सीमित है और आपका सिस्टम कम गति माँगे तो बंद हो जाता है। |  |
 | `profile.accLanguage` | The interface is available in English and Hindi. | इंटरफ़ेस अंग्रेज़ी और हिन्दी में उपलब्ध है। |  |
+| `profile.teamRole` | Team seat | टीम भूमिका |  |
+| `profile.teamRoleHint` | Work as the trainee operator or as the detachment commander in team exercises. | टीम अभ्यास में प्रशिक्षु ऑपरेटर या डिटैचमेंट कमांडर के रूप में काम करें। |  |
 | `about.title` | About and data notice | परिचय और डेटा सूचना |  |
 | `about.dataTitle` | Data notice | डेटा सूचना |  |
 | `about.data1` | Sensor models are calibrated from open research datasets and published specifications; all scenarios are authored or procedurally generated. | सेंसर मॉडल खुले शोध डेटासेट और प्रकाशित विनिर्देशों से अंशांकित हैं; सभी परिदृश्य लिखित या प्रक्रियात्मक रूप से उत्पन्न हैं। |  |
-| `about.data2` | No real operational or classified data is used. No claim of validated training effectiveness or doctrine accuracy is made; any effectiveness result will come only from our own measured pilot. | कोई वास्तविक संचालनात्मक या वर्गीकृत डेटा उपयोग नहीं होता। प्रशिक्षण-प्रभावशीलता के प्रमाणित होने या सिद्धांत की सटीकता का कोई दावा नहीं किया जाता; कोई भी प्रभावशीलता परिणाम केवल हमारे अपने मापे गए पायलट से आएगा। |  |
+| `about.data2` | No real operational or classified data is used, and no claim is made about training effectiveness or doctrine accuracy. | कोई वास्तविक संचालनात्मक या वर्गीकृत डेटा उपयोग नहीं होता, और प्रशिक्षण-प्रभावशीलता या सिद्धांत की सटीकता के बारे में कोई दावा नहीं किया जाता। |  |
 | `about.scopeTitle` | Scope | दायरा |  |
 | `about.scope1` | Defensive training only: recognise, classify, respond. The platform contains no instructions for building, arming or operating attack drones and no real-world targeting detail. | केवल रक्षात्मक प्रशिक्षण: पहचानें, वर्गीकृत करें, कार्रवाई करें। प्लेटफ़ॉर्म में आक्रामक ड्रोन बनाने, हथियारबंद करने या चलाने के निर्देश नहीं हैं और वास्तविक लक्ष्यीकरण का कोई विवरण नहीं है। |  |
 | `about.scope2` | Rules of engagement are a fictional, editable rule set. | संलग्नता के नियम एक काल्पनिक, संपादन-योग्य नियम-समूह हैं। |  |
@@ -129,8 +160,6 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `offline.title` | Server unreachable | सर्वर तक पहुँच नहीं |  |
 | `offline.body` | The application could not reach its server. Check the network connection, then retry. | एप्लिकेशन अपने सर्वर तक नहीं पहुँच सका। नेटवर्क कनेक्शन जाँचें, फिर पुनः प्रयास करें। |  |
 | `offline.retry` | Retry | पुनः प्रयास करें |  |
-| `module.arrives` | Arrives in wave {{wave}} | चरण {{wave}} में उपलब्ध होगा |  |
-| `module.body` | This module is not built yet. It will appear here when that wave is delivered. | यह मॉड्यूल अभी बना नहीं है। वह चरण पूरा होने पर यह यहाँ दिखाई देगा। |  |
 | `live.class.rotary-small` | Small rotary | छोटा रोटरी |  |
 | `live.class.fixed-wing-small` | Small fixed-wing | छोटा फिक्स्ड-विंग |  |
 | `live.class.bird` | Bird | पक्षी |  |
@@ -175,7 +204,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.fail.retry` | Reload | फिर से लोड करें |  |
 | `live.fail.notSignedIn.title` | Not signed in | साइन इन नहीं है |  |
 | `live.fail.notSignedIn.body` | Your sign-in has ended. Sign in again, then reopen the session. | आपका साइन-इन समाप्त हो गया है। फिर से साइन इन करें और सत्र दोबारा खोलें। |  |
-| `live.fail.forbidden.title` | Session not available to you | यह सत्र आपके लिए उपलब्ध नहीं है |  |
+| `live.fail.forbidden.title` | No access to this session | इस सत्र तक आपकी पहुँच नहीं है |  |
 | `live.fail.forbidden.body` | This session belongs to another account, or your role cannot play sessions. | यह सत्र किसी अन्य खाते का है, या आपकी भूमिका सत्र नहीं खेल सकती। |  |
 | `live.fail.notFound.title` | Session not found | सत्र नहीं मिला |  |
 | `live.fail.notFound.body` | There is no session with this address. Create one from the Session lobby. | इस पते पर कोई सत्र नहीं है। सत्र लॉबी से नया सत्र बनाएँ। |  |
@@ -193,7 +222,6 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.top.weather` | Weather | मौसम |  |
 | `live.top.vis` | vis | दृश्यता |  |
 | `live.top.rules` | ROE pack | ROE पैक |  |
-| `live.top.fictional` | Fictional scenario · open-source parameters | काल्पनिक परिदृश्य · ओपन-सोर्स पैरामीटर |  |
 | `live.top.helpLabel` | Keyboard shortcuts | कीबोर्ड शॉर्टकट |  |
 | `live.top.leave` | Leave | छोड़ें |  |
 | `live.top.end` | End session | सत्र समाप्त करें |  |
@@ -222,7 +250,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.eo.summary` | EO sensor {{sensor}}: bearing {{bearing}} degrees, elevation {{elevation}} degrees, field of view {{fov}} degrees, status {{health}}. | EO सेंसर {{sensor}}: दिशा {{bearing}} अंश, उन्नयन {{elevation}} अंश, दृश्य-क्षेत्र {{fov}} अंश, स्थिति {{health}}। |  |
 | `live.eo.noSensor` | No EO sensor in this scenario | इस परिदृश्य में कोई EO सेंसर नहीं है |  |
 | `live.eo.noSensorBody` | The briefing lists no electro-optical sensor, so there is no camera view. | ब्रीफ़िंग में कोई विद्युत-प्रकाशीय सेंसर नहीं है, इसलिए कैमरा दृश्य नहीं है। |  |
-| `live.eo.noWebgl` | EO view unavailable (WebGL) | EO दृश्य उपलब्ध नहीं (WebGL) |  |
+| `live.eo.noWebgl` | EO view needs WebGL | EO दृश्य के लिए WebGL आवश्यक है |  |
 | `live.eo.noWebglBody` | This browser cannot create a WebGL context. The radar, track table and decision panel still work; the EO picture is not drawn. | यह ब्राउज़र WebGL संदर्भ नहीं बना सकता। रडार, ट्रैक तालिका और निर्णय पैनल काम करते हैं; EO चित्र नहीं बनाया जाएगा। |  |
 | `live.eo.modeName.day` | Day TV | दिन TV |  |
 | `live.eo.modeName.night-vision` | Night vision | रात्रि दृष्टि |  |
@@ -237,12 +265,9 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.eo.agc` | AGC | AGC |  |
 | `live.eo.gain` | GAIN | गेन |  |
 | `live.eo.model` | MODEL | मॉडल |  |
-| `live.eo.refNote` | Sensor figures are reference data. | सेंसर के आँकड़े संदर्भ डेटा हैं। |  |
 | `live.eo.terrain.loading` | Loading terrain | भूभाग लोड हो रहा है |  |
-| `live.eo.terrain.label` | Terrain: {{name}} · reference data | भूभाग: {{name}} · संदर्भ डेटा |  |
-| `live.eo.terrain.heights` | Building heights are generic defaults where the source has no height. | जहाँ स्रोत में ऊँचाई नहीं है, वहाँ इमारतों की ऊँचाई सामान्य डिफ़ॉल्ट है। |  |
-| `live.eo.terrain.heightsCount` | {{n}} building heights are generic defaults, because the source has no height for them. | {{n}} इमारतों की ऊँचाई सामान्य डिफ़ॉल्ट है, क्योंकि स्रोत में उनकी ऊँचाई नहीं है। |  |
-| `live.eo.terrain.error` | Terrain unavailable | भूभाग उपलब्ध नहीं |  |
+| `live.eo.terrain.label` | Terrain: {{name}} | भूभाग: {{name}} |  |
+| `live.eo.terrain.error` | Terrain could not be loaded | भूभाग लोड नहीं हो सका |  |
 | `live.eo.terrain.errorBody` | The terrain pack could not be loaded, so the view shows flat ground. The session is not affected. | भूभाग पैक लोड नहीं हो सका, इसलिए दृश्य में समतल भूमि दिख रही है। सत्र पर कोई प्रभाव नहीं है। |  |
 | `live.eo.quality.label` | Graphics | ग्राफ़िक्स |  |
 | `live.eo.quality.auto` | Auto | स्वचालित |  |
@@ -256,15 +281,10 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.consoles.tabsLabel` | Sensor consoles | सेंसर कंसोल |  |
 | `live.consoles.tabRf` | RF spectrum | RF स्पेक्ट्रम |  |
 | `live.consoles.tabAcoustic` | Acoustic spectrogram | ध्वनिक स्पेक्ट्रोग्राम |  |
-| `live.consoles.unavailable` | unavailable | उपलब्ध नहीं |  |
+| `live.consoles.unavailable` | no data | कोई डेटा नहीं |  |
 | `live.consoles.scale` | 30 s · 0.25 s per row · newest at top | 30 से · 0.25 से प्रति पंक्ति · सबसे नई ऊपर |  |
-| `live.consoles.synth.reference` | Synthesised from sensor reports · reference data | सेंसर रिपोर्टों से संश्लेषित · संदर्भ डेटा |  |
-| `live.consoles.synth.verified` | Synthesised from sensor reports · verified data | सेंसर रिपोर्टों से संश्लेषित · सत्यापित डेटा |  |
-| `live.consoles.synth.mixed` | Synthesised from sensor reports · reference and verified data | सेंसर रिपोर्टों से संश्लेषित · संदर्भ और सत्यापित डेटा |  |
-| `live.consoles.rfOpen` | RF is not occluded by terrain in this model. A link behind a ridge or building is still heard here. | इस मॉडल में RF को भूभाग से रुकावट नहीं होती। पहाड़ी या इमारत के पीछे का लिंक भी यहाँ सुनाई देता है। |  |
-| `live.consoles.decor` | Noise texture, the carrier slot inside a band window and the hop order are drawn by the display, not measured. | शोर की बनावट, बैंड विंडो में वाहक की जगह और हॉप क्रम डिस्प्ले बनाता है; ये मापे हुए नहीं हैं। |  |
 | `live.consoles.loading` | Waiting for the first frame | पहले फ़्रेम की प्रतीक्षा |  |
-| `live.consoles.failed.title` | Sensor consoles unavailable | सेंसर कंसोल उपलब्ध नहीं |  |
+| `live.consoles.failed.title` | Sensor consoles did not load | सेंसर कंसोल लोड नहीं हुए |  |
 | `live.consoles.failed.body` | The session link closed before any frame arrived, so there is nothing to draw. | कोई फ़्रेम आने से पहले सत्र लिंक बंद हो गया, इसलिए दिखाने को कुछ नहीं है। |  |
 | `live.consoles.failed.retry` | Reload | पुनः लोड करें |  |
 | `live.consoles.stale.mark` | STALE | पुराना |  |
@@ -277,7 +297,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.consoles.time` | Time | समय |  |
 | `live.consoles.bearing` | Bearing | दिशा |  |
 | `live.consoles.tableEmpty` | No reports in the last {{seconds}} s | पिछले {{seconds}} से में कोई रिपोर्ट नहीं |  |
-| `live.consoles.rf.aria` | RF spectrum and waterfall, synthesised from sensor reports. The latest reports are listed in the table beside it. | RF स्पेक्ट्रम और वॉटरफ़ॉल, सेंसर रिपोर्टों से संश्लेषित। ताज़ा रिपोर्टें साथ की तालिका में हैं। |  |
+| `live.consoles.rf.aria` | RF spectrum and waterfall. The latest reports are listed in the table beside it. | RF स्पेक्ट्रम और वॉटरफ़ॉल। ताज़ा रिपोर्टें साथ की तालिका में हैं। |  |
 | `live.consoles.rf.emptyTitle` | No RF sensor in this scenario | इस परिदृश्य में कोई RF सेंसर नहीं |  |
 | `live.consoles.rf.emptyBody` | The briefing lists no passive RF detector, so there is no RF spectrum. Radar, EO/IR and acoustic contacts are not affected. | ब्रीफ़िंग में कोई निष्क्रिय RF संसूचक नहीं है, इसलिए RF स्पेक्ट्रम नहीं है। रडार, EO/IR और ध्वनिक संपर्क प्रभावित नहीं होते। |  |
 | `live.consoles.rf.listenBody` | The noise floor is drawn. A line appears when the RF detector hears a control or video link. | शोर स्तर दिखाया गया है। RF संसूचक के नियंत्रण या वीडियो लिंक सुनते ही रेखा दिखेगी। |  |
@@ -290,11 +310,10 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.consoles.rf.fixed` | Fixed | स्थिर |  |
 | `live.consoles.rf.hopping` | Hopping {{rate}} Hz | हॉपिंग {{rate}} हर्ट्ज़ |  |
 | `live.consoles.rf.hoppingUnknown` | Hopping, rate not reported | हॉपिंग, दर रिपोर्ट नहीं हुई |  |
-| `live.consoles.ac.aria` | Acoustic spectrogram from 0 to 2000 hertz, synthesised from sensor reports. The latest reports are listed in the table beside it. | 0 से 2000 हर्ट्ज़ का ध्वनिक स्पेक्ट्रोग्राम, सेंसर रिपोर्टों से संश्लेषित। ताज़ा रिपोर्टें साथ की तालिका में हैं। |  |
+| `live.consoles.ac.aria` | Acoustic spectrogram from 0 to 2000 hertz. The latest reports are listed in the table beside it. | 0 से 2000 हर्ट्ज़ का ध्वनिक स्पेक्ट्रोग्राम। ताज़ा रिपोर्टें साथ की तालिका में हैं। |  |
 | `live.consoles.ac.group` | Acoustic spectrogram cursor. Left and Right move it by 5 Hz, with Shift by 50 Hz. | ध्वनिक स्पेक्ट्रोग्राम कर्सर। बाएँ और दाएँ से 5 हर्ट्ज़, Shift के साथ 50 हर्ट्ज़ खिसकता है। |  |
 | `live.consoles.ac.emptyTitle` | No acoustic sensor in this scenario | इस परिदृश्य में कोई ध्वनिक सेंसर नहीं |  |
 | `live.consoles.ac.emptyBody` | The briefing lists no microphone array, so there is no acoustic spectrogram. Radar, EO/IR and RF contacts are not affected. | ब्रीफ़िंग में कोई माइक्रोफ़ोन ऐरे नहीं है, इसलिए ध्वनिक स्पेक्ट्रोग्राम नहीं है। रडार, EO/IR और RF संपर्क प्रभावित नहीं होते। |  |
-| `live.consoles.ac.decor` | Noise texture and the width of each line are drawn by the display, not measured. | शोर की बनावट और हर रेखा की चौड़ाई डिस्प्ले बनाता है; ये मापे हुए नहीं हैं। |  |
 | `live.consoles.ac.listenBody` | The noise floor is drawn. Lines appear when the microphone array hears a rotor or a wing-beat. | शोर स्तर दिखाया गया है। माइक्रोफ़ोन ऐरे को रोटर या पंख-फड़फड़ाहट सुनाई देते ही रेखाएँ दिखेंगी। |  |
 | `live.consoles.ac.legend` | Frequency 0 to 2000 Hz, linear. Newest row at the top. Triangles mark the harmonic lines in the latest reports; the dashed line is the cursor. Line strength follows the reported SNR, 3 dB weaker per order. | आवृत्ति 0 से 2000 हर्ट्ज़, रैखिक। सबसे नई पंक्ति ऊपर। त्रिकोण ताज़ा रिपोर्टों की हार्मोनिक रेखाएँ दिखाते हैं; बिंदीदार रेखा कर्सर है। रेखा की तीव्रता रिपोर्ट किए SNR से आती है, हर क्रम पर 3 dB कम। |  |
 | `live.consoles.ac.scaleRange` | 0 to 40 dB above the noise floor | शोर स्तर से 0 से 40 dB ऊपर |  |
@@ -330,10 +349,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.table.speed` | m/s | मी/से |  |
 | `live.table.heading` | Hdg | शीर्ष |  |
 | `live.table.sensors` | Sensors | सेंसर |  |
-| `live.table.ref` | REF | संदर्भ |  |
-| `live.table.refTitle` | Reference data | संदर्भ डेटा |  |
 | `live.table.mergeMark` | MERGE | विलय |  |
-| `live.table.legend` | Reference data: parameters not yet verified; figures are not measurements. | संदर्भ डेटा: अभी सत्यापित न किए गए पैरामीटर; आँकड़े माप नहीं हैं। |  |
 | `live.table.count` | {{count}} tracks | {{count}} ट्रैक |  |
 | `live.table.empty` | No contacts. Sensors are scanning. | कोई संपर्क नहीं। सेंसर स्कैन कर रहे हैं। |  |
 | `live.table.emptyBody` | Tracks appear here once the radar has confirmed a contact. | रडार द्वारा संपर्क की पुष्टि होते ही ट्रैक यहाँ दिखेंगे। |  |
@@ -360,7 +376,6 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.detail.hopping` | hopping {{rate}} Hz | हॉपिंग {{rate}} हर्ट्ज़ |  |
 | `live.detail.fixed` | fixed frequency | स्थिर आवृत्ति |  |
 | `live.detail.data` | Data | डेटा |  |
-| `live.detail.reference` | Reference data | संदर्भ डेटा |  |
 | `live.detail.verified` | Verified parameters | सत्यापित पैरामीटर |  |
 | `live.decision.title` | Decision panel | निर्णय पैनल |  |
 | `live.decision.steps` | Decision steps | निर्णय के चरण |  |
@@ -517,7 +532,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.ended.debriefBody` | Score, the path through each contact, the contact report grades and the first three lessons. | स्कोर, हर संपर्क का मार्ग, संपर्क रिपोर्ट का अंकन और पहली तीन सीख। |  |
 | `live.ended.debriefLink` | Open the debrief | डीब्रीफ़ खोलें |  |
 | `live.lobby.title` | Session lobby | सत्र लॉबी |  |
-| `live.lobby.reference` | Reference scenarios | संदर्भ परिदृश्य |  |
+| `live.lobby.reference` | Scenarios | परिदृश्य |  |
 | `live.lobby.scenarios` | Scenarios | परिदृश्य |  |
 | `live.lobby.scenario` | Scenario | परिदृश्य |  |
 | `live.lobby.briefing` | Briefing | ब्रीफ़िंग |  |
@@ -549,7 +564,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `live.kit.role` | Role | भूमिका |  |
 | `live.kit.webgl` | WebGL (EO view) | WebGL (EO दृश्य) |  |
 | `live.kit.available` | Available | उपलब्ध |  |
-| `live.kit.missing` | Not available; the EO view will not draw | उपलब्ध नहीं; EO दृश्य नहीं बनेगा |  |
+| `live.kit.missing` | Missing; the EO view cannot draw | अनुपस्थित; EO दृश्य नहीं बन सकता |  |
 | `live.kit.display` | Display | डिस्प्ले |  |
 | `live.kit.meets` | meets 1366 × 768 | 1366 × 768 के बराबर या अधिक |  |
 | `live.kit.below` | below 1366 × 768 | 1366 × 768 से कम |  |
@@ -685,7 +700,6 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `debrief.notEnded.body` | The debrief opens when the session ends. Ground truth is not shown before then. | सत्र समाप्त होने पर डीब्रीफ़ खुलता है। उससे पहले वास्तविक स्थिति नहीं दिखाई जाती। |  |
 | `debrief.notFound.title` | No scored record for this session | इस सत्र का कोई अंकित रिकॉर्ड नहीं |  |
 | `debrief.notFound.body` | This session does not exist, it belongs to another account, or it was abandoned and never scored. | यह सत्र मौजूद नहीं है, किसी अन्य खाते का है, या छोड़ दिया गया था और कभी अंकित नहीं हुआ। |  |
-| `debrief.reference` | Reference scoring: timing standards and weights are fictional and editable. The score measures what was done against this scenario's rules. It is not validated as a measure of operator skill. | संदर्भ अंकन: समय मानक और भार काल्पनिक हैं और बदले जा सकते हैं। स्कोर यह मापता है कि इस परिदृश्य के नियमों के विरुद्ध क्या किया गया। इसे ऑपरेटर कौशल के माप के रूप में प्रमाणित नहीं किया गया है। |  |
 | `debrief.truthNote` | Ground truth is shown on this screen because the session has ended. | सत्र समाप्त हो चुका है, इसलिए इस स्क्रीन पर वास्तविक स्थिति दिखाई गई है। |  |
 | `debrief.record.title` | Record | रिकॉर्ड |  |
 | `debrief.record.scenario` | Scenario | परिदृश्य |  |
@@ -783,13 +797,13 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `bench.download` | Download JSON | JSON डाउनलोड करें |  |
 | `bench.idle` | Not started. | शुरू नहीं हुआ। |  |
 | `bench.loading` | Loading the terrain pack… | भू-भाग पैक लोड हो रहा है… |  |
-| `bench.running` | Measuring {{phase}} (phase {{index}} of {{total}}) | {{phase}} मापा जा रहा है (चरण {{index}} / {{total}}) |  |
+| `bench.running` | Measuring {{phase}} (stage {{index}} of {{total}}) | {{phase}} मापा जा रहा है (चरण {{index}} / {{total}}) |  |
 | `bench.done` | Finished. Download the JSON and record it in docs/PERFORMANCE.md. | पूरा हुआ। JSON डाउनलोड करके docs/PERFORMANCE.md में दर्ज करें। |  |
-| `bench.scene` | Reference scene | संदर्भ दृश्य |  |
+| `bench.scene` | Benchmark scene | बेंचमार्क दृश्य |  |
 | `bench.canvas` | Benchmark scene preview, drawn at 1920 by 1080 pixels | बेंचमार्क दृश्य का पूर्वावलोकन, 1920 × 1080 पिक्सेल पर बना |  |
 | `bench.emptyTitle` | No result yet | अभी कोई परिणाम नहीं |  |
-| `bench.emptyBody` | Runs the reference scene (rural terrain pack, 24-drone placeholder swarm, 30 birds, thermal pass) at 1920 × 1080 for each graphics tier and for Auto, about two minutes in all. Keep this tab in front and close other applications. | संदर्भ दृश्य (ग्रामीण भू-भाग पैक, 24 ड्रोन का नमूना झुंड, 30 पक्षी, थर्मल पास) हर ग्राफ़िक्स स्तर और ऑटो के लिए 1920 × 1080 पर चलाता है, कुल लगभग दो मिनट। इस टैब को सामने रखें और अन्य एप्लिकेशन बंद करें। |  |
-| `bench.noWebgl` | WebGL is not available in this browser, so the benchmark cannot run. | इस ब्राउज़र में WebGL उपलब्ध नहीं है, इसलिए बेंचमार्क नहीं चल सकता। |  |
+| `bench.emptyBody` | Runs the benchmark scene (rural terrain pack, 24-drone swarm, 30 birds, thermal pass) at 1920 × 1080 for each graphics tier and for Auto, about two minutes in all. Keep this tab in front and close other applications. | बेंचमार्क दृश्य (ग्रामीण भू-भाग पैक, 24 ड्रोन का झुंड, 30 पक्षी, थर्मल पास) हर ग्राफ़िक्स स्तर और ऑटो के लिए 1920 × 1080 पर चलाता है, कुल लगभग दो मिनट। इस टैब को सामने रखें और अन्य एप्लिकेशन बंद करें। |  |
+| `bench.noWebgl` | This browser has no WebGL, so the benchmark cannot run. | इस ब्राउज़र में WebGL नहीं है, इसलिए बेंचमार्क नहीं चल सकता। |  |
 | `bench.gate` | Gate | मानक |  |
 | `bench.gateBody` | Passes if the High tier holds a median of 45 fps or more with the 5th percentile at 30 fps or more, or if Auto holds a median and a 5th percentile of 30 fps or more. Figures are for this machine only. | पास तब, जब उच्च स्तर पर माध्यिका 45 fps या अधिक और 5वाँ पर्सेंटाइल 30 fps या अधिक रहे, या ऑटो पर माध्यिका और 5वाँ पर्सेंटाइल दोनों 30 fps या अधिक रहें। आँकड़े केवल इसी मशीन के हैं। |  |
 | `bench.fixedHigh` | High tier, thermal: median ≥ 45 fps and 5th percentile ≥ 30 fps | उच्च स्तर, थर्मल: माध्यिका ≥ 45 fps और 5वाँ पर्सेंटाइल ≥ 30 fps |  |
@@ -799,8 +813,8 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `bench.verdict.pass` | Gate met | मानक पूरा |  |
 | `bench.verdict.fail` | Gate not met | मानक पूरा नहीं |  |
 | `bench.verdict.unknown` | Incomplete | अधूरा |  |
-| `bench.results` | Frame rate by phase | चरण के अनुसार फ़्रेम दर |  |
-| `bench.col.phase` | Phase | चरण |  |
+| `bench.results` | Frame rate by stage | चरण के अनुसार फ़्रेम दर |  |
+| `bench.col.phase` | Stage | चरण |  |
 | `bench.col.mode` | Picture | चित्र |  |
 | `bench.col.tier` | Tier at end | अंत में स्तर |  |
 | `bench.col.median` | Median fps | माध्यिका fps |  |
@@ -826,14 +840,14 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `bench.memory` | Memory reported | रिपोर्ट की गई मेमोरी |  |
 | `bench.display` | Display | डिस्प्ले |  |
 | `bench.unknown` | not reported | रिपोर्ट नहीं हुआ |  |
-| `bench.notes` | Thermal is a rendering model, not radiometric. The swarm and birds are placeholder markers. Frame times are display-refresh intervals, so a 60 Hz screen caps results at 60 fps. | थर्मल एक रेंडरिंग मॉडल है, रेडियोमेट्रिक नहीं। झुंड और पक्षी नमूना चिह्न हैं। फ़्रेम समय डिस्प्ले-रिफ़्रेश अंतराल हैं, इसलिए 60 Hz स्क्रीन परिणामों को 60 fps पर सीमित करती है। |  |
+| `bench.notes` | Frame times are display-refresh intervals, so a 60 Hz screen caps results at 60 fps. | फ़्रेम समय डिस्प्ले-रिफ़्रेश अंतराल हैं, इसलिए 60 Hz स्क्रीन परिणामों को 60 fps पर सीमित करती है। |  |
 | `scenarios.cancel` | Cancel | रद्द करें |  |
-| `scenarios.reference` | Reference scenarios | संदर्भ परिदृश्य |  |
+| `scenarios.reference` | Pack scenarios | पैक परिदृश्य |  |
 | `scenarios.wording.verified` | Verified solvable by test run | परीक्षण-रन से हल-योग्य सत्यापित |  |
 | `scenarios.wording.notVerified` | Not verified solvable | हल-योग्य सत्यापित नहीं |  |
 | `scenarios.solvability.verified` | Verified solvable by test run | परीक्षण-रन से हल-योग्य सत्यापित |  |
 | `scenarios.solvability.failed` | Not verified solvable | हल-योग्य सत्यापित नहीं |  |
-| `scenarios.solvability.unchecked` | Not yet checked | अभी जाँचा नहीं गया |  |
+| `scenarios.solvability.unchecked` | Unchecked | जाँच नहीं हुई |  |
 | `scenarios.severity.error` | Error | त्रुटि |  |
 | `scenarios.severity.warning` | Warning | चेतावनी |  |
 | `scenarios.origin.scripted` | Scripted | स्क्रिप्टेड |  |
@@ -858,7 +872,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `scenarios.feature.degradation_load` | Degradation load | क्षमता-ह्रास भार |  |
 | `scenarios.feature.timing_tightness` | Timing tightness | समय की कसावट |  |
 | `scenarios.feature.stealth` | Stealth | छिपाव |  |
-| `scenarios.check.note` | Verified solvable by test run means a headless oracle defender cleared this scenario in the simulation. It is a practical check of what the oracle exercises, not a statement about how hard the scenario is for a person. Sensor, threat and tracker numbers are reference data. | परीक्षण-रन से हल-योग्य सत्यापित का अर्थ है कि एक हेडलेस ओरेकल रक्षक ने इस परिदृश्य को सिमुलेशन में पूरा किया। यह उसी की व्यावहारिक जाँच है जिसे ओरेकल आज़माता है; यह नहीं बताता कि परिदृश्य किसी व्यक्ति के लिए कितना कठिन है। सेंसर, खतरे और ट्रैकर के आँकड़े संदर्भ डेटा हैं। |  |
+| `scenarios.check.note` | Verified solvable by test run means a headless oracle defender cleared this scenario in the simulation. | परीक्षण-रन से हल-योग्य सत्यापित का अर्थ है कि एक हेडलेस ओरेकल रक्षक ने इस परिदृश्य को सिमुलेशन में पूरा किया। |  |
 | `scenarios.check.solvability.presented` | Every hostile contact was reported by a sensor | हर शत्रु संपर्क की रिपोर्ट किसी सेंसर ने की |  |
 | `scenarios.check.solvability.answered` | Every hostile contact was engaged under the rules | हर शत्रु संपर्क पर नियमों के अंतर्गत कार्रवाई हुई |  |
 | `scenarios.check.solvability.failures` | No hard fail, blocked attempt, false engagement or unfixed track error | कोई कठोर विफलता, अवरुद्ध प्रयास, झूठी कार्रवाई या अनसुधारी ट्रैक त्रुटि नहीं |  |
@@ -868,7 +882,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `scenarios.lint.coverage.late` | A hostile contact is first covered after half of the scenario has passed. | एक शत्रु संपर्क परिदृश्य का आधा समय बीतने के बाद ही पहली बार कवर होता है। |  |
 | `scenarios.lint.roe.no-engage-rule` | No rule of the named pack can permit an engagement in any zone this scenario defines. | नामित पैक का कोई नियम इस परिदृश्य के किसी भी क्षेत्र में कार्रवाई की अनुमति नहीं दे सकता। |  |
 | `scenarios.lint.roe.zone-missing` | A rule names a zone role this scenario has no zone for. | एक नियम ऐसे क्षेत्र-भूमिका का नाम लेता है जिसका क्षेत्र इस परिदृश्य में नहीं है। |  |
-| `scenarios.lint.roe.pack-missing` | The named rule pack is not available. | नामित नियम पैक उपलब्ध नहीं है। |  |
+| `scenarios.lint.roe.pack-missing` | The named rule pack was not found. | नामित नियम पैक नहीं मिला। |  |
 | `scenarios.lint.route.leaves-area` | A waypoint is outside the play area. | एक वेपॉइंट खेल-क्षेत्र से बाहर है। |  |
 | `scenarios.lint.route.below-envelope` | A waypoint is below the altitude the threat class can fly. | एक वेपॉइंट उस ऊँचाई से नीचे है जिस पर यह खतरा-श्रेणी उड़ सकती है। |  |
 | `scenarios.lint.route.above-envelope` | A waypoint is above the altitude the threat class can fly. | एक वेपॉइंट उस ऊँचाई से ऊपर है जिस पर यह खतरा-श्रेणी उड़ सकती है। |  |
@@ -932,7 +946,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `scenarios.library.deleteFailed` | The scenario could not be deleted: {{detail}} | परिदृश्य नहीं हटाया जा सका: {{detail}} |  |
 | `scenarios.library.deleteForbidden` | Your account cannot delete this scenario. | आपका खाता यह परिदृश्य नहीं हटा सकता। |  |
 | `scenarios.library.deleteUnreachable` | The server is unreachable. Check the connection and try again. | सर्वर तक पहुँच नहीं हो रही। कनेक्शन जाँचें और पुनः प्रयास करें। |  |
-| `scenarios.library.note` | Pack scenarios are read-only; only saved scenarios (authored or generated) can be deleted. Every scenario is fictional. Sensor, threat and tracker numbers are reference data. | पैक के परिदृश्य केवल पढ़ने योग्य हैं; केवल सहेजे गए (लिखित या उत्पन्न) परिदृश्य हटाए जा सकते हैं। हर परिदृश्य काल्पनिक है। सेंसर, खतरे और ट्रैकर के आँकड़े संदर्भ डेटा हैं। |  |
+| `scenarios.library.note` | Pack scenarios are read-only; only saved scenarios (authored or generated) can be deleted. | पैक के परिदृश्य केवल पढ़ने योग्य हैं; केवल सहेजे गए (लिखित या उत्पन्न) परिदृश्य हटाए जा सकते हैं। |  |
 | `scenarios.editor.title` | Scenario editor | परिदृश्य संपादक |  |
 | `scenarios.editor.openById` | Open by scenario id | परिदृश्य आईडी से खोलें |  |
 | `scenarios.editor.open` | Open | खोलें |  |
@@ -1025,7 +1039,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `scenarios.editor.preview.sensors` | Covered by | कवर करने वाले |  |
 | `scenarios.editor.preview.notRun` | The preview did not run | पूर्वावलोकन नहीं चला |  |
 | `scenarios.editor.preview.notRunBody` | The text does not validate. Fix the errors first. | पाठ मान्य नहीं है। पहले त्रुटियाँ ठीक करें। |  |
-| `scenarios.editor.preview.note` | Threat routes are kinematics only. Sensor, threat and tracker numbers are reference data. | खतरों के मार्ग केवल गति-विज्ञान हैं। सेंसर, खतरे और ट्रैकर के आँकड़े संदर्भ डेटा हैं। |  |
+| `scenarios.editor.preview.note` | Threat routes are kinematics only. | खतरों के मार्ग केवल गति-विज्ञान हैं। |  |
 | `scenarios.editor.preview.error.network` | The server is unreachable | सर्वर तक पहुँच नहीं हो रही |  |
 | `scenarios.editor.preview.error.forbidden` | Your account cannot run a preview | आपका खाता पूर्वावलोकन नहीं चला सकता |  |
 | `scenarios.editor.preview.error.notFound` | The preview service was not found | पूर्वावलोकन सेवा नहीं मिली |  |
@@ -1041,7 +1055,6 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `scenarios.editor.terrain.zone` | Zone | क्षेत्र |  |
 | `scenarios.editor.terrain.role` | Role | भूमिका |  |
 | `scenarios.editor.terrain.radius` | Radius | त्रिज्या |  |
-| `scenarios.editor.terrain.note` | Fictional site. Terrain and numbers are reference data. | काल्पनिक स्थल। भूभाग और आँकड़े संदर्भ डेटा हैं। |  |
 | `scenarios.editor.threats.title` | Threat timeline | खतरा समय-रेखा |  |
 | `scenarios.editor.threats.caption` | Threats by spawn time | उत्पत्ति समय के अनुसार खतरे |  |
 | `scenarios.editor.threats.id` | Threat | खतरा |  |
@@ -1052,7 +1065,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `scenarios.editor.threats.route` | Waypoints | वेपॉइंट |  |
 | `scenarios.editor.threats.group` | Group | समूह |  |
 | `scenarios.editor.threats.note` | Each bar runs from the spawn time to the end of the route at the waypoint speeds, within the scenario duration. Solid fill is hostile, dashed outline civil, dotted outline clutter. | हर पट्टी उत्पत्ति समय से वेपॉइंट गति पर मार्ग के अंत तक चलती है, परिदृश्य की अवधि के भीतर। ठोस भराव शत्रु है, टूटी रूपरेखा नागरिक, बिंदु रूपरेखा क्लटर। |  |
-| `scenarios.editor.threats.reference` | Threat behaviour is kinematics only. Class limits are reference data. | खतरे का व्यवहार केवल गति-विज्ञान है। श्रेणी की सीमाएँ संदर्भ डेटा हैं। |  |
+| `scenarios.editor.threats.reference` | Threat behaviour is kinematics only. | खतरे का व्यवहार केवल गति-विज्ञान है। |  |
 | `scenarios.editor.timeline.alt` | Time strip of {{count}} threats over {{duration}} s, from spawn to the end of the route | {{duration}} से. में {{count}} खतरों की समय-पट्टी, उत्पत्ति से मार्ग के अंत तक |  |
 | `scenarios.editor.sensors.title` | Sensors and degradations | सेंसर और क्षमता-ह्रास |  |
 | `scenarios.editor.sensors.caption` | Sensors placed in the scenario | परिदृश्य में लगाए गए सेंसर |  |
@@ -1063,7 +1076,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `scenarios.editor.sensors.boresight` | Boresight | बोरसाइट |  |
 | `scenarios.editor.sensors.none` | No sensor is placed | कोई सेंसर नहीं लगा है |  |
 | `scenarios.editor.sensors.conditions` | Conditions on the sensors | सेंसरों पर परिस्थितियाँ |  |
-| `scenarios.editor.sensors.note` | Sensor numbers come from reference sensor profiles (reference data). Weather and light are modelled. | सेंसर के आँकड़े संदर्भ सेंसर प्रोफ़ाइलों से आते हैं (संदर्भ डेटा)। मौसम और प्रकाश मॉडल किए गए हैं। |  |
+| `scenarios.editor.sensors.note` | Weather and light are modelled. | मौसम और प्रकाश मॉडल किए गए हैं। |  |
 | `scenarios.editor.weather.title` | Weather and light | मौसम और प्रकाश |  |
 | `scenarios.editor.weather.start` | Start time and length | आरंभ समय और अवधि |  |
 | `scenarios.editor.weather.condition` | Condition | स्थिति |  |
@@ -1120,7 +1133,7 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `scenarios.generator.code.copy` | Copy | कॉपी करें |  |
 | `scenarios.generator.code.encode` | Encode | एन्कोड करें |  |
 | `scenarios.generator.code.copied` | Copied to the clipboard. | क्लिपबोर्ड पर कॉपी किया गया। |  |
-| `scenarios.generator.code.copyManual` | The clipboard is not available here. The code is selected; copy it with Ctrl+C. | यहाँ क्लिपबोर्ड उपलब्ध नहीं है। कोड चुना हुआ है; Ctrl+C से कॉपी करें। |  |
+| `scenarios.generator.code.copyManual` | The clipboard cannot be used here. The code is selected; copy it with Ctrl+C. | यहाँ क्लिपबोर्ड का उपयोग नहीं हो सकता। कोड चुना हुआ है; Ctrl+C से कॉपी करें। |  |
 | `scenarios.generator.code.decoded` | Code decoded: the form now holds the request (seed {{seed}}). | कोड डिकोड हुआ: फ़ॉर्म में अब अनुरोध है (सीड {{seed}})। |  |
 | `scenarios.generator.code.encoded` | Share code made from the form. | फ़ॉर्म से साझा कोड बना। |  |
 | `scenarios.generator.code.invalid` | That share code is not valid. | यह साझा कोड मान्य नहीं है। |  |
@@ -1181,5 +1194,550 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `scenarios.generator.heat.cellEmpty` | {{where}}: empty, no scenario has landed here. | {{where}}: खाली, यहाँ कोई परिदृश्य नहीं आया। |  |
 | `scenarios.generator.heat.legend` | Quality scale | गुणवत्ता पैमाना |  |
 | `scenarios.generator.heat.empty` | empty | खाली |  |
+| `m.common.screens` | {{module}} screens | {{module}} की स्क्रीनें |  |
+| `m.common.all` | All | सभी |  |
+| `m.common.any` | Any | कोई भी |  |
+| `m.common.yes` | Yes | हाँ |  |
+| `m.common.cancel` | Cancel | रद्द करें |  |
+| `m.common.search` | Search | खोजें |  |
+| `m.common.noMatch` | Nothing matches these filters. | इन फ़िल्टर से कुछ नहीं मिलता। |  |
+| `m.common.dataTable` | Data table | डेटा तालिका |  |
+| `m.common.sessionNumber` | Session | सत्र |  |
+| `m.common.sessions` | Sessions | सत्र |  |
+| `m.common.trainee` | Trainee | प्रशिक्षु |  |
+| `m.common.scenario` | Scenario | परिदृश्य |  |
+| `m.common.terrain` | Terrain | भू-भाग |  |
+| `m.common.weather` | Weather | मौसम |  |
+| `m.common.time` | Time | समय |  |
+| `m.common.date` | Date | तिथि |  |
+| `m.common.mode` | Mode | मोड |  |
+| `m.common.score` | Score | स्कोर |  |
+| `m.common.change` | Change | बदलाव |  |
+| `m.common.accuracy` | Accuracy | सटीकता |  |
+| `m.common.detectTime` | Detection time | पहचान समय |  |
+| `m.common.classifyTime` | Classification time | वर्गीकरण समय |  |
+| `m.common.falseAlarms` | False alarms | झूठे अलार्म |  |
+| `m.common.roe` | ROE compliance | ROE अनुपालन |  |
+| `m.common.difficulty` | Difficulty | कठिनाई |  |
+| `m.common.contacts` | Contacts | संपर्क |  |
+| `m.common.duration` | Duration | अवधि |  |
+| `m.common.version` | Version | संस्करण |  |
+| `m.common.updated` | Updated | अद्यतन |  |
+| `m.mode.assessed` | Assessed | मूल्यांकित |  |
+| `m.mode.practice` | Practice | अभ्यास |  |
+| `m.tod.dawn` | Dawn | भोर |  |
+| `m.tod.day` | Day | दिन |  |
+| `m.tod.dusk` | Dusk | सांध्य |  |
+| `m.tod.night` | Night | रात |  |
+| `m.skill.detect-radar` | Detect on radar | रडार पर पहचान |  |
+| `m.skill.detect-eo` | Detect on EO/IR | EO/IR पर पहचान |  |
+| `m.skill.detect-rf` | Detect on RF | RF पर पहचान |  |
+| `m.skill.detect-acoustic` | Detect by sound | ध्वनि से पहचान |  |
+| `m.skill.classify-rotary` | Classify small rotary | छोटे रोटरी का वर्गीकरण |  |
+| `m.skill.classify-fixed-wing` | Classify fixed-wing | फिक्स्ड-विंग का वर्गीकरण |  |
+| `m.skill.classify-fpv` | Classify FPV | FPV का वर्गीकरण |  |
+| `m.skill.classify-clutter` | Reject clutter | क्लटर को अलग करना |  |
+| `m.skill.assess-intent` | Assess intent | इरादे का आकलन |  |
+| `m.skill.respond-roe` | Respond within ROE | ROE के भीतर प्रतिक्रिया |  |
+| `m.skill.hold-fire-civil` | Hold fire on civil traffic | नागरिक यातायात पर फ़ायर रोकना |  |
+| `m.skill.handover` | Hand over tracks | ट्रैक हस्तांतरण |  |
+| `m.today.overview` | Today overview | आज का अवलोकन |  |
+| `m.today.recommended` | Recommended drill | अनुशंसित ड्रिल |  |
+| `m.today.focus` | Skill focus | कौशल केंद्र |  |
+| `m.today.predicted` | Predicted success | अनुमानित सफलता |  |
+| `m.today.start` | Start drill | ड्रिल शुरू करें |  |
+| `m.today.startNamed` | Start drill: {{name}} | ड्रिल शुरू करें: {{name}} |  |
+| `m.today.due` | Skills due for review | समीक्षा के लिए कौशल |  |
+| `m.today.dueNote` | Ordered from the lowest proficiency. | सबसे कम दक्षता से क्रमबद्ध। |  |
+| `m.today.last` | Last session summary | पिछले सत्र का सार |  |
+| `m.today.openReview` | Open session review | सत्र समीक्षा खोलें |  |
+| `m.today.next` | Next-scenario recommendation | अगले परिदृश्य की अनुशंसा |  |
+| `m.today.trend` | Score by session | सत्र अनुसार स्कोर |  |
+| `m.today.trendAlt` | Line chart of the session score for each of the four sessions. | चारों सत्रों के स्कोर का रेखा चार्ट। |  |
+| `m.drills.curriculum` | Curriculum | पाठ्यक्रम |  |
+| `m.drills.quick` | Quick drill | त्वरित ड्रिल |  |
+| `m.drills.lobby` | Session lobby | सत्र लॉबी |  |
+| `m.drills.lobbyBody` | Check your role and kit, read the briefing and start the session. | अपनी भूमिका और किट जाँचें, ब्रीफ़िंग पढ़ें और सत्र शुरू करें। |  |
+| `m.drills.openLobby` | Open session lobby | सत्र लॉबी खोलें |  |
+| `m.drills.courses` | Courses | पाठ्यक्रम सूची |  |
+| `m.drills.course` | Course | पाठ्यक्रम |  |
+| `m.drills.stages` | Stages | चरण |  |
+| `m.drills.stage` | Stage {{n}} | चरण {{n}} |  |
+| `m.drills.scenarios` | Scenarios | परिदृश्य |  |
+| `m.drills.courseDetail` | {{name}}: stages and gates | {{name}}: चरण और द्वार |  |
+| `m.drills.gate` | Gate: score {{score}} or more, accuracy {{accuracy}} or more | द्वार: स्कोर {{score}} या अधिक, सटीकता {{accuracy}} या अधिक |  |
+| `m.drills.state.done` | Passed | उत्तीर्ण |  |
+| `m.drills.state.current` | In progress | जारी |  |
+| `m.drills.state.locked` | Opens at the previous gate | पिछला द्वार पार होने पर खुलता है |  |
+| `m.drills.quickTitle` | Difficulty and focus | कठिनाई और केंद्र |  |
+| `m.drills.startQuick` | Start quick drill | त्वरित ड्रिल शुरू करें |  |
+| `m.drills.matching` | Matching scenarios: {{count}} | मेल खाते परिदृश्य: {{count}} |  |
+| `m.drills.noMatch` | No scenario matches | कोई परिदृश्य मेल नहीं खाता |  |
+| `m.drills.noMatchBody` | Change the difficulty or the terrain to see matching scenarios. | मेल खाते परिदृश्य देखने के लिए कठिनाई या भू-भाग बदलें। |  |
+| `m.lib.threats` | Threat catalogue | ख़तरा सूची |  |
+| `m.lib.clutter` | Clutter catalogue | क्लटर सूची |  |
+| `m.lib.signatureDrills` | Signature drills | हस्ताक्षर ड्रिल |  |
+| `m.lib.class` | Class | वर्ग |  |
+| `m.lib.detail` | {{name}} | {{name}} |  |
+| `m.lib.appearance` | Appearance by sensor | सेंसर के अनुसार दिखावट |  |
+| `m.lib.sensor` | Sensor | सेंसर |  |
+| `m.lib.return` | Return | वापसी |  |
+| `m.lib.tellApart` | How to tell it apart | अंतर कैसे पहचानें |  |
+| `m.lib.level.high` | Strong | प्रबल |  |
+| `m.lib.level.medium` | Moderate | मध्यम |  |
+| `m.lib.level.low` | Weak | कमज़ोर |  |
+| `m.lib.level.none` | None | कोई नहीं |  |
+| `m.lib.desc.rotary-small` | A small multi-rotor that hovers, turns on the spot and flies slowly at low level. | छोटा मल्टी-रोटर जो मँडराता है, जगह पर घूमता है और नीचे धीरे उड़ता है। |  |
+| `m.lib.desc.fpv-small` | A small, fast quadcopter flown by first-person view, with sharp manoeuvres and a high rotor pitch. | फ़र्स्ट-पर्सन व्यू से उड़ाया जाने वाला छोटा, तेज़ क्वाडकॉप्टर; तीखे मोड़ और ऊँची रोटर ध्वनि। |  |
+| `m.lib.desc.fixed-wing-small` | A small fixed-wing aircraft that cruises steadily on straight legs. | छोटा फिक्स्ड-विंग विमान जो सीधी राह पर स्थिर गति से चलता है। |  |
+| `m.lib.desc.fixed-wing-medium` | A medium fixed-wing aircraft with a larger return and a steady cruise. | मध्यम फिक्स्ड-विंग विमान; बड़ी वापसी और स्थिर गति। |  |
+| `m.lib.desc.fixed-wing-large` | A large fixed-wing aircraft with a strong return, high speed and a low-pitched sound. | बड़ा फिक्स्ड-विंग विमान; प्रबल वापसी, तेज़ गति और धीमी ध्वनि। |  |
+| `m.lib.desc.bird` | A single bird or a flock: irregular speed, flapping motion and no radio link. | एक पक्षी या झुंड: अनियमित गति, पंख फड़फड़ाना और कोई रेडियो लिंक नहीं। |  |
+| `m.lib.desc.kite` | A kite held on a tether: it moves with the wind and stays within a small area. | डोरी से बँधी पतंग: हवा के साथ चलती है और छोटे क्षेत्र में रहती है। |  |
+| `m.lib.desc.balloon` | A balloon that rises and drifts with the wind at the wind's speed. | गुब्बारा जो ऊपर उठता है और हवा की गति से बहता है। |  |
+| `m.lib.tell.rotary-small` | Look for hover and slow turns, strong rotor harmonics and an active control link. | मँडराना और धीमे मोड़, प्रबल रोटर हार्मोनिक और सक्रिय कंट्रोल लिंक देखें। |  |
+| `m.lib.tell.fpv-small` | Look for fast, sharp turns, a high-pitched rotor sound and a strong video and control link. | तेज़ और तीखे मोड़, ऊँची रोटर ध्वनि और प्रबल वीडियो व कंट्रोल लिंक देखें। |  |
+| `m.lib.tell.fixed-wing-small` | Look for steady speed on straight legs, a faint sound and a regular radar return. | सीधी राह पर स्थिर गति, हल्की ध्वनि और नियमित रडार वापसी देखें। |  |
+| `m.lib.tell.fixed-wing-medium` | Look for a strong radar return, steady speed and a broad body in the EO view. | प्रबल रडार वापसी, स्थिर गति और EO दृश्य में चौड़ा ढाँचा देखें। |  |
+| `m.lib.tell.fixed-wing-large` | Look for a very strong return, high speed and a low, steady sound. | बहुत प्रबल वापसी, तेज़ गति और धीमी स्थिर ध्वनि देखें। |  |
+| `m.lib.tell.bird` | Look for varying speed, wing-beat flicker and no radio emission at all. | बदलती गति, पंखों की झिलमिलाहट और रेडियो उत्सर्जन का न होना देखें। |  |
+| `m.lib.tell.kite` | Look for motion that follows the wind and a position that stays inside a small area. | हवा के साथ चलती गति और छोटे क्षेत्र के भीतर टिकी स्थिति देखें। |  |
+| `m.lib.tell.balloon` | Look for a vertical drift at wind speed, no sound and no radio emission. | हवा की गति से ऊर्ध्वाधर बहाव, कोई ध्वनि नहीं और कोई रेडियो उत्सर्जन नहीं देखें। |  |
+| `m.lib.cardAlt` | Acoustic spectrogram: time runs left to right, frequency runs from the bottom up. | ध्वनिक स्पेक्ट्रोग्राम: समय बाएँ से दाएँ, आवृत्ति नीचे से ऊपर। |  |
+| `m.lib.cardTitle` | Card {{n}} of {{of}} | कार्ड {{n}} / {{of}} |  |
+| `m.lib.cardPrompt` | Which class produces this acoustic signature? | यह ध्वनि हस्ताक्षर किस वर्ग का है? |  |
+| `m.lib.right` | Correct. | सही। |  |
+| `m.lib.wrong` | This was {{name}}. | यह {{name}} था। |  |
+| `m.lib.next` | Next card | अगला कार्ड |  |
+| `m.lib.drillsDone` | Deck complete | डेक पूरा हुआ |  |
+| `m.lib.cardsSeen` | Cards answered | उत्तर दिए गए कार्ड |  |
+| `m.lib.correctFirst` | Correct on the first try | पहले प्रयास में सही |  |
+| `m.lib.again` | Start the deck again | डेक फिर शुरू करें |  |
+| `m.perf.sessions` | Sessions | सत्र |  |
+| `m.perf.progress` | Progress | प्रगति |  |
+| `m.perf.reports` | Reports | रिपोर्ट |  |
+| `m.perf.sessionList` | Session list | सत्र सूची |  |
+| `m.perf.skillProficiency` | Skill proficiency | कौशल दक्षता |  |
+| `m.perf.learningCurves` | Learning curves | सीखने के वक्र |  |
+| `m.perf.learningAlt` | Line chart of the session score over four sessions. | चार सत्रों में सत्र स्कोर का रेखा चार्ट। |  |
+| `m.perf.accuracyAlt` | Line chart of classification accuracy over four sessions. | चार सत्रों में वर्गीकरण सटीकता का रेखा चार्ट। |  |
+| `m.perf.accuracyPct` | Accuracy (%) | सटीकता (%) |  |
+| `m.perf.cohortMean` | Cohort mean | कोहोर्ट औसत |  |
+| `m.aar.replay` | Session replay | सत्र रीप्ले |  |
+| `m.aar.seen` | What you saw | आपने क्या देखा |  |
+| `m.aar.truth` | Ground truth | वास्तविक स्थिति |  |
+| `m.aar.seenAlt` | Plan view of the tracks as the operator saw them, with the track label at the time shown. | ऑपरेटर को दिखे ट्रैक का योजना दृश्य, उस समय के ट्रैक लेबल के साथ। |  |
+| `m.aar.truthAlt` | Plan view of the true position, class and route of every contact at the time shown. | दर्शाए गए समय पर हर संपर्क की वास्तविक स्थिति, वर्ग और मार्ग का योजना दृश्य। |  |
+| `m.aar.eventLog` | Event log | घटना लॉग |  |
+| `m.aar.play` | Play | चलाएँ |  |
+| `m.aar.pause` | Pause | रोकें |  |
+| `m.aar.restart` | Restart | फिर से शुरू करें |  |
+| `m.aar.speed` | Speed | गति |  |
+| `m.aar.scrub` | Time | समय |  |
+| `m.aar.annotate` | Add annotation | टिप्पणी जोड़ें |  |
+| `m.aar.annotateLabel` | Annotation at {{time}} | {{time}} पर टिप्पणी |  |
+| `m.aar.you` | You | आप |  |
+| `m.aar.kind.sensor` | Sensor | सेंसर |  |
+| `m.aar.kind.detect` | Detect | पहचान |  |
+| `m.aar.kind.classify` | Classify | वर्गीकरण |  |
+| `m.aar.kind.assess` | Assess | आकलन |  |
+| `m.aar.kind.respond` | Respond | प्रतिक्रिया |  |
+| `m.aar.kind.injected` | Injected | डाली गई |  |
+| `m.aar.kind.note` | Note | टिप्पणी |  |
+| `m.aar.event.sensor` | First sensor return on {{id}}. | {{id}} पर पहली सेंसर वापसी। |  |
+| `m.aar.event.detect` | {{id}} detected. | {{id}} की पहचान हुई। |  |
+| `m.aar.event.classify` | {{id}} classified as {{called}}. | {{id}} को {{called}} वर्गीकृत किया गया। |  |
+| `m.aar.event.assess` | {{id}} assessed as {{identity}}. | {{id}} का आकलन {{identity}} हुआ। |  |
+| `m.aar.event.hold` | Hold fire on {{id}}. | {{id}} पर फ़ायर रोका गया। |  |
+| `m.aar.event.respond` | {{id}}: response {{action}}. | {{id}}: प्रतिक्रिया {{action}}। |  |
+| `m.aar.event.wind` | Instructor injected a wind gust. | प्रशिक्षक ने हवा का झोंका डाला। |  |
+| `m.aar.event.rfLoss` | Instructor injected an RF link loss. | प्रशिक्षक ने RF लिंक हानि डाली। |  |
+| `m.aar.event.note` | {{text}} | {{text}} |  |
+| `m.aar.action.hold` | hold fire | फ़ायर रोकना |  |
+| `m.aar.action.report` | report | रिपोर्ट |  |
+| `m.aar.action.track` | track | ट्रैक |  |
+| `m.aar.action.engage` | engage | संलग्न |  |
+| `m.aar.action.designate` | designate | नामित |  |
+| `m.aar.action.classify` | classify | वर्गीकरण |  |
+| `m.aar.action.assess` | assess | आकलन |  |
+| `m.aar.decisionPath` | Decision-tree path | निर्णय-वृक्ष मार्ग |  |
+| `m.aar.contact` | Contact | संपर्क |  |
+| `m.aar.truthClass` | True class | वास्तविक वर्ग |  |
+| `m.aar.calledClass` | Called class | बताया गया वर्ग |  |
+| `m.aar.points` | Points | अंक |  |
+| `m.aar.node` | Node | चरण |  |
+| `m.aar.nodeName.detect` | Detect | पहचान |  |
+| `m.aar.nodeName.classify` | Classify | वर्गीकरण |  |
+| `m.aar.nodeName.assess` | Assess | आकलन |  |
+| `m.aar.nodeName.respond` | Respond | प्रतिक्रिया |  |
+| `m.aar.nodeName.report` | Report | रिपोर्ट |  |
+| `m.aar.reasonCol` | Reason | कारण |  |
+| `m.aar.pathFor` | Path for {{id}} | {{id}} का मार्ग |  |
+| `m.aar.reason.detect` | Detected {{delay}} s after the first sensor return; the standard is {{std}} s. | पहली सेंसर वापसी के {{delay}} s बाद पहचान; मानक {{std}} s है। |  |
+| `m.aar.reason.classifyRight` | Classified as {{called}}, {{delay}} s after the first return. | {{called}} वर्गीकृत किया, पहली वापसी के {{delay}} s बाद। |  |
+| `m.aar.reason.classifyWrong` | Called {{called}}; the contact was {{truth}}. | {{called}} बताया; संपर्क {{truth}} था। |  |
+| `m.aar.reason.assessRight` | Identity assessed correctly as {{identity}}. | पहचान का आकलन {{identity}} के रूप में सही रहा। |  |
+| `m.aar.reason.assessWrong` | Identity assessed as {{identity}}, which differs from the true identity. | पहचान का आकलन {{identity}} रहा, जो वास्तविक पहचान से भिन्न है। |  |
+| `m.aar.reason.respondHold` | Held fire, as the rules require for this contact. | फ़ायर रोका गया, जैसा इस संपर्क के लिए नियम कहते हैं। |  |
+| `m.aar.reason.respondPermitted` | Response {{action}} at {{at}} s was permitted by the rule pack. | {{at}} s पर प्रतिक्रिया {{action}} नियम पैक से अनुमत थी। |  |
+| `m.aar.reason.report` | Contact report graded at {{quality}} of its available marks. | संपर्क रिपोर्ट को उपलब्ध अंकों का {{quality}} मिला। |  |
+| `m.aar.confusion` | Confusion matrix | कन्फ़्यूज़न मैट्रिक्स |  |
+| `m.aar.trueClass` | True class | वास्तविक वर्ग |  |
+| `m.aar.reactionCurve` | Reaction time | प्रतिक्रिया समय |  |
+| `m.aar.reactionAlt` | Line chart of mean reaction time in seconds for each session. | हर सत्र के औसत प्रतिक्रिया समय (सेकंड) का रेखा चार्ट। |  |
+| `m.aar.seconds` | Seconds | सेकंड |  |
+| `m.aar.rosterMean` | All trainees | सभी प्रशिक्षु |  |
+| `m.aar.missZone` | Miss-zone heat map | चूक-क्षेत्र हीट मैप |  |
+| `m.aar.missZoneAlt` | Polar heat map of the share of missed contacts by {{sectors}} bearing sectors and {{rings}} range rings. | {{sectors}} दिशा खंडों और {{rings}} दूरी वलयों में छूटे संपर्कों के अनुपात का ध्रुवीय हीट मैप। |  |
+| `m.aar.missLegend` | Share of contacts not detected in time, by bearing and range. | समय पर न पहचाने गए संपर्कों का अनुपात, दिशा और दूरी के अनुसार। |  |
+| `m.report.builder` | Report builder | रिपोर्ट निर्माता |  |
+| `m.report.options` | Report options | रिपोर्ट विकल्प |  |
+| `m.report.scope` | Scope | दायरा |  |
+| `m.report.allUnits` | All units | सभी यूनिट |  |
+| `m.report.sections` | Sections | खंड |  |
+| `m.report.section.summary` | Summary | सार |  |
+| `m.report.section.sessions` | Latest sessions | नवीनतम सत्र |  |
+| `m.report.section.skills` | Skill proficiency | कौशल दक्षता |  |
+| `m.report.section.confusion` | Confusion matrix | कन्फ़्यूज़न मैट्रिक्स |  |
+| `m.report.section.missZone` | Miss-zone heat map | चूक-क्षेत्र हीट मैप |  |
+| `m.report.exportPdf` | Export PDF | PDF निर्यात |  |
+| `m.report.exportCsv` | Export CSV | CSV निर्यात |  |
+| `m.report.preview` | Report preview | रिपोर्ट पूर्वावलोकन |  |
+| `m.report.title` | After-action report: {{scope}} | कार्रवाई-उपरांत रिपोर्ट: {{scope}} |  |
+| `m.report.period` | Period {{from}} to {{to}} | अवधि {{from}} से {{to}} |  |
+| `m.report.means` | Mean latest score {{score}}, mean classification accuracy {{accuracy}}. | नवीनतम औसत स्कोर {{score}}, औसत वर्गीकरण सटीकता {{accuracy}}। |  |
+| `m.report.footer` | {{trainees}} trainee(s), {{classes}} recognition classes. | {{trainees}} प्रशिक्षु, {{classes}} पहचान वर्ग। |  |
+| `m.help.shortcuts` | Keyboard shortcuts | कीबोर्ड शॉर्टकट |  |
+| `m.help.key` | Key | कुंजी |  |
+| `m.help.action` | Action | क्रिया |  |
+| `m.help.shortcut.nextTrack` | Move to the next track | अगले ट्रैक पर जाएँ |  |
+| `m.help.shortcut.classify` | Classify the selected track | चुने ट्रैक को वर्गीकृत करें |  |
+| `m.help.shortcut.assess` | Assess the selected track | चुने ट्रैक का आकलन करें |  |
+| `m.help.shortcut.respond` | Respond to the selected track | चुने ट्रैक पर प्रतिक्रिया दें |  |
+| `m.help.shortcut.hold` | Hold fire | फ़ायर रोकें |  |
+| `m.help.shortcut.pause` | Pause (practice mode) | रोकें (अभ्यास मोड) |  |
+| `m.help.shortcut.help` | Show the shortcuts | शॉर्टकट दिखाएँ |  |
+| `m.help.shortcut.options` | Choose an option | विकल्प चुनें |  |
+| `m.help.shortcut.commit` | Commit the choice | चुनाव दर्ज करें |  |
+| `m.help.sops` | Standard procedures | मानक प्रक्रियाएँ |  |
+| `m.help.sop.watch.title` | Keeping watch | निगरानी रखना |  |
+| `m.help.sop.watch.s1` | Confirm the sensor consoles are live and the zones are drawn. | पुष्टि करें कि सेंसर कंसोल चालू हैं और क्षेत्र दर्शाए गए हैं। |  |
+| `m.help.sop.watch.s2` | Scan the radar and the track table at a steady pace. | रडार और ट्रैक तालिका को स्थिर गति से देखें। |  |
+| `m.help.sop.watch.s3` | Cross-check each new track on a second sensor. | हर नए ट्रैक को दूसरे सेंसर पर मिलाएँ। |  |
+| `m.help.sop.watch.s4` | Call out every new track to the detachment commander. | हर नया ट्रैक डिटैचमेंट कमांडर को बताएँ। |  |
+| `m.help.sop.classify.title` | Classifying a track | ट्रैक का वर्गीकरण |  |
+| `m.help.sop.classify.s1` | Select the track and read its speed, height and signature. | ट्रैक चुनें और उसकी गति, ऊँचाई व हस्ताक्षर पढ़ें। |  |
+| `m.help.sop.classify.s2` | Compare it with the catalogue entry for the likely class. | संभावित वर्ग की सूची प्रविष्टि से मिलान करें। |  |
+| `m.help.sop.classify.s3` | Commit the class, then assess the identity. | वर्ग दर्ज करें, फिर पहचान का आकलन करें। |  |
+| `m.help.sop.classify.s4` | Revise the call when new evidence arrives. | नया प्रमाण आने पर निर्णय बदलें। |  |
+| `m.help.sop.report.title` | Contact report | संपर्क रिपोर्ट |  |
+| `m.help.sop.report.s1` | State what you see: class, count and heading. | जो दिखे वह बताएँ: वर्ग, संख्या और दिशा। |  |
+| `m.help.sop.report.s2` | Give the position and the zone. | स्थिति और क्षेत्र बताएँ। |  |
+| `m.help.sop.report.s3` | Give your confidence. | अपना विश्वास स्तर बताएँ। |  |
+| `m.help.sop.report.s4` | Send the report before the time standard ends. | समय मानक पूरा होने से पहले रिपोर्ट भेजें। |  |
+| `m.help.sop.handover.title` | Track handover | ट्रैक हस्तांतरण |  |
+| `m.help.sop.handover.s1` | Offer the track to the receiving operator by call sign. | ट्रैक को कॉल साइन से प्राप्तकर्ता ऑपरेटर को सौंपें। |  |
+| `m.help.sop.handover.s2` | Wait for the acknowledgement. | पावती की प्रतीक्षा करें। |  |
+| `m.help.sop.handover.s3` | Keep the track until it is acknowledged. | पावती मिलने तक ट्रैक अपने पास रखें। |  |
+| `m.help.sop.handover.s4` | Confirm the track history on the new table. | नई तालिका में ट्रैक का इतिहास जाँचें। |  |
+| `m.help.about` | About | परिचय |  |
+| `m.help.aboutBody` | SUDARSHAN trains operators and detachment commanders to recognise, classify and respond to small aerial contacts. It measures detection time, classification accuracy and decisions. | SUDARSHAN ऑपरेटरों और डिटैचमेंट कमांडरों को छोटे हवाई संपर्कों को पहचानना, वर्गीकृत करना और उन पर प्रतिक्रिया देना सिखाता है। यह पहचान समय, वर्गीकरण सटीकता और निर्णयों को मापता है। |  |
+| `m.cohorts.list` | Cohort list | कोहोर्ट सूची |  |
+| `m.cohorts.detail` | Cohort detail | कोहोर्ट विवरण |  |
+| `m.cohorts.cohort` | Cohort | कोहोर्ट |  |
+| `m.cohorts.unit` | Unit | यूनिट |  |
+| `m.cohorts.instructor` | Instructor | प्रशिक्षक |  |
+| `m.cohorts.members` | Members | सदस्य |  |
+| `m.cohorts.started` | Started | शुरू |  |
+| `m.cohorts.assigned` | Assigned curriculum | सौंपा गया पाठ्यक्रम |  |
+| `m.cohorts.sequence` | Drill sequence | ड्रिल क्रम |  |
+| `m.trainees.listTab` | Trainee list | प्रशिक्षु सूची |  |
+| `m.trainees.profile` | Trainee profile | प्रशिक्षु प्रोफ़ाइल |  |
+| `m.trainees.list` | Trainees: {{count}} | प्रशिक्षु: {{count}} |  |
+| `m.trainees.callSign` | Call sign | कॉल साइन |  |
+| `m.trainees.skillModel` | Skill model | कौशल मॉडल |  |
+| `m.trainees.history` | Session history | सत्र इतिहास |  |
+| `m.trainees.notes` | Instructor notes | प्रशिक्षक की टिप्पणियाँ |  |
+| `m.trainees.noNotes` | No notes yet. Add the first note below. | अभी कोई टिप्पणी नहीं। नीचे पहली टिप्पणी जोड़ें। |  |
+| `m.trainees.addNote` | New note | नई टिप्पणी |  |
+| `m.trainees.saveNote` | Save note | टिप्पणी सहेजें |  |
+| `m.live.launchTab` | Launch session | सत्र शुरू करें |  |
+| `m.live.launch` | Launch a session | सत्र शुरू करें |  |
+| `m.live.monitor` | Live monitor | लाइव मॉनिटर |  |
+| `m.live.scenarioSummary` | Scenario summary | परिदृश्य सार |  |
+| `m.live.participants` | Participants | प्रतिभागी |  |
+| `m.live.teamMode` | Team exercise with a detachment commander | डिटैचमेंट कमांडर के साथ टीम अभ्यास |  |
+| `m.live.start` | Start session for {{count}} trainee(s) | {{count}} प्रशिक्षुओं के लिए सत्र शुरू करें |  |
+| `m.live.running` | Running | चालू |  |
+| `m.live.paused` | Paused | रुका हुआ |  |
+| `m.live.pause` | Pause session | सत्र रोकें |  |
+| `m.live.resume` | Resume session | सत्र फिर चलाएँ |  |
+| `m.live.classGrid` | Class grid | कक्षा ग्रिड |  |
+| `m.live.stage` | Stage | चरण |  |
+| `m.live.tracks` | Tracks | ट्रैक |  |
+| `m.live.attention` | Needs attention | ध्यान चाहिए |  |
+| `m.live.onTrack` | On track | ठीक चल रहा |  |
+| `m.live.drill` | Drill-down: {{name}} | विस्तृत दृश्य: {{name}} |  |
+| `m.live.drillAlt` | Ground-truth plan view for {{name}} with every contact and its true identity. | {{name}} के लिए हर संपर्क और उसकी वास्तविक पहचान के साथ योजना दृश्य। |  |
+| `m.live.overlay` | Ground-truth overlay | वास्तविक स्थिति ओवरले |  |
+| `m.live.inject` | Inject event | घटना डालें |  |
+| `m.live.event` | Event | घटना |  |
+| `m.live.injectNow` | Inject now | अभी डालें |  |
+| `m.live.injection.contact` | New contact | नया संपर्क |  |
+| `m.live.injection.degrade` | Sensor degradation | सेंसर क्षीणता |  |
+| `m.live.injection.weather` | Weather change | मौसम में बदलाव |  |
+| `m.live.injection.comms` | Communications loss | संचार हानि |  |
+| `m.live.annotate` | Annotate the timeline | टाइमलाइन पर टिप्पणी |  |
+| `m.live.annotateLabel` | Annotation at {{clock}} | {{clock}} पर टिप्पणी |  |
+| `m.live.timeline` | Instructor timeline | प्रशिक्षक टाइमलाइन |  |
+| `m.live.timelineEmpty` | Injected events and annotations appear here. | डाली गई घटनाएँ और टिप्पणियाँ यहाँ दिखती हैं। |  |
+| `m.live.kind.inject` | Inject | घटना |  |
+| `m.live.kind.annotate` | Note | टिप्पणी |  |
+| `m.live.kind.pause` | Pause | रोका |  |
+| `m.live.kind.resume` | Resume | चालू |  |
+| `m.live.log.inject` | {{what}} injected for {{who}}. | {{who}} के लिए {{what}} डाली गई। |  |
+| `m.live.log.pause` | Session paused. | सत्र रोका गया। |  |
+| `m.live.log.resume` | Session resumed. | सत्र फिर चालू हुआ। |  |
+| `m.compare.sessions` | Compare sessions | सत्रों की तुलना |  |
+| `m.compare.sessionA` | Session A | सत्र A |  |
+| `m.compare.sessionB` | Session B | सत्र B |  |
+| `m.compare.traineeA` | Trainee A | प्रशिक्षु A |  |
+| `m.compare.traineeB` | Trainee B | प्रशिक्षु B |  |
+| `m.compare.metrics` | Metrics side by side | मापदंड साथ-साथ |  |
+| `m.compare.metric` | Metric | मापदंड |  |
+| `m.compare.better` | Better | बेहतर |  |
+| `m.compare.equal` | Equal | बराबर |  |
+| `m.team.setup` | Team setup | टीम सेटअप |  |
+| `m.team.monitor` | Team monitor | टीम मॉनिटर |  |
+| `m.team.sectors` | Sector assignment | सेक्टर आवंटन |  |
+| `m.team.handover` | Track handover | ट्रैक हस्तांतरण |  |
+| `m.team.teamScore` | Team score | टीम स्कोर |  |
+| `m.team.sectorMap` | Sector map | सेक्टर मानचित्र |  |
+| `m.team.sectorAlt` | Plan view split into four sectors, each labelled with its owner, with every track plotted. | चार सेक्टरों में बँटा योजना दृश्य, हर सेक्टर पर उसके स्वामी का नाम और सभी ट्रैक अंकित। |  |
+| `m.team.assignment` | Sector owners | सेक्टर स्वामी |  |
+| `m.team.sectorOwner` | {{sector}} sector owner | {{sector}} सेक्टर स्वामी |  |
+| `m.team.coverage` | {{count}} of {{total}} operators hold a sector. | {{total}} में से {{count}} ऑपरेटरों के पास सेक्टर है। |  |
+| `m.team.sector.north` | North | उत्तर |  |
+| `m.team.sector.east` | East | पूर्व |  |
+| `m.team.sector.south` | South | दक्षिण |  |
+| `m.team.sector.west` | West | पश्चिम |  |
+| `m.team.roles` | Role assignment | भूमिका आवंटन |  |
+| `m.team.role` | Role | भूमिका |  |
+| `m.team.roleFor` | Role for {{name}} | {{name}} की भूमिका |  |
+| `m.team.operator` | Operator | ऑपरेटर |  |
+| `m.team.commander` | Commander | कमांडर |  |
+| `m.team.trackBoard` | Track board | ट्रैक बोर्ड |  |
+| `m.team.track` | Track | ट्रैक |  |
+| `m.team.identity` | Identity | पहचान |  |
+| `m.team.range` | Range | दूरी |  |
+| `m.team.bearing` | Bearing | दिशा |  |
+| `m.team.sectorCol` | Sector | सेक्टर |  |
+| `m.team.owner` | Owner | स्वामी |  |
+| `m.team.history` | Reports | रिपोर्ट |  |
+| `m.team.handoverState` | Handover | हस्तांतरण |  |
+| `m.team.state.none` | Held | अपने पास |  |
+| `m.team.state.offered` | Offered | प्रस्तावित |  |
+| `m.team.state.accepted` | Acknowledged | पावती दी |  |
+| `m.team.handOver` | Hand over | सौंपें |  |
+| `m.team.handOverNamed` | Hand over {{id}} | {{id}} सौंपें |  |
+| `m.team.handTo` | Receiving operator for {{id}} | {{id}} के लिए प्राप्तकर्ता ऑपरेटर |  |
+| `m.team.acknowledge` | Acknowledge | पावती दें |  |
+| `m.team.acknowledgeNamed` | Acknowledge {{id}} from {{name}} | {{name}} से {{id}} की पावती दें |  |
+| `m.team.handoverLog` | Handover log | हस्तांतरण लॉग |  |
+| `m.team.from` | From | से |  |
+| `m.team.to` | To | को |  |
+| `m.team.latency` | Latency | देरी |  |
+| `m.team.member` | Member | सदस्य |  |
+| `m.team.roleScores` | Scores by role | भूमिका अनुसार स्कोर |  |
+| `m.team.handoverTime` | Handover time | हस्तांतरण समय |  |
+| `m.team.part.coverage` | Sector coverage | सेक्टर कवरेज |  |
+| `m.team.part.handover` | Handover quality | हस्तांतरण गुणवत्ता |  |
+| `m.team.part.roe` | Rules compliance | नियम अनुपालन |  |
+| `m.team.part.tempo` | Tempo | गति |  |
+| `m.team.scoreNote` | Team score {{share}} of the available marks. | टीम स्कोर उपलब्ध अंकों का {{share}}। |  |
+| `m.rules.listTab` | Rule-pack list | नियम-पैक सूची |  |
+| `m.rules.editor` | Rule-pack editor | नियम-पैक संपादक |  |
+| `m.rules.list` | Rule packs | नियम पैक |  |
+| `m.rules.pack` | Rule pack | नियम पैक |  |
+| `m.rules.rules` | Rules | नियम |  |
+| `m.rules.author` | Author | लेखक |  |
+| `m.rules.inUse` | Cohorts using it | उपयोग करने वाले कोहोर्ट |  |
+| `m.rules.weights` | Scoring weights | स्कोर भार |  |
+| `m.rules.sumOk` | Weights add up to {{sum}}. | भार का योग {{sum}} है। |  |
+| `m.rules.sumBad` | Weights add up to {{sum}}; they must add up to 1. | भार का योग {{sum}} है; योग 1 होना चाहिए। |  |
+| `m.rules.thresholds` | Time standards (seconds) | समय मानक (सेकंड) |  |
+| `m.rules.threshold.detect_within_s` | Detect within | पहचान की अवधि |  |
+| `m.rules.threshold.classify_within_s` | Classify within | वर्गीकरण की अवधि |  |
+| `m.rules.threshold.report_within_s` | Report within | रिपोर्ट की अवधि |  |
+| `m.rules.threshold.respond_within_s` | Respond within | प्रतिक्रिया की अवधि |  |
+| `m.rules.roe` | Rules of engagement | संलग्नता के नियम |  |
+| `m.rules.ruleId` | Rule | नियम |  |
+| `m.rules.ruleTitle` | Title | शीर्षक |  |
+| `m.rules.when` | Applies when | लागू होने की शर्त |  |
+| `m.rules.authority` | Authority | प्राधिकार |  |
+| `m.rules.permits` | Permits | अनुमति |  |
+| `m.rules.rule.holdCivil` | Hold fire on neutral traffic | तटस्थ यातायात पर फ़ायर रोकें |  |
+| `m.rules.rule.trackUnknown` | Track and assess unknown contacts | अज्ञात संपर्क को ट्रैक और आकलित करें |  |
+| `m.rules.rule.engageHostileInner` | Engage hostile contacts in the inner zone | आंतरिक क्षेत्र में शत्रु संपर्क पर संलग्न हों |  |
+| `m.rules.rule.designateOuter` | Designate hostile contacts in the outer zone | बाहरी क्षेत्र में शत्रु संपर्क को नामित करें |  |
+| `m.rules.rule.restrictedAny` | Restricted zone: commander decision | प्रतिबंधित क्षेत्र: कमांडर का निर्णय |  |
+| `m.rules.rule.suspectReport` | Report suspect contacts | संदिग्ध संपर्क की रिपोर्ट करें |  |
+| `m.rules.diff` | Changes from the previous version | पिछले संस्करण से बदलाव |  |
+| `m.rules.field` | Field | फ़ील्ड |  |
+| `m.rules.save` | Save as a new version | नए संस्करण के रूप में सहेजें |  |
+| `m.rules.saved` | Saved as a new version. | नए संस्करण के रूप में सहेजा गया। |  |
+| `m.curricula.listTab` | Curriculum list | पाठ्यक्रम सूची |  |
+| `m.curricula.editor` | Curriculum editor | पाठ्यक्रम संपादक |  |
+| `m.curricula.list` | Curricula | पाठ्यक्रम |  |
+| `m.curricula.cohorts` | Cohorts | कोहोर्ट |  |
+| `m.curricula.stagesGates` | Stages and gates | चरण और द्वार |  |
+| `m.curricula.minScore` | Minimum score | न्यूनतम स्कोर |  |
+| `m.curricula.minAccuracy` | Minimum accuracy (%) | न्यूनतम सटीकता (%) |  |
+| `m.curricula.save` | Save curriculum | पाठ्यक्रम सहेजें |  |
+| `m.curricula.saved` | Curriculum saved. | पाठ्यक्रम सहेजा गया। |  |
+| `m.unit.dashboard` | Unit dashboard | यूनिट डैशबोर्ड |  |
+| `m.unit.compare` | Compare trainees | प्रशिक्षुओं की तुलना |  |
+| `m.unit.replay` | Annotated replay | टिप्पणी सहित रीप्ले |  |
+| `m.unit.trends` | Cohort trends | कोहोर्ट रुझान |  |
+| `m.unit.trendAlt` | Line chart of mean score and mean accuracy over four sessions. | चार सत्रों में औसत स्कोर और औसत सटीकता का रेखा चार्ट। |  |
+| `m.unit.rankings` | Rankings | क्रम |  |
+| `m.unit.skillHeat` | Skill heat map | कौशल हीट मैप |  |
+| `m.unit.mean` | Mean | औसत |  |
+| `m.org.units` | Units | यूनिट |  |
+| `m.org.unit` | Unit | यूनिट |  |
+| `m.org.location` | Location | स्थान |  |
+| `m.org.detail` | {{name}} | {{name}} |  |
+| `m.org.users` | Accounts | खाते |  |
+| `m.org.cohorts` | Cohorts | कोहोर्ट |  |
+| `m.org.trainees` | Trainees | प्रशिक्षु |  |
+| `m.users.listTab` | User list | उपयोगकर्ता सूची |  |
+| `m.users.detail` | User detail | उपयोगकर्ता विवरण |  |
+| `m.users.list` | Users: {{count}} | उपयोगकर्ता: {{count}} |  |
+| `m.users.name` | Name | नाम |  |
+| `m.users.email` | Email address | ईमेल पता |  |
+| `m.users.role` | Role | भूमिका |  |
+| `m.users.roles` | Role and access | भूमिका और पहुँच |  |
+| `m.users.lastSignIn` | Last sign-in | पिछला साइन-इन |  |
+| `m.users.status` | Status | स्थिति |  |
+| `m.users.active` | Active | सक्रिय |  |
+| `m.users.deactivated` | Deactivated | निष्क्रिय |  |
+| `m.users.account` | Account | खाता |  |
+| `m.users.roleSaved` | Role updated. | भूमिका अद्यतन हुई। |  |
+| `m.users.statusSaved` | Status updated. | स्थिति अद्यतन हुई। |  |
+| `m.users.reset` | Reset access | पहुँच रीसेट करें |  |
+| `m.users.resetTitle` | Reset access for {{name}} | {{name}} की पहुँच रीसेट करें |  |
+| `m.users.resetBody` | The current password stops working and a new one-time sign-in is issued. | मौजूदा पासवर्ड काम करना बंद कर देता है और एक बार का नया साइन-इन जारी होता है। |  |
+| `m.users.resetConfirm` | Reset access | पहुँच रीसेट करें |  |
+| `m.users.resetDone` | Access reset. A one-time sign-in was issued. | पहुँच रीसेट हुई। एक बार का साइन-इन जारी हुआ। |  |
+| `m.packs.manager` | Pack manager | पैक प्रबंधक |  |
+| `m.packs.kind` | Kind | प्रकार |  |
+| `m.packs.terrain` | Terrain packs | भू-भाग पैक |  |
+| `m.packs.sensor` | Sensor profiles | सेंसर प्रोफ़ाइल |  |
+| `m.packs.scenario` | Scenario packs | परिदृश्य पैक |  |
+| `m.packs.rule` | Rule packs | नियम पैक |  |
+| `m.packs.import` | Import pack | पैक आयात करें |  |
+| `m.packs.export` | Export packs | पैक निर्यात करें |  |
+| `m.packs.importDone` | Pack imported. | पैक आयात हुआ। |  |
+| `m.packs.exportDone` | Packs exported. | पैक निर्यात हुए। |  |
+| `m.packs.list` | Packs: {{count}} | पैक: {{count}} |  |
+| `m.packs.name` | Name | नाम |  |
+| `m.packs.entries` | Entries | प्रविष्टियाँ |  |
+| `m.packs.size` | Size | आकार |  |
+| `m.packs.licence` | Licence | लाइसेंस |  |
+| `m.register.sources` | Sources | स्रोत |  |
+| `m.register.provenance` | Parameter provenance | पैरामीटर का मूल |  |
+| `m.register.dataset` | Dataset | डेटासेट |  |
+| `m.register.modality` | Modality | प्रकार |  |
+| `m.register.use` | Used for | उपयोग |  |
+| `m.register.shipped` | Shipped with the platform | प्लेटफ़ॉर्म के साथ भेजा जाता है |  |
+| `m.register.calibrationOnly` | Calibration only | केवल अंशांकन |  |
+| `m.register.parameters` | Parameters | पैरामीटर |  |
+| `m.register.detail` | Source {{id}} | स्रोत {{id}} |  |
+| `m.register.parameter` | Parameter | पैरामीटर |  |
+| `m.register.source` | Source | स्रोत |  |
+| `m.register.checked` | Check | जाँच |  |
+| `m.register.verified` | Verified | सत्यापित |  |
+| `m.register.toCheck` | To verify | सत्यापन बाकी |  |
+| `m.audit.tab` | Audit log | ऑडिट लॉग |  |
+| `m.audit.log` | Audit log: {{count}} entries | ऑडिट लॉग: {{count}} प्रविष्टियाँ |  |
+| `m.audit.action` | Action | क्रिया |  |
+| `m.audit.actor` | Actor | कर्ता |  |
+| `m.audit.target` | Target | लक्ष्य |  |
+| `m.audit.result` | Result | परिणाम |  |
+| `m.audit.hash` | Chain hash | श्रृंखला हैश |  |
+| `m.audit.ok` | Permitted | अनुमत |  |
+| `m.audit.denied` | Denied | अस्वीकृत |  |
+| `m.audit.intact` | Integrity: chain intact | अखंडता: श्रृंखला सुरक्षित |  |
+| `m.audit.broken` | Integrity: chain broken | अखंडता: श्रृंखला टूटी |  |
+| `m.verify.tab` | Record verification | रिकॉर्ड सत्यापन |  |
+| `m.verify.record` | Record | रिकॉर्ड |  |
+| `m.verify.session` | Session record | सत्र रिकॉर्ड |  |
+| `m.verify.events` | Events in chain | श्रृंखला में घटनाएँ |  |
+| `m.verify.head` | Chain head | श्रृंखला शीर्ष |  |
+| `m.verify.key` | Signing key | हस्ताक्षर कुंजी |  |
+| `m.verify.algorithm` | Signature algorithm | हस्ताक्षर एल्गोरिदम |  |
+| `m.verify.checkChain` | Check chain | श्रृंखला जाँचें |  |
+| `m.verify.checkSignature` | Check signature | हस्ताक्षर जाँचें |  |
+| `m.verify.results` | Results | परिणाम |  |
+| `m.verify.chain` | Chain check | श्रृंखला जाँच |  |
+| `m.verify.signature` | Signature check | हस्ताक्षर जाँच |  |
+| `m.verify.notRun` | Not run yet. | अभी नहीं चलाई। |  |
+| `m.verify.chainOk` | All {{count}} links verify. | सभी {{count}} कड़ियाँ सत्यापित हैं। |  |
+| `m.verify.chainBroken` | Link {{seq}} does not verify. | कड़ी {{seq}} सत्यापित नहीं होती। |  |
+| `m.verify.signatureOk` | The signature matches the chain head. | हस्ताक्षर श्रृंखला शीर्ष से मेल खाता है। |  |
+| `m.health.services` | Services | सेवाएँ |  |
+| `m.health.performance` | Performance | प्रदर्शन |  |
+| `m.health.storage` | Storage | भंडारण |  |
+| `m.health.service` | Service | सेवा |  |
+| `m.health.running` | Running | चालू |  |
+| `m.health.uptime` | Uptime | चालू अवधि |  |
+| `m.health.latency` | Latency | विलंब |  |
+| `m.health.name.proxy` | Reverse proxy | रिवर्स प्रॉक्सी |  |
+| `m.health.name.web` | Web server | वेब सर्वर |  |
+| `m.health.name.api` | API | API |  |
+| `m.health.name.sim` | Simulation runtime | सिमुलेशन रनटाइम |  |
+| `m.health.name.db` | Database | डेटाबेस |  |
+| `m.health.tick` | Simulation tick time | सिमुलेशन टिक समय |  |
+| `m.health.tickAlt` | Line chart of the simulation tick time over the last hour. | पिछले एक घंटे में सिमुलेशन टिक समय का रेखा चार्ट। |  |
+| `m.health.minutesAgo` | Minutes ago | मिनट पहले |  |
+| `m.health.load` | Load | भार |  |
+| `m.health.tickP50` | Tick time, median | टिक समय, माध्यिका |  |
+| `m.health.tickP95` | Tick time, 95th percentile | टिक समय, 95वाँ प्रतिशतक |  |
+| `m.health.tickBudget` | Tick budget | टिक सीमा |  |
+| `m.health.clients` | Connected clients | जुड़े क्लाइंट |  |
+| `m.health.memory` | API memory | API मेमोरी |  |
+| `m.health.store.database` | Database | डेटाबेस |  |
+| `m.health.store.packs` | Packs | पैक |  |
+| `m.health.store.records` | Session records | सत्र रिकॉर्ड |  |
+| `m.health.store.backups` | Backups | बैकअप |  |
+| `m.settings.instance` | Instance settings | इंस्टेंस सेटिंग |  |
+| `m.settings.mode` | Mode | मोड |  |
+| `m.settings.production` | Production | उत्पादन |  |
+| `m.settings.demoAccounts` | Demo accounts | डेमो खाते |  |
+| `m.settings.blocked` | Blocked | अवरुद्ध |  |
+| `m.settings.firstAdmin` | First administrator | पहला प्रशासक |  |
+| `m.settings.fromEnv` | From environment variables | एनवायरनमेंट वेरिएबल से |  |
+| `m.settings.signing` | Signing key | हस्ताक्षर कुंजी |  |
+| `m.settings.defaults` | Defaults | डिफ़ॉल्ट |  |
+| `m.settings.defaultLanguage` | Default language | डिफ़ॉल्ट भाषा |  |
+| `m.settings.retention` | Record retention | रिकॉर्ड प्रतिधारण |  |
+| `m.settings.days` | Days | दिन |  |
+| `m.settings.sessionLength` | Sign-in length | साइन-इन अवधि |  |
+| `m.settings.minutes` | Minutes | मिनट |  |
+| `m.settings.save` | Save settings | सेटिंग सहेजें |  |
+| `m.settings.saved` | Settings saved. | सेटिंग सहेजी गई। |  |
+| `m.backup.tab` | Backup and restore | बैकअप और पुनर्स्थापना |  |
+| `m.backup.run` | Run backup now | अभी बैकअप लें |  |
+| `m.backup.created` | Backup created and verified. | बैकअप बना और सत्यापित हुआ। |  |
+| `m.backup.list` | Backups | बैकअप |  |
+| `m.backup.kind` | Kind | प्रकार |  |
+| `m.backup.full` | Full | पूर्ण |  |
+| `m.backup.incremental` | Incremental | वृद्धिशील |  |
+| `m.backup.restore` | Restore | पुनर्स्थापित करें |  |
+| `m.backup.restoreNamed` | Restore the backup from {{when}} | {{when}} का बैकअप पुनर्स्थापित करें |  |
+| `m.backup.restoreTitle` | Restore this backup | यह बैकअप पुनर्स्थापित करें |  |
+| `m.backup.restoreBody` | The current database and records are replaced by the backup. Sessions in progress end first. | मौजूदा डेटाबेस और रिकॉर्ड बैकअप से बदल जाते हैं। चल रहे सत्र पहले समाप्त होते हैं। |  |
+| `m.backup.restoreConfirm` | Restore backup | बैकअप पुनर्स्थापित करें |  |
+| `m.backup.restored` | Backup restored. | बैकअप पुनर्स्थापित हुआ। |  |
 
-1175 strings.
+1733 strings.

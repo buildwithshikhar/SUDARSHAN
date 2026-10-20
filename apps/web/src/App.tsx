@@ -13,13 +13,15 @@ import { PublicFrame } from './layout/PublicFrame'
 import { Shell } from './layout/Shell'
 import { AuthProvider, useAuth, type Role } from './lib/auth'
 import { VersionProvider, useVersion } from './lib/version'
+import { useViewRole } from './lib/viewRole'
 import { findModule } from './nav/modules'
 import { About } from './screens/About'
 import { Bench } from './screens/Bench'
 import { Debrief } from './screens/Debrief'
 import { DevComponents } from './screens/DevComponents'
-import { ModulePlaceholder, NoAccess, NotFound, Offline } from './screens/Messages'
+import { NoAccess, NotFound, Offline } from './screens/Messages'
 import { LiveSessionPage } from './screens/LiveSession'
+import { MODULE_SCREENS } from './screens/modules'
 import { Profile } from './screens/Profile'
 import { SessionLobby } from './screens/SessionLobby'
 import { SignIn } from './screens/SignIn'
@@ -108,18 +110,28 @@ function RoleGate({ roles, children }: { roles: Role[]; children: ReactNode }) {
 /** /:role/:module: each role may open only its own modules; others get No access. */
 function RoleModule() {
   const { role, module } = useParams()
-  const { state } = useAuth()
-  if (state.status !== 'authenticated') return null
-  const own = state.user.role
+  const own = useViewRole()
+  if (own === null) return null
   if (role !== own) {
-    const known = role === 'trainee' || role === 'instructor' || role === 'admin'
+    const known =
+      role === 'trainee' || role === 'instructor' || role === 'admin' || role === 'commander'
     return known ? <Navigate to="/no-access" replace /> : <NotFound />
   }
   const found = module ? findModule(own, module) : null
   if (!found) return <NotFound />
   if (found.module.home) return <Navigate to={found.module.home} replace />
+  return <ModuleScreen slug={found.module.slug} />
+}
+
+/** A module screen, loaded on demand. */
+function ModuleScreen({ slug }: { slug: string }) {
+  const { t } = useTranslation()
+  const Screen = MODULE_SCREENS[slug]
+  if (!Screen) return <NotFound />
   return (
-    <ModulePlaceholder slug={found.module.slug} groupId={found.group.id} wave={found.module.wave} />
+    <Suspense fallback={<LoadingState label={t('app.loading')} />}>
+      <Screen />
+    </Suspense>
   )
 }
 
@@ -128,11 +140,8 @@ function AccountModule() {
   const { state } = useAuth()
   if (state.status !== 'authenticated') return null
   if (module === 'profile') return <Profile />
-  const found = module ? findModule(state.user.role, module) : null
-  if (!found || found.group.id !== 'account') return <NotFound />
-  return (
-    <ModulePlaceholder slug={found.module.slug} groupId={found.group.id} wave={found.module.wave} />
-  )
+  if (module === 'help') return <ModuleScreen slug="help" />
+  return <NotFound />
 }
 
 function Home() {

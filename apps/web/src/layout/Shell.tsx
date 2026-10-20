@@ -5,6 +5,7 @@ import { Link, NavLink } from 'react-router-dom'
 import brand from '../../../../brand.json'
 import { useAuth } from '../lib/auth'
 import { useVersion } from '../lib/version'
+import { useViewRole } from '../lib/viewRole'
 import { modulePath, sidebarGroups } from '../nav/modules'
 import { Badge } from '../ui/Badge'
 import { BrandMark } from '../ui/BrandMark'
@@ -24,7 +25,8 @@ export function Shell({ children }: { children: ReactNode }) {
   const { t } = useTranslation()
   const auth = useAuth()
   const version = useVersion()
-  if (auth.state.status !== 'authenticated') return null
+  const view = useViewRole()
+  if (auth.state.status !== 'authenticated' || view === null) return null
   const { user } = auth.state
   const info = version.state.status === 'ready' ? version.state.info : null
 
@@ -42,7 +44,7 @@ export function Shell({ children }: { children: ReactNode }) {
           <span className="text-base font-semibold tracking-[0.14em]">{brand.productName}</span>
         </Link>
         <div className="flex items-center gap-4">
-          <Badge tone="accent">{t(`roles.${user.role}`)}</Badge>
+          <Badge tone="accent">{t(`roles.${view}`)}</Badge>
           <span className="num hidden text-sm text-ink-2 lg:inline">{user.email}</span>
           <PreferenceControls />
           <Button variant="ghost" onClick={() => void auth.logout()}>
@@ -60,16 +62,13 @@ export function Shell({ children }: { children: ReactNode }) {
           <NavLink to="/status" className={itemClass} end>
             {t('nav.status')}
           </NavLink>
-          {sidebarGroups(user.role).map((group) => (
+          {sidebarGroups(view).map((group) => (
             <div key={group.id} className="mt-4">
               <h2 className="micro-label m-0 mb-1 px-3">{t(`nav.group.${group.id}`)}</h2>
               <ul className="m-0 list-none p-0">
                 {group.modules.map((module) => (
                   <li key={module.slug}>
-                    <NavLink
-                      to={modulePath(user.role, group.id, module.slug)}
-                      className={itemClass}
-                    >
+                    <NavLink to={modulePath(view, group.id, module.slug)} className={itemClass}>
                       {t(`nav.module.${module.slug}`)}
                     </NavLink>
                   </li>

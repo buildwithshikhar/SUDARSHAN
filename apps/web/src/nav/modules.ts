@@ -1,9 +1,11 @@
 /**
  * The single source list for the sidebar, matching docs/07-ui-map.md.
- * Each module records the wave that delivers it; until then its route shows an honest empty state.
  * Counts per role are pinned by tests/nav.test.ts so they cannot drift from the UI map.
+ * The detachment commander seat is a trainee account working in the team role; it has its own
+ * sidebar, listed apart from the counted roles.
  */
 import type { Role } from '../lib/auth'
+import type { ViewRole } from '../lib/viewRole'
 
 /** A screen inside a module, for modules that have more than one (docs/07-ui-map.md). */
 export interface NavScreen {
@@ -16,8 +18,9 @@ export interface NavScreen {
 
 export interface NavModule {
   slug: string
+  /** Build-plan reference; kept for the planning documents, never shown. */
   wave: string
-  /** Where the sidebar link goes, when the module is built and has its own routes. */
+  /** Where the sidebar link goes, when the module has its own routes. */
   home?: string
   screens?: NavScreen[]
 }
@@ -36,7 +39,6 @@ export const NAV: Record<Role, NavGroup[]> = {
         {
           slug: 'drills',
           wave: '5',
-          home: '/train/lobby',
           screens: [
             { slug: 'session-lobby', path: '/train/lobby', roles: ['trainee', 'instructor'] },
             { slug: 'live-session', path: '/train/session/:id', roles: ['trainee', 'instructor'] },
@@ -113,18 +115,23 @@ export const NAV: Record<Role, NavGroup[]> = {
   ],
 }
 
-/** Modules with a real screen behind them; the rest show an empty state naming their wave. */
-export const ACCOUNT_BUILT = new Set(['profile', 'drills', 'scenarios', 'generator'])
+/** A trainee account in the detachment commander seat: the command module, then the trainee screens. */
+const COMMANDER: NavGroup[] = [
+  { id: 'command', modules: [{ slug: 'command', wave: '13a' }] },
+  ...NAV.trainee,
+]
+
+const ALL: Record<ViewRole, NavGroup[]> = { ...NAV, commander: COMMANDER }
 
 /** The counted sidebar groups: trainee Account (Profile, Help) is shared, so it is listed apart. */
-export function sidebarGroups(role: Role): NavGroup[] {
-  const own = NAV[role].filter((g) => g.id !== 'account')
+export function sidebarGroups(role: ViewRole): NavGroup[] {
+  const own = ALL[role].filter((g) => g.id !== 'account')
   const account = NAV.trainee.find((g) => g.id === 'account')
   return account ? [...own, account] : own
 }
 
 export function findModule(
-  role: Role,
+  role: ViewRole,
   slug: string,
 ): { group: NavGroup; module: NavModule } | null {
   for (const group of sidebarGroups(role)) {
@@ -134,7 +141,7 @@ export function findModule(
   return null
 }
 
-export function modulePath(role: Role, groupId: string, slug: string): string {
+export function modulePath(role: ViewRole, groupId: string, slug: string): string {
   const home = findModule(role, slug)?.module.home
   if (home) return home
   return groupId === 'account' ? `/account/${slug}` : `/${role}/${slug}`

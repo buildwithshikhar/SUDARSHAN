@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
 import { useVersion } from '../lib/version'
-import { ACCOUNT_BUILT, modulePath, sidebarGroups } from '../nav/modules'
+import { useViewRole } from '../lib/viewRole'
+import { modulePath, sidebarGroups } from '../nav/modules'
 import { PageHeader } from '../layout/PageHeader'
-import { Badge } from '../ui/Badge'
 import { Panel } from '../ui/Panel'
 import { ErrorState, LoadingState } from '../ui/States'
 import { Table, type Column } from '../ui/Table'
@@ -37,7 +37,6 @@ interface ModuleRow {
   key: string
   slug: string
   group: string
-  wave: string
   path: string
 }
 
@@ -45,16 +44,16 @@ export function Status() {
   const { t } = useTranslation()
   const auth = useAuth()
   const version = useVersion()
-  if (auth.state.status !== 'authenticated') return null
+  const view = useViewRole()
+  if (auth.state.status !== 'authenticated' || view === null) return null
   const { user, expiresAt } = auth.state
 
-  const rows: ModuleRow[] = sidebarGroups(user.role).flatMap((group) =>
+  const rows: ModuleRow[] = sidebarGroups(view).flatMap((group) =>
     group.modules.map((module) => ({
       key: `${group.id}/${module.slug}`,
       slug: module.slug,
       group: group.id,
-      wave: module.wave,
-      path: modulePath(user.role, group.id, module.slug),
+      path: modulePath(view, group.id, module.slug),
     })),
   )
 
@@ -65,22 +64,7 @@ export function Status() {
       render: (row) => <Link to={row.path}>{t(`nav.module.${row.slug}`)}</Link>,
     },
     { key: 'group', header: t('status.groupCol'), render: (row) => t(`nav.group.${row.group}`) },
-    {
-      key: 'wave',
-      header: t('status.arrivesCol'),
-      mono: true,
-      render: (row) => (ACCOUNT_BUILT.has(row.slug) ? '—' : t('page.wave', { wave: row.wave })),
-    },
-    {
-      key: 'state',
-      header: t('status.stateCol'),
-      render: (row) =>
-        ACCOUNT_BUILT.has(row.slug) ? (
-          <Badge tone="neutralTrack">{t('status.available')}</Badge>
-        ) : (
-          <Badge>{t('status.planned')}</Badge>
-        ),
-    },
+    { key: 'about', header: t('status.aboutCol'), render: (row) => t(`status.about.${row.slug}`) },
   ]
 
   return (
@@ -126,7 +110,7 @@ export function Status() {
           <Rows
             rows={[
               { id: 'account', label: t('status.account'), value: user.email },
-              { id: 'role', label: t('status.role'), value: t(`roles.${user.role}`) },
+              { id: 'role', label: t('status.role'), value: t(`roles.${view}`) },
               {
                 id: 'language',
                 label: t('status.language'),

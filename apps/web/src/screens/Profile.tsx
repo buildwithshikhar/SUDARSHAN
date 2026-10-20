@@ -5,6 +5,7 @@ import type { Language } from '../i18n'
 import { ApiError, NetworkError } from '../lib/api'
 import { useAuth } from '../lib/auth'
 import { setLanguage, setTheme, useTheme, type Theme } from '../lib/prefs'
+import { setTeamRole, useViewRole } from '../lib/viewRole'
 import { InlineAlert } from '../ui/InlineAlert'
 import { Panel } from '../ui/Panel'
 import { Select } from '../ui/Field'
@@ -14,6 +15,7 @@ export function Profile() {
   const { t, i18n } = useTranslation()
   const auth = useAuth()
   const theme = useTheme()
+  const view = useViewRole()
   const [notice, setNotice] = useState<'saved' | 'failed' | null>(null)
   const language: Language = i18n.language === 'hi' ? 'hi' : 'en'
 
@@ -55,6 +57,20 @@ export function Profile() {
           void save({ theme: value })
         }}
       />
+      {auth.state.status === 'authenticated' && auth.state.user.role === 'trainee' && (
+        <Select
+          label={t('profile.teamRole')}
+          hint={t('profile.teamRoleHint')}
+          value={view === 'commander' ? 'commander' : 'operator'}
+          options={[
+            { value: 'operator', label: t('roles.trainee') },
+            { value: 'commander', label: t('roles.commander') },
+          ]}
+          onChange={(event) =>
+            setTeamRole(event.target.value === 'commander' ? 'commander' : 'operator')
+          }
+        />
+      )}
       {notice === 'saved' && <InlineAlert tone="success">{t('profile.saved')}</InlineAlert>}
       {notice === 'failed' && <InlineAlert tone="warning">{t('profile.saveFailed')}</InlineAlert>}
     </div>

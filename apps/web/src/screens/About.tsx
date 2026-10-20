@@ -11,6 +11,7 @@ export function About() {
   return (
     <div className="max-w-[760px]">
       <PageHeader title={t('about.title')} />
+      <p className="m-0 mb-4 text-sm">{t('app.scenarioLabel')}</p>
       <div className="flex flex-col gap-4">
         <Panel title={t('about.dataTitle')}>
           <p className="m-0 mb-2 text-sm">{t('about.data1')}</p>

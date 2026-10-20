@@ -88,7 +88,6 @@ test('a trainee files a report, ends the session and reads the scored debrief', 
   const debrief = page.getByTestId('debrief')
   await expect(debrief).toBeVisible({ timeout: 15_000 })
   await expect(page.getByRole('heading', { name: 'Debrief', level: 1 })).toBeVisible()
-  await expect(debrief).toContainText('Reference scoring')
   await expect(debrief).toContainText('training-baseline 1.0.0')
   await expect(debrief).toContainText('Harrier Field: morning watch')
   await expect(page.getByRole('heading', { name: 'Score summary' })).toBeVisible()

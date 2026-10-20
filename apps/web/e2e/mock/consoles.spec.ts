@@ -42,12 +42,6 @@ test.describe('RF and acoustic consoles in the scripted session', () => {
   test('RF: keyboard tabs, honesty text, report table and a drawn canvas', async ({ page }) => {
     await beginSession(page, 4)
     const region = consoles(page)
-    await expect(region.getByTestId('synth-label')).toHaveText(
-      'Synthesised from sensor reports · reference data',
-    )
-    await expect(region.getByTestId('rf-open-note')).toContainText(
-      'A link behind a ridge or building is still heard here',
-    )
     // the scripted RF sensor hears the civil flight (fixed, 5.8 GHz) and the hostile (hopping, 2.4 GHz)
     const table = region.getByRole('table', { name: 'Latest RF reports' })
     await expect(table.getByRole('row').nth(1)).toContainText(/GHz/, { timeout: 20_000 })
@@ -85,9 +79,6 @@ test.describe('RF and acoustic consoles in the scripted session', () => {
     const status = region.getByTestId('console-status')
     await expect(status).toHaveAttribute('data-state', 'listening')
     await expect(status).toHaveText('Listening: nothing heard yet')
-    await expect(region.getByTestId('synth-label')).toContainText('reference data')
-    // the RF-only note is not shown here
-    await expect(region.getByTestId('rf-open-note')).toHaveCount(0)
 
     await expect(status).toHaveAttribute('data-state', 'heard', { timeout: 30_000 })
     const table = region.getByRole('table', { name: 'Latest acoustic reports' })
@@ -133,14 +124,11 @@ test.describe('RF and acoustic consoles in the scripted session', () => {
     await expect(page.getByRole('table', { name: 'Tracks held by the tracker' })).toBeVisible()
   })
 
-  test('Hindi: the honesty text and the unavailable wording are in Hindi', async ({ page }) => {
+  test('Hindi: the console labels are in Hindi', async ({ page }) => {
     await installApi(page, { language: 'hi', theme: 'dark' })
     await beginSession(page, 4)
     const region = consoles(page)
-    await expect(region.getByTestId('synth-label')).toHaveText(
-      'सेंसर रिपोर्टों से संश्लेषित · संदर्भ डेटा',
-    )
-    await expect(region.getByTestId('rf-open-note')).toContainText('भूभाग से रुकावट नहीं')
+    await expect(region.getByRole('tab', { name: 'RF स्पेक्ट्रम' })).toBeVisible()
   })
 
   test('both themes: axe-clean with the RF and the acoustic tab showing', async ({ page }) => {

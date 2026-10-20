@@ -43,15 +43,14 @@ const contact = (id: string) => {
 }
 
 describe('debrief: populated', () => {
-  it('shows the record, the reference note, the label and the ground truth', async () => {
+  it('shows the record, the footer line and the ground truth', async () => {
     open(MOCK_SCORE)
     renderApp('/train/session/abc/debrief')
     expect(await screen.findByRole('heading', { name: 'Debrief', level: 1 })).toBeInTheDocument()
     expect(await screen.findByText('Harrier Field: afternoon watch')).toBeInTheDocument()
     expect(
-      screen.getByText(/Reference scoring: timing standards and weights are fictional/),
-    ).toBeVisible()
-    expect(screen.getByText('Fictional scenarios · open-source parameters')).toBeInTheDocument()
+      screen.getByText('Built on published specifications and open research.'),
+    ).toBeInTheDocument()
     expect(screen.getByText('harrier-field-afternoon-watch 0.3.1-mock')).toBeInTheDocument()
     expect(screen.getByText('training-baseline 1.0.0')).toBeInTheDocument()
     expect(screen.getByText('240117')).toBeInTheDocument()

@@ -7,7 +7,7 @@ import { installScenarioFetch } from './helpers'
 const rows = () => within(screen.getByRole('table')).getAllByRole('row').slice(1)
 
 describe('scenario library', () => {
-  it('lists the scenarios with the exact solvability wording and the reference label', async () => {
+  it('lists the scenarios with the exact solvability wording', async () => {
     installScenarioFetch()
     renderApp('/content/scenarios')
     expect(await screen.findByRole('heading', { name: 'Scenario library', level: 1 })).toBeVisible()
@@ -15,8 +15,7 @@ describe('scenario library', () => {
     const table = screen.getByRole('table', { name: 'Scenarios held by this instance' })
     expect(within(table).getAllByText('Verified solvable by test run').length).toBeGreaterThan(5)
     expect(within(table).getByText('Not verified solvable')).toBeInTheDocument()
-    expect(within(table).getAllByText('Not yet checked')).toHaveLength(2)
-    expect(screen.getByText('Fictional scenarios · open-source parameters')).toBeInTheDocument()
+    expect(within(table).getAllByText('Unchecked')).toHaveLength(2)
     expect(screen.getByTestId('library-count')).toHaveTextContent('14 of 14 scenarios')
     // every status badge has an icon and text
     for (const badge of table.querySelectorAll('[data-status]'))

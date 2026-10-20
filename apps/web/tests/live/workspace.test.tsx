@@ -114,9 +114,8 @@ describe('opening a session', () => {
     expect(fake().control).toContain('start')
   })
 
-  it('shows the permanent label, the ROE pack version and the link state in the top bar', async () => {
+  it('shows the ROE pack version and the link state in the top bar', async () => {
     await running()
-    expect(screen.getByText('Fictional scenario · open-source parameters')).toBeInTheDocument()
     const bar = screen.getAllByRole('banner')[0]!
     expect(within(bar).getByText('training-baseline 1.0.0')).toBeInTheDocument()
     expect(within(bar).getByText('Connected')).toBeInTheDocument()
@@ -134,9 +133,9 @@ describe('opening a session', () => {
     expect(await screen.findByText('No contacts. Sensors are scanning.')).toBeInTheDocument()
   })
 
-  it('says the EO view is unavailable when WebGL is missing, and still works around it', async () => {
+  it('says the EO view needs WebGL when it is missing, and still works around it', async () => {
     await running()
-    expect(screen.getByText('EO view unavailable (WebGL)')).toBeInTheDocument()
+    expect(screen.getByText('EO view needs WebGL')).toBeInTheDocument()
     expect(screen.getByRole('table', { name: 'Tracks held by the tracker' })).toBeInTheDocument()
   })
 
@@ -195,7 +194,7 @@ describe('connection states', () => {
   })
 
   it.each([
-    [4403, 'Session not available to you'],
+    [4403, 'No access to this session'],
     [4404, 'Session not found'],
     [4401, 'Not signed in'],
     [4408, 'Opened in another window'],
@@ -287,7 +286,7 @@ describe('session ended view', () => {
 })
 
 describe('track table', () => {
-  it('lists the tracks with class, assist, bearing and range, and marks reference data', async () => {
+  it('lists the tracks with class, assist, bearing and range', async () => {
     await running({
       assist: [
         {
@@ -307,9 +306,7 @@ describe('track table', () => {
     expect(row).toHaveTextContent('Small rotary')
     expect(row).toHaveTextContent('71%')
     expect(row).toHaveTextContent('Threat 83%')
-    expect(row).toHaveTextContent('REF')
     expect(within(table).getByText('Assist (simulated AI)')).toBeInTheDocument()
-    expect(screen.getByText(/Reference data: parameters not yet verified/)).toBeInTheDocument()
     expect(screen.getByText('2 tracks')).toBeInTheDocument()
   })
 

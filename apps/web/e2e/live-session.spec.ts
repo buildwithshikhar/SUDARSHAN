@@ -53,8 +53,7 @@ test('a trainee plays the scenario by keyboard: cue, relabel, a blocked response
   })
   const id = await startSession(page, consoleErrors)
 
-  // the top bar carries the permanent label, the rule pack and its version
-  await expect(page.getByText('Fictional scenario · open-source parameters')).toBeVisible()
+  // the top bar carries the rule pack and its version
   await expect(page.getByText(/training-baseline/).first()).toBeVisible()
 
   await firstConfirmed(page)

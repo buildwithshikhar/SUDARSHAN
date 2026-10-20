@@ -96,7 +96,7 @@ describe('session lobby', () => {
     const kit = await screen.findByRole('region', { name: 'Role and kit check' })
     expect(within(kit).getByText('Trainee')).toBeInTheDocument()
     // jsdom has no WebGL, so the check says so instead of promising an EO view
-    expect(within(kit).getByText(/Not available; the EO view will not draw/)).toBeInTheDocument()
+    expect(within(kit).getByText(/Missing; the EO view cannot draw/)).toBeInTheDocument()
     expect(within(kit).getByText('Keyboard first; mouse works')).toBeInTheDocument()
   })
 
@@ -170,12 +170,15 @@ describe('session lobby', () => {
     expect(await screen.findByRole('heading', { name: 'No access', level: 1 })).toBeInTheDocument()
   })
 
-  it('is reached from Drills in the sidebar, and the old module address goes there', async () => {
+  it('is reached from the Drills module, which links to the lobby', async () => {
     api({ body: [scenario] })
     renderApp('/trainee/drills')
-    expect(
-      await screen.findByRole('heading', { name: 'Session lobby', level: 1 }),
-    ).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Drills' })).toHaveAttribute('href', '/train/lobby')
+    expect(await screen.findByRole('heading', { name: 'Drills', level: 1 })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Drills' })).toHaveAttribute('href', '/trainee/drills')
+    await userEvent.click(screen.getByRole('tab', { name: 'Session lobby' }))
+    expect(screen.getByRole('link', { name: 'Open session lobby' })).toHaveAttribute(
+      'href',
+      '/train/lobby',
+    )
   })
 })

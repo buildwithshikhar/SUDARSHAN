@@ -144,15 +144,15 @@ describe('states', () => {
   it('error: a closed link before any frame uses the app error state with a reload button', () => {
     open({ frame: false, connection: 'closed' })
     const alert = screen.getByRole('alert')
-    expect(alert).toHaveTextContent('Sensor consoles unavailable')
+    expect(alert).toHaveTextContent('Sensor consoles did not load')
     expect(within(alert).getByRole('button', { name: 'Reload' })).toBeInTheDocument()
   })
 
-  it('empty: no RF sensor keeps the tab, names it unavailable and explains', async () => {
+  it('empty: no RF sensor keeps the tab, marks it as having no data and explains', async () => {
     const user = userEvent.setup()
     open({ modalities: ['acoustic'] })
     const rf = screen.getByRole('tab', { name: /RF spectrum/ })
-    expect(rf).toHaveTextContent('unavailable')
+    expect(rf).toHaveTextContent('no data')
     expect(rf).toHaveAttribute('data-unavailable', 'true')
     // the acoustic console is the one shown when the RF one cannot be
     expect(screen.getByRole('tab', { name: /Acoustic/ })).toHaveAttribute('aria-selected', 'true')
@@ -165,18 +165,18 @@ describe('states', () => {
   it('empty: no acoustic sensor says so, and both missing says so on each tab', async () => {
     const user = userEvent.setup()
     open({ modalities: ['rf'] })
-    expect(screen.getByRole('tab', { name: /Acoustic/ })).toHaveTextContent('unavailable')
+    expect(screen.getByRole('tab', { name: /Acoustic/ })).toHaveTextContent('no data')
     await user.click(screen.getByRole('tab', { name: /Acoustic/ }))
     expect(screen.getByTestId('console-empty-acoustic')).toHaveTextContent(
       'No acoustic sensor in this scenario',
     )
   })
 
-  it('empty: with neither sensor both tabs stay and say unavailable', async () => {
+  it('empty: with neither sensor both tabs stay and say no data', async () => {
     open({ modalities: [] })
     expect(screen.getAllByRole('tab').map((t) => t.textContent)).toEqual([
-      'RF spectrum · unavailable',
-      'Acoustic spectrogram · unavailable',
+      'RF spectrum · no data',
+      'Acoustic spectrogram · no data',
     ])
     expect(screen.getByTestId('console-empty-rf')).toBeInTheDocument()
   })
@@ -234,29 +234,6 @@ describe('RF console', () => {
     expect(screen.getByRole('img', { name: /RF spectrum and waterfall/ })).toBeInTheDocument()
   })
 
-  it('states that it is synthesised reference data and that RF is not occluded by terrain', () => {
-    open({ reports: [rfReport()] })
-    expect(screen.getByTestId('synth-label')).toHaveTextContent(
-      'Synthesised from sensor reports · reference data',
-    )
-    expect(screen.getByTestId('rf-open-note')).toHaveTextContent(
-      'RF is not occluded by terrain in this model. A link behind a ridge or building is still heard here.',
-    )
-    expect(screen.getByText(/drawn by the display, not measured/)).toBeInTheDocument()
-  })
-
-  it('shows the label that matches the data: verified, or both', () => {
-    const { unmount } = open({
-      sensors: [sensor('rf', { data_status: 'verified' }), sensor('acoustic')],
-      reports: [rfReport({ data_status: 'verified' })],
-    })
-    expect(screen.getByTestId('synth-label')).toHaveAttribute('data-status', 'verified')
-    expect(screen.getByTestId('synth-label')).toHaveTextContent('verified data')
-    unmount()
-    open({ reports: [rfReport({ data_status: 'verified' }), rfReport()] })
-    expect(screen.getByTestId('synth-label')).toHaveAttribute('data-status', 'mixed')
-  })
-
   it('says a hopping link with no reported rate has none', () => {
     open({
       reports: [report({ features: { band: '900 MHz', hopping: true, rssi_dbm: -80 } })],
@@ -271,13 +248,9 @@ describe('RF console', () => {
     expect(screen.getByTestId('rf-reports')).not.toHaveTextContent(/wifi|rotary|bird|hostile/i)
   })
 
-  it('shows the honesty text and legend in Hindi', () => {
+  it('shows the tab labels in Hindi', () => {
     setLanguage('hi')
     open({ reports: [rfReport()] })
-    expect(screen.getByTestId('synth-label')).toHaveTextContent(
-      'सेंसर रिपोर्टों से संश्लेषित · संदर्भ डेटा',
-    )
-    expect(screen.getByTestId('rf-open-note')).toHaveTextContent('RF को भूभाग से रुकावट नहीं होती')
     expect(screen.getByRole('tab', { name: 'RF स्पेक्ट्रम' })).toBeInTheDocument()
   })
 })
@@ -290,7 +263,7 @@ describe('acoustic console', () => {
     return { user, ...r }
   }
 
-  it('lists the latest reports and carries the same honesty label', async () => {
+  it('lists the latest reports', async () => {
     await showAcoustic({ reports: [acReport()] })
     const table = screen.getByRole('table', { name: 'Latest acoustic reports' })
     expect(
@@ -299,10 +272,6 @@ describe('acoustic console', () => {
         .map((h) => h.textContent),
     ).toEqual(['Blade-pass (Hz)', 'Harmonics', 'Tonal', 'SNR (dB)', 'Bearing'])
     expect(within(table).getAllByRole('row')[1]).toHaveTextContent('100.04Yes17.5210°')
-    expect(screen.getByTestId('synth-label')).toHaveTextContent(
-      'Synthesised from sensor reports · reference data',
-    )
-    expect(screen.queryByTestId('rf-open-note')).not.toBeInTheDocument()
   })
 
   it('listens: nothing heard, no nearest harmonic, the cursor still moves', async () => {
@@ -366,7 +335,6 @@ describe('acoustic console', () => {
     const user = userEvent.setup()
     open({ reports: [acReport()] })
     await user.click(screen.getByRole('tab', { name: 'ध्वनिक स्पेक्ट्रोग्राम' }))
-    expect(screen.getByTestId('synth-label')).toHaveTextContent('संदर्भ डेटा')
     expect(screen.getByTestId('cursor-readout')).toHaveTextContent('कर्सर')
   })
 })

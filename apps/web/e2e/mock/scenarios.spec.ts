@@ -49,12 +49,10 @@ test.describe('scenario library', () => {
     const table = page.getByRole('table', { name: 'Scenarios held by this instance' })
     await expect(table.locator('tbody tr')).toHaveCount(14)
     await expect(page.getByTestId('library-count')).toHaveText('14 of 14 scenarios')
-    await expect(page.getByText('Fictional scenarios · open-source parameters')).toBeVisible()
-    for (const wording of [
-      'Verified solvable by test run',
-      'Not verified solvable',
-      'Not yet checked',
-    ]) {
+    await expect(
+      page.getByText('Built on published specifications and open research.'),
+    ).toBeVisible()
+    for (const wording of ['Verified solvable by test run', 'Not verified solvable', 'Unchecked']) {
       await expect(table.getByText(wording, { exact: true }).first()).toBeVisible()
     }
     await expect(table.locator('[data-status="verified"]').first()).toContainText(
@@ -273,7 +271,7 @@ test.describe('scenario editor', () => {
     await expect(
       page.getByRole('table', { name: 'Nearest scenarios in your history' }),
     ).toBeVisible()
-    await expect(page.getByTestId('check-result')).toContainText('reference data')
+    await expect(page.getByTestId('check-result')).toContainText('Verified solvable by test run')
     await expectClean(page)
     await noBannedWords(page)
   })
@@ -468,7 +466,7 @@ test.describe('generator studio', () => {
       })
     })
     await page.getByRole('button', { name: 'Copy', exact: true }).click()
-    await expect(page.getByText(/clipboard is not available here/)).toBeVisible()
+    await expect(page.getByText(/clipboard cannot be used here/)).toBeVisible()
   })
 
   test('draws the archive as a heat map with a numeric scale, metrics and keyboard cells', async ({

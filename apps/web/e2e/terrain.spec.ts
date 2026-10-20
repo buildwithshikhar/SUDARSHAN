@@ -33,7 +33,7 @@ test('a pack scenario loads its terrain through nginx without a policy violation
   await expect(eo.locator('[data-terrain]')).toHaveAttribute('data-terrain', 'pack', {
     timeout: 60_000,
   })
-  await expect(eo.getByText('Terrain: Heron Ridge · reference data')).toBeVisible()
+  await expect(eo.getByText('Terrain: Heron Ridge')).toBeVisible()
   await expect(eo.getByRole('alert')).toHaveCount(0)
   await expect(page.getByText('Connected')).toBeVisible()
   // give the glTF loader time to ask for its texture, then check nothing was refused

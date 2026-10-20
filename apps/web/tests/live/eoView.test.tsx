@@ -1,5 +1,3 @@
-import { readFileSync } from 'node:fs'
-import { resolve } from 'node:path'
 import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -121,49 +119,10 @@ describe('EoView and the terrain pack', () => {
     expect(screen.getByTestId('terrain-loading')).toHaveTextContent('Loading terrain')
     await waitFor(() => expect(box).toHaveAttribute('data-terrain', 'pack'))
     expect(screen.queryByTestId('terrain-loading')).not.toBeInTheDocument()
-    expect(screen.getByTestId('terrain-label')).toHaveTextContent(
-      'Terrain: Fixture Ridge · reference data',
-    )
+    expect(screen.getByTestId('terrain-label')).toHaveTextContent('Terrain: Fixture Ridge')
     await waitFor(() => expect(called('setTerrain').length).toBeGreaterThan(0))
     const pack = called('setTerrain').at(-1)?.args[0] as { id: string } | null
     expect(pack?.id).toBe('fixture-ridge')
-  })
-
-  it('says building heights are generic defaults, without a count when the manifest gives none', async () => {
-    const { session } = liveSession({ kind: 'pack', id: 'fixture-ridge', version: '1.0.0' })
-    const { container } = view(session)
-    const box = container.firstElementChild as HTMLElement
-    await waitFor(() => expect(box).toHaveAttribute('data-terrain', 'pack'))
-    const note = screen.getByTestId('terrain-heights')
-    expect(note).toHaveTextContent(
-      'Building heights are generic defaults where the source has no height.',
-    )
-    expect(note.textContent).not.toMatch(/\d/)
-  })
-
-  it('gives the count of default heights when the manifest has one, in English and Hindi', async () => {
-    const manifest = JSON.parse(
-      readFileSync(
-        resolve(import.meta.dirname, '../fixtures/terrain/fixture-ridge/manifest.json'),
-        'utf-8',
-      ),
-    )
-    manifest.buildings.height_source = { tag: 1, levels: 0, default: 2 }
-    vi.stubGlobal(
-      'fetch',
-      fixtureFetch({ 'manifest.json': () => new Response(JSON.stringify(manifest)) }),
-    )
-    const { session } = liveSession({ kind: 'pack', id: 'fixture-ridge', version: '1.0.0' })
-    const { container } = view(session)
-    const box = container.firstElementChild as HTMLElement
-    await waitFor(() => expect(box).toHaveAttribute('data-terrain', 'pack'))
-    expect(screen.getByTestId('terrain-heights')).toHaveTextContent(
-      '2 building heights are generic defaults',
-    )
-    act(() => setLanguage('hi'))
-    await waitFor(() =>
-      expect(screen.getByTestId('terrain-heights')).toHaveTextContent('2 इमारतों की ऊँचाई'),
-    )
   })
 
   it('falls back to flat ground with an accessible notice when the pack fails', async () => {
@@ -172,7 +131,7 @@ describe('EoView and the terrain pack', () => {
     const box = container.firstElementChild as HTMLElement
     await waitFor(() => expect(box).toHaveAttribute('data-terrain', 'error'))
     const notice = screen.getByTestId('terrain-notice')
-    expect(notice).toHaveTextContent('Terrain unavailable')
+    expect(notice).toHaveTextContent('Terrain could not be loaded')
     expect(notice).toHaveTextContent('flat ground')
     expect(screen.getByRole('alert')).toBeInTheDocument()
     // the view still runs: scene made, site drawn, no pack ever handed over
@@ -194,7 +153,7 @@ describe('EoView and the terrain pack', () => {
     setLanguage('hi')
     const { session } = liveSession({ kind: 'pack', id: 'missing', version: '1.0.0' })
     view(session)
-    expect(await screen.findByText('भूभाग उपलब्ध नहीं')).toBeInTheDocument()
+    expect(await screen.findByText('भूभाग लोड नहीं हो सका')).toBeInTheDocument()
   })
 })
 
@@ -242,22 +201,20 @@ describe('EoHud readouts', () => {
     )
   }
 
-  it('labels the day picture and marks sensor figures as reference data', () => {
+  it('labels the day picture', () => {
     hud('day')
     expect(screen.getByText(/T\+00:01\.00 DAY TV/)).toBeInTheDocument()
-    expect(screen.getByText(/eo-1 OK RNG n\/a REF/)).toBeInTheDocument()
+    expect(screen.getByText(/eo-1 OK RNG n\/a/)).toBeInTheDocument()
     expect(screen.queryByText(/AGC|GAIN/)).not.toBeInTheDocument()
-    expect(screen.getByText(/Sensor figures are reference data\./)).toBeInTheDocument()
   })
 
-  it('shows polarity, gain and that thermal is a model', () => {
+  it('shows polarity and gain', () => {
     hud('thermal-white-hot')
     expect(screen.getByText(/IR WHT/)).toBeInTheDocument()
     // before the first gain sample the readout is a dash, not an invented figure
     expect(screen.getByText('AGC — MODEL')).toBeInTheDocument()
     act(() => publishLook({ mode: 'thermal-white-hot', gainPct: 61, tubeGain: 1 }))
     expect(screen.getByText('AGC 61% MODEL')).toBeInTheDocument()
-    expect(screen.getByText(/Thermal is a rendering model, not radiometric/)).toBeInTheDocument()
   })
 
   it('shows night-vision tube gain, and ignores a readout from another mode', () => {

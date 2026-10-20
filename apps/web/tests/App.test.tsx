@@ -18,7 +18,7 @@ describe('signed out', () => {
     mockApi({ 'GET /api/v1/version': { body: version('demo') }, 'GET /api/v1/auth/me': unauth })
     renderApp('/status')
     expect(await screen.findByRole('heading', { name: 'Sign in' })).toBeInTheDocument()
-    expect(await screen.findByText(/Demo mode\./)).toBeInTheDocument()
+    expect(await screen.findByRole('group', { name: 'Open as' })).toBeInTheDocument()
     expect(screen.getByText(brand.descriptor)).toBeInTheDocument()
   })
 
@@ -29,7 +29,7 @@ describe('signed out', () => {
     })
     renderApp('/sign-in')
     await screen.findByRole('heading', { name: 'Sign in' })
-    await waitFor(() => expect(screen.queryByText(/Demo mode\./)).not.toBeInTheDocument())
+    expect(screen.queryByRole('group', { name: 'Open as' })).not.toBeInTheDocument()
   })
 
   it('validates the form before sending anything', async () => {
@@ -81,7 +81,9 @@ describe('signed out', () => {
     expect(
       await screen.findByRole('heading', { name: 'Page not found', level: 1 }),
     ).toBeInTheDocument()
-    expect(screen.getByText('Fictional scenarios · open-source parameters')).toBeInTheDocument()
+    expect(
+      screen.getByText('Built on published specifications and open research.'),
+    ).toBeInTheDocument()
   })
 })
 
@@ -133,7 +135,7 @@ describe('shell by role', () => {
       expect(within(nav).queryByRole('link', { name })).not.toBeInTheDocument()
   })
 
-  it('shows the account, role and the modules table with the arriving wave', async () => {
+  it('shows the account, role and the modules table with what each module does', async () => {
     signedIn('instructor')
     renderApp('/status')
     expect(
@@ -143,15 +145,14 @@ describe('shell by role', () => {
     const cohorts = within(table)
       .getByRole('link', { name: 'Cohorts' })
       .closest('tr') as HTMLElement
-    expect(cohorts).toHaveTextContent('Wave 10a')
-    expect(cohorts).toHaveTextContent('Planned')
+    expect(cohorts).toHaveTextContent('Cohorts, members and drill sequences.')
     expect(await screen.findByText('abc1234')).toBeInTheDocument()
   })
 
-  it('shows an honest empty state naming the delivering wave', async () => {
+  it('opens the Today overview for a trainee', async () => {
     signedIn('trainee')
     renderApp('/trainee/today')
-    expect(await screen.findByText('Arrives in wave 11a')).toBeInTheDocument()
+    expect(await screen.findByText('Recommended drill')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Today', level: 1 })).toBeInTheDocument()
   })
 
@@ -184,7 +185,7 @@ describe('shell by role', () => {
   it('opens the shared Help module and rejects unknown account modules', async () => {
     signedIn('admin')
     const { unmount } = renderApp('/account/help')
-    expect(await screen.findByText('Arrives in wave 15a')).toBeInTheDocument()
+    expect(await screen.findByRole('tab', { name: 'Keyboard shortcuts' })).toBeInTheDocument()
     unmount()
     signedIn('admin')
     renderApp('/account/nothing')
@@ -245,7 +246,7 @@ describe('sign in and out', () => {
     await userEvent.type(await screen.findByLabelText('Email address'), 'trainee@unit.example')
     await userEvent.type(screen.getByLabelText('Password'), 'correct-horse-battery')
     await userEvent.click(screen.getByRole('button', { name: 'Sign in' }))
-    expect(await screen.findByText('Arrives in wave 11a')).toBeInTheDocument()
+    expect(await screen.findByText('Recommended drill')).toBeInTheDocument()
   })
 })
 

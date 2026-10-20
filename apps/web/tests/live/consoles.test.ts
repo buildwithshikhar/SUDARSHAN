@@ -23,7 +23,6 @@ import {
   rfEmissionOf,
 } from '../../src/live/consoles/spectra'
 import { AcousticModel, RfModel } from '../../src/live/consoles/synth'
-import { synthKey } from '../../src/live/consoles/parts'
 import { LiveStore } from '../../src/live/store'
 import type { Report } from '../../src/live/protocol'
 import { frame } from './helpers'
@@ -470,15 +469,6 @@ describe('colour map and layouts', () => {
     const a = acousticLayout(353, 131)
     expect(a.plot.w).toBeGreaterThan(0)
     expect(a.plot.h).toBeGreaterThan(0)
-  })
-})
-
-describe('honesty label choice', () => {
-  it('says reference data unless everything it was built from is verified', () => {
-    expect(synthKey([])).toBe('reference')
-    expect(synthKey(['reference', 'reference'])).toBe('reference')
-    expect(synthKey(['verified'])).toBe('verified')
-    expect(synthKey(['reference', 'verified'])).toBe('mixed')
   })
 })
 

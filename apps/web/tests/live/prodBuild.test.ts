@@ -57,7 +57,7 @@ describe('the scripted session is development only', () => {
       // sanity: the debrief itself is in the bundle
       expect(text).toContain('/score')
       // the demo scenario's own text is not in the bundle either
-      expect(text).not.toContain('Harrier Field')
+      expect(text).not.toContain('harrier-field-afternoon-watch')
       // sanity: the build is a real one with the live code in it
       expect(text).toContain('WebGLRenderer')
       expect(text).toMatch(/\/ws/)

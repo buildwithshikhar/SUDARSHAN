@@ -125,7 +125,7 @@ describe('scenario strings', () => {
     expect(en.scenarios.solvability).toEqual({
       verified: 'Verified solvable by test run',
       failed: 'Not verified solvable',
-      unchecked: 'Not yet checked',
+      unchecked: 'Unchecked',
     })
     expect(en.scenarios.wording).toEqual({
       verified: 'Verified solvable by test run',
@@ -160,16 +160,9 @@ describe('scenario strings', () => {
     expect(same).toEqual([])
   })
 
-  it('says reference data wherever sensor, threat and tracker numbers appear', () => {
-    for (const key of [
-      'check.note',
-      'library.note',
-      'editor.preview.note',
-      'editor.terrain.note',
-      'editor.threats.reference',
-      'editor.sensors.note',
-    ])
-      expect(String(lookup(en.scenarios, key)).toLowerCase()).toContain('reference data')
+  it('carries no data-source labels inside the scenario screens', () => {
+    for (const text of leaves(en.scenarios))
+      expect(text.toLowerCase()).not.toContain('reference data')
   })
 
   it('uses no emoji in strings or sources', () => {

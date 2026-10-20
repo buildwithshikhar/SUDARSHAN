@@ -39,7 +39,7 @@ test.describe('/bench: the render benchmark harness (demo mode)', () => {
     await expect(page.getByRole('button', { name: 'Cancel' })).toBeVisible()
     await expect(page.getByTestId('bench-status')).toContainText('Finished', { timeout: 120_000 })
 
-    const table = page.getByRole('table', { name: 'Frame rate by phase' })
+    const table = page.getByRole('table', { name: 'Frame rate by stage' })
     await expect(table.locator('tbody tr')).toHaveCount(5)
     await expect(page.getByRole('heading', { name: 'Gate', exact: true })).toBeVisible()
     await expect(page.getByRole('heading', { name: 'This machine' })).toBeVisible()

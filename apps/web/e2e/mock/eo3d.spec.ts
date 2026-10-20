@@ -18,9 +18,7 @@ test.describe('EO view: terrain pack, thermal and night vision, graphics tier', 
     await installApi(page, { language: 'en', theme: 'dark' })
   })
 
-  test('loads the terrain pack: loading, then ready, with the pack named as reference data', async ({
-    page,
-  }) => {
+  test('loads the terrain pack: loading, then ready, with the pack named', async ({ page }) => {
     const terrain = await installTerrain(page, 'slow')
     await beginSession(page, 4, variantUrl({ terrain: 'fixture-ridge' }))
     const eo = eoRegion(page)
@@ -31,7 +29,7 @@ test.describe('EO view: terrain pack, thermal and night vision, graphics tier', 
     await expect(eo.getByText(/BRG\s+038°/)).toBeVisible()
     terrain.release()
     await expect(box).toHaveAttribute('data-terrain', 'pack')
-    await expect(eo.getByText('Terrain: Fixture Ridge · reference data')).toBeVisible()
+    await expect(eo.getByText('Terrain: Fixture Ridge')).toBeVisible()
     await expect(eo.getByRole('alert')).toHaveCount(0)
     await expect(eo.locator('canvas')).toHaveCount(1)
     await expectClean(page)
@@ -45,7 +43,7 @@ test.describe('EO view: terrain pack, thermal and night vision, graphics tier', 
     const eo = eoRegion(page)
     await expect(eo.locator('[data-terrain]')).toHaveAttribute('data-terrain', 'error')
     const notice = eo.getByRole('alert')
-    await expect(notice).toContainText('Terrain unavailable')
+    await expect(notice).toContainText('Terrain could not be loaded')
     await expect(notice).toContainText('flat ground')
     // the picture, the reticle and the rest of the workspace carry on
     await expect(eo.locator('canvas')).toHaveCount(1)
@@ -135,6 +133,6 @@ test.describe('Hindi', () => {
     await expect(page.getByRole('button', { name: 'सफ़ेद-गर्म' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'काला-गर्म' })).toBeVisible()
     await expect(page.getByRole('group', { name: 'ग्राफ़िक्स' })).toBeVisible()
-    await expect(page.getByText('भूभाग उपलब्ध नहीं')).toBeVisible()
+    await expect(page.getByText('भूभाग लोड नहीं हो सका')).toBeVisible()
   })
 })

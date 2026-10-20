@@ -163,7 +163,7 @@ describe('scenario editor', () => {
     expect(checks).toHaveTextContent('Every hostile contact was reported by a sensor')
     expect(checks).toHaveTextContent('92.0%')
     expect(screen.getByTestId('diversity')).toHaveTextContent('Passes')
-    expect(screen.getByTestId('check-result')).toHaveTextContent('reference data')
+    expect(screen.getByTestId('check-result')).toHaveTextContent('Verified solvable by test run')
     const call = seen.find((s) => s.path === '/scenario-tools/check')!
     expect(call.csrf).toBe('csrf-token-1')
   })

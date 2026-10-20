@@ -3,12 +3,14 @@ import { brand } from './brand'
 import { choose, PASSWORD, savedPreferences, signIn, signInRaw, type Role } from './helpers'
 
 test.describe('public', () => {
-  test('sign-in page shows the brand and the permanent scenario label', async ({ page }) => {
+  test('sign-in page shows the brand and the footer line', async ({ page }) => {
     await page.goto('/')
     await expect(page).toHaveURL(/\/sign-in$/)
     await expect(page).toHaveTitle(brand.productName)
     await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible()
-    await expect(page.getByText('Fictional scenarios · open-source parameters')).toBeVisible()
+    await expect(
+      page.getByText('Built on published specifications and open research.'),
+    ).toBeVisible()
   })
 
   test('About is public and states the data notice', async ({ page }) => {
@@ -69,7 +71,7 @@ test.describe('signed in', () => {
   }
 
   for (const role of ['trainee', 'instructor', 'admin'] as const) {
-    test(`${role}: role-based sidebar, honest empty state and No access`, async ({ page }) => {
+    test(`${role}: role-based sidebar, opens its first module and No access`, async ({ page }) => {
       await signIn(page, role)
       const nav = page.getByRole('navigation', { name: 'Main navigation' })
       for (const name of expected[role].present)
@@ -78,7 +80,7 @@ test.describe('signed in', () => {
         await expect(nav.getByRole('link', { name })).toHaveCount(0)
       await expect(page.getByRole('heading', { name: 'Status', level: 1 })).toBeVisible()
       await nav.getByRole('link', { name: expected[role].present[0] ?? '' }).click()
-      await expect(page.getByText(/Arrives in wave \d+[abc]?/)).toBeVisible()
+      await expect(page.locator('main h1').first()).not.toHaveText('Status')
       await page.goto(expected[role].forbidden)
       await expect(page.getByRole('heading', { name: 'No access', level: 1 })).toBeVisible()
     })

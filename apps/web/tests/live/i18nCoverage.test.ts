@@ -87,7 +87,6 @@ describe('live workspace strings', () => {
         'consoleTabs',
         'consoleCursor',
       ].map((k) => `live.keys.${k}`),
-      ...['reference', 'verified', 'mixed'].map((k) => `live.consoles.synth.${k}`),
       ...[
         'notSignedIn',
         'forbidden',

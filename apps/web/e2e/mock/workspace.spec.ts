@@ -150,7 +150,7 @@ test.describe('workspace against the scripted session', () => {
     await expect(eo.getByText(/BRG\s+038°\s+EL\s+\+04\.2°/)).toBeVisible()
     await expect(eo.getByText(/RNG\s+n\/a/)).toBeVisible()
     await expect(page.getByRole('img', { name: /Radar plan position indicator/ })).toBeVisible()
-    await expect(page.getByText('EO view unavailable (WebGL)')).toHaveCount(0)
+    await expect(page.getByText('EO view needs WebGL')).toHaveCount(0)
     // no night-vision or thermal mode is offered in this wave
     await expect(page.getByRole('group', { name: 'Mode' }).getByRole('button')).toHaveText([
       'Day TV',

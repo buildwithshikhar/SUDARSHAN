@@ -31,9 +31,8 @@ test.describe('debrief against the scripted score', () => {
     await expect(page.getByRole('heading', { name: 'Debrief', level: 1 })).toBeVisible()
     await expect(page.getByText('Harrier Field: afternoon watch').first()).toBeVisible()
     await expect(
-      page.getByText(/Reference scoring: timing standards and weights are fictional/),
+      page.getByText('Built on published specifications and open research.'),
     ).toBeVisible()
-    await expect(page.getByText('Fictional scenarios · open-source parameters')).toBeVisible()
     await expect(
       page.getByRole('table', { name: 'Session score and decision score' }),
     ).toContainText('34.6%')

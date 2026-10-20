@@ -332,7 +332,9 @@ def test_a_batch_varies_the_seed_and_keeps_each_different(author: Any) -> None:
         "/api/v1/generator/batch", json={"request": LOW, "count": 3, "save": True}, headers=csrf
     ).json()
     assert [r["request"]["seed"] for r in body["scenarios"]] == [3, 4, 5] and body["failures"] == []
-    assert len({r["id"] for r in body["scenarios"]}) == 3 and all(r["saved"] for r in body["scenarios"])
+    assert len({r["id"] for r in body["scenarios"]}) == 3 and all(
+        r["saved"] for r in body["scenarios"]
+    )
     assert (
         client.post(
             "/api/v1/generator/batch", json={"request": LOW, "count": 13}, headers=csrf

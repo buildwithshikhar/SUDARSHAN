@@ -104,6 +104,62 @@ def login(
     return SessionOut(user=user_out(user), csrf=record.csrf_token, expiresAt=record.expires_at)
 
 
+EVALUATION_SEATS: dict[str, str] = {
+    "trainee": "trainee@demo.invalid",
+    "commander": "trainee@demo.invalid",  # a seat of the trainee account
+    "instructor": "instructor@demo.invalid",
+    "admin": "admin@demo.invalid",
+}
+
+
+class EvaluationBody(BaseModel):
+    seat: Literal["trainee", "commander", "instructor", "admin"]
+
+
+def evaluation_router() -> APIRouter:
+    """The one-click entry; included by `create_app` only when EVALUATION_MODE is on."""
+    extra = APIRouter(prefix="/api/v1/auth", tags=["evaluation"])
+
+    @extra.post("/evaluation-login")
+    def evaluation_login(
+        body: EvaluationBody,
+        request: Request,
+        response: Response,
+        db: Session = Depends(get_db),
+    ) -> SessionOut:
+        settings: Settings = request.app.state.settings
+        limiter = request.app.state.evaluation_limiter
+        keys = (_client_key(request),)
+        wait = limiter.retry_after(*keys)
+        if wait is not None:
+            raise HTTPException(
+                status.HTTP_429_TOO_MANY_REQUESTS,
+                "Too many entries. Try again shortly.",
+                headers={"Retry-After": str(wait)},
+            )
+        limiter.record_failure(*keys)  # every call counts, not only failures
+        user = db.query(User).filter(User.email == EVALUATION_SEATS[body.seat]).one_or_none()
+        if user is None or not user.is_demo:
+            raise HTTPException(
+                status.HTTP_503_SERVICE_UNAVAILABLE,
+                "Evaluation seats are not set up. Run the evaluation reset on the server.",
+            )
+        ttl = settings.evaluation_session_ttl_hours
+        token, record = issue_session(db, user, settings, ttl_hours=ttl)
+        response.set_cookie(
+            COOKIE_NAME,
+            token,
+            max_age=ttl * 3600,
+            httponly=True,
+            samesite="lax",
+            secure=settings.cookie_is_secure,
+            path="/",
+        )
+        return SessionOut(user=user_out(user), csrf=record.csrf_token, expiresAt=record.expires_at)
+
+    return extra
+
+
 @router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
 def logout(
     request: Request,

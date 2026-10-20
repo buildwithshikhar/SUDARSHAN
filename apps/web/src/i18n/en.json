@@ -90,6 +90,31 @@
       "commander": "Detachment commander",
       "instructor": "Instructor",
       "admin": "Administrator"
+    },
+    "evaluation": {
+      "title": "Enter the evaluation",
+      "intro": "Choose a seat to open it. No password is needed on this evaluation link.",
+      "account": "Sign in with an account",
+      "notReady": "The evaluation seats are not set up on this server. Ask the owner to run the evaluation reset.",
+      "failed": "This seat could not be opened. Try again in a moment.",
+      "seats": {
+        "operator": {
+          "name": "Trainee operator",
+          "description": "Work the sensor consoles, classify and respond, then read the debrief."
+        },
+        "commander": {
+          "name": "Detachment commander",
+          "description": "Assign sectors, hand over tracks and read the team score."
+        },
+        "instructor": {
+          "name": "Instructor",
+          "description": "Run cohorts, watch live sessions with ground truth, author scenarios and rule packs."
+        },
+        "admin": {
+          "name": "Administrator",
+          "description": "Review users, packs, data provenance, records and system health."
+        }
+      }
     }
   },
   "status": {
@@ -2210,6 +2235,9 @@
       "restoreBody": "The current database and records are replaced by the backup. Sessions in progress end first.",
       "restoreConfirm": "Restore backup",
       "restored": "Backup restored."
+    },
+    "evaluation": {
+      "disabled": "Disabled in the evaluation build. This action would change accounts, passwords, records or system settings."
     }
   }
 }

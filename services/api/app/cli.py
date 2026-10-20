@@ -3,16 +3,18 @@
 import os
 import secrets
 from pathlib import Path
+from typing import Any, cast
 
 import typer
 from alembic.config import Config
+from sqlalchemy import CursorResult, Delete, delete, select
 from sqlalchemy.orm import Session
 
 from alembic import command
 from app.config import Settings
 from app.db import make_engine
 from app.guard import StartupError, validate_production
-from app.models import Role
+from app.models import Role, ScenarioRecord, SessionRecord, TrainingSession, User
 from app.passwords import WeakPasswordError, check_password
 from app.users import UserError, create_admin, create_user, upsert_demo_user
 
@@ -193,6 +195,47 @@ def seed_demo() -> None:
             password = fixed or secrets.token_urlsafe(12)
             upsert_demo_user(session, email, role, password)
             typer.echo(f"  {role.value:<11} {email:<26} {password}")
+
+
+def _deleted(session: Session, statement: Delete) -> int:
+    return cast("CursorResult[Any]", session.execute(statement)).rowcount
+
+
+@cli.command("eval-reset")
+def eval_reset() -> None:
+    """Restore the evaluation seats to the seeded state (EVALUATION_MODE=true only).
+
+    Creates the three demo accounts if missing, with a random password that is never shown or
+    kept (the seats are entered through /auth/evaluation-login), resets their preferences and
+    deletes their sign-in sessions, training sessions and saved scenarios. Other accounts are
+    never touched. Run it after the first deploy and daily.
+    """
+    settings = Settings()
+    if not settings.evaluation_mode:
+        typer.echo("error: eval-reset needs EVALUATION_MODE=true", err=True)
+        raise typer.Exit(code=2)
+    engine = make_engine(settings.database_url)
+    with Session(engine) as session:
+        for email, role in DEMO_ACCOUNTS:
+            user = upsert_demo_user(session, email, role, secrets.token_urlsafe(32))
+            user.language, user.theme = "en", "dark"
+        session.commit()
+        ids = list(session.scalars(select(User.id).where(User.is_demo.is_(True))))
+        removed = {
+            "sign-in sessions": _deleted(
+                session, delete(SessionRecord).where(SessionRecord.user_id.in_(ids))
+            ),
+            "training sessions": _deleted(
+                session, delete(TrainingSession).where(TrainingSession.user_id.in_(ids))
+            ),
+            "saved scenarios": _deleted(
+                session, delete(ScenarioRecord).where(ScenarioRecord.owner_id.in_(ids))
+            ),
+        }
+        session.commit()
+    typer.echo(f"evaluation seats reset ({len(DEMO_ACCOUNTS)} accounts)")
+    for what, count in removed.items():
+        typer.echo(f"  removed {count} {what}")
 
 
 if __name__ == "__main__":

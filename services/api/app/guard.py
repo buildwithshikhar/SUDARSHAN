@@ -17,7 +17,8 @@ def validate_production(settings: Settings, engine: Engine) -> None:
     problem = settings.secret_problem()
     if problem is not None:
         raise StartupError(f"Refusing to start in production: {problem}.")
-    if inspect(engine).has_table(User.__tablename__):
+    # Evaluation mode keeps the seeded seats on purpose; password sign-in to them stays refused.
+    if not settings.evaluation_mode and inspect(engine).has_table(User.__tablename__):
         with Session(engine) as session:
             demo = session.scalar(select(User.email).where(User.is_demo.is_(True)).limit(1))
         if demo is not None:

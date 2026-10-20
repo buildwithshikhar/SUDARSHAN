@@ -42,6 +42,13 @@ class Settings(BaseSettings):
     #: Check the shipped scenarios with the oracle defender in the background after start-up, so
     #: the library can say which are verified solvable by test run (about a minute of one core).
     scenario_warmup: bool = True
+    #: Public evaluation link only (docs/DEPLOY.md "Evaluation deployment"): one-click entry to the
+    #: seeded demo seats with no password. Off unless EVALUATION_MODE=true; never needed to run.
+    evaluation_mode: bool = False
+    #: Evaluation sessions are short, and the entry endpoint counts every request, not failures.
+    evaluation_session_ttl_hours: int = 3
+    evaluation_rate_max: int = 20
+    evaluation_rate_window_seconds: int = 300
 
     @field_validator("first_admin_email", "first_admin_password", mode="before")
     @classmethod

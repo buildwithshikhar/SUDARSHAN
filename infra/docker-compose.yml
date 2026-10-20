@@ -29,6 +29,7 @@ services:
       CORS_ORIGINS: ${CORS_ORIGINS:-}
       FIRST_ADMIN_EMAIL: ${FIRST_ADMIN_EMAIL:-}
       FIRST_ADMIN_PASSWORD: ${FIRST_ADMIN_PASSWORD:-}
+      EVALUATION_MODE: ${EVALUATION_MODE:-false}
     volumes:
       - uploads:/data/uploads
     depends_on:
@@ -43,6 +44,7 @@ services:
         PRODUCT_NAME: ${PRODUCT_NAME:-trainer}
         GIT_SHA: ${GIT_SHA:-dev}
         BUILD_TIME: ${BUILD_TIME:-unknown}
+        VITE_EVALUATION_MODE: ${VITE_EVALUATION_MODE:-false}
     ports:
       - "${WEB_BIND:-127.0.0.1}:${WEB_PORT:-8080}:8080"
     depends_on:

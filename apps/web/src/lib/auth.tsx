@@ -36,6 +36,7 @@ export type AuthState =
 interface AuthContextValue {
   state: AuthState
   login: (email: string, password: string) => Promise<void>
+  evaluationLogin: (seat: string) => Promise<void>
   logout: () => Promise<void>
   savePreferences: (prefs: { language?: string; theme?: string }) => Promise<void>
   retry: () => void
@@ -81,6 +82,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [accept],
   )
 
+  const evaluationLogin = useCallback(
+    async (seat: string) => {
+      accept(
+        await api<SessionResponse>('/api/v1/auth/evaluation-login', {
+          method: 'POST',
+          body: { seat },
+        }),
+      )
+    },
+    [accept],
+  )
+
   const logout = useCallback(async () => {
     try {
       await api<undefined>('/api/v1/auth/logout', { method: 'POST' })
@@ -102,8 +115,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const value = useMemo(
-    () => ({ state, login, logout, savePreferences, retry }),
-    [state, login, logout, savePreferences, retry],
+    () => ({ state, login, evaluationLogin, logout, savePreferences, retry }),
+    [state, login, evaluationLogin, logout, savePreferences, retry],
   )
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

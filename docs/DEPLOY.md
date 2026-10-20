@@ -289,6 +289,7 @@ Environment variables used on the VM:
 | `WEB_PORT`, `WEB_BIND` | host port and bind address of the web container (default `8080`, `127.0.0.1`) |
 | `HTTP_PORT`, `HTTPS_PORT` | Caddy's host ports (default 80 and 443) |
 | `BACKUP_DIR`, `BACKUP_KEEP` | where backups go and how many to keep |
+| `EVALUATION_MODE`, `VITE_EVALUATION_MODE` | evaluation link only, both `false` by default (section 15) |
 
 ## 14. Troubleshooting
 
@@ -301,3 +302,35 @@ Environment variables used on the VM:
 | Build is killed | out of memory on a small VM; add the swap file (section 4) or build on your Mac (section 9) |
 | Cannot SSH after a while | your public IP changed and the NSG rule for port 22 no longer matches it |
 | Everyone is locked out of sign-in | too many failed sign-ins from one account or address; the limit clears by itself after 15 minutes |
+
+## 15. Evaluation deployment
+
+**For the public evaluation link only.** Evaluation mode lets evaluators enter any of the four seats (Trainee operator, Detachment commander, Instructor, Administrator) with one click and no password. Do not enable it on any deployment that holds real trainee records, and do not leave it on after the evaluation ends.
+
+**It is off unless both variables are set.**
+
+| Variable | Where it acts | Effect |
+|---|---|---|
+| `EVALUATION_MODE=true` | API, read at start | Registers `POST /api/v1/auth/evaluation-login` (it returns 404 when the flag is off) and lets a production start keep the seeded seats in the database. Password sign-in to the seats stays refused in production. |
+| `VITE_EVALUATION_MODE=true` | Web image, read at **build** time | The sign-in page shows the four seat buttons, each with a one-line description, above "Sign in with an account". Changing it needs an image rebuild (`infra/deploy.sh update` or `up`). |
+
+Both default to `false` in `.env.example`, the compose files and the image build argument. Put the two lines in the git-ignored `.env` on the VM; no credential is involved and none belongs in the repository or the web bundle. The seats use the three seeded accounts (`trainee@`, `instructor@`, `admin@demo.invalid`); the commander seat is a seat of the trainee account. The accounts get a random password at every reset that is never printed or stored anywhere, so they cannot be signed in to with a password at all.
+
+**Set up and reset.**
+
+```
+infra/deploy.sh eval-reset        # on the VM; or `make eval-reset` against a local stack
+```
+
+Run it once after the first deploy (until it has run, the buttons answer "evaluation seats are not set up") and then daily, ideally from cron at a quiet hour: `0 3 * * *  cd /path/to/repo && infra/deploy.sh eval-reset`. It creates the three seats if missing, resets their language and theme, and deletes their sign-in sessions, training sessions and saved scenarios, so the next visitor finds the seeded state. It never touches other accounts. It exits with an error if `EVALUATION_MODE` is not `true`. Anyone in a live session at that moment is signed out.
+
+**Safety limits.**
+
+- Seeded data only: the seats are the seeded accounts and the seeded screens; nothing in evaluation mode creates real records.
+- The entry endpoint counts every request: 20 per 5 minutes per client address, then 429 with `Retry-After`.
+- Evaluation sessions last 3 hours (`evaluation_session_ttl_hours` in `app/config.py`), not 12; the cookie is `HttpOnly` and `Secure` in production.
+- The Administrator seat cannot reset a password, change a role, deactivate an account, save instance settings or restore a backup: those controls are disabled with the message "Disabled in the evaluation build", and the server refuses an evaluation seat on any route guarded with `forbid_in_evaluation` (to be applied to the user, password, audit and settings routes when they are built). The audit chain can only be verified, not edited.
+- No outbound email is configured anywhere, and the screens show no secret.
+- Data written during a session (a session record, a saved scenario) is shared by everyone who enters the same seat until the next reset; it is isolated from every real account.
+
+**Checking it.** `make smoke URL=<link>` signs in as each of the four seats and checks the role behind each cookie. Set `EXPECT_EVALUATION=true` to require the entry (the check then fails on a 404), or `EXPECT_EVALUATION=false` to require that it is off. A deployment without the flag must report 404 for `/api/v1/auth/evaluation-login`. See ADR-027.

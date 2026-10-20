@@ -79,6 +79,19 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `signIn.seats.commander` | Detachment commander | डिटैचमेंट कमांडर |  |
 | `signIn.seats.instructor` | Instructor | प्रशिक्षक |  |
 | `signIn.seats.admin` | Administrator | प्रशासक |  |
+| `signIn.evaluation.title` | Enter the evaluation | मूल्यांकन में प्रवेश करें |  |
+| `signIn.evaluation.intro` | Choose a seat to open it. No password is needed on this evaluation link. | किसी भूमिका को खोलने के लिए उसे चुनें। इस मूल्यांकन लिंक पर पासवर्ड की आवश्यकता नहीं है। |  |
+| `signIn.evaluation.account` | Sign in with an account | खाते से साइन इन करें |  |
+| `signIn.evaluation.notReady` | The evaluation seats are not set up on this server. Ask the owner to run the evaluation reset. | इस सर्वर पर मूल्यांकन भूमिकाएँ तैयार नहीं हैं। स्वामी से मूल्यांकन रीसेट चलाने को कहें। |  |
+| `signIn.evaluation.failed` | This seat could not be opened. Try again in a moment. | यह भूमिका नहीं खुल सकी। कुछ देर बाद फिर प्रयास करें। |  |
+| `signIn.evaluation.seats.operator.name` | Trainee operator | प्रशिक्षु ऑपरेटर |  |
+| `signIn.evaluation.seats.operator.description` | Work the sensor consoles, classify and respond, then read the debrief. | सेंसर कंसोल चलाएँ, वर्गीकृत करें और कार्रवाई करें, फिर डिब्रीफ़ पढ़ें। |  |
+| `signIn.evaluation.seats.commander.name` | Detachment commander | टुकड़ी कमांडर |  |
+| `signIn.evaluation.seats.commander.description` | Assign sectors, hand over tracks and read the team score. | सेक्टर सौंपें, ट्रैक हस्तांतरित करें और टीम स्कोर देखें। |  |
+| `signIn.evaluation.seats.instructor.name` | Instructor | प्रशिक्षक |  |
+| `signIn.evaluation.seats.instructor.description` | Run cohorts, watch live sessions with ground truth, author scenarios and rule packs. | समूह चलाएँ, वास्तविक स्थिति के साथ लाइव सत्र देखें, परिदृश्य और नियम पैक बनाएँ। |  |
+| `signIn.evaluation.seats.admin.name` | Administrator | प्रशासक |  |
+| `signIn.evaluation.seats.admin.description` | Review users, packs, data provenance, records and system health. | उपयोगकर्ता, पैक, डेटा उत्पत्ति, रिकॉर्ड और सिस्टम स्वास्थ्य देखें। |  |
 | `status.title` | Status | स्थिति |  |
 | `status.build` | Build | बिल्ड |  |
 | `status.version` | Version | संस्करण |  |
@@ -1739,5 +1752,6 @@ Source files: `apps/web/src/i18n/en.json` and `apps/web/src/i18n/hi.json`. This 
 | `m.backup.restoreBody` | The current database and records are replaced by the backup. Sessions in progress end first. | मौजूदा डेटाबेस और रिकॉर्ड बैकअप से बदल जाते हैं। चल रहे सत्र पहले समाप्त होते हैं। |  |
 | `m.backup.restoreConfirm` | Restore backup | बैकअप पुनर्स्थापित करें |  |
 | `m.backup.restored` | Backup restored. | बैकअप पुनर्स्थापित हुआ। |  |
+| `m.evaluation.disabled` | Disabled in the evaluation build. This action would change accounts, passwords, records or system settings. | मूल्यांकन संस्करण में अक्षम। यह कार्रवाई खाते, पासवर्ड, रिकॉर्ड या सिस्टम सेटिंग बदल देगी। |  |
 
-1733 strings.
+1747 strings.

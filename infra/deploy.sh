@@ -8,6 +8,7 @@
 #   infra/deploy.sh check                                 run the deployed-URL checks
 #   infra/deploy.sh status | logs [service]               inspect the stack
 #   infra/deploy.sh create-admin                          create the first administrator (prompts)
+#   infra/deploy.sh eval-reset                            restore the evaluation seats (EVALUATION_MODE=true only)
 #   infra/deploy.sh backup | restore <backup-dir>         data backup and restore
 #
 # NO_BUILD=1 starts from images that are already loaded on the machine (see docs/DEPLOY.md).
@@ -127,6 +128,7 @@ case "${1:-}" in
   status) compose ps ;;
   logs) shift; compose logs --tail=200 "$@" ;;
   create-admin) compose exec api python -m app.cli create-admin ;;
+  eval-reset) compose exec -T api python -m app.cli eval-reset ;;
   backup) "$(dirname "$0")/backup.sh" ;;
   restore) shift; "$(dirname "$0")/restore.sh" "$@" ;;
   *) sed -n '2,15p' "$0"; exit 1 ;;

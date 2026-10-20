@@ -22,6 +22,7 @@ import {
   type UserRow,
 } from '../../mock'
 import { Badge } from '../../ui/Badge'
+import { EVALUATION_MODE } from '../../lib/evaluation'
 import { Button } from '../../ui/Button'
 import { Dialog } from '../../ui/Dialog'
 import { Checkbox, Input, Select } from '../../ui/Field'
@@ -167,6 +168,7 @@ function UserDetail({
                 value: r,
                 label: t(`roles.${r}`),
               }))}
+              disabled={EVALUATION_MODE}
               onChange={(e) => {
                 onChange({ ...user, role: e.target.value as AccountRole })
                 setDone(t('m.users.roleSaved'))
@@ -175,14 +177,18 @@ function UserDetail({
             <Checkbox
               label={t('m.users.active')}
               checked={user.active}
+              disabled={EVALUATION_MODE}
               onChange={(e) => {
                 onChange({ ...user, active: e.target.checked })
                 setDone(t('m.users.statusSaved'))
               }}
             />
             <div>
-              <Button onClick={() => setConfirm(true)}>{t('m.users.reset')}</Button>
+              <Button disabled={EVALUATION_MODE} onClick={() => setConfirm(true)}>
+                {t('m.users.reset')}
+              </Button>
             </div>
+            {EVALUATION_MODE && <InlineAlert>{t('m.evaluation.disabled')}</InlineAlert>}
             {done && <InlineAlert tone="success">{done}</InlineAlert>}
           </div>
         </Panel>
@@ -814,46 +820,52 @@ export function Settings() {
                     setSaved(true)
                   }}
                 >
-                  <Select
-                    label={t('m.settings.defaultLanguage')}
-                    value={language}
-                    options={[
-                      { value: 'en', label: 'English', lang: 'en' },
-                      { value: 'hi', label: 'हिन्दी', lang: 'hi' },
-                    ]}
-                    onChange={(e) => {
-                      setLanguage(e.target.value)
-                      setSaved(false)
-                    }}
-                  />
-                  <Input
-                    label={t('m.settings.retention')}
-                    inputMode="numeric"
-                    className="num"
-                    value={retention}
-                    onChange={(e) => {
-                      setRetention(e.target.value)
-                      setSaved(false)
-                    }}
-                    hint={t('m.settings.days')}
-                  />
-                  <Input
-                    label={t('m.settings.sessionLength')}
-                    inputMode="numeric"
-                    className="num"
-                    value={session}
-                    onChange={(e) => {
-                      setSession(e.target.value)
-                      setSaved(false)
-                    }}
-                    hint={t('m.settings.minutes')}
-                  />
-                  <div className="flex items-center gap-3">
-                    <Button type="submit" variant="primary">
-                      {t('m.settings.save')}
-                    </Button>
-                    {saved && <InlineAlert tone="success">{t('m.settings.saved')}</InlineAlert>}
-                  </div>
+                  <fieldset
+                    disabled={EVALUATION_MODE}
+                    className="m-0 flex flex-col gap-4 border-0 p-0"
+                  >
+                    <Select
+                      label={t('m.settings.defaultLanguage')}
+                      value={language}
+                      options={[
+                        { value: 'en', label: 'English', lang: 'en' },
+                        { value: 'hi', label: 'हिन्दी', lang: 'hi' },
+                      ]}
+                      onChange={(e) => {
+                        setLanguage(e.target.value)
+                        setSaved(false)
+                      }}
+                    />
+                    <Input
+                      label={t('m.settings.retention')}
+                      inputMode="numeric"
+                      className="num"
+                      value={retention}
+                      onChange={(e) => {
+                        setRetention(e.target.value)
+                        setSaved(false)
+                      }}
+                      hint={t('m.settings.days')}
+                    />
+                    <Input
+                      label={t('m.settings.sessionLength')}
+                      inputMode="numeric"
+                      className="num"
+                      value={session}
+                      onChange={(e) => {
+                        setSession(e.target.value)
+                        setSaved(false)
+                      }}
+                      hint={t('m.settings.minutes')}
+                    />
+                    <div className="flex items-center gap-3">
+                      <Button type="submit" variant="primary">
+                        {t('m.settings.save')}
+                      </Button>
+                      {saved && <InlineAlert tone="success">{t('m.settings.saved')}</InlineAlert>}
+                    </div>
+                  </fieldset>
+                  {EVALUATION_MODE && <InlineAlert>{t('m.evaluation.disabled')}</InlineAlert>}
                 </form>
               </Panel>
             </Grid>
@@ -900,6 +912,7 @@ export function Backup() {
                 </Button>
                 {note && <InlineAlert tone="success">{note}</InlineAlert>}
               </div>
+              {EVALUATION_MODE && <InlineAlert>{t('m.evaluation.disabled')}</InlineAlert>}
               <Panel title={t('m.backup.list')} flush>
                 <Table
                   caption={t('m.backup.list')}
@@ -934,6 +947,7 @@ export function Backup() {
                       header: '',
                       render: (b: (typeof BACKUPS)[number]) => (
                         <Button
+                          disabled={EVALUATION_MODE}
                           onClick={() => setConfirm(b.id)}
                           aria-label={t('m.backup.restoreNamed', { when: shortTime(b.at) })}
                         >

@@ -15,6 +15,7 @@ from app.models import Role, SessionRecord, User
 
 COOKIE_NAME = "session"
 CSRF_HEADER = "X-CSRF-Token"
+EVALUATION_DISABLED = "This action is disabled in the evaluation build."
 UNSAFE_METHODS = frozenset({"POST", "PUT", "PATCH", "DELETE"})
 
 
@@ -27,7 +28,9 @@ def get_db(request: Request) -> Iterator[Session]:
         yield session
 
 
-def issue_session(db: Session, user: User, settings: Settings) -> tuple[str, SessionRecord]:
+def issue_session(
+    db: Session, user: User, settings: Settings, ttl_hours: int | None = None
+) -> tuple[str, SessionRecord]:
     """Create a session; returns the cookie token (never stored) and the stored record."""
     now = datetime.now(UTC)
     db.execute(delete(SessionRecord).where(SessionRecord.expires_at <= now))
@@ -36,7 +39,7 @@ def issue_session(db: Session, user: User, settings: Settings) -> tuple[str, Ses
         id=hash_token(token),
         user_id=user.id,
         csrf_token=secrets.token_urlsafe(32),
-        expires_at=now + timedelta(hours=settings.session_ttl_hours),
+        expires_at=now + timedelta(hours=ttl_hours or settings.session_ttl_hours),
     )
     db.add(record)
     db.commit()
@@ -84,6 +87,21 @@ def require_csrf(request: Request, principal: Principal = Depends(current_princi
         supplied = request.headers.get(CSRF_HEADER, "")
         if not secrets.compare_digest(supplied, principal.session.csrf_token):
             raise HTTPException(status.HTTP_403_FORBIDDEN, "Missing or invalid CSRF token")
+    return principal
+
+
+def forbid_in_evaluation(
+    request: Request, principal: Principal = Depends(require_csrf)
+) -> Principal:
+    """Refuses an evaluation seat (a demo account while EVALUATION_MODE is on).
+
+    Put it on any route that deletes users, changes passwords, edits the audit chain or changes
+    system settings. No such route exists yet (wave 13c adds them); the web app disables the same
+    actions in evaluation builds.
+    """
+    settings: Settings = request.app.state.settings
+    if settings.evaluation_mode and principal.user.is_demo:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, EVALUATION_DISABLED)
     return principal
 
 

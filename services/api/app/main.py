@@ -76,6 +76,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.rate_limiter = LoginRateLimiter(
         settings.login_max_attempts, settings.login_window_seconds
     )
+    app.state.evaluation_limiter = LoginRateLimiter(
+        settings.evaluation_rate_max, settings.evaluation_rate_window_seconds
+    )
     if settings.cors_origin_list:
         app.add_middleware(
             CORSMiddleware,
@@ -87,6 +90,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(health.router)
     app.include_router(version.router)
     app.include_router(auth.router)
+    if settings.evaluation_mode:
+        app.include_router(auth.evaluation_router())
     app.include_router(users.router)
     app.include_router(sessions.router)
     app.include_router(scenarios.router)

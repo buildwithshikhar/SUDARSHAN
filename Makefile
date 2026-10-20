@@ -17,7 +17,7 @@ COMPOSE_PROD = $(COMPOSE) -f infra/docker-compose.prod.yml
 rand = $$(python3 -c "import secrets; print(secrets.token_hex($(1)))")
 UV = $(shell command -v uv || echo $$HOME/Library/Python/3.10/bin/uv)
 
-.PHONY: setup env dev schemas lint typecheck test e2e visual build up down demo smoke create-admin prod-check backup-test check-deploy build-amd64 terrain ci-api solvability help
+.PHONY: setup env dev schemas lint typecheck test e2e visual build up down demo smoke create-admin eval-reset prod-check backup-test check-deploy build-amd64 terrain ci-api solvability help
 
 help:
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | sed 's/:.*##/\t/' || true
@@ -86,6 +86,9 @@ terrain: ## bake the terrain packs from data/raw (TERRAIN_RAW=dir to override); 
 
 create-admin: ## create the first administrator in the running stack (prompts, or uses FIRST_ADMIN_*)
 	$(COMPOSE) exec api python -m app.cli create-admin
+
+eval-reset: ## restore the evaluation seats to the seeded state (needs EVALUATION_MODE=true in the stack)
+	$(COMPOSE) exec -T api python -m app.cli eval-reset
 
 prod-check: ## production images and stack on a throwaway project: smoke, page load, bootstrap, HTTPS, memory
 	@infra/prod-check.sh

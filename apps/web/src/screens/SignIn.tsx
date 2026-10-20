@@ -4,6 +4,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import brand from '../../../../brand.json'
 import { ApiError } from '../lib/api'
 import { useAuth } from '../lib/auth'
+import { EVALUATION_MODE, EVALUATION_SEATS, type EvaluationSeat } from '../lib/evaluation'
 import { useVersion } from '../lib/version'
 import { setTeamRole, type TeamRole } from '../lib/viewRole'
 import { BrandMark } from '../ui/BrandMark'
@@ -29,6 +30,7 @@ export function SignIn() {
   const [password, setPassword] = useState('')
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
   const [failure, setFailure] = useState<string | null>(null)
+  const [seatFailure, setSeatFailure] = useState<string | null>(null)
   const [pending, setPending] = useState(false)
 
   if (auth.state.status === 'authenticated') return <Navigate to="/status" replace />
@@ -48,6 +50,29 @@ export function SignIn() {
         setFailure(t('signIn.invalid'))
       } else {
         setFailure(t('signIn.unreachable'))
+      }
+    } finally {
+      setPending(false)
+    }
+  }
+
+  /** Evaluation builds: one click enters a seat, with no password. */
+  const enterSeat = async (seat: { id: EvaluationSeat; api: string }) => {
+    setPending(true)
+    setSeatFailure(null)
+    setTeamRole(seat.id === 'commander' ? 'commander' : 'operator')
+    try {
+      await auth.evaluationLogin(seat.api)
+      navigate(from, { replace: true })
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 429) {
+        setSeatFailure(t('signIn.tooMany', { seconds: error.retryAfter ?? 60 }))
+      } else if (error instanceof ApiError && error.status === 503) {
+        setSeatFailure(t('signIn.evaluation.notReady'))
+      } else if (error instanceof ApiError) {
+        setSeatFailure(t('signIn.evaluation.failed'))
+      } else {
+        setSeatFailure(t('signIn.unreachable'))
       }
     } finally {
       setPending(false)
@@ -92,13 +117,43 @@ export function SignIn() {
         <p className="m-0 border-l-2 border-signal pl-3 text-md">{t('signIn.tagline')}</p>
       </section>
 
-      <section className="flex flex-col justify-center">
+      <section className="flex flex-col justify-center gap-4">
+        {EVALUATION_MODE && (
+          <div className="flex flex-col gap-3 border border-line bg-surface-1 p-6">
+            <h1 className="m-0 text-lg font-semibold">{t('signIn.evaluation.title')}</h1>
+            <p className="m-0 text-sm text-ink-2">{t('signIn.evaluation.intro')}</p>
+            {seatFailure && <InlineAlert tone="error">{seatFailure}</InlineAlert>}
+            <ul className="m-0 flex list-none flex-col gap-2 p-0">
+              {EVALUATION_SEATS.map((seat) => (
+                <li key={seat.id}>
+                  <button
+                    type="button"
+                    disabled={pending}
+                    onClick={() => void enterSeat(seat)}
+                    className="flex w-full flex-col items-start gap-1 border border-line bg-surface-2 p-3 text-left hover:border-accent disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <span className="text-md font-semibold">
+                      {t(`signIn.evaluation.seats.${seat.id}.name`)}
+                    </span>
+                    <span className="text-sm text-ink-2">
+                      {t(`signIn.evaluation.seats.${seat.id}.description`)}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         <form
           onSubmit={submit}
           noValidate
           className="flex flex-col gap-4 border border-line bg-surface-1 p-6"
         >
-          <h1 className="m-0 text-lg font-semibold">{t('signIn.title')}</h1>
+          {EVALUATION_MODE ? (
+            <h2 className="m-0 text-lg font-semibold">{t('signIn.evaluation.account')}</h2>
+          ) : (
+            <h1 className="m-0 text-lg font-semibold">{t('signIn.title')}</h1>
+          )}
           <p className="m-0 text-sm text-ink-2">{t('signIn.intro')}</p>
           {failure && <InlineAlert tone="error">{failure}</InlineAlert>}
           <Input
@@ -120,7 +175,7 @@ export function SignIn() {
           <Button type="submit" variant="primary" disabled={pending}>
             {pending ? t('signIn.submitting') : t('signIn.submit')}
           </Button>
-          {demo && (
+          {demo && !EVALUATION_MODE && (
             <fieldset className="m-0 flex flex-col gap-2 border border-line p-3">
               <legend className="micro-label px-1">{t('signIn.seat')}</legend>
               <div className="grid grid-cols-2 gap-2">

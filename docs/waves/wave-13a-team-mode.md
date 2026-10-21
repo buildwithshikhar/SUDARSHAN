@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 10b, 12a, 4b |
-| Recommended model | Sonnet |
 | Deployment | Keep the live build green. |
 
 **Goal.** An operator and a detachment commander work one picture with sector split and track handover, and the handover is scored.
@@ -34,22 +33,22 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 13a (Team mode) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 13a (Team mode) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 12b is Done and main is green; if not, stop and tell me). Then: docs/07-ui-map.md (Team exercise), docs/05-architecture.md, docs/SENSOR_MODELS.md (tracking), docs/10-differentiators.md (H5).
 
 GOAL: An operator and a detachment commander work one picture with sector split and track handover, and the handover is scored.
 
-STEP 1 — Roles and sectors (subagent A, worktree)
+STEP 1 — Roles and sectors (track A, worktree)
 - Roles, sector split, per-role frames over WS.
 
-STEP 2 — Handover and scoring (subagent B, worktree)
+STEP 2 — Handover and scoring (track B, worktree)
 - Handover protocol with history, acknowledgement, handoff scoring nodes, team monitor view.
 
-STEP 3 — Integration (main session)
+STEP 3 — Integration (main track)
 - Tests as in the acceptance criteria; docs/TEAM_MODE.md.
 
 OUT OF SCOPE (do not build):

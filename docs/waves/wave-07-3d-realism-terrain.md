@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 5 |
-| Recommended model | Sonnet (switch to Opus only if the benchmark gate fails) |
 | Deployment | Keep the live build green; the live link gains the realistic scene. |
 
 **Goal.** A convincing offline 3D scene on real-shaped generic terrain that meets the benchmark gate on the floor laptop.
@@ -26,7 +25,7 @@
 - LOS tests: a target behind terrain or a building is not detected by line-of-sight sensors.
 - JS bundle ≤ 1.5 MB gzipped excluding assets (CI check); first load ≤ 8 s from the local server.
 - Benchmark gate from 04 on the floor laptop: ≥ 45 fps median and ≥ 30 fps 5th percentile at 1080p, or the auto tier holds 30 fps. The user runs the harness on the floor laptop; results and machine specs go in `docs/PERFORMANCE.md`.
-- If the gate fails, stop and say so; the fix continues on Opus.
+- If the gate fails, stop and say so; the fix continues as a follow-up step.
 - Every new user-facing string exists in EN and HI (key-parity check passes).
 - Every new screen has populated, empty, loading and error states, works by keyboard, and is axe-clean.
 - CI is green on `main` (lint, typecheck, unit, e2e, gitleaks, docker build).
@@ -36,26 +35,26 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 7 (3D realism + terrain packs) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 7 (3D realism + terrain packs) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 6 is Done and main is green; if not, stop and tell me). Then: docs/04-engine.md (benchmark gate), docs/07-ui-map.md (3D look), docs/DATA_REGISTER.md (G01, G02).
 
 GOAL: A convincing offline 3D scene on real-shaped generic terrain that meets the benchmark gate on the floor laptop.
 
-STEP 1 — Terrain pipeline (subagent A, worktree)
+STEP 1 — Terrain pipeline (track A, worktree)
 - tools/terrain/: scripts that take an SRTM tile and an OSM extract (downloaded by the user into data/raw/, which git ignores) and bake a heightmap mesh and building glTF, plus a pack manifest with attribution.
 - Choose generic, non-sensitive areas; give sites fictional names. No identifiable military or sensitive installations.
 - LOS occlusion in the sim core from the baked heightmap and building footprints.
 
-STEP 2 — Look and feel (subagent B, worktree)
+STEP 2 — Look and feel (track B, worktree)
 - Sky, sun and moon, ACES tone mapping, height fog, rain streaks, wind on trees and drift.
 - Thermal (white-hot and black-hot) and NV passes; reticle HUD in SVG over the canvas.
 - Quality tiers with an fps probe at session start.
 
-STEP 3 — Benchmark (main session)
+STEP 3 — Benchmark (main track)
 - The reference scene from docs/04-engine.md (a placeholder swarm and birds are fine until wave 8) and a /bench route in demo mode that writes fps percentiles and device info to JSON.
 - Bundle-size CI check. Then stop and ask me to run the bench on the floor laptop; record my results in docs/PERFORMANCE.md.
 
@@ -67,7 +66,7 @@ ACCEPTANCE (all must be true):
 - LOS tests: a target behind terrain or a building is not detected by line-of-sight sensors.
 - JS bundle ≤ 1.5 MB gzipped excluding assets (CI check); first load ≤ 8 s from the local server.
 - Benchmark gate from 04 on the floor laptop: ≥ 45 fps median and ≥ 30 fps 5th percentile at 1080p, or the auto tier holds 30 fps. The user runs the harness on the floor laptop; results and machine specs go in `docs/PERFORMANCE.md`.
-- If the gate fails, stop and say so; the fix continues on Opus.
+- If the gate fails, stop and say so; the fix continues as a follow-up step.
 - Every new user-facing string exists in EN and HI (key-parity check passes).
 - Every new screen has populated, empty, loading and error states, works by keyboard, and is axe-clean.
 - CI is green on `main` (lint, typecheck, unit, e2e, gitleaks, docker build).

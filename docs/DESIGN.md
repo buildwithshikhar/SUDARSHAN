@@ -129,7 +129,7 @@ Fragment for merging into `docs/DESIGN.md` under "Workspace". Code: `apps/web/sr
 
 ## Target meshes (wave 8)
 
-Source: `apps/web/src/live/views/eoMeshes.ts`, `eoHold.ts`, `eoScene.ts`. For the main session to fold into the build log, the engine notes and the traceability matrix.
+Source: `apps/web/src/live/views/eoMeshes.ts`, `eoHold.ts`, `eoScene.ts`. For the main track to fold into the build log, the engine notes and the traceability matrix.
 
 ### Classification vocabulary
 

@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 4a |
-| Recommended model | Opus |
 | Deployment | Keep the live build green. No new user-facing feature. |
 
 **Goal.** A tracker that fuses the four sensors, fails in the ways real trackers fail (swaps, splits, merges), supports sensor cueing, and a seeded simulated AI assist.
@@ -36,26 +35,26 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Opus)
+## Brief
 
 ````text
-ROLE: You are building wave 4b (Tracking, fusion and AI assist) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 4b (Tracking, fusion and AI assist) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 4a is Done and main is green; if not, stop and tell me). Then: docs/10-differentiators.md (H5), docs/SENSOR_MODELS.md, docs/05-architecture.md §3.2.
 
 GOAL: A tracker that fuses the four sensors, fails in the ways real trackers fail (swaps, splits, merges), supports sensor cueing, and a seeded simulated AI assist.
 
-STEP 1 — Tracker (main session)
+STEP 1 — Tracker (main track)
 - services/api/sim/tracking/: gated nearest-neighbour association, alpha-beta or Kalman filter, track lifecycle.
 
-STEP 2 — Association errors and commands (subagent A, worktree)
+STEP 2 — Association errors and commands (track A, worktree)
 - Swap, split and merge modes from geometry and clutter, seeded; true-identity ground truth kept for scoring.
 - Track command handlers (merge, split, relabel, drop) and cue-to-track, all as logged actions.
 
-STEP 3 — AI assist (subagent B, worktree)
+STEP 3 — AI assist (track B, worktree)
 - Seeded classifier over fused tracks with configured hit / false-alarm rates and a confidence value.
 
-STEP 4 — Tests and docs (main session)
+STEP 4 — Tests and docs (main track)
 - Tests as in the acceptance criteria; update docs/SENSOR_MODELS.md.
 
 OUT OF SCOPE (do not build):

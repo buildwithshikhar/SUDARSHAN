@@ -3,7 +3,7 @@
  * controller that picks a tier. Pure logic: no DOM, no WebGL and no wall clock. The caller passes
  * the frame timestamp, so tests drive it with synthetic frame times.
  *
- * Target hardware is an 8 GB laptop with integrated graphics (CLAUDE.md), so the controller starts
+ * Target hardware is an 8 GB laptop with integrated graphics (docs/04-engine.md), so the controller starts
  * at the heaviest tier, measures for about two seconds, and settles on the highest tier the
  * machine holds. It can step down while the session runs, and step up at most once.
  */

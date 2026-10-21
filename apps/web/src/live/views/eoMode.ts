@@ -5,7 +5,7 @@
  * Thermal here is a RENDERING MODEL, not radiometric: each surface class gets a 0..1 "apparent
  * temperature" from a simple day/night cycle, then the picture is normalised by an automatic
  * gain. There are no kelvin, no emissivity and no noise-equivalent figure (docs/SENSOR_MODELS.md,
- * CLAUDE.md data policy).
+ * data policy in CONTRIBUTING.md).
  */
 import { clamp } from '../geometry'
 

@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 6, 9a |
-| Recommended model | Sonnet |
 | Deployment | Keep the live build green. |
 
 **Goal.** The platform models each trainee's skills, picks the next drill, biases scenario generation toward their weaknesses, and models workload and fatigue conditions.
@@ -38,22 +37,22 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 11a (Adaptive learning and adaptive adversary) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 11a (Adaptive learning and adaptive adversary) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 10b is Done and main is green; if not, stop and tell me). Then: docs/02-research.md §5, docs/05-architecture.md §3.5, docs/07-ui-map.md (Today, Progress), docs/10-differentiators.md (H1, H12).
 
 GOAL: The platform models each trainee's skills, picks the next drill, biases scenario generation toward their weaknesses, and models workload and fatigue conditions.
 
-STEP 1 — Learner model and adaptive adversary (subagent A, worktree)
+STEP 1 — Learner model and adaptive adversary (track A, worktree)
 - services/api/app/learner/: skill taxonomy with sector and altitude dimensions, Elo with decaying K, BKT display, policy, recommendation endpoint, weakness-biased generator requests with reasons.
 
-STEP 2 — Stress and fatigue profiles (subagent B, worktree)
+STEP 2 — Stress and fatigue profiles (track B, worktree)
 - Profile parameters in the scenario spec, generator support, nuisance-alarm and workload models, recorded with the session.
 
-STEP 3 — Trainee screens (main session)
+STEP 3 — Trainee screens (main track)
 - Today, Quick drill, Progress. Tests as in the acceptance criteria. docs/LEARNER_MODEL.md with the heuristic labelled as such, and the adversary and fatigue models described.
 
 OUT OF SCOPE (do not build):

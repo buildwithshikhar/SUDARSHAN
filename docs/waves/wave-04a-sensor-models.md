@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 3 |
-| Recommended model | Opus |
 | Deployment | Keep the live build green. No new user-facing feature. |
 
 **Goal.** Physically-motivated radar, EO/IR, RF and acoustic detection models with degradations, every parameter sourced from the data register.
@@ -35,28 +34,28 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Opus)
+## Brief
 
 ````text
-ROLE: You are building wave 4a (Sensor models) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 4a (Sensor models) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 3 is Done and main is green; if not, stop and tell me). Then: docs/02-research.md §2 (sensor appearance and figures), docs/DATA_REGISTER.md, docs/05-architecture.md §3.2.
 
 GOAL: Physically-motivated radar, EO/IR, RF and acoustic detection models with degradations, every parameter sourced from the data register.
 
-STEP 1 — Sensor framework (main session)
+STEP 1 — Sensor framework (main track)
 - services/api/sim/sensors/: a Sensor interface (detect(world, t, rng) → detections with measurement noise), shared degradation hooks, a cue input, and a profile loader that rejects any parameter without a source_id.
 
-STEP 2 — Radar and EO/IR (subagent A, worktree)
+STEP 2 — Radar and EO/IR (track A, worktree)
 - Radar: RCS ranges, range-dependent P(d), clutter false plots, micro-Doppler cue as a classification feature (rotor vs wing-beat), sector outage.
 - EO/IR: Johnson-criteria detection and recognition pixel thresholds, apparent size vs range and IFOV, day / NV / thermal modes, haze and glare.
 - Values from docs/02-research.md §2 with register IDs; secondary or UNVERIFIED figures carry verified: false.
 
-STEP 3 — RF and acoustic (subagent B, worktree)
+STEP 3 — RF and acoustic (track B, worktree)
 - RF: band plan, hop-pattern presence, RF-silent flag, Wi-Fi/Bluetooth confusers, interference.
 - Acoustic: blade-pass frequency and harmonics, range limit, wind-noise degradation.
 
-STEP 4 — Tests and docs (main session)
+STEP 4 — Tests and docs (main track)
 - Tests as in the acceptance criteria.
 - docs/SENSOR_MODELS.md. Add any parameter source not yet in docs/DATA_REGISTER.md to docs/OPEN_QUESTIONS.md instead of inventing an ID.
 

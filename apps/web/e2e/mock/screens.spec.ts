@@ -3,7 +3,7 @@ import { MOCK_WELCOME } from '../../src/live/mock'
 import { beginSession, installApi, SCENARIO } from './fixtures'
 
 // Screenshots for review, written to a git-ignored folder. They are looked at, not compared:
-// the visual baselines for these screens belong to the main session.
+// the visual baselines for these screens belong to the main track.
 const SIZES = [
   { name: '1920x1080', width: 1920, height: 1080 },
   { name: '1366x768', width: 1366, height: 768 },

@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 1 |
-| Recommended model | Opus |
 | Deployment | Keep the live build green. No new user-facing feature. |
 
 **Goal.** Versioned contracts and a deterministic, replayable simulation core that every later wave builds on.
@@ -38,30 +37,30 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Opus)
+## Brief
 
 ````text
-ROLE: You are building wave 3 (Contracts + deterministic sim core) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 3 (Contracts + deterministic sim core) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 2 is Done and main is green; if not, stop and tell me). Then: docs/05-architecture.md (§1, §3.2, §5) and docs/02-research.md §3 (swarm models, for future-proofing the entity model only).
 
 GOAL: Versioned contracts and a deterministic, replayable simulation core that every later wave builds on.
 
-STEP 1 — Contracts (main session first; everything else depends on them)
+STEP 1 — Contracts (main track first; everything else depends on them)
 - services/api/app/contracts/: Pydantic v2 models for ScenarioSpec, RulePack, SensorProfile (each numeric parameter is {value, unit, source_id, verified}), EventRecord.
 - Export JSON Schemas to packs/schemas/*.v1.json via a make target; CI fails if exported schemas differ from the models.
 - Generate TS types into apps/web/src/contracts/ (json-schema-to-typescript); CI drift check.
 
-STEP 2 — Sim core (subagent A, worktree)
+STEP 2 — Sim core (track A, worktree)
 - services/api/sim/: World, Entity, Kinematics, Clock (20 Hz fixed), Rng (numpy PCG64, one named stream per subsystem derived from the scenario seed).
 - Single-drone waypoint follower with max speed, climb rate and turn rate from the spec. No guidance or attack logic.
 - Deterministic iteration order everywhere (no dict or set ordering surprises, no wall-clock time).
 
-STEP 3 — Event log and replay (subagent B, worktree)
+STEP 3 — Event log and replay (track B, worktree)
 - EventLog with SHA-256 chaining over canonical JSON; verify() returns the first bad seq.
 - Replayer: spec + seed + action log → identical event stream and final state hash.
 
-STEP 4 — Tests and docs (main session)
+STEP 4 — Tests and docs (main track)
 - Determinism across two processes, replay equality, tamper detection, schema round-trips, hypothesis tests on kinematics.
 - Snapshot/restore: restore at tick N and run to M equals a straight run (state hash). Golden files for a fixed scenario set, with a readable diff on failure.
 - docs/SIM_CORE.md: tick model, RNG streams, determinism rules for future contributors.

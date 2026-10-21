@@ -13,6 +13,12 @@ permissions:
   contents: read
 
 jobs:
+  wording:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: tools/check_wording.sh
+
   api:
     runs-on: ubuntu-latest
     defaults:

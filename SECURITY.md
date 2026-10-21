@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-Please report suspected vulnerabilities privately through GitHub's private vulnerability reporting on this repository (Security tab, "Report a vulnerability"). Do not open a public issue for a security problem. Include the affected version or commit, steps to reproduce and the impact you see. Reports are acknowledged as the maintainer is able; this is a solo project and there is no response-time commitment.
+Please report suspected vulnerabilities privately through GitHub's private vulnerability reporting on this repository (Security tab, "Report a vulnerability"). Do not open a public issue for a security problem. Include the affected version or commit, steps to reproduce and the impact you see. Reports are acknowledged as the maintainer is able; this is a volunteer student team project and there is no response-time commitment.
 
 ## Supported versions
 

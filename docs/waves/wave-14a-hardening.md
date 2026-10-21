@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 7, 12b, 13c |
-| Recommended model | Sonnet |
 | Deployment | Keep the live build green. |
 
 **Goal.** Every screen is accessible, secure and fast on the floor laptop, the platform works offline and over low bandwidth, and a recorded feed in an open format can drive the consoles.
@@ -41,22 +40,22 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 14a (Hardening and accessibility) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 14a (Hardening and accessibility) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 13c is Done and main is green; if not, stop and tell me). Then: docs/04-engine.md, docs/07-ui-map.md (banned list), docs/08-demo.md (must-work list), docs/10-differentiators.md.
 
 GOAL: Every screen is accessible, secure and fast on the floor laptop, the platform works offline and over low bandwidth, and a recorded feed in an open format can drive the consoles.
 
-STEP 1 — Security (subagent A, worktree)
+STEP 1 — Security (track A, worktree)
 - ASVS L1 checklist, dependency audit, rate limits, CSP and security headers; docs/SECURITY_REVIEW.md.
 
-STEP 2 — Adapter and low-bandwidth (subagent B, worktree)
+STEP 2 — Adapter and low-bandwidth (track B, worktree)
 - sensor-feed.v1 schema, playback adapter, low-bandwidth mode; docs/SENSOR_ADAPTER.md.
 
-STEP 3 — Accessibility, performance, regression (main session)
+STEP 3 — Accessibility, performance, regression (main track)
 - Accessibility fixes on every route and the two extra themes; keyboard-only flows; 12 visual snapshots; offline test; LAN join test.
 - Ask me to run the performance pass on the floor laptop and record it in docs/PERFORMANCE.md.
 

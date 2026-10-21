@@ -1,6 +1,6 @@
 # Open questions
 
-Everything the research marked unverified or undecided. Owner is **SD** (the user) or **Claude Code** (CC). Close an item by resolving it, recording the outcome in [DECISIONS.md](DECISIONS.md) if it is a decision, and moving the row to **Closed** with the date.
+Everything the research marked unverified or undecided. Owner is **SD** (the owner) or **Team** (TM). Close an item by resolving it, recording the outcome in [DECISIONS.md](DECISIONS.md) if it is a decision, and moving the row to **Closed** with the date.
 
 ## Open
 
@@ -9,7 +9,7 @@ Everything the research marked unverified or undecided. Owner is **SD** (the use
 | ID | Question | Owner | How to close | Needed by |
 |---|---|---|---|---|
 | Q-01 | **Choose a licence** for the repository. Depends on dataset terms: ODbL share-alike (G02), CC BY attribution (D14) and any pack we ship. No LICENSE file exists yet, by instruction. | SD | After Q-05 and Q-06: pick MIT, Apache-2.0 or AGPL-3.0 for code and CC BY for docs, check each against bundled packs, then add LICENSE and a NOTICE file in a separate commit. | Before the repo goes public or release 1.0 |
-| Q-03 | **SIH submission format** for the next milestone: required fields, file types and size limits, and whether a video or slides are needed beyond the live link. | SD | Read the SIH portal instructions and paste them into this file. Claude then prepares the matching material. | Before the next milestone |
+| Q-03 | **SIH submission format** for the next milestone: required fields, file types and size limits, and whether a video or slides are needed beyond the live link. | SD | Read the SIH portal instructions and paste them into this file. The team then prepares the matching material. | Before the next milestone |
 | Q-04 | **Floor laptop** for the benchmark gate: which machine, with what specs, will run the wave 7 harness. | SD | Name the machine and record specs in docs/PERFORMANCE.md. **Wave 7 status:** the harness is built (`/bench`, demo mode). Run it on that machine and paste the JSON summary into docs/PERFORMANCE.md. | Wave 7 |
 
 ### Licences and naming
@@ -41,9 +41,9 @@ Everything the research marked unverified or undecided. Owner is **SD** (the use
 
 | ID | Question | Owner | How to close | Needed by |
 |---|---|---|---|---|
-| Q-13 | **Pilot logistics**: recruit 12 volunteers for 4 sessions, consent form text, and whether the institute needs ethics sign-off. | SD | Ask IILM whether sign-off is needed; draft the consent form; Claude Code adds data export and delete in wave 13c. | Before wave 12a completes |
+| Q-13 | **Pilot logistics**: recruit 12 volunteers for 4 sessions, consent form text, and whether the institute needs ethics sign-off. | SD | Ask IILM whether sign-off is needed; draft the consent form; the team adds data export and delete in wave 13c. | Before wave 12a completes |
 | Q-14 | **VR headset access**: none assumed. Decide whether any headset test is attempted. | SD | If none, keep the wording "VR mode, emulator-tested". | Wave 14 |
-| Q-15 | **Hindi translation review**: who reviews the HI strings for correct military and technical terms. | SD | Name a reviewer. The review sheet [i18n/HI_REVIEW.md](i18n/HI_REVIEW.md) lists every Hindi string with a blank verdict column; all Hindi is unreviewed until that column is filled. Claude Code adds a glossary file in wave 2. | Wave 2 onward |
+| Q-15 | **Hindi translation review**: who reviews the HI strings for correct military and technical terms. | SD | Name a reviewer. The review sheet [i18n/HI_REVIEW.md](i18n/HI_REVIEW.md) lists every Hindi string with a blank verdict column; all Hindi is unreviewed until that column is filled. the team adds a glossary file in wave 2. | Wave 2 onward |
 | Q-16 | **Real Doppler RAD-DAR** dataset (D17) was not found. | SD | Supply a link, or the row stays dropped. | Optional |
 | Q-17 | **Optional AAR narration backend**: wave 12b ships a deterministic template narrator. Decide whether a local language-model backend is wanted, and which licence and hardware budget applies. | SD | Name a model that fits the 8 GB floor and has an open licence, or keep template-only. | Before wave 12b |
 

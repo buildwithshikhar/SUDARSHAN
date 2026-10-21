@@ -11,7 +11,7 @@ Captured at 1440×900, full page, from the running demo stack on the final wave 
 | Sign in, EN dark | [sign-in-en-dark.png](sign-in-en-dark.png) |
 | Module empty state (Cohorts), EN dark | [module-empty-en-dark.png](module-empty-en-dark.png) |
 
-**Hindi is not verified or reviewed.** Every Hindi string in these images is a draft by Claude Code; the review sheet is [../../i18n/HI_REVIEW.md](../../i18n/HI_REVIEW.md) and Q-15 stays open.
+**Hindi is not verified or reviewed.** Every Hindi string in these images is a machine draft; the review sheet is [../../i18n/HI_REVIEW.md](../../i18n/HI_REVIEW.md) and Q-15 stays open.
 
 ## Wave 1 findings: what changed
 

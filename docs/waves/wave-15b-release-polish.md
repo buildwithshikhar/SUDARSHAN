@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 15a, plus any depth wave built (13a, 14b); none is required |
-| Recommended model | Sonnet |
 | Deployment | Release 1.0: the user deploys the release commit and tags it. |
 
 **Goal.** The 1.0 release: documentation brought up to date with any depth waves built, pilot results included as measured, and a rehearsed final polish.
@@ -36,22 +35,22 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 15b (Release 1.0 polish) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 15b (Release 1.0 polish) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 15a is Done and main is green; note which depth waves 13a and 14b are Done; if 15a is not Done, stop and tell me). Then: every doc in docs/README.md; docs/TRACEABILITY.md; docs/FINAL_REPORT.md.
 
 GOAL: The 1.0 release: documentation brought up to date with any depth waves built, pilot results included as measured, and a rehearsed final polish.
 
-STEP 1 — Depth documentation (subagent A, worktree)
+STEP 1 — Depth documentation (track A, worktree)
 - Update the manuals, SOPs, API and architecture docs for each depth wave that is Done; add a "not built" note for any that is not.
 
-STEP 2 — Pilot and licences (subagent B, worktree)
+STEP 2 — Pilot and licences (track B, worktree)
 - Add pilot results to docs/FINAL_REPORT.md from data files only; re-run the licence check across docs/DATA_REGISTER.md.
 
-STEP 3 — Release (main session)
+STEP 3 — Release (main track)
 - Final polish pass; complete docs/TRACEABILITY.md; CHANGELOG 1.0.0; release notes; link check and wording grep.
 - Do not create tags or deploy; tell me the commit to tag.
 

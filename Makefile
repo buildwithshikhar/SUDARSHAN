@@ -17,7 +17,7 @@ COMPOSE_PROD = $(COMPOSE) -f infra/docker-compose.prod.yml
 rand = $$(python3 -c "import secrets; print(secrets.token_hex($(1)))")
 UV = $(shell command -v uv || echo $$HOME/Library/Python/3.10/bin/uv)
 
-.PHONY: setup env dev schemas lint typecheck test e2e visual build up down demo smoke create-admin eval-reset prod-check backup-test check-deploy build-amd64 terrain ci-api solvability help
+.PHONY: setup env dev schemas lint typecheck test e2e visual build up down demo smoke create-admin eval-reset prod-check backup-test check-deploy build-amd64 terrain ci-api solvability wording check help
 
 help:
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | sed 's/:.*##/\t/' || true
@@ -77,6 +77,11 @@ ci-api: ## API tests on x86-64 Linux like the CI job; ARGS="tests/x.py" CI_CPUS=
 
 solvability: ## generate and check scenarios with the oracle defender; COUNT=50 START=0 JOBS=2
 	cd services/api && $(UV) run python -m app.cli scenario-sweep --count $(or $(COUNT),50) --start $(or $(START),0) --jobs $(or $(JOBS),2)
+
+wording: ## fail if tracked files contain forbidden wording
+	@tools/check_wording.sh
+
+check: wording lint typecheck test ## wording check, lint, typecheck and unit tests
 
 smoke: ## health, readiness and version checks against URL
 	@infra/smoke.sh $(URL)

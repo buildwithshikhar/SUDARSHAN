@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | — |
-| Recommended model | Sonnet |
 | Deployment | Deploy-ready: production images and smoke test exist, nothing is hosted yet. |
 
 **Goal.** A clean, production-shaped monorepo with CI green: health endpoints, admin bootstrap, a bilingual placeholder page, and Docker images ready to deploy.
@@ -11,7 +10,7 @@
 ## Scope
 
 - Monorepo layout: `apps/web/`, `services/api/`, `packs/` (`rule-packs/`, `scenarios/`, `sensor-profiles/`, `terrain/`, each with a README stating "fictional / open-source parameters"), `infra/`, `Makefile`.
-- `brand.json` at the root holding the product name (see CLAUDE.md). Web and API read it; nothing else hard-codes the name.
+- `brand.json` at the root holding the product name (see CONTRIBUTING.md). Web and API read it; nothing else hard-codes the name.
 - API skeleton: `/healthz`, `/readyz`, `/api/v1/version`; settings; production guard; User model and first migration; `create-admin` and `seed-demo` CLIs.
 - Web skeleton: React + TS strict + Vite + Tailwind with the design tokens from `docs/07-ui-map.md` as CSS variables (dark default, light via `data-theme`); one placeholder route; i18n wired with EN and HI.
 - Infra: multi-stage Dockerfiles, `docker compose` (web, api, db), a production compose override, `make demo` and `make smoke`.
@@ -25,7 +24,7 @@
 
 ## Files to read
 
-`CLAUDE.md`, `docs/BUILD_LOG.md`, this file, `docs/05-architecture.md` (§1, §2, deployment view) and `docs/07-ui-map.md` (design-system direction and banned list). Skim `docs/DECISIONS.md`. Nothing else.
+`CONTRIBUTING.md`, `docs/BUILD_LOG.md`, this file, `docs/05-architecture.md` (§1, §2, deployment view) and `docs/07-ui-map.md` (design-system direction and banned list). Skim `docs/DECISIONS.md`. Nothing else.
 
 ## Prerequisites on the build machine
 
@@ -78,7 +77,7 @@ Node 20+ and npm; Python 3.12 via `uv` (`make setup` installs `uv` from PyPI if 
 
 ## Model and effort
 
-Sonnet, medium effort. No design decision here is expensive to undo. The wave is large but linear; if the session passes about 60% before acceptance, stop at the next green commit and log the rest as wave 1.2.
+No design decision here is expensive to undo. The wave is large but linear; if the session passes about 60% before acceptance, stop at the next green commit and log the rest as wave 1.2.
 
 ## Stop conditions
 
@@ -112,10 +111,10 @@ Same as the prompt: credentials needed; network beyond package registries, GitHu
 - `docs/BUILD_LOG.md` is updated per its rules, including the deploy check and the next wave entry point.
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 1 (Repo bootstrap) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 1 (Repo bootstrap) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm the build has not started; if it has, stop and tell me). Then: docs/05-architecture.md and docs/07-ui-map.md (design tokens). Skim docs/DECISIONS.md. Do not read the other planning docs unless a decision needs them.
 
@@ -134,7 +133,7 @@ brand.json       { "productName": "SUDARSHAN", "descriptor": "Counter-UAS Threat
 Makefile         setup, dev, lint, typecheck, test, e2e, build, up, down, demo, smoke, create-admin
 .env.example     placeholders only
 
-STEP 2 — API skeleton (subagent A, worktree)
+STEP 2 — API skeleton (track A, worktree)
 - GET /healthz (liveness, no DB), GET /readyz (DB ping), GET /api/v1/version (git sha, build time, productName from brand.json).
 - pydantic-settings: APP_ENV=demo|production, DATABASE_URL (default SQLite file), SECRET_KEY, CORS_ORIGINS, FIRST_ADMIN_EMAIL, FIRST_ADMIN_PASSWORD.
 - Production guard: in production, refuse to start if SECRET_KEY is missing or default, or if any demo account exists; log a clear error.
@@ -142,13 +141,13 @@ STEP 2 — API skeleton (subagent A, worktree)
 - typer CLI: create-admin (env or prompt; idempotent), seed-demo (refuses in production).
 - Tests: health, readyz with and without DB, production guard, create-admin idempotency, seed-demo refusal. Coverage ≥ 90% for this wave's code.
 
-STEP 3 — Web skeleton (subagent B, worktree)
+STEP 3 — Web skeleton (track B, worktree)
 - Tokens from docs/07-ui-map.md as CSS variables; dark default, light via data-theme. No component-library defaults, no gradients.
 - Route "/" shows productName and descriptor from brand.json, the /api/v1/version result, a language switch (EN/HI) and the label "FICTIONAL SCENARIOS · OPEN-SOURCE PARAMETERS" (translated). It must look deliberate (system UI font stack until wave 2).
 - i18next with en.json and hi.json; a unit test fails if any key is missing from either file.
 - Vitest unit test; Playwright smoke + @axe-core/playwright with zero violations.
 
-STEP 4 — Infra + CI (main session, after A and B merge)
+STEP 4 — Infra + CI (main track, after A and B merge)
 - docker compose up builds and serves web on :8080, proxying /api, /healthz and /readyz to api.
 - docker-compose.prod.yml: APP_ENV=production, no demo seed, persistent volume for the DB, restart policies, healthchecks.
 - make demo: compose up in demo mode, run migrations, seed-demo (one admin, one instructor, one trainee; demo-only passwords printed to the console, never committed).

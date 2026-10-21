@@ -1,6 +1,6 @@
 # Contributing
 
-SUDARSHAN is a solo project built with Claude Code. This file states the rules that apply to every commit, human or Claude Code. [CLAUDE.md](CLAUDE.md) holds the full standing instructions, including the locked rules.
+SUDARSHAN is a hackathon team project. This file states the rules that apply to every commit.
 
 ## Commit convention
 
@@ -16,17 +16,17 @@ Types: `feat`, `fix`, `docs`, `test`, `refactor`, `perf`, `build`, `ci`, `chore`
 
 ## Branch and merge rules
 
-- Push to `main` only. Subagents work in git worktrees and merge to `main` when their tests pass.
-- CI must be green on `main` before a wave is marked done. Never carry a red build across a `/clear`.
+- Push to `main` only. Parallel tracks work in separate git worktrees and merge to `main` when their tests pass.
+- CI must be green on `main` before a wave is marked done. Never carry a red build from one work session to the next.
 - Never rewrite published history on `main`.
 
-## Claude Code rules
+## Working rules
 
 1. Stay inside this repository. Touch no Docker objects outside this repo's compose project.
-2. Never deploy. The user deploys; Claude Code prepares config, docs and smoke tests.
+2. Never deploy. The owner deploys; the team prepares config, docs and smoke tests.
 3. Never put credentials, tokens or keys in the repo, in logs or on slides. Commit only `.env.example` with placeholders.
 4. Production mode blocks demo accounts. Credentials come from first-admin environment variables or the `create-admin` CLI.
-5. Follow the wave workflow in [docs/BUILD_LOG.md](docs/BUILD_LOG.md): update the log after every merged step, write tests with every feature, at most 2 subagents at once.
+5. Follow the wave workflow in [docs/BUILD_LOG.md](docs/BUILD_LOG.md): update the log after every merged step, write tests with every feature, at most 2 parallel tracks at once.
 6. Do not rewrite research documents (`docs/00`–`09`). Record new decisions in [docs/DECISIONS.md](docs/DECISIONS.md) and open items in [docs/OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md).
 
 ## Content rules

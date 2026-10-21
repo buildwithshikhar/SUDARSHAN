@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 4a, 8, 11a |
-| Recommended model | Sonnet |
 | Deployment | Keep the live build green. |
 
 **Goal.** A study-and-quiz library for drone and clutter signatures built from our own sensor models, plus professional competency levels.
@@ -35,22 +34,22 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 11b (Recognition academy and progression) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 11b (Recognition academy and progression) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 11a is Done and main is green; if not, stop and tell me). Then: docs/07-ui-map.md (Recognition library, Progress), docs/DATA_REGISTER.md, docs/SENSOR_MODELS.md, docs/10-differentiators.md (H7).
 
 GOAL: A study-and-quiz library for drone and clutter signatures built from our own sensor models, plus professional competency levels.
 
-STEP 1 — Signature generation (subagent A, worktree)
+STEP 1 — Signature generation (track A, worktree)
 - Signature renderers from the sensor models, reproducible from a seed; asset manifest with licence status.
 
-STEP 2 — Academy screens and drills (subagent B, worktree)
+STEP 2 — Academy screens and drills (track B, worktree)
 - Explorer, quiz, SM-2 drills; Recognition library per docs/07-ui-map.md.
 
-STEP 3 — Progression (main session)
+STEP 3 — Progression (main track)
 - Level model and thresholds in the rule pack; display on Progress; tests; update docs/LEARNER_MODEL.md.
 
 OUT OF SCOPE (do not build):

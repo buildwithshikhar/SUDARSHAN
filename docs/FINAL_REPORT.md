@@ -8,12 +8,24 @@ Smart India Hackathon 2026 · Problem statement 26247 · Ministry of Defence, De
 | Report date | 2026-10-20 |
 | Repository state | `main` at `07c971d` (288 commits, 17 to 20 October 2026) |
 | Live link | https://sudarshan.centralindia.cloudapp.azure.com (running the wave 2 build, commit `b722313`; later builds are ready to deploy) |
-| Team | Solo developer (Shikhar Dixit); all code written with Claude Code |
+| Team | The SUDARSHAN team (see Team) |
 | Affiliation | Independent student project. No official affiliation with any ministry, service or programme. |
 
 > **Honesty statement.** SUDARSHAN is built from open research datasets and published specifications, in fictional scenarios. It contains no operational or classified data, makes no claim of validated training effectiveness and makes no claim of doctrinal accuracy. Rules of engagement and effector classes are a fictional, editable rule set. Several screens show seeded demonstration data (section 13.5); those figures are not measurements. The pilot with volunteers has not run yet, so this report gives no effectiveness result.
 
 ---
+
+## Team
+
+SUDARSHAN is a hackathon team project. Fields below are for the owner to complete before submission.
+
+| Field | Entry |
+|---|---|
+| Team name | _to be filled in_ |
+| Team lead | _to be filled in_ |
+| Members and roles | _to be filled in_ |
+| Institute | _to be filled in_ |
+| Mentor | _to be filled in_ |
 
 ## Contents
 
@@ -424,7 +436,7 @@ Key design decisions are recorded as ADR-001 to ADR-026 in [DECISIONS.md](DECISI
 | Terrain content (Q-26, Q-27) | Thin OSM building heights use defaults; pack source coordinates live in `tools/terrain/areas.json`. |
 | Seeded screens | Instructor, AAR, team and admin screens read the seeded module until waves 10a to 13c land. |
 | Licence (Q-01), trade-mark search (Q-07), name association (Q-08) | Owner decisions open. |
-| Labelling rule | CLAUDE.md locked rule 1 still describes per-screen labels; the owner decides whether to reconcile it with ADR-026. |
+| Labelling rule | The honesty rule in CONTRIBUTING.md still describes per-screen labels; the owner decides whether to reconcile it with ADR-026. |
 
 ## 20. Next steps
 

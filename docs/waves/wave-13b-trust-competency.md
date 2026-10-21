@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 12a, 11b |
-| Recommended model | Sonnet |
 | Deployment | Keep the live build green. |
 
 **Goal.** Training records can be verified, and trainee and unit competency is shown as a matrix with exportable certificates.
@@ -34,22 +33,22 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 13b (Signed records and competency matrix) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 13b (Signed records and competency matrix) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 13a is Done and main is green; if not, stop and tell me). Then: docs/05-architecture.md (session records), docs/DECISIONS.md ADR-003, docs/LEARNER_MODEL.md, docs/10-differentiators.md (H8).
 
 GOAL: Training records can be verified, and trainee and unit competency is shown as a matrix with exportable certificates.
 
-STEP 1 — Signing and verification (subagent A, worktree)
+STEP 1 — Signing and verification (track A, worktree)
 - Ed25519 signing of the chain head, verify-record CLI, verification screen, audit log.
 
-STEP 2 — Matrix and certificates (subagent B, worktree)
+STEP 2 — Matrix and certificates (track B, worktree)
 - Competency matrix, unit view, certificate PDF with verification code.
 
-STEP 3 — Integration (main session)
+STEP 3 — Integration (main track)
 - Tests as in the acceptance criteria; docs/TRUST.md; demo state shows "Record chain verified".
 
 OUT OF SCOPE (do not build):

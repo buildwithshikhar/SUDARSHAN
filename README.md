@@ -139,6 +139,18 @@ To put it on a server, follow [docs/DEPLOY.md](docs/DEPLOY.md) (an Azure for Stu
 - [Design system](docs/DESIGN.md) · [Traceability](docs/TRACEABILITY.md) · [Release process](docs/RELEASE.md)
 - [Security policy](SECURITY.md) · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
 
+## Team
+
+SUDARSHAN is a hackathon team project. Fields below are for the owner to complete before submission.
+
+| Field | Entry |
+|---|---|
+| Team name | _to be filled in_ |
+| Team lead | _to be filled in_ |
+| Members and roles | _to be filled in_ |
+| Institute | _to be filled in_ |
+| Mentor | _to be filled in_ |
+
 ## Roadmap
 
 First, a deployable foundation: the repository, the design system and a live link. Then the core: a deterministic simulation, sensor models and a playable single-operator session. Then the training layer: scoring, realism, more threat types, the scenario engine and the instructor console. Then what turns a simulator into a training system: adaptive drills, full after-action review, team mode, signed records and administration. A pilot with 12 volunteers starts once the full review is in place, and release 1.0 follows. Differentiating features such as an adaptive adversary, a sensor placement trainer and counterfactual review are scheduled into these waves in [docs/10-differentiators.md](docs/10-differentiators.md).

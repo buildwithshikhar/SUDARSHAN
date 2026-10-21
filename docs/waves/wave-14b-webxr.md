@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 14a |
-| Recommended model | Sonnet |
 | Deployment | Keep the live build green. |
 
 **Goal.** An optional VR observer and EO-operator mode behind a flag, tested in an emulator. May be skipped without blocking release 1.0.
@@ -31,16 +30,16 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 14b (WebXR (optional)) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 14b (WebXR (optional)) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 14a is Done and main is green; if not, stop and tell me). Then: docs/04-engine.md, docs/OPEN_QUESTIONS.md (Q-14).
 
 GOAL: An optional VR observer and EO-operator mode behind a flag, tested in an emulator. May be skipped without blocking release 1.0.
 
-STEP 1 — WebXR (main session)
+STEP 1 — WebXR (main track)
 - renderer.xr behind a feature flag; observer and EO views; emulator-based smoke test; comfort defaults.
 
 OUT OF SCOPE (do not build):

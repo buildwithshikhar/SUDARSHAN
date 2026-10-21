@@ -66,5 +66,3 @@ backups/
 .deploy/
 .env.prodcheck
 
-# Claude Code agent worktrees (local only)
-.claude/worktrees/

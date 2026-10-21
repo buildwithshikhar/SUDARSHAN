@@ -4,7 +4,7 @@ The PS items (see [06-requirements-traceability.md](06-requirements-traceability
 
 ## How entries are ranked
 
-Score = evaluator impact (does it show something a typical simulator does not) × credibility (can it be built and demonstrated honestly on the floor laptop) ÷ effort. Effort: **S** under a day of Claude Code work, **M** one wave-sized step, **L** a wave or more on its own.
+Score = evaluator impact (does it show something a typical simulator does not) × credibility (can it be built and demonstrated honestly on the floor laptop) ÷ effort. Effort: **S** under a day of build work, **M** one wave-sized step, **L** a wave or more on its own.
 
 Constraints that apply to every entry: threat behaviour stays kinematic (no guidance or terminal-attack logic); no real systems or figures; nothing claims validated training effectiveness; anything described as "AI" is a small, inspectable, deterministic or seeded model.
 

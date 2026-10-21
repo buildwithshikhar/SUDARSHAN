@@ -14,7 +14,7 @@ Requirement: browser-based, runs on a laptop with 8 GB RAM and integrated graphi
 | Night-vision / thermal looks | Custom post-processing passes (EffectComposer or TSL); full control | Post-process stages exist; harder to customise deeply | Strong post-process pipeline | Possible | Possible (shaders) |
 | Terrain from SRTM / OSM | Pre-bake a local heightmap and buildings offline into glTF. Simple and fast. | Native (quantized-mesh, 3D Tiles). Best-in-class if you need the globe. | Pre-bake, as Three.js | Pre-bake | Pre-bake |
 | WebGPU path | `WebGPURenderer` with automatic WebGL 2 fallback [6] | Experimental | WebGPU-first since v5 | Yes | Not on web |
-| Ecosystem and Claude Code fluency | Largest. Code generation is reliable. | Narrow, GIS-focused | Large | Small | Medium; GDScript does not fit our TS/Python stack |
+| Ecosystem and tooling familiarity | Largest. Code generation is reliable. | Narrow, GIS-focused | Large | Small | Medium; GDScript does not fit our TS/Python stack |
 | Testing in CI (headless, Playwright) | Works with SwiftShader WebGL | Works, but slow | Works | Works | Hard |
 | Fit with React UI | Clean: an imperative renderer in a React host component | Clean (Resium) | Clean | Clean | Poor (separate canvas app) |
 

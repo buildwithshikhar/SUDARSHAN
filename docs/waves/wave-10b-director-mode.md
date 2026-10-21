@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 10a, 3, 6 |
-| Recommended model | Sonnet |
 | Deployment | Keep the live build green. |
 
 **Goal.** An instructor runs a drill like an exercise controller: watch the class with ground truth, inject, pause, branch, annotate and see scores as they happen.
@@ -38,22 +37,22 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 10b (Live monitor and director mode) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 10b (Live monitor and director mode) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 10a is Done and main is green; if not, stop and tell me). Then: docs/07-ui-map.md (Instructor), docs/08-demo.md (beats 4:15–7:00), docs/SIM_CORE.md (snapshots), docs/10-differentiators.md (H11).
 
 GOAL: An instructor runs a drill like an exercise controller: watch the class with ground truth, inject, pause, branch, annotate and see scores as they happen.
 
-STEP 1 — Instructor channel and monitor (subagent A, worktree)
+STEP 1 — Instructor channel and monitor (track A, worktree)
 - Instructor WS channel with ground truth; class grid; drill-down overlay; pause/resume; annotations, all logged as instructor events.
 
-STEP 2 — Injects, branch and live scoring (subagent B, worktree)
+STEP 2 — Injects, branch and live scoring (track B, worktree)
 - Inject macros incl. the demo macro; branch from snapshot; incremental evaluator feed.
 
-STEP 3 — Integration (main session)
+STEP 3 — Integration (main track)
 - Tests as in the acceptance criteria; update docs/TRACEABILITY.md (R4, R13); docs/DIRECTOR_MODE.md.
 
 OUT OF SCOPE (do not build):

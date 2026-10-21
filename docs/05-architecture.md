@@ -144,7 +144,7 @@ flowchart LR
   T1["Trainee browser 1"] & T2["Trainee browser 2"] & T3["… up to 12"] -->|LAN http/ws| N
 ```
 
-Production mode refuses demo accounts. The first admin is created from environment variables or `create-admin`. `/healthz` and `/readyz` are available. `make demo` seeds reference data from fixed seeds. Claude Code never deploys; you handle hosting (for a public demo: a Docker host with persistent storage; Vercel for the frontend needs `VITE_API_URL` at build time and `CORS_ORIGINS` set on the backend).
+Production mode refuses demo accounts. The first admin is created from environment variables or `create-admin`. `/healthz` and `/readyz` are available. `make demo` seeds reference data from fixed seeds. the team prepares config and the owner deploys; you handle hosting (for a public demo: a Docker host with persistent storage; Vercel for the frontend needs `VITE_API_URL` at build time and `CORS_ORIGINS` set on the backend).
 
 ## 5. Key interfaces (contracts fixed in wave 1–2)
 

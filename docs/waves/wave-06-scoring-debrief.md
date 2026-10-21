@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 5 |
-| Recommended model | Sonnet |
 | Deployment | Redeploy: sessions on the live link now end with a scored debrief. |
 
 **Goal.** Explainable decision-tree scoring for every threat and a debrief screen that says why.
@@ -40,25 +39,25 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 6 (Scoring + debrief) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 6 (Scoring + debrief) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 5 is Done and main is green; if not, stop and tell me). Then: docs/10-differentiators.md (H4), docs/02-research.md §4 (scoring and ROE), docs/05-architecture.md §3.3, docs/07-ui-map.md (Debrief).
 
 GOAL: Explainable decision-tree scoring for every threat and a debrief screen that says why.
 
-STEP 1 — Evaluator (main session)
+STEP 1 — Evaluator (main track)
 - services/api/app/scoring/: tree walk per threat over the event log and ground truth; node results with score, reason key and parameters.
 - ROE hard-fail gate; capped timing bands; weights from the rule pack.
 - SDT metrics with a log-linear correction.
 - Contact-report grader (per-field tolerances, calibration) and unfixed-track-error penalties.
 
-STEP 2 — Fixtures and tests (subagent A, worktree)
+STEP 2 — Fixtures and tests (track A, worktree)
 - At least 10 golden logs with expected outputs; hypothesis property test for the no-reward-for-breach rule.
 
-STEP 3 — Debrief UI (subagent B, worktree)
+STEP 3 — Debrief UI (track B, worktree)
 - Debrief screen per docs/07-ui-map.md; explanations rendered from EN/HI templates; empty, loading and error states.
 - Contact-report form in the decision panel (keyboard-operable, EN and HI).
 

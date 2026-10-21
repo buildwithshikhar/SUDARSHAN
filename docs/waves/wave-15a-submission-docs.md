@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | Every wave in the Submission-ready cut (1–12b, 13b, 13c, 14a); 14a is the last dependency. 13a and 14b are not required. |
-| Recommended model | Sonnet |
 | Deployment | Redeploy: the submission build, documented and rehearsed. |
 
 **Goal.** Product-grade documentation, a completed traceability matrix and a rehearsed demo for the submission, covering what is built in the cut.
@@ -42,22 +41,22 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 15a (Submission documentation) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 15a (Submission documentation) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 14a is Done and main is green, and that every other wave in the Submission-ready cut is Done; if not, stop and tell me). Then: every doc in docs/README.md; docs/06-requirements-traceability.md; docs/08-demo.md.
 
 GOAL: Product-grade documentation, a completed traceability matrix and a rehearsed demo for the submission, covering what is built in the cut.
 
-STEP 1 — Manuals and SOPs (subagent A, worktree)
+STEP 1 — Manuals and SOPs (track A, worktree)
 - docs/USER_MANUAL.md, docs/INSTRUCTOR_SOP.md, docs/ADMIN_SOP.md, bilingual where trainee-facing; build on the LAN-join draft from wave 14a.
 
-STEP 2 — Reference docs and cost sheet (subagent B, worktree)
+STEP 2 — Reference docs and cost sheet (track B, worktree)
 - docs/API.md from the OpenAPI export; docs/ARCHITECTURE.md updated from docs/05-architecture.md and the built system; docs/COST_SHEET.md.
 
-STEP 3 — Traceability, report and release notes (main session)
+STEP 3 — Traceability, report and release notes (main track)
 - Complete docs/TRACEABILITY.md; write docs/FINAL_REPORT.md from measured data only; licence re-check; CHANGELOG entry; release notes; link check and wording grep in CI.
 - Demo rehearsal checklist and fallback-recording checklist.
 - Do not create tags or deploy; tell me the commit to tag.

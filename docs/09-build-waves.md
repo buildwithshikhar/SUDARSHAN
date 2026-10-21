@@ -1,41 +1,40 @@
-# 09 · Build waves for Claude Code (dependency order)
+# 09 · Build waves (dependency order)
 
-> **Execution note (2026-10-17):** the per-wave files in [waves/](waves/) and the resumable [BUILD_LOG.md](BUILD_LOG.md) are what Claude Code runs. They apply the recorded decisions (repo already exists, one `docs/BUILD_LOG.md` instead of `ROUND_<n>_LOG.md`, deployment as a first-class requirement). This file is kept as the original plan.
+> **Execution note (2026-10-17):** the per-wave files in [waves/](waves/) and the resumable [BUILD_LOG.md](BUILD_LOG.md) are what the team runs. They apply the recorded decisions (repo already exists, one `docs/BUILD_LOG.md` instead of `ROUND_<n>_LOG.md`, deployment as a first-class requirement). This file is kept as the original plan.
 
-Each wave is sized for one Claude Code session. You `/clear` between waves; `docs/ROUND_<n>_LOG.md` carries state. Each wave ends with CI green on `main`, the log updated, and the verification checklist ticked. At most 2 worktree subagents run per wave.
+Each wave is sized for one work session. You a work session between waves; `docs/ROUND_<n>_LOG.md` carries state. Each wave ends with CI green on `main`, the log updated, and the verification checklist ticked. At most 2 parallel tracks run per wave.
 
-**Model rule:** Sonnet by default. Opus only where a wrong design is expensive to undo (contracts, the deterministic sim core, sensor-model maths, generator/solvability).
 
-| Wave | Name | Depends on | Delivers | Model | Thin-slice deploy? |
-|---|---|---|---|---|---|
-| 1 | **Repo bootstrap** | — | Private repo, monorepo, tooling, CI, Docker skeleton, `/healthz` and `/readyz`, prod/demo modes, `create-admin`, docs skeleton, brand constant | Sonnet | — |
-| 2 | **Design system + app shell** | 1 | Tokens (07), self-hosted Plex and Devanagari fonts, Carbon icons, role-based sidebar, auth and RBAC, i18n EN/HI, theme switch, empty/loading/error states, axe in CI, first visual snapshots | Sonnet | **Yes: first deploy (shell + login + health)** |
-| 3 | **Contracts + deterministic sim core** | 1 | Pydantic + JSON Schema for scenario spec, rule pack, sensor profile, event record; fixed-tick engine with seeded RNG; flat-terrain world; single-drone kinematics; hash-chained event log; determinism and replay tests; TS type codegen | **Opus** | — |
-| 4 | **Sensor models + fusion + AI assist** | 3 | Radar, EO/IR, RF, acoustic detection models (probability of detection vs range/aspect/weather/time-of-day), degradations, simple tracker/fusion, simulated AI assist with set error rates; each parameter carries a data-register ID | **Opus** | — |
-| 5 | **Live-session vertical slice** | 2, 4 | WebSocket protocol, session manager, Three.js EO view (basic), radar PPI, track table, decision panel, ROE validator, one scripted scenario end-to-end, 12-client LAN load test | Sonnet | **Yes: playable slice** |
-| 6 | **Scoring + debrief** | 5 | Decision-tree evaluator (Detect → Classify → Assess → Respond with an ROE hard-fail gate), node explanations, SDT metrics, golden-log tests, debrief screen | Sonnet | Yes |
-| 7 | **3D realism + terrain packs** | 5 | Offline SRTM/OSM bake pipeline (rural + urban packs), time of day, NV and thermal passes, weather, HUD, quality tiers, **benchmark gate (04)** in `docs/PERFORMANCE.md` | Sonnet (Opus only if the gate fails) | — |
-| 8 | **Threat breadth** | 4, 7 | Drone class catalogue, swarm behaviours (boids / Vicsek noise / leader-follower), decoys, RF-silent threats, birds, kites, balloons, permitted civil drones | Sonnet | — |
-| 9 | **Scenario engine** | 6, 8 | Seeded generator, hard constraints, oracle-defender solvability check, MAP-Elites diversity grid + novelty filter, scripted library, scenario editor UI | **Opus** | Yes |
-| 10 | **Instructor console** | 5, 9 | Cohorts, launch, live monitor with ground-truth overlay, pause, inject macros, annotate, team setup | Sonnet | — |
-| 11 | **Adaptive learning + recognition library** | 6, 9 | Per-skill Elo + BKT display, next-scenario policy (~85% predicted success, heuristic), Leitner/SM-2 signature drills, threat and clutter catalogue | Sonnet | — |
-| 12 | **Full AAR + reports** | 6, 10, 11 | Seen-vs-truth replay, decision path, confusion matrix, reaction-time curves, miss-zone heat map, unit trends, PDF and CSV export | Sonnet | **Yes: demo-complete** |
-| 13 | **Team mode, trust and admin** | 10, 12 | Multi-operator roles and handoff scoring, Ed25519-signed chain head plus verify CLI, users and units admin, pack manager, data-register viewer, audit log, backup/restore | Sonnet | — |
-| 14 | **WebXR + hardening** | 7, 12 | WebXR observer/EO mode (emulator-tested), accessibility pass, performance pass, visual regression for the 12 key screens, security review | Sonnet | — |
-| 15 | **Docs + release 1.0** | all | User manual, instructor and admin SOPs, API docs, traceability matrix completed (06), final report, release process, changelog, demo rehearsal from `make demo` | Sonnet | Release |
+| Wave | Name | Depends on | Delivers | Thin-slice deploy? |
+|---|---|---|---|---|
+| 1 | **Repo bootstrap** | — | Private repo, monorepo, tooling, CI, Docker skeleton, `/healthz` and `/readyz`, prod/demo modes, `create-admin`, docs skeleton, brand constant | — |
+| 2 | **Design system + app shell** | 1 | Tokens (07), self-hosted Plex and Devanagari fonts, Carbon icons, role-based sidebar, auth and RBAC, i18n EN/HI, theme switch, empty/loading/error states, axe in CI, first visual snapshots | **Yes: first deploy (shell + login + health)** |
+| 3 | **Contracts + deterministic sim core** | 1 | Pydantic + JSON Schema for scenario spec, rule pack, sensor profile, event record; fixed-tick engine with seeded RNG; flat-terrain world; single-drone kinematics; hash-chained event log; determinism and replay tests; TS type codegen | — |
+| 4 | **Sensor models + fusion + AI assist** | 3 | Radar, EO/IR, RF, acoustic detection models (probability of detection vs range/aspect/weather/time-of-day), degradations, simple tracker/fusion, simulated AI assist with set error rates; each parameter carries a data-register ID | — |
+| 5 | **Live-session vertical slice** | 2, 4 | WebSocket protocol, session manager, Three.js EO view (basic), radar PPI, track table, decision panel, ROE validator, one scripted scenario end-to-end, 12-client LAN load test | **Yes: playable slice** |
+| 6 | **Scoring + debrief** | 5 | Decision-tree evaluator (Detect → Classify → Assess → Respond with an ROE hard-fail gate), node explanations, SDT metrics, golden-log tests, debrief screen | Yes |
+| 7 | **3D realism + terrain packs** | 5 | Offline SRTM/OSM bake pipeline (rural + urban packs), time of day, NV and thermal passes, weather, HUD, quality tiers, **benchmark gate (04)** in `docs/PERFORMANCE.md` | — |
+| 8 | **Threat breadth** | 4, 7 | Drone class catalogue, swarm behaviours (boids / Vicsek noise / leader-follower), decoys, RF-silent threats, birds, kites, balloons, permitted civil drones | — |
+| 9 | **Scenario engine** | 6, 8 | Seeded generator, hard constraints, oracle-defender solvability check, MAP-Elites diversity grid + novelty filter, scripted library, scenario editor UI | Yes |
+| 10 | **Instructor console** | 5, 9 | Cohorts, launch, live monitor with ground-truth overlay, pause, inject macros, annotate, team setup | — |
+| 11 | **Adaptive learning + recognition library** | 6, 9 | Per-skill Elo + BKT display, next-scenario policy (~85% predicted success, heuristic), Leitner/SM-2 signature drills, threat and clutter catalogue | — |
+| 12 | **Full AAR + reports** | 6, 10, 11 | Seen-vs-truth replay, decision path, confusion matrix, reaction-time curves, miss-zone heat map, unit trends, PDF and CSV export | **Yes: demo-complete** |
+| 13 | **Team mode, trust and admin** | 10, 12 | Multi-operator roles and handoff scoring, Ed25519-signed chain head plus verify CLI, users and units admin, pack manager, data-register viewer, audit log, backup/restore | — |
+| 14 | **WebXR + hardening** | 7, 12 | WebXR observer/EO mode (emulator-tested), accessibility pass, performance pass, visual regression for the 12 key screens, security review | — |
+| 15 | **Docs + release 1.0** | all | User manual, instructor and admin SOPs, API docs, traceability matrix completed (06), final report, release process, changelog, demo rehearsal from `make demo` | Release |
 
 **Pilot** (your activity, not a wave): starts once wave 12 is green. Waves 13–15 continue in parallel, so pilot data reaches the AAR screens and the final report.
 
-**Split rule:** if a wave's log shows more than about 60% of the session used before acceptance, stop at the next green commit and continue as wave n.b. Never carry a red build across a `/clear`.
+**Split rule:** if a wave's log shows more than about 60% of the session used before acceptance, stop at the next green commit and continue as wave n.b. Never carry a red build across a a work session.
 
 ---
 
-## Wave 1 prompt (paste into Claude Code, Sonnet)
+## Wave 1 brief
 
-Before pasting: create an empty folder, put the planning files (01–09 from the project library) in `docs/planning/`, and open Claude Code in that folder.
+Before pasting: create an empty folder, put the planning files (01–09 from the project library) in `docs/planning/`, and open the project in that folder.
 
 ````text
-ROLE: You are building wave 1 (repo bootstrap) of SIH26247, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247, MoD / DSSC). Planning docs are in docs/planning/ — read 05-architecture.md and 07-ui-map.md (design tokens) only; skim others if a decision needs them.
+ROLE: Build wave 1 (repo bootstrap) of SIH26247, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247, MoD / DSSC). Planning docs are in docs/planning/ — read 05-architecture.md and 07-ui-map.md (design tokens) only; skim others if a decision needs them.
 
 LOCKED RULES (never break):
 1. Honesty: no claims of real operational data, validated effectiveness or doctrine accuracy. Standard wording: "built from open research datasets and published specifications, in fictional scenarios."
@@ -57,7 +56,7 @@ docs/                README links + ARCHITECTURE.md (from planning/05), DECISION
 brand.json           { "productName": "SUDARSHAN", "descriptor": "Counter-UAS Threat Recognition Trainer", "status": "confirmed" } — the ONLY place the name lives; web and api read it.
 Makefile             setup, dev, lint, typecheck, test, e2e, build, up, down, demo, smoke, create-admin
 
-STEP 2 — API skeleton (subagent A, worktree)
+STEP 2 — API skeleton (track A, worktree)
 - GET /healthz (liveness, no DB), GET /readyz (DB ping), GET /api/v1/version (git sha, build time, productName).
 - Settings via pydantic-settings: APP_ENV=demo|production, DATABASE_URL (default sqlite file), SECRET_KEY, CORS_ORIGINS, FIRST_ADMIN_EMAIL, FIRST_ADMIN_PASSWORD.
 - Production guard: in production, refuse to start if SECRET_KEY is missing/default or any demo account exists; log a clear error.
@@ -65,12 +64,12 @@ STEP 2 — API skeleton (subagent A, worktree)
 - CLI (typer): `create-admin` (reads env or prompts; idempotent), `seed-demo` (refuses in production).
 - Tests: health, readyz with/without DB, production guard, create-admin idempotency, seed-demo refusal. Coverage ≥ 90% for this wave's code.
 
-STEP 3 — Web skeleton (subagent B, worktree)
+STEP 3 — Web skeleton (track B, worktree)
 - Vite + React + TS strict + Tailwind with design tokens from planning/07 as CSS variables (dark default, light via data-theme). No component library styling defaults left in; no gradients.
 - One placeholder route "/" showing productName + descriptor from brand.json, API /version result, and a "FICTIONAL SCENARIOS · OPEN-SOURCE PARAMETERS" label. Must look deliberate (Plex fonts are wave 2; use system UI stack for now).
 - Vitest unit test; Playwright smoke test + @axe-core/playwright with zero violations.
 
-STEP 4 — Infra + CI (main session, after A and B merge)
+STEP 4 — Infra + CI (main track, after A and B merge)
 - docker compose up builds and serves web on :8080 proxying /api and /healthz to api.
 - `make demo`: compose up in APP_ENV=demo, run migrations, seed-demo (one admin, one instructor, one trainee, demo-only passwords printed to console, never committed).
 - `make smoke`: curl /healthz, /readyz, /api/v1/version; exit non-zero on failure.
@@ -106,4 +105,4 @@ FINAL OUTPUT TO ME: a 10-line summary — commits, test counts, CI link, anythin
 - [ ] 06: every PS clause has a mechanism and a proof. The honest-wording hotspots (R0, R8, R18, R19) are agreed.
 - [ ] 07: tokens copied into `docs/DESIGN.md` in wave 1. Banned list reviewed.
 - [ ] 08: fictional names checked against real places and units (no accidental real match).
-- [ ] 09: wave 1 pasted with Sonnet. ROUND_1_LOG.md reviewed here before wave 2.
+- [ ] 09: wave 1 brief run. BUILD_LOG.md reviewed here before wave 2.

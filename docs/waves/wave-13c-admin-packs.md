@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 13b, 9a |
-| Recommended model | Sonnet |
 | Deployment | Keep the live build green. |
 
 **Goal.** Administrators manage users, units, instance settings and packs, and can back up and restore.
@@ -33,22 +32,22 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 13c (Admin and pack manager) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 13c (Admin and pack manager) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 13b is Done and main is green; if not, stop and tell me). Then: docs/07-ui-map.md (Admin), docs/TRUST.md, docs/SCENARIO_ENGINE.md, docs/10-differentiators.md (H10).
 
 GOAL: Administrators manage users, units, instance settings and packs, and can back up and restore.
 
-STEP 1 — Users, units and settings (subagent A, worktree)
+STEP 1 — Users, units and settings (track A, worktree)
 - Users and roles, units, instance settings, system health.
 
-STEP 2 — Packs and backup (subagent B, worktree)
+STEP 2 — Packs and backup (track B, worktree)
 - Pack manager with signing and verification, backup and restore.
 
-STEP 3 — Integration (main session)
+STEP 3 — Integration (main track)
 - Data-register viewer (from a machine-readable copy of docs/DATA_REGISTER.md); tests as in the acceptance criteria.
 
 OUT OF SCOPE (do not build):

@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 5, 9a |
-| Recommended model | Sonnet |
 | Deployment | Keep the live build green. |
 
 **Goal.** Instructors can manage cohorts, curricula and rule packs, and launch sessions.
@@ -35,22 +34,22 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 10a (Class management and rule packs) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 10a (Class management and rule packs) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 9c is Done and main is green; if not, stop and tell me). Then: docs/07-ui-map.md (Instructor), docs/08-demo.md (beat 0:45–2:00).
 
 GOAL: Instructors can manage cohorts, curricula and rule packs, and launch sessions.
 
-STEP 1 — Class management (subagent A, worktree)
+STEP 1 — Class management (track A, worktree)
 - Cohorts, trainees, curricula (stages and gates), launch session flow; API and screens.
 
-STEP 2 — Rule packs and team skeleton (subagent B, worktree)
+STEP 2 — Rule packs and team skeleton (track B, worktree)
 - Rule-pack list and editor with versioning and diff; team setup skeleton.
 
-STEP 3 — Integration (main session)
+STEP 3 — Integration (main track)
 - Instructor events in the hash chain; tests as in the acceptance criteria; update docs/TRACEABILITY.md (R4, R13).
 
 OUT OF SCOPE (do not build):

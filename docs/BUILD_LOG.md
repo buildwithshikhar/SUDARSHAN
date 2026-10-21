@@ -1,6 +1,6 @@
 # Build log
 
-The resumable state of the build. After every `/clear`, Claude Code reads [CLAUDE.md](../CLAUDE.md), then this file, then the wave file named under **Current position**. If this file and the repo disagree, the repo (git history and CI) wins; fix this file first.
+The resumable state of the build. At the start of each work session, read [CONTRIBUTING.md](../CONTRIBUTING.md), then this file, then the wave file named under **Current position**. If this file and the repo disagree, the repo (git history and CI) wins; fix this file first.
 
 ## Current position
 
@@ -38,7 +38,7 @@ CI on `main` is read with `gh run list --repo buildwithshikhar/SUDARSHAN --branc
 
 - 2026-10-17: README rewritten as a product README (banner in `docs/assets/`, status table mirrors the wave table above, capabilities all Planned). Update its status table and capability states whenever a wave is marked Done.
 - 2026-10-17: [10-differentiators.md](10-differentiators.md) added. Headline features: H1 adaptive adversary, H2 sensor placement trainer, H3 site builder, H4 contact-report scoring, H5 track management with association errors, H6 counterfactual AAR, H7 recognition academy, H8 competency matrix with signed records, H9 unit readiness dashboard, H10 scenario language and signed packs, H11 director mode, H12 stress and fatigue modelling. Demo five: H2, H4, H1, H6, H8. The wave files are not yet changed; pull an entry into its wave only when that wave starts and record it in the wave entry.
-- 2026-10-17: Wave execution protocol added to CLAUDE.md.
+- 2026-10-17: Wave execution protocol added to the project rules.
 - 2026-10-17: Headline features folded into the wave files and overloaded waves split (4a/4b, 9a/9b/9c, 10a/10b, 11a/11b, 12a/12b, 13a/13b/13c, 14a/14b); see ADR-012. Waves 1, 2, 3, 5, 6, 7, 8 and 15 keep their numbers; 3, 5, 6 and 15 gained scope or edits.
 - 2026-10-18: Sign-in page no longer links to About; the About and data notice page (`/about`, EN/HI) is linked from the footer on every page. No Help menu exists yet (wave 15a); link it there when built.
 
@@ -46,33 +46,33 @@ CI on `main` is read with `gh run list --repo buildwithshikhar/SUDARSHAN --branc
 
 Status values: Not started · In progress · Blocked · Done. A wave is Done only when its acceptance criteria are met, CI is green on `main`, and (from wave 2 on) the deployed build is verified.
 
-| Wave | Name | Depends on | Model | Deploy | Cut | Status |
-|---|---|---|---|---|---|---|
-| 1 | [Repo bootstrap](waves/wave-01-repo-bootstrap.md) | — | Sonnet | Deploy-ready (prod images, smoke test) | Cut | Done |
-| 2 | [Design system + app shell](waves/wave-02-design-system-shell.md) | 1 | Sonnet | **PRIORITY MILESTONE: first live link** | Cut | In progress |
-| 3 | [Contracts + deterministic sim core](waves/wave-03-contracts-sim-core.md) | 1 | Opus | Keep live build green | Cut | In progress |
-| 4a | [Sensor models](waves/wave-04a-sensor-models.md) | 3 | Opus | Keep live build green | Cut | Done (CI pending) |
-| 4b | [Tracking, fusion + AI assist](waves/wave-04b-tracking-ai-assist.md) | 4a | Opus | Keep live build green | Cut | Done (CI pending) |
-| 5 | [Live-session vertical slice](waves/wave-05-live-session-slice.md) | 2, 4b | Sonnet | Redeploy: playable slice | Cut | Done (CI pending) |
-| 6 | [Scoring + debrief](waves/wave-06-scoring-debrief.md) | 5 | Sonnet | Redeploy | Cut | Done (CI pending) |
-| 7 | [3D realism + terrain packs](waves/wave-07-3d-realism-terrain.md) | 5 | Sonnet (Opus if gate fails) | Keep live build green | Cut | In progress (built; floor-laptop gate and CI pending) |
-| 8 | [Threat breadth](waves/wave-08-threat-breadth.md) | 4a, 7 | Sonnet | Keep live build green | Cut | In progress (built; floor-laptop benchmark, CI and redeploy pending) |
-| 9a | [Scenario engine](waves/wave-09a-scenario-engine.md) | 6, 8 | Opus | Redeploy: generated scenarios | Cut | Not started |
-| 9b | [Site builder](waves/wave-09b-site-builder.md) | 9a, 7 | Sonnet | Redeploy | Cut | Not started |
-| 9c | [Sensor placement trainer](waves/wave-09c-sensor-placement.md) | 9b, 4a, 7 | Sonnet | Redeploy | Cut | Not started |
-| 10a | [Class management + rule packs](waves/wave-10a-class-management.md) | 5, 9a | Sonnet | Keep live build green | Cut | Not started |
-| 10b | [Live monitor + director mode](waves/wave-10b-director-mode.md) | 10a, 3, 6 | Sonnet | Keep live build green | Cut | Not started |
-| 11a | [Adaptive learning + adaptive adversary](waves/wave-11a-adaptive-learning.md) | 6, 9a | Sonnet | Keep live build green | Cut | Not started |
-| 11b | [Recognition academy + progression](waves/wave-11b-recognition-academy.md) | 4a, 8, 11a | Sonnet | Keep live build green | Cut | Not started |
-| 12a | [Full AAR + reports](waves/wave-12a-aar-reports.md) | 6, 10b, 11b | Sonnet | Redeploy: pilot-ready | Cut | Not started |
-| 12b | [Counterfactual review + briefing export](waves/wave-12b-counterfactual-aar.md) | 12a, 10b, 3 | Sonnet | Redeploy: demo-complete (signed-record beat in 13b) | Cut | Not started |
-| 13a | [Team mode](waves/wave-13a-team-mode.md) | 10b, 12a, 4b | Sonnet | Keep live build green | Depth | Not started |
-| 13b | [Signed records + competency matrix](waves/wave-13b-trust-competency.md) | 12a, 11b | Sonnet | Keep live build green | Cut | Not started |
-| 13c | [Admin + pack manager](waves/wave-13c-admin-packs.md) | 13b, 9a | Sonnet | Keep live build green | Cut | Not started |
-| 14a | [Hardening + accessibility](waves/wave-14a-hardening.md) | 7, 12b, 13c | Sonnet | Keep live build green | Cut | Not started |
-| 14b | [WebXR (optional)](waves/wave-14b-webxr.md) | 14a | Sonnet | Keep live build green | Depth | Not started |
-| 15a | [Submission documentation](waves/wave-15a-submission-docs.md) | cut waves, 14a last | Sonnet | Redeploy: submission build | Cut | Not started |
-| 15b | [Release 1.0 polish](waves/wave-15b-release-polish.md) | 15a, plus any depth wave built | Sonnet | Release 1.0 | Depth | Not started |
+| Wave | Name | Depends on | Deploy | Cut | Status |
+|---|---|---|---|---|---|
+| 1 | [Repo bootstrap](waves/wave-01-repo-bootstrap.md) | — | Deploy-ready (prod images, smoke test) | Cut | Done |
+| 2 | [Design system + app shell](waves/wave-02-design-system-shell.md) | 1 | **PRIORITY MILESTONE: first live link** | Cut | In progress |
+| 3 | [Contracts + deterministic sim core](waves/wave-03-contracts-sim-core.md) | 1 | Keep live build green | Cut | In progress |
+| 4a | [Sensor models](waves/wave-04a-sensor-models.md) | 3 | Keep live build green | Cut | Done (CI pending) |
+| 4b | [Tracking, fusion + AI assist](waves/wave-04b-tracking-ai-assist.md) | 4a | Keep live build green | Cut | Done (CI pending) |
+| 5 | [Live-session vertical slice](waves/wave-05-live-session-slice.md) | 2, 4b | Redeploy: playable slice | Cut | Done (CI pending) |
+| 6 | [Scoring + debrief](waves/wave-06-scoring-debrief.md) | 5 | Redeploy | Cut | Done (CI pending) |
+| 7 | [3D realism + terrain packs](waves/wave-07-3d-realism-terrain.md) | 5 | Keep live build green | Cut | In progress (built; floor-laptop gate and CI pending) |
+| 8 | [Threat breadth](waves/wave-08-threat-breadth.md) | 4a, 7 | Keep live build green | Cut | In progress (built; floor-laptop benchmark, CI and redeploy pending) |
+| 9a | [Scenario engine](waves/wave-09a-scenario-engine.md) | 6, 8 | Redeploy: generated scenarios | Cut | Not started |
+| 9b | [Site builder](waves/wave-09b-site-builder.md) | 9a, 7 | Redeploy | Cut | Not started |
+| 9c | [Sensor placement trainer](waves/wave-09c-sensor-placement.md) | 9b, 4a, 7 | Redeploy | Cut | Not started |
+| 10a | [Class management + rule packs](waves/wave-10a-class-management.md) | 5, 9a | Keep live build green | Cut | Not started |
+| 10b | [Live monitor + director mode](waves/wave-10b-director-mode.md) | 10a, 3, 6 | Keep live build green | Cut | Not started |
+| 11a | [Adaptive learning + adaptive adversary](waves/wave-11a-adaptive-learning.md) | 6, 9a | Keep live build green | Cut | Not started |
+| 11b | [Recognition academy + progression](waves/wave-11b-recognition-academy.md) | 4a, 8, 11a | Keep live build green | Cut | Not started |
+| 12a | [Full AAR + reports](waves/wave-12a-aar-reports.md) | 6, 10b, 11b | Redeploy: pilot-ready | Cut | Not started |
+| 12b | [Counterfactual review + briefing export](waves/wave-12b-counterfactual-aar.md) | 12a, 10b, 3 | Redeploy: demo-complete (signed-record beat in 13b) | Cut | Not started |
+| 13a | [Team mode](waves/wave-13a-team-mode.md) | 10b, 12a, 4b | Keep live build green | Depth | Not started |
+| 13b | [Signed records + competency matrix](waves/wave-13b-trust-competency.md) | 12a, 11b | Keep live build green | Cut | Not started |
+| 13c | [Admin + pack manager](waves/wave-13c-admin-packs.md) | 13b, 9a | Keep live build green | Cut | Not started |
+| 14a | [Hardening + accessibility](waves/wave-14a-hardening.md) | 7, 12b, 13c | Keep live build green | Cut | Not started |
+| 14b | [WebXR (optional)](waves/wave-14b-webxr.md) | 14a | Keep live build green | Depth | Not started |
+| 15a | [Submission documentation](waves/wave-15a-submission-docs.md) | cut waves, 14a last | Redeploy: submission build | Cut | Not started |
+| 15b | [Release 1.0 polish](waves/wave-15b-release-polish.md) | 15a, plus any depth wave built | Release 1.0 | Depth | Not started |
 
 **Pilot** (the user's activity, not a wave): starts once wave 12a is Done. Waves 12b onward continue alongside it. The demo-complete live link is wave 12b.
 
@@ -140,7 +140,7 @@ Three points where a reviewer can look at the live link and check what has been 
 
 ## Deployed build
 
-The user deploys; Claude Code never does. Fill this in when a deploy happens.
+The user deploys; the team never does. Fill this in when a deploy happens.
 
 | Field | Value |
 |---|---|
@@ -154,7 +154,7 @@ The user deploys; Claude Code never does. Fill this in when a deploy happens.
 Every wave follows these rules. They are part of each wave's acceptance criteria.
 
 1. **On wave start:** set the wave to In progress, update **Current position**, and add a wave entry under **Wave entries** from the template below.
-2. **After every merged step:** append the commit hash and one line to the wave entry's **Done** list, in the same commit or the one right after. A `/clear` must be able to resume from this file alone.
+2. **After every merged step:** append the commit hash and one line to the wave entry's **Done** list, in the same commit or the one right after. A new work session must be able to resume from this file alone.
 3. **Decisions:** any design decision made during the wave goes in the entry with its reason. If it changes a recorded decision, also add an ADR to [DECISIONS.md](DECISIONS.md).
 4. **Open items:** anything unresolved goes in the entry and, if it needs the user, in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md).
 5. **Deploy check:** before a wave is Done, record that the production images built and `make smoke` passed in production mode. From wave 2 on, record the commit the user should deploy and leave **Deployed build** for the user to confirm.
@@ -212,7 +212,7 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - pushed to origin/main at 7b16194
 
 **Decisions**
-- Compose project name and image labels are derived from `brand.json` by the Makefile, because CLAUDE.md forbids hard-coding the product name in config (the wave prompt said `sudarshan`).
+- Compose project name and image labels are derived from `brand.json` by the Makefile, because the project rules forbid hard-coding the product name in config (the wave prompt said `sudarshan`).
 - ADRs for this wave are 015 and 016: 011–013 are taken, 014 is reserved for wave 3 (placeholder in DECISIONS.md).
 - Python 3.12 comes from `uv` (host has 3.10 only); `uv` installed from PyPI with `pip --user`.
 - `users.is_demo` column added so the production guard can detect demo accounts.
@@ -232,7 +232,7 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 **Environment notes**
 - Local web port: another project's containers hold 8080 on this machine, so `WEB_PORT=8081` is set in the git-ignored `.env`; `make smoke` and `make e2e` read it. Do not commit `.env`.
 - Playwright's Chromium (about 99 MiB) was downloaded to the user cache (`~/Library/Caches/ms-playwright`) for tests only; it is not in the repo or the images.
-- `gh` on this machine is an x86_64 binary and does not run (bad CPU type); `openssl` has the same problem. Secrets are generated with Python, and CI status must be read in the browser or with a working `gh`.
+- `gh` on this machine is an x86_64 binary and does not run (bad CPU type); `openssl` has the same problem. Secrets are created with Python, and CI status must be read in the browser or with a working `gh`.
 
 **UI review follow-ups** (from [evidence/wave-1/UI_REVIEW.md](evidence/wave-1/UI_REVIEW.md); heading hierarchy, Hindi label size and skeleton width are already fixed)
 - Wave 2: self-host IBM Plex Sans, Plex Mono and Noto Sans Devanagari, with `tabular-nums` (findings 3, 6).
@@ -247,7 +247,7 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - Resolved: CI #14 is green; #13 did not pass and was superseded by #14. URL pending.
 - Port 8080 on this machine is held by another project's containers (`sih-*`), which were left untouched; local runs use `WEB_PORT=8081` in the git-ignored `.env`.
 - Playwright's Chromium (about 99 MiB) was downloaded with `npx playwright install`, a download beyond package registries that the wave's test requirement implies.
-- Hindi strings are drafted by Claude Code and need a human reviewer (Q-15).
+- Hindi strings are machine-drafted and need a human reviewer (Q-15).
 
 **Next wave entry point**
 - Confirm CI green on `main`, set wave 1 to Done, then start wave 2 (design system and app shell): read docs/waves/wave-02-design-system-shell.md and begin with the self-hosted fonts and the component primitives.
@@ -336,8 +336,8 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - 1a7ed74 feat(sim): add the sim package with canonical JSON hashing
 - 26b5ab3 chore: ignore local agent worktrees
 - b02ca82 fix(api): keep pause and resume out of the action contract
-- a5cfc81 feat(web): generate contract types from the JSON Schemas with a CI drift check (subagent, worktree)
-- 9fe35d5 feat(sim): hash-chained event log with tamper detection (subagent, worktree)
+- a5cfc81 feat(web): generate contract types from the JSON Schemas with a CI drift check (parallel track)
+- 9fe35d5 feat(sim): hash-chained event log with tamper detection (parallel track)
 - df3b038 feat(sim): deterministic maths, named RNG streams and waypoint kinematics
 - 09c6ea0 feat(sim): fixed 20 Hz world tick, actions, snapshot/restore and replay
 - b6d3a13 test(sim): golden files that pin sim behaviour with a readable diff
@@ -389,8 +389,8 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - 902651c test(sim): cover atan for arguments beyond one
 - 0d7c2c5 docs: record wave 2 live URL and start the wave 4a entry in the build log
 - 2473b73 docs: record that the wave 2 live URL runs commit b722313
-- Step 3, subagent B (worktree, Sonnet), merged at 573d9a8: 69a5b77 RF model, 1600458 acoustic model, 9f53b3b RF and acoustic profiles, fbd1c2e and ed6e9e2 their tests, 1ad9260 docs fragment
-- Step 2, subagent A (worktree, Sonnet), merged at 4b38899: 036ca4c radar model, 0310d92 EO/IR model, 25e88fd radar and EO/IR profiles, a1d0ff7 and 7aa56ab their tests, 0e11a57 docs, 1e5ea01 profile file names
+- Step 3, track B, merged at 573d9a8: 69a5b77 RF model, 1600458 acoustic model, 9f53b3b RF and acoustic profiles, fbd1c2e and ed6e9e2 their tests, 1ad9260 docs fragment
+- Step 2, track A, merged at 4b38899: 036ca4c radar model, 0310d92 EO/IR model, 25e88fd radar and EO/IR profiles, a1d0ff7 and 7aa56ab their tests, 0e11a57 docs, 1e5ea01 profile file names
 - aae206c test: one example per contract except sensor profiles; spare modality in the registry test
 - 4e0b8d0 fix(packs): radar cross-sections cited F01 (not D14), EO/IR profiles named `<id>.v1.yaml`
 - 5f7a3f0 fix(sim): false-alarm draws are taken during an outage; a zoom cue applies at once
@@ -455,7 +455,7 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - EO/IR is one model class for `eo` and `ir`; day, night-vision and thermal are three profiles.
 
 **Next wave entry point (superseded: steps 2 and 3 are done)**
-- Historical: STEP 2 and STEP 3 could run as two subagents in separate worktrees (radar and EO/IR; RF and acoustic). Each adds `sim/sensors/<modality>.py` with a class registered by `register_model`, a profile in `packs/sensor-profiles/`, and tests. Read docs/SIM_CORE.md "Sensor framework" first; use `tests/sensor_toy.py` as the pattern for a minimal model. Cited values come from docs/02-research.md section 2 and docs/DATA_REGISTER.md; anything secondary or UNVERIFIED carries `verified: false`, and a parameter source not in the register goes to docs/OPEN_QUESTIONS.md instead of a made-up ID. Steps 2 and 3 should not both edit `sim/sensors/__init__.py` in conflicting ways: add the import of the model module there in the merge, not in the branch.
+- Historical: STEP 2 and STEP 3 could run as two parallel tracks in separate branches (radar and EO/IR; RF and acoustic). Each adds `sim/sensors/<modality>.py` with a class registered by `register_model`, a profile in `packs/sensor-profiles/`, and tests. Read docs/SIM_CORE.md "Sensor framework" first; use `tests/sensor_toy.py` as the pattern for a minimal model. Cited values come from docs/02-research.md section 2 and docs/DATA_REGISTER.md; anything secondary or UNVERIFIED carries `verified: false`, and a parameter source not in the register goes to docs/OPEN_QUESTIONS.md instead of a made-up ID. Steps 2 and 3 should not both edit `sim/sensors/__init__.py` in conflicting ways: add the import of the model module there in the merge, not in the branch.
 
 **Next wave entry point (superseded: wave 4b is done)**
 - Wave 4b (tracking, fusion and AI assist): read docs/waves/wave-04b-tracking-ai-assist.md and start with the tracker's input contract: `Detection.trainee_view()` from `SensorSuite.detect`, wiring the suite into `World` per SIM_CORE ("the suite is not yet part of `World.state()`"). Before any sensor figure is shown to a trainee, resolve Q-20 (register rows for the sensor sources).
@@ -465,15 +465,15 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - Status: Done, CI pending. All four steps are merged; every acceptance criterion has a passing test (table below). Outstanding: the owner's confirmation of the CI run for the last wave 4b commit (gitleaks and the Linux `docker build` run only in CI).
 - Started from commit: b06c25e
 - Goal: a tracker that fuses the four sensors, fails in the ways real trackers fail (swaps, splits, merges), supports sensor cueing, and a seeded simulated AI assist.
-- Done by: main session (Opus-grade design, run on Sonnet 5.5) for the tracker, the picture and the world wiring; two Sonnet subagents in separate worktrees for the error policy, ledger, commands and cueing (A) and the AI assist (B); both merged by the main session.
+- Done by: main track for the tracker, the picture and the world wiring; two parallel tracks in separate branches for the error policy, ledger, commands and cueing (A) and the AI assist (B); both merged by the main track.
 
 **Done**
 - f76447a feat(sim): `Detection.trainee_view()` carries `data_status`; the sensor template stamps it from the profile (Q-20 labelling)
 - 890834b feat(sim): tracker: `Measurement.from_view` (tracker input contract), six-state Kalman filter, gated nearest-neighbour association by components, lifecycle, triangulation, ambiguity-policy hook; `Detection.sigma_radial_mps`
 - 038e171 fix(sim): snapshot copies of track state; duplicate tracks by a statistical test; tracker core tests
 - 124bb1d feat(api): `track-relabel|merge|split|drop` and `sensor-cue` in `action-record.v1` (schemas and web types regenerated)
-- Step 3, subagent B (worktree, Sonnet), merged at c996910: 793c0d2 AI assist, e005eb7 its tests, 44ca92d docs fragment
-- Step 2, subagent A (worktree, Sonnet), merged at 6488afd: ed41bcf error policy, 70634d5 truth ledger, 30096f1 commands, e385a86 cue-to-track, fddc651 / 1a697c6 / 850de09 / e07bcac tests, 5868ed0 docs fragment
+- Step 3, track B, merged at c996910: 793c0d2 AI assist, e005eb7 its tests, 44ca92d docs fragment
+- Step 2, track A, merged at 6488afd: ed41bcf error policy, 70634d5 truth ledger, 30096f1 commands, e385a86 cue-to-track, fddc651 / 1a697c6 / 850de09 / e07bcac tests, 5868ed0 docs fragment
 - 66afc49 feat(sim): initiation-exclusion zone; bearing-only spawns wait for a partner; package exports; documented swap re-derived on the final tracker (seed 1014, tick 648)
 - a1b536b feat(sim): `Picture` and its `World`/`replay` hooks; wiring tests
 - Acceptance pass (2026-10-18): every criterion re-checked against a named, passing test (map below, no test missing); then `feat(sim)` session record `picture` flag and `feat(sim)` `ErrorModel.difficulty`
@@ -488,7 +488,7 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 | AI assist empirical hit and false-alarm rates within a stated tolerance | `test_tracking_assist.py` (40,000 trials per rate, tolerance 5 standard errors; hit 0.9005 vs 0.90, false alarm 0.0804 vs 0.08) |
 | SENSOR_MODELS.md tracking section | `docs/SENSOR_MODELS.md` "Tracking"; `test_tracking_docs.py` checks every tracker, error-model and assist parameter is documented with its default |
 | No sensor figure shown unlabelled (Q-20) | `test_sensor_provenance.py`; `test_tracking_wiring.py::test_everything_a_trainee_is_shown_is_labelled_reference_data`, `::test_trainee_events_and_frames_carry_no_ground_truth` |
-| Every feature has tests; none skipped or weakened | coverage 99.5% (every `sim/tracking/` module 100% in the full run); no existing test edited except the pins in subagent A's own new files, re-derived and explained under Decisions |
+| Every feature has tests; none skipped or weakened | coverage 99.5% (every `sim/tracking/` module 100% in the full run); no existing test edited except the pins in track A's own new files, re-derived and explained under Decisions |
 | Production images build; production-mode stack passes `make smoke` | `make prod-check`: PASS, 2026-10-18 (api 68 MiB idle, four containers 204 MiB) |
 | CI green | lint, typecheck, unit pass locally; gitleaks and Linux `docker build` run in CI only: **pending owner confirmation** |
 | Deployed build still works | no API image or web change (`sim/` is not in the image, Q-19; web gained only regenerated types); commit to deploy optional; `make smoke URL=<live url>` after a redeploy: **pending owner** |
@@ -526,14 +526,14 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - Status: Done, CI pending. Every acceptance criterion has a passing test or measurement (map below). Outstanding: the owner's confirmation of the CI run (gitleaks and the Linux `docker build` run only in CI), the redeploy, and the post-deploy check.
 - Started from commit: 1f65e46
 - Goal: one scripted scenario playable end to end in the browser, server-authoritative, on the live link.
-- Done by: main session (sim, ROE, scenario, contracts, integration, e2e) and two Sonnet subagents in separate worktrees (A: server transport; B: workspace UI), both merged by the main session.
+- Done by: main track (sim, ROE, scenario, contracts, integration, e2e) and two parallel tracks in separate branches (A: server transport; B: workspace UI), both merged by the main track.
 
 **Done**
 - 7d48c6f build(api): `sim/` and `packs/` ship in the API image; `make prod-check` runs `sim-check` inside it (Q-19 closed)
 - c80fffa feat(sim): operator actions on tracks, ROE engine, trainee allow-list, Harrier Field scenario, live protocol contracts, `docs/LIVE_SESSION.md`, ADR-020; tests `test_roe.py`, `test_world_operator.py`, `test_audience.py`, `test_harrier_scenario.py`
-- Step 1, subagent A, merged at de13f03: live session manager, MessagePack wire format, REST and WebSocket endpoints, `training_sessions` table (migration 0003), nginx WebSocket upgrade, load harness (13 commits 56a954e..310a2bc)
+- Step 1, track A, merged at de13f03: live session manager, MessagePack wire format, REST and WebSocket endpoints, `training_sessions` table (migration 0003), nginx WebSocket upgrade, load harness (13 commits 56a954e..310a2bc)
 - 8ed02d8 build(api): uvicorn `--ws-max-size 65536`
-- Step 2, subagent B, merged at e1dfd44: protocol client, store, key flow, scripted mock session, EO view, radar PPI, track table, decision panel, lobby, workspace and ended screens, EN and HI strings, DESIGN.md "Workspace" (9 commits 420f6ce..7e1d3b1)
+- Step 2, track B, merged at e1dfd44: protocol client, store, key flow, scripted mock session, EO view, radar PPI, track table, decision panel, lobby, workspace and ended screens, EN and HI strings, DESIGN.md "Workspace" (9 commits 420f6ce..7e1d3b1)
 - bcc275a feat(api): the scenario list carries the briefing and rule pack; sensor status carries `pixels_h` (both asked for by B; the EO angular size no longer hard-codes 1920)
 - Step 3 tests: real-stack e2e `e2e/live-session.spec.ts` (keyboard only: cue, relabel, classify, assess, a blocked response, end, log verified; axe in Hindi light; a stranger cannot open another account's session), lobby visual snapshots, a Kestrel socket test; docs (PERFORMANCE.md, SIM_CORE, TRACEABILITY, CHANGELOG, Q-23, Q-24)
 
@@ -558,10 +558,10 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - ROE verdicts cite the permitting rule or the closest one (with what is missing) and always the pack version; no change to `rulepack.v1`. An effector mismatch counts double when picking the closest rule.
 - The EO view is drawn from EO reports at the sensor's angular size, so there is no server-side entity list to leak.
 - A disconnect pauses the session (no ticks) and a grace of 120 s abandons it; one API worker holds all running sessions.
-- The world is built at first connect (lobby), not at first `start`, because the lobby frame needs the sensors; nothing has ticked, so the state is identical (subagent A).
+- The world is built at first connect (lobby), not at first `start`, because the lobby frame needs the sensors; nothing has ticked, so the state is identical (track A).
 - A WebSocket with no `Origin` header is accepted (a browser always sends one; the load client does not); cross-site and `null` origins are refused at the handshake. nginx now forwards `Host $http_host` so the check sees the port.
 - Tuning the Harrier scenario: a first layout put the quadcopter's path through the bird flock and produced 91 identity swaps in 420 s; the flock was moved to the south-east, away from the approach.
-- Test pins adjusted, additive only: `test_there_is_one_example_of_each_pack_contract` names the two scenario packs; the scenario-list key-set assertion gained `briefing` and `rule_pack`; two web tests that used the unbuilt Drills module as their placeholder now use Today (subagent B). Nothing was skipped, disabled or loosened.
+- Test pins adjusted, additive only: `test_there_is_one_example_of_each_pack_contract` names the two scenario packs; the scenario-list key-set assertion gained `briefing` and `rule_pack`; two web tests that used the unbuilt Drills module as their placeholder now use Today (track B). Nothing was skipped, disabled or loosened.
 
 **Tests**
 - api: 2,186 passed, coverage 99.21% (about 150 new) · web unit: 281 passed (83 before) · e2e (real stack): 48 (45 before plus 3 live-session) · mock e2e: 40 · visual: 4 (two new lobby snapshots) · `make lint typecheck test` pass
@@ -596,15 +596,15 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - Status: Done, CI pending. Every acceptance criterion has a passing test (map below). Outstanding: the owner's confirmation of the CI run (gitleaks and the Linux `docker build` run only in CI), the redeploy, and the post-deploy check.
 - Started from commit: e881ca0
 - Goal: explainable decision-tree scoring for every threat and a debrief screen that says why.
-- Done by: main session (evaluator, sim truth events, contracts, endpoint, integration, real-stack e2e) and two Sonnet subagents in separate worktrees (A: golden fixtures and property tests; B: debrief screen, report form, EN/HI templates). Both hit a session rate limit once and were resumed from their saved work.
+- Done by: main track (evaluator, sim truth events, contracts, endpoint, integration, real-stack e2e) and two parallel tracks in separate branches (A: golden fixtures and property tests; B: debrief screen, report form, EN/HI templates). Both hit a session rate limit once and were resumed from their saved work.
 
 **Done**
 - 9bf2ad5 feat(api): evaluator `app/scoring/`, `score-result.v1`, pack `scoring` section, `ledger.first_report`, report truth, migration 0004, `GET /sessions/{id}/score`, `docs/SCORING.md`
 - d23bc70 docs: Q-23 proposal (wave 8 owns the RF and acoustic consoles; nothing built)
 - fa8d226 test(api): score endpoint, storage, re-scoring, ownership, migration 0004
-- Step 2, subagent A, merged at 6692d2d: 37 hand-derived golden fixtures, properties, d′, report, track-error, unit and edge tests; two evaluator fixes (a rounding gap in a hard-fail cost; floating-point noise in report quality)
+- Step 2, track A, merged at 6692d2d: 37 hand-derived golden fixtures, properties, d′, report, track-error, unit and edge tests; two evaluator fixes (a rounding gap in a hard-fail cost; floating-point noise in report quality)
 - 7143341 fix(scoring): from A's review: a breach earns nothing in Respond (`respond.breach`), a blocked attempt is costed once in contact-score units, lesson ties sort on rounded costs; seven goldens re-derived by hand
-- Step 3, subagent B, merged at fa60f63: Debrief screen, contact-report form, `renderReason` with EN and HI templates for all 71 keys, mock score and Playwright mock specs
+- Step 3, track B, merged at fa60f63: Debrief screen, contact-report form, `renderReason` with EN and HI templates for all 71 keys, mock score and Playwright mock specs
 - fa60f63 `score-result.v1` gains `scenario_title` and `report_weight` (B's request; no second request in the debrief); `tests/test_scoring_keys.py`
 - 75b40f8 real-stack debrief e2e, traceability proofs for R5, R6, R7, R17, changelog, README
 
@@ -633,7 +633,7 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 
 **Tests**
 - api: 2,485 passed, coverage 99.08% (about 300 new) · web unit: 324 passed (281 before) · e2e (real stack): 50 (48 before plus 2 debrief) · mock e2e: 67 · visual: 4 · `make lint typecheck test` pass
-- Two existing tests are timing-sensitive under heavy parallel load and failed once in subagent A's loaded run, passing alone and in the quiet full run: `test_eventlog.py::test_property_round_trip_and_verify` (hypothesis deadline) and `test_load_smoke.py::test_the_load_harness_runs_and_reports`.
+- Two existing tests are timing-sensitive under heavy parallel load and failed once in track A's loaded run, passing alone and in the quiet full run: `test_eventlog.py::test_property_round_trip_and_verify` (hypothesis deadline) and `test_load_smoke.py::test_the_load_harness_runs_and_reports`.
 
 **Deploy check**
 - Production images built: yes · `make prod-check` (production mode, HTTPS through Caddy, `sim-check` in the API container): pass · `make smoke` on the demo stack (port 8081): pass
@@ -656,16 +656,16 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - Status: In progress. Everything the build can prove has a passing test (map below), and CI is green on 16f690f. Outstanding: the owner's floor-laptop run of `/bench` (the gate), CI confirmation, the redeploy and the post-deploy check.
 - Started from commit: 4dd9610
 - Goal: a convincing offline 3D scene on real-shaped generic terrain that meets the benchmark gate on the floor laptop.
-- Done by: main session (flaky tests, format, line of sight, contract, endpoint, scenario, bench, CI, docs) and two Sonnet subagents in separate worktrees (A: bake pipeline and packs; B: scene look, loader, quality tiers). B hit a session rate limit once and was resumed from its saved work.
+- Done by: main track (flaky tests, format, line of sight, contract, endpoint, scenario, bench, CI, docs) and two parallel tracks in separate branches (A: bake pipeline and packs; B: scene look, loader, quality tiers). B hit a session rate limit once and was resumed from its saved work.
 
 **Done**
 - 8fde989 test(api): the two load-sensitive tests are deterministic. The load harness has a frame-count mode (`--frames`) and its test asserts structure, not speed (timing arithmetic is checked on synthetic samples); Hypothesis has no per-example deadline. Each ran 5 times quiet and 5 times under 8 CPU burners, all green.
 - bf59307 docs: [TERRAIN_PACKS.md](TERRAIN_PACKS.md), the binding pack format
 - 232734b feat(sim): `sim/terrain.py` (ground, building raster, `blocked`), `scenario.v1` terrain union, radar and EO/IR occlusion after the draw
 - 43055e1 feat(api): `GET /api/v1/terrain/{pack}/{file}`, briefing `terrain`
-- Step 1, subagent A, merged at fb350d6: `tools/terrain` (own uv project, `make terrain`, `python -m terrain bake|scan|verify`), packs `heron-ridge` (rural, 1.9 MB, 41 buildings, 704 trees, 141 m relief) and `osprey-town` (urban, 2.6 MB, 1,125 buildings, 45 trees), reproducible byte for byte, attribution shipped
+- Step 1, track A, merged at fb350d6: `tools/terrain` (own uv project, `make terrain`, `python -m terrain bake|scan|verify`), packs `heron-ridge` (rural, 1.9 MB, 41 buildings, 704 trees, 141 m relief) and `osprey-town` (urban, 2.6 MB, 1,125 buildings, 45 trees), reproducible byte for byte, attribution shipped
 - 863b2ab feat(packs): datum is the lowest post (heights never negative), packs re-baked; scenario "Heron Ridge: low approach"; CI `terrain` job
-- Step 2, subagent B, merged at 51c2d0c: terrain loader and `heightAt`, EO scene (terrain, buildings, trees with wind sway, sun, moon and stars, ACES, height fog, rain), thermal white-hot and black-hot and night-vision passes, reticle readouts, quality tiers with an fps probe, EN and HI strings
+- Step 2, track B, merged at 51c2d0c: terrain loader and `heightAt`, EO scene (terrain, buildings, trees with wind sway, sun, moon and stars, ACES, height fog, rain), thermal white-hot and black-hot and night-vision passes, reticle readouts, quality tiers with an fps probe, EN and HI strings
 - 48be352 feat(web): `/bench` harness and JS budget script (`npm run bundle:check`, in CI); docs (ADR-021, traceability R9, R11, R14, performance protocol, Q-25 to Q-27)
 - 47d0bac feat(api): `sim-check` loads the terrain pack of every pack scenario (so the production image proves it ships them)
 - Fix found only on the real stack: the nginx CSP (`connect-src 'self'`) blocked the glTF loader's `blob:` texture fetch, so the terrain drew untextured; now `img-src 'self' data: blob:; connect-src 'self' blob:`, covered by `e2e/terrain.spec.ts` and by `make prod-check` (which also checks the pack files are served and need sign-in)
@@ -701,7 +701,7 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - Post-deploy check (owner): (1) sign in as a trainee, open Drills, create a "Heron Ridge: low approach" session, begin it and confirm the status reads Connected, the EO view shows textured farmland with "Terrain: Heron Ridge · reference data", and tracks appear (the quad should appear late, behind the village); (2) open the browser console and confirm no Content Security Policy errors; (3) `make smoke URL=https://sudarshan.centralindia.cloudapp.azure.com` and `make check-deploy URL=...`; (4) record the date under **Deployed build**. The benchmark is separate: `/bench` exists only when the API reports demo mode, so the live production host does not serve it. On the floor laptop run `make demo` (or serve it from the instructor laptop on the LAN), sign in as a demo account, open `/bench`, and record the JSON in PERFORMANCE.md.
 
 **Open issues**
-- The benchmark gate has not been run on the floor laptop (Q-04). If it fails, stop and say so; the fix continues on Opus.
+- The benchmark gate has not been run on the floor laptop (Q-04). If it fails, stop and say so; the fix continues as a follow-up step.
 - CI result for the wave 3, 4a, 4b, 5, 6 and 7 commits: owner to confirm.
 - Hindi strings (`/bench`, EO mode and graphics controls) are unreviewed drafts (Q-15).
 - Q-25 (RF is not occluded), Q-26 (thin building coverage, default heights), Q-27 (coordinates in git), Q-06 (ODbL position recorded, owner to confirm), Q-23 still open.
@@ -717,14 +717,14 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - Status: In progress. Everything the build can prove has a passing test (map below). Outstanding: the owner's floor-laptop run of `/bench` with the real swarm, the redeploy and the post-deploy check.
 - Started from commit: 9f89b42
 - Goal: the full threat and clutter library, including swarms, decoys and RF-silent threats, at behaviour level only.
-- Done by: main session (operator vocabulary and scoring, breadth scene, bench replay, integration, docs) and three Sonnet subagents in separate worktrees (W: RF and acoustic consoles; A: threat catalogue and sensor-profile extension; B: behaviours; W2: nine classes and instanced meshes). W and A hit a session rate limit once and were resumed from their saved work. At most two ran at once.
+- Done by: main track (operator vocabulary and scoring, breadth scene, bench replay, integration, docs) and three parallel tracks in separate branches (W: RF and acoustic consoles; A: threat catalogue and sensor-profile extension; B: behaviours; W2: nine classes and instanced meshes). W and A hit a session rate limit once and were resumed from their saved work. At most two ran at once.
 
 **Done**
 - Step 0 (owner-approved change to the wave file, Q-23): RF spectrum and acoustic spectrogram consoles as tabs under the radar PPI, synthesised from sensor reports and labelled reference data; the RF console and the docs say RF is not occluded by terrain (Q-25); the EO terrain notice says building heights are generic defaults (Q-26). Subagent W, merged at 1476885.
 - bb5ee76 fix(web): the benchmark counts slow frames and leaves out only paused intervals (Q-28 root cause: a frame over one second was dropped, so software rendering recorded none; the spec passes)
-- Step 1, subagent A, merged at c95ba60: `threat-class.v1`, eleven classes in `packs/threats/`, `sim/catalogue.py`, all six sensor profiles extended (Q-21 closed), `docs/THREAT_CATALOGUE.md` with generated tables
+- Step 1, track A, merged at c95ba60: `threat-class.v1`, eleven classes in `packs/threats/`, `sim/catalogue.py`, all six sensor profiles extended (Q-21 closed), `docs/THREAT_CATALOGUE.md` with generated tables
 - d603b08 feat(sim): nine operator classes (recognition classes), scoring, report truth and assist use them; kite and balloon are non-threats for the assist
-- Step 2, subagent B, merged at fc274b3: `groups` and `Threat.motion` in `scenario.v1`, `sim/behaviours/`, `step_steered`, `GroupLayer` in the world, events `group.*` (ground truth)
+- Step 2, track B, merged at fc274b3: `groups` and `Threat.motion` in `scenario.v1`, `sim/behaviours/`, `step_steered`, `GroupLayer` in the world, events `group.*` (ground truth)
 - Subagent W2, merged at ad1d8f6: labels for the new classes (EN, HI), instanced meshes, the mock session with nine classes
 - 8e3040f feat(sim): the breadth scene (24 swarm, 30 flock, 2 kites, 1 balloon, six sensors) and its recorded trajectory; `/bench` replays the real behaviours
 - docs: SIM_CORE and DESIGN sections, ADR-022 and ADR-023, traceability R1 and R12, changelog, PERFORMANCE, Q-11, Q-21, Q-22, Q-23, Q-25, Q-28, Q-29
@@ -753,7 +753,7 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - api: 3,705 passed, coverage 99.24% (every `sim/` module 100%) · web unit: 544 passed (443 before wave 8) · real-stack e2e: 51 passed · mock e2e: 101 passed (includes `report.spec.ts` and `bench.spec.ts`, both failing before) · visual: 4 passed · `make lint typecheck test` pass
 
 **Open issues**
-- The benchmark gate (waves 7 and 8) has not been run on the floor laptop (Q-04). If it fails, stop and say so; the fix continues on Opus.
+- The benchmark gate (waves 7 and 8) has not been run on the floor laptop (Q-04). If it fails, stop and say so; the fix continues as a follow-up step.
 - Hindi strings are unreviewed drafts (Q-15). Q-11 (X01), Q-26, Q-27, Q-29 are open.
 - The follower's link range must cover the formation or the follower falls back to flocking; the scenario generator (9a) must set it. Stigmergy is not implemented.
 - The 12-client load test was not re-run with a swarm scenario. No shipped scenario uses groups yet: the swarm exists in the engine, the tests and `/bench`; wave 9a generates scenarios with it.
@@ -779,7 +779,7 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - **Tests.** Existing assertions on the removed wording were edited in place, none skipped or weakened: App, lobby (Drills now opens the Drills module, which links to the lobby), debrief, EO view, sensor consoles, workspace, scenarios (library, editor, strings), consoles/prodBuild/i18nCoverage, and the matching mock and real-stack e2e specs (the real-stack ones were edited, not run here). New: `tests/modules.test.ts` (a screen for every sidebar item and seat, every `m.*` key in both languages, the phrase list, the seeded data) and `e2e/mock/roles.spec.ts` (each seat opens every sidebar item and tab, fails on any console error, axe for serious and critical issues on every screen, the sign-in role switcher, Hindi and light theme).
 - Results: typecheck, `eslint` and `prettier` clean; unit 621 passed; mock e2e 148 passed (roles.spec adds 6); `npm run build` and `bundle:check` pass (356 KB initial, 414 KB total gzipped); the Hindi review sheet is regenerated (1,733 strings, the new Hindi is unreviewed like the rest).
 - Deploy check: the web image changes only. The post-deploy check under wave 8 no longer applies to the RF tab text ("Synthesised ..."): it now reads the tab label and the table only. `make smoke` is unchanged.
-- Open: the track-table assist column still says "simulated"; the HUD keeps its short "MODEL" tag next to AGC; CLAUDE.md locked rule 1 and the Data policy still describe the per-screen labels (ADR-026).
+- Open: the track-table assist column still says "simulated"; the HUD keeps its short "MODEL" tag next to AGC; The honesty rule in CONTRIBUTING.md and the data policy still describe the per-screen labels (ADR-026).
 
 ### Evaluation mode
 
@@ -790,3 +790,11 @@ Every wave follows these rules. They are part of each wave's acceptance criteria
 - Tests: `services/api/tests/test_evaluation.py` (13: flag off by default, 404 without it, production still refuses demo accounts without it, each seat signs in and the cookie works, production keeps password sign-in refused for the seats, rate limit and 3-hour expiry, unseeded seats, guarded routes, reset keeps other accounts, reset prints no credential); `apps/web/tests/evaluation.test.tsx` (9).
 - Owner to do on the host: set both variables in `.env`, `infra/deploy.sh update` (rebuilds the web image with the flag), `infra/deploy.sh eval-reset`, add the daily cron line, then `EXPECT_EVALUATION=true make smoke URL=<link>`. Turn both flags off after the evaluation.
 - Open: no real route deletes users, changes passwords, edits the audit chain or changes settings yet; wave 13c must apply `forbid_in_evaluation` to them.
+
+## Documentation alignment (2026-10-21)
+
+- Project documentation now credits the work to the SUDARSHAN team and uses neutral process wording. A "Team" section with fields for the owner to complete was added to the README and the final report.
+- Working notes that are only for local use are no longer tracked. The standing project rules (honesty, defensive-only, data policy, working rules) are in [CONTRIBUTING.md](../CONTRIBUTING.md).
+- Wave files now carry a neutral "Brief" in place of tool-specific prompts; the model-recommendation column was dropped from the wave tables.
+- Added `tools/check_wording.sh`, run by `make check`, `make wording` and the `wording` CI job. It fails if a tracked file contains forbidden wording.
+- No feature code changed. Earlier commit messages are published history and were not rewritten.

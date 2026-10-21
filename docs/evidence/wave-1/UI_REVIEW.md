@@ -11,7 +11,7 @@ Screens reviewed at 1440×900, full page, captured from the running demo stack (
 | Loading (EN dark) | [state-loading-en-dark.png](state-loading-en-dark.png) |
 | Error (EN dark) | [state-error-en-dark.png](state-error-en-dark.png) |
 
-Reviewed against the quality bar in CLAUDE.md and `docs/DESIGN.md`. This is one placeholder screen, so the review is about the foundations, not the product. The images are the evidence; the notes are the reviewer's, written by the same agent that built the screen, so they are not independent.
+Reviewed against the quality bar in docs/DESIGN.md and docs/07-ui-map.md and `docs/DESIGN.md`. This is one placeholder screen, so the review is about the foundations, not the product. The images are the evidence; the notes are the reviewer's, written by the same agent that built the screen, so they are not independent.
 
 ## What holds up
 

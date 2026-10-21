@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 2, 4b |
-| Recommended model | Sonnet |
 | Deployment | Redeploy: the live link becomes a playable slice. |
 
 **Goal.** One scripted scenario playable end to end in the browser, server-authoritative, on the live link.
@@ -40,27 +39,27 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 5 (Live-session vertical slice) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 5 (Live-session vertical slice) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 4b is Done and main is green; if not, stop and tell me). Then: docs/07-ui-map.md (live session workspace), docs/05-architecture.md §3.2, docs/08-demo.md (Run 1, for the scenario shape).
 
 GOAL: One scripted scenario playable end to end in the browser, server-authoritative, on the live link.
 
-STEP 1 — Transport (subagent A, worktree)
+STEP 1 — Transport (track A, worktree)
 - WS endpoint with auth, MessagePack frames typed from the contracts, session manager with an asyncio 20 Hz loop calling the sim core.
 - Trainee frames contain only sensor detections, tracks and entities inside the EO field of view. Instructor frames are not built yet.
 - Load-test script (12 clients, 5 minutes) under services/api/tests/load/.
 
-STEP 2 — Workspace UI (subagent B, worktree)
+STEP 2 — Workspace UI (track B, worktree)
 - Layout grid per docs/07-ui-map.md at 1920×1080 degrading to 1366×768.
 - EO view in Three.js (flat ground, sky, simple drone and bird meshes, reticle, zoom ladder).
 - Radar PPI on canvas (sweep with phosphor decay, range rings, bearing ticks, plots and track symbols).
 - Track table and decision panel with the keyboard flow, including cue and track commands. All strings EN and HI.
 
-STEP 3 — Integration (main session)
+STEP 3 — Integration (main track)
 - ROE validator server-side; responses carry the rule ID, text and pack version.
 - Scripted scenario in packs/scenarios/ (fictional names), end-to-end Playwright test that plays it with keyboard only.
 - Event log stored at session end; verify on read.

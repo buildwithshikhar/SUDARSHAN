@@ -5,7 +5,6 @@
 | | |
 |---|---|
 | Depends on | 1 |
-| Recommended model | Sonnet |
 | Deployment | **PRIORITY MILESTONE: first live link.** The user deploys this wave; it must be live before wave 3 starts. |
 
 **Goal.** The real design system, sign-in, role-based shell and bilingual UI, deployed as the first live link.
@@ -27,7 +26,7 @@
 
 ## Files to read
 
-`CLAUDE.md`, `docs/BUILD_LOG.md`, this file, `docs/evidence/wave-1/UI_REVIEW.md`, `docs/HOSTING_OPTIONS.md`, `docs/OPEN_QUESTIONS.md`, `docs/07-ui-map.md` (design system, sidebar, screens), `docs/DESIGN.md`, `docs/DECISIONS.md` ADR-005 and ADR-006. Nothing else.
+`CONTRIBUTING.md`, `docs/BUILD_LOG.md`, this file, `docs/evidence/wave-1/UI_REVIEW.md`, `docs/HOSTING_OPTIONS.md`, `docs/OPEN_QUESTIONS.md`, `docs/07-ui-map.md` (design system, sidebar, screens), `docs/DESIGN.md`, `docs/DECISIONS.md` ADR-005 and ADR-006. Nothing else.
 
 ## Decisions already made
 
@@ -93,7 +92,7 @@
 
 ## Model and effort
 
-Sonnet, medium effort. If about 60% of the session is used before acceptance, stop at the next green commit and log the remainder as wave 2.2; the natural split is (2a) auth, design system, shell and screens, (2b) the deployment kit and measurement.
+If about 60% of the session is used before acceptance, stop at the next green commit and log the remainder as wave 2.2; the natural split is (2a) auth, design system, shell and screens, (2b) the deployment kit and measurement.
 
 ## Stop conditions
 
@@ -130,28 +129,28 @@ The prompt's list, plus: stop at the deploy step and ask the owner to deploy; st
 - `docs/BUILD_LOG.md` is updated per its rules, including the deploy check and the next wave entry point.
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 2 (Design system + app shell) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 2 (Design system + app shell) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 1 is Done and main is green; if not, stop and tell me). Then: docs/07-ui-map.md (design system, sidebar and screens) and docs/DECISIONS.md ADR-005 and ADR-006.
 
 GOAL: The real design system, sign-in, role-based shell and bilingual UI, deployed as the first live link.
 
-STEP 1 — Design system (subagent A, worktree)
+STEP 1 — Design system (track A, worktree)
 - Complete the tokens in docs/07-ui-map.md as CSS variables and a Tailwind theme; remove any default Tailwind palette from use.
 - Self-host IBM Plex Sans, IBM Plex Mono and Noto Sans Devanagari (OFL; keep the licence files). tabular-nums for all numbers.
 - IBM Carbon icons (Apache-2.0) only, 16 and 20 px.
 - Components: button, input, select, checkbox, table (28/36 px rows), panel, tabs, dialog, badge, inline alert, tooltip, and EmptyState / LoadingState / ErrorState. Storybook is not needed; a /dev/components route in demo mode only is enough.
 - Token contrast unit test (WCAG AA, both themes).
 
-STEP 2 — Auth and RBAC (subagent B, worktree)
+STEP 2 — Auth and RBAC (track B, worktree)
 - Login endpoint with argon2, secure HttpOnly SameSite session cookie, CSRF protection, login rate limit, logout.
 - Role guard dependency for API routes; tests per role.
 - create-user CLI (email, role; password from prompt or env; refuses weak passwords).
 
-STEP 3 — Shell (main session, after A and B merge)
+STEP 3 — Shell (main track, after A and B merge)
 - Role-based sidebar with the groups and modules from docs/07-ui-map.md. Unbuilt modules route to an EmptyState: "Arrives in wave N" (translated).
 - Screens: Sign in, About and data notice (honest-data statement, defensive-only scope, no-affiliation line), Not found, No access, Offline.
 - Theme and language switches persisted per user; all strings in EN and HI.

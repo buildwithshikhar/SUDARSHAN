@@ -8,4 +8,4 @@ A stub, completed in wave 15. The shape of a release:
 4. **Documentation.** `CHANGELOG.md` has the release section, [TRACEABILITY.md](TRACEABILITY.md) has no empty proof cell, release notes are written.
 5. **Hand-off.** The maintainer tags the commit and deploys it; the build log records the deployed commit and the result of `make smoke URL=<live url>`.
 
-Claude Code prepares steps 1 to 4 and never tags or deploys.
+The team prepares steps 1 to 4; the owner tags and deploys.

@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 12a, 10b, 3 |
-| Recommended model | Sonnet |
 | Deployment | Redeploy: **demo-complete** live link (the signed-record beat lands with wave 13b). |
 
 **Goal.** From any moment in a replay, branch the run with one changed action and compare the outcome; export clips and optional narration for briefings.
@@ -36,22 +35,22 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 12b (Counterfactual review and briefing export) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 12b (Counterfactual review and briefing export) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 12a is Done and main is green; if not, stop and tell me). Then: docs/05-architecture.md §3.4, docs/08-demo.md, docs/SIM_CORE.md (snapshots), docs/DIRECTOR_MODE.md, docs/10-differentiators.md (H6).
 
 GOAL: From any moment in a replay, branch the run with one changed action and compare the outcome; export clips and optional narration for briefings.
 
-STEP 1 — Branch engine (main session)
+STEP 1 — Branch engine (main track)
 - Snapshot restore, action edit, deterministic forward run, comparison model and API; branch marking in the record.
 
-STEP 2 — Branch UI and export (subagent A, worktree)
+STEP 2 — Branch UI and export (track A, worktree)
 - Counterfactual panel in the replay, side-by-side comparison, clip export, PDF page.
 
-STEP 3 — Narration and demo (subagent B, worktree)
+STEP 3 — Narration and demo (track B, worktree)
 - Template narrator with event-ID citations, settings switch; extend make demo and the must-work checks. Add the narration-backend question to docs/OPEN_QUESTIONS.md.
 
 OUT OF SCOPE (do not build):

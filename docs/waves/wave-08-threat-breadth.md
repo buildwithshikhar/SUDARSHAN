@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 4a, 7 |
-| Recommended model | Sonnet |
 | Deployment | Keep the live build green. |
 
 **Goal.** The full threat and clutter library, including swarms, decoys and RF-silent threats, at behaviour level only.
@@ -35,23 +34,23 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 8 (Threat breadth) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 8 (Threat breadth) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 7 is Done and main is green; if not, stop and tell me). Then: docs/02-research.md §2 and §3, docs/DATA_REGISTER.md (X01), docs/SENSOR_MODELS.md.
 
 GOAL: The full threat and clutter library, including swarms, decoys and RF-silent threats, at behaviour level only.
 
-STEP 1 — Catalogue (subagent A, worktree)
+STEP 1 — Catalogue (track A, worktree)
 - packs/threats/: YAML per class with kinematic envelope and signature parameters (each with source_id). Generic class names only; no real system names.
 - Clutter types with their signatures (bird wing-beat, kite, balloon, permitted civil drone with a filed flight plan).
 
-STEP 2 — Swarm behaviours (subagent B, worktree)
+STEP 2 — Swarm behaviours (track B, worktree)
 - services/api/sim/behaviours/: boids, Vicsek noise, leader-follower, leaderless consensus with link loss, intents, decoys, arrival profiles. Kinematics only.
 
-STEP 3 — Integration (main session)
+STEP 3 — Integration (main track)
 - Signatures wired into all four sensors; instanced meshes in the 3D scene.
 - Tests as in the acceptance criteria; re-run the benchmark harness and ask me to confirm on the floor laptop.
 - docs/THREAT_CATALOGUE.md.

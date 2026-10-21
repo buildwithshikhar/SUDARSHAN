@@ -15,8 +15,8 @@ Prepared offline, without checking any provider's site. **Every price, limit, re
 | Memory | Three small containers; plan for at least 1 GB of RAM for the stack, more once the simulation and WebSocket sessions arrive (wave 3 onward). Unverified, to be measured. |
 | CPU architecture | Images build for the machine that builds them. Building on an Apple-silicon laptop gives arm64; most VPS plans are amd64. Build on the host (`docker compose build`) or build multi-arch. |
 | Low cost | A free or small monthly tier is enough for evaluators; no scale needed. |
-| Simple deploy by you | Ideally `git pull` and one command, with secrets in an `.env` file on the host. Claude Code prepares config and docs and never deploys. |
-| Optional | A separately hosted frontend (for example Vercel) needs `VITE_API_URL` at build time and `CORS_ORIGINS` on the API (see CLAUDE.md). The simplest path keeps web and API on one origin. |
+| Simple deploy by you | Ideally `git pull` and one command, with secrets in an `.env` file on the host. the team prepares config and docs and never deploys. |
+| Optional | A separately hosted frontend (for example Vercel) needs `VITE_API_URL` at build time and `CORS_ORIGINS` on the API (see CONTRIBUTING.md). The simplest path keeps web and API on one origin. |
 
 ## Measured memory of the production stack (local measurement)
 
@@ -58,7 +58,7 @@ Examples: Hetzner Cloud, DigitalOcean, Vultr, AWS Lightsail, Linode/Akamai (all 
 
 A container platform that runs Docker images in small VMs with attachable volumes (unverified).
 
-- **Fit with compose:** not compose-native. Each service becomes its own Fly app or process with a `fly.toml`; the repo has none yet, so Claude Code would add per-service config and docs. The web-to-api proxy (`http://api:8000` in `infra/nginx.conf`) would need Fly's private networking name instead.
+- **Fit with compose:** not compose-native. Each service becomes its own Fly app or process with a `fly.toml`; the repo has none yet, so the team would add per-service config and docs. The web-to-api proxy (`http://api:8000` in `infra/nginx.conf`) would need Fly's private networking name instead.
 - **Database and disk:** a volume attaches to one machine in one region (unverified), which suits SQLite on a volume or a Postgres machine. Managed Postgres offerings and their costs change; check current terms. Volume snapshots and retention: unverified.
 - **HTTPS:** provided on a `*.fly.dev` hostname, with custom domains supported (unverified).
 - **Cost:** pay for running machines and volumes, with a small free allowance that has changed over time. Unverified, check current pricing.
@@ -97,10 +97,10 @@ A laptop or mini PC running the compose stack, published through a tunnel servic
 | Cost | Low, fixed (unverified) | Usage-based (unverified) | Free tier (unverified) | None |
 | Setup effort for you | Medium | Medium to high | Medium to high | Low |
 | Always-on for evaluators | Yes | Yes | Likely (verify policy) | No |
-| Extra work for Claude Code | Caddy compose snippet and deploy doc | `fly.toml` per service, proxy change | Same as VPS | Tunnel doc |
+| Extra work for the team | Caddy compose snippet and deploy doc | `fly.toml` per service, proxy change | Same as VPS | Tunnel doc |
 
 ## Recommendation
 
 For an evaluator-facing link that must stay up, a small VPS running the repo's compose stack behind Caddy (option 1) fits best: it needs no changes to the existing config, gives a persistent disk, and the deploy is a `git pull` and one command. If you would rather not administer a server, Fly.io is the next choice, at the cost of some extra config work. Keep option 4 as the demo-day fallback, not the primary link.
 
-The decision, and the provider's real pricing, are yours. Once you pick one, note it in `docs/BUILD_LOG.md` (Deployed build, Host) and Claude Code adds the matching `docs/DEPLOY.md` and any proxy config in wave 2. To decide you need: a domain name (or acceptance of a provider subdomain), a payment method if not on a free tier, and a choice of region.
+The decision, and the provider's real pricing, are yours. Once you pick one, note it in `docs/BUILD_LOG.md` (Deployed build, Host) and the team adds the matching `docs/DEPLOY.md` and any proxy config in wave 2. To decide you need: a domain name (or acceptance of a provider subdomain), a payment method if not on a free tier, and a choice of region.

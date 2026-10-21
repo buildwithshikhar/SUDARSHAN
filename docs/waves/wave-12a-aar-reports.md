@@ -3,7 +3,6 @@
 | | |
 |---|---|
 | Depends on | 6, 10b, 11b |
-| Recommended model | Sonnet |
 | Deployment | Redeploy: pilot-ready live link. The pilot can start after this wave. |
 
 **Goal.** Review a session as seen versus truth, see individual and unit performance over time, and export reports.
@@ -38,22 +37,22 @@
 - No credentials, secrets or real keys anywhere in git history; only `.env.example` placeholders.
 - The deployed build still works: the commit to deploy is recorded in the build log, and after the user redeploys, `make smoke URL=<live url>` passes.
 
-## Prompt (paste into Claude Code, Sonnet)
+## Brief
 
 ````text
-ROLE: You are building wave 12a (Full AAR and reports) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). CLAUDE.md is loaded: follow it, above all the LOCKED RULES.
+ROLE: Build wave 12a (Full AAR and reports) of SUDARSHAN, an AI-enabled drone and counter-drone threat simulation TRAINER (SIH 2026, PS 26247). Follow the project rules in CONTRIBUTING.md, above all the content rules.
 
 READ FIRST: docs/BUILD_LOG.md (confirm wave 11b is Done and main is green; if not, stop and tell me). Then: docs/05-architecture.md §3.4, docs/07-ui-map.md (My performance, Unit AAR, Reports), docs/08-demo.md, docs/10-differentiators.md (H9).
 
 GOAL: Review a session as seen versus truth, see individual and unit performance over time, and export reports.
 
-STEP 1 — Replay and per-session views (subagent A, worktree)
+STEP 1 — Replay and per-session views (track A, worktree)
 - Split replay (sensor frames vs ground truth), bookmarks, decision path, contact-report grades, confusion matrix, reaction-time curve, miss-zone heat map.
 
-STEP 2 — Aggregates and export (subagent B, worktree)
+STEP 2 — Aggregates and export (track B, worktree)
 - Individual and unit aggregates across sessions, readiness dashboard, compare trainees, PDF and CSV export, data-table alternatives.
 
-STEP 3 — Demo seed (main session)
+STEP 3 — Demo seed (main track)
 - make demo builds the 08 storyline state (Post KESARI, Demo Section, labelled bot seats) from fixed seeds.
 - Automated must-work checks. Update docs/TRACEABILITY.md (R18).
 

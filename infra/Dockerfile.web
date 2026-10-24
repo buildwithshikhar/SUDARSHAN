@@ -12,7 +12,7 @@ ARG VITE_EVALUATION_MODE=false
 ENV VITE_EVALUATION_MODE=${VITE_EVALUATION_MODE}
 RUN npm run build
 
-FROM nginxinc/nginx-unprivileged:1.27-alpine
+FROM nginxinc/nginx-unprivileged:1.31-alpine
 ARG PRODUCT_NAME=trainer
 ARG GIT_SHA=dev
 ARG BUILD_TIME=unknown
